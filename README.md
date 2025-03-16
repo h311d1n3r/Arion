@@ -3,24 +3,24 @@
 <div align="center"><img src="./logo.png" alt="Arion Logo" width="300"></div>
 
 ## A high-performance C++ framework for emulating executable binaries  
-Arion is a library that aims to emulate various executable formats (ELF, PE, Mach-O...) coming from different platforms (Linux, Windows, macOS...) and with different CPU architectures (x86, ARM, MIPS...).  
-Based on Unicorn and written in C++, it should allow fast emulation especially for fuzzing purposes.  
-Inspired by Qiling, Arion in its current form is not intended to replace this awesome Python library, but to complement it with higher performance.  
+**Arion** is a library that aims to emulate various **executable formats** (ELF, PE, Mach-O...) coming from **different platforms** (Linux, Windows, macOS...) and with **different CPU architectures** (x86, ARM, MIPS...).  
+Based on **Unicorn** and written in **C++**, it should allow fast emulation especially for **fuzzing purposes**.  
+Inspired by **Qiling**, Arion in its current form is not intended to replace this awesome Python library, but to complement it **with higher performance**.  
 
 ## Current state of the project
 ### Warning
 **This project is still in alpha development. It can be unstable and/or lead to undesired behaviors so you may want to deploy it in a containerized environment.**  
 ### Features
 Arion currently implements the following features :  
-- Emulating Linux ELFs for x86, x86-64, ARM, ARM64  
-- Emulating more than 120 syscalls  
-- Fork handling  
-- Multithreading handling (unstable)  
-- Saving / restoring context  
-- Hooking the target with ~20 functions  
-- Memory reading / writing  
-- File system management  
-- Network sockets management  
+- **Emulating Linux ELFs for x86, x86-64, ARM, ARM64**  
+- **Emulating more than 120 syscalls**  
+- **Fork handling**  
+- **Multithreading handling (unstable)**  
+- **Saving / restoring context**  
+- **Hooking the target with ~20 functions**  
+- **Memory reading / writing**  
+- **File system management**  
+- **Network sockets management**  
 
 ## Table of contents
 [Installation](#install)  
@@ -55,17 +55,18 @@ Check the [Releases](https://github.com/h311d1n3r/Arion/releases/) tab on the Gi
 2. Initialize git dependencies : `git submodule update --init`  
 3. Create the build directory `mkdir build && cd build`.  
 4. Run CMake to configure the project `cmake ..`.
-5. Run make to compile the project `make -j4`.  
+5. Run make to compile the project `make -j4`.
+6. Run make install to deploy the project `sudo make install`.  
 
 <a name="how"/>
 
 ## How to use ?
-A wiki and a documentation are to come. For now, you can rely on the examples and visit the headers in `include` directory to learn more about what you can do with Arion.  
+**A wiki and a documentation are to come**. For now, you can rely on the examples and visit the headers in `include` directory to learn more about what you can do with **Arion**.  
 
 <a name="how_examples"/>
 
 ### Examples
-You can find examples inside the `examples` directory. These examples are by no means exhaustive, but they will teach you how to deal with Arion.  
+You can find examples inside the `examples` directory. These examples are by no means exhaustive, but they will teach you how to deal with **Arion**.  
 
 <a name="contributing"/>
 
