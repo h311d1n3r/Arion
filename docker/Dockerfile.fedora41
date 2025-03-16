@@ -1,0 +1,67 @@
+FROM fedora:41
+
+ARG VERSION=1.0.0
+
+RUN dnf update && dnf install -y \
+    git \
+    gcc \
+    g++ \
+    libuuid-devel \
+    python3 \
+    pkg-config \
+    make \
+    rpm-build \
+    curl
+
+RUN curl -LO https://github.com/Kitware/CMake/releases/download/v3.28.2/cmake-3.28.2-linux-x86_64.tar.gz
+RUN tar -zxvf cmake-3.28.2-linux-x86_64.tar.gz
+RUN rm cmake-3.28.2-linux-x86_64.tar.gz
+RUN mv cmake-3.28.2-linux-x86_64 /opt/cmake
+ENV PATH="/opt/cmake/bin:$PATH"
+
+WORKDIR /app
+
+COPY . .
+
+RUN git submodule update --init --recursive
+
+RUN cmake -DCMAKE_BUILD_TYPE=Release -B docker_build
+RUN cmake --build docker_build --parallel 4
+
+RUN mkdir -p /app/docker_build/rpm_package/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+RUN mkdir -p /app/docker_build/rpm_package/usr/include
+RUN mkdir -p /app/docker_build/rpm_package/usr/lib
+
+RUN cp -r /app/include/arion /app/docker_build/rpm_package/usr/include/
+RUN cp -r /app/lib/capstone/include/capstone /app/docker_build/rpm_package/usr/include/arion/
+RUN cp -r /app/lib/keystone/include/keystone /app/docker_build/rpm_package/usr/include/arion/
+RUN cp -r /app/lib/lief/include/LIEF /app/docker_build/rpm_package/usr/include/arion/
+RUN cp -r /app/docker_build/lib/lief/include/LIEF /app/docker_build/rpm_package/usr/include/arion/
+RUN cp -r /app/lib/spdlog/include/spdlog /app/docker_build/rpm_package/usr/include/arion/
+RUN cp -r /app/lib/unicorn/include/unicorn /app/docker_build/rpm_package/usr/include/arion/
+RUN cp -r /app/docker_build/libarion.so /app/docker_build/rpm_package/usr/lib/
+RUN find /app/docker_build/rpm_package/usr/include/ -type f -exec chmod 666 {} +
+
+RUN echo "Name: Arion" > /app/docker_build/rpm_package/SPECS/arion.spec && \
+    echo "Version: $(echo $VERSION | sed 's/-/~/g')" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
+    echo "Release: 1%{?dist}" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
+    echo "Summary: A high-performance C++ framework for emulating executable binaries." >> /app/docker_build/rpm_package/SPECS/arion.spec && \
+    echo "License: MIT" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
+    echo "URL: https://github.com/h311d1n3r/Arion" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
+    echo "Source0: arion-%{version}.tar.gz" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
+    echo "BuildArch: x86_64" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
+    echo "Requires: glibc, libuuid" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
+    echo "%description" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
+    echo "Arion is a high-performance C++ framework for emulating executable binaries." >> /app/docker_build/rpm_package/SPECS/arion.spec && \
+    echo "%install" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
+    echo "mkdir -p %{buildroot}/usr/include" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
+    echo "mkdir -p %{buildroot}/usr/lib" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
+    echo "cp -r /app/docker_build/rpm_package/usr/include/* %{buildroot}/usr/include/" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
+    echo "cp -r /app/docker_build/rpm_package/usr/lib/* %{buildroot}/usr/lib/" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
+    echo "%files" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
+    echo "/usr/include/arion" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
+    echo "/usr/lib/libarion.so" >> /app/docker_build/rpm_package/SPECS/arion.spec
+
+RUN rpmbuild --define "_topdir /app/docker_build/rpm_package" -bb /app/docker_build/rpm_package/SPECS/arion.spec
+
+RUN mv /app/docker_build/rpm_package/RPMS/x86_64/*.rpm /app/docker_build/arion-$VERSION.rpm

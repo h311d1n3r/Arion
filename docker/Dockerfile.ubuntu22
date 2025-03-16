@@ -1,0 +1,56 @@
+FROM ubuntu:22.04
+
+ARG VERSION=1.0.0
+
+ARG DEBIAN_FRONTEND="noninteractive"
+RUN apt update && apt install -y \
+    git \
+    gcc-multilib \
+    g++-multilib \
+    uuid-dev \
+    python3 \
+    pkg-config \
+    build-essential \
+    curl \
+    dpkg-dev \
+    fakeroot
+
+RUN curl -LO https://github.com/Kitware/CMake/releases/download/v3.28.2/cmake-3.28.2-linux-x86_64.tar.gz
+RUN tar -zxvf cmake-3.28.2-linux-x86_64.tar.gz
+RUN rm cmake-3.28.2-linux-x86_64.tar.gz
+RUN mv cmake-3.28.2-linux-x86_64 /opt/cmake
+ENV PATH="/opt/cmake/bin:$PATH"
+
+WORKDIR /app
+
+COPY . .
+
+RUN git submodule update --init --recursive
+
+RUN cmake -DCMAKE_BUILD_TYPE=Release -B docker_build
+RUN cmake --build docker_build --parallel 4
+
+RUN mkdir -p /app/docker_build/deb_package/DEBIAN
+RUN mkdir -p /app/docker_build/deb_package/usr/include
+RUN mkdir -p /app/docker_build/deb_package/usr/lib
+
+RUN cp -r /app/include/arion /app/docker_build/deb_package/usr/include/
+RUN cp -r /app/lib/capstone/include/capstone /app/docker_build/deb_package/usr/include/arion/
+RUN cp -r /app/lib/keystone/include/keystone /app/docker_build/deb_package/usr/include/arion/
+RUN cp -r /app/lib/lief/include/LIEF /app/docker_build/deb_package/usr/include/arion/
+RUN cp -r /app/docker_build/lib/lief/include/LIEF /app/docker_build/deb_package/usr/include/arion/
+RUN cp -r /app/lib/spdlog/include/spdlog /app/docker_build/deb_package/usr/include/arion/
+RUN cp -r /app/lib/unicorn/include/unicorn /app/docker_build/deb_package/usr/include/arion/
+RUN cp -r /app/docker_build/libarion.so /app/docker_build/deb_package/usr/lib/
+RUN find /app/docker_build/deb_package/usr/include/ -type f -exec chmod 666 {} +
+
+RUN echo "Package: Arion" > /app/docker_build/deb_package/DEBIAN/control && \
+    echo "Version: $VERSION" >> /app/docker_build/deb_package/DEBIAN/control && \
+    echo "Section: libs" >> /app/docker_build/deb_package/DEBIAN/control && \
+    echo "Priority: optional" >> /app/docker_build/deb_package/DEBIAN/control && \
+    echo "Architecture: amd64" >> /app/docker_build/deb_package/DEBIAN/control && \
+    echo "Depends: libc6, uuid-dev" >> /app/docker_build/deb_package/DEBIAN/control && \
+    echo "Maintainer: HellDiner <me.helldiner@gmail.com>" >> /app/docker_build/deb_package/DEBIAN/control && \
+    echo "Description: A high-performance C++ framework for emulating executable binaries." >> /app/docker_build/deb_package/DEBIAN/control
+
+RUN dpkg-deb --build /app/docker_build/deb_package /app/docker_build/arion-$VERSION.deb

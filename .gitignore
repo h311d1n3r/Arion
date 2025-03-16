@@ -1,0 +1,7 @@
+build/
+.cache/
+.idea/
+cmake-build-release/
+cmake-build-debug/
+lab/
+compile_commands.json

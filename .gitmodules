@@ -1,0 +1,15 @@
+[submodule "lib/lief"]
+	path = lib/lief
+	url = https://github.com/lief-project/LIEF.git
+[submodule "lib/spdlog"]
+	path = lib/spdlog
+	url = https://github.com/gabime/spdlog.git
+[submodule "lib/unicorn"]
+	path = lib/unicorn
+	url = https://github.com/unicorn-engine/unicorn.git
+[submodule "lib/capstone"]
+	path = lib/capstone
+	url = https://github.com/capstone-engine/capstone.git
+[submodule "lib/keystone"]
+	path = lib/keystone
+	url = https://github.com/keystone-engine/keystone.git
