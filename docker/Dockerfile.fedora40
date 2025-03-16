@@ -42,7 +42,7 @@ RUN cp -r /app/lib/unicorn/include/unicorn /app/docker_build/rpm_package/usr/inc
 RUN cp -r /app/docker_build/libarion.so /app/docker_build/rpm_package/usr/lib/
 RUN find /app/docker_build/rpm_package/usr/include/ -type f -exec chmod 666 {} +
 
-RUN echo "Name: Arion" > /app/docker_build/rpm_package/SPECS/arion.spec && \
+RUN echo "Name: arion" > /app/docker_build/rpm_package/SPECS/arion.spec && \
     echo "Version: $(echo $VERSION | sed 's/-/~/g')" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
     echo "Release: 1%{?dist}" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
     echo "Summary: A high-performance C++ framework for emulating executable binaries." >> /app/docker_build/rpm_package/SPECS/arion.spec && \

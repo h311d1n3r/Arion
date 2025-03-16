@@ -44,7 +44,7 @@ RUN cp -r /app/lib/unicorn/include/unicorn /app/docker_build/deb_package/usr/inc
 RUN cp -r /app/docker_build/libarion.so /app/docker_build/deb_package/usr/lib/
 RUN find /app/docker_build/deb_package/usr/include/ -type f -exec chmod 666 {} +
 
-RUN echo "Package: Arion" > /app/docker_build/deb_package/DEBIAN/control && \
+RUN echo "Package: arion" > /app/docker_build/deb_package/DEBIAN/control && \
     echo "Version: $VERSION" >> /app/docker_build/deb_package/DEBIAN/control && \
     echo "Section: libs" >> /app/docker_build/deb_package/DEBIAN/control && \
     echo "Priority: optional" >> /app/docker_build/deb_package/DEBIAN/control && \
