@@ -1,6 +1,6 @@
 # Arion
 
-<div align="center"><img src="./logo.png" alt="Arion Logo" width="300"></div>
+<div align="center"><img src="./res/img/logo.png" alt="Arion Logo" width="300"></div>
 
 ## A high-performance C++ framework for emulating executable binaries  
 Arion is a library that aims to emulate various executable formats (ELF, PE, Mach-O...) coming from different platforms (Linux, Windows, macOS...) and with different CPU architectures (x86, ARM, MIPS...).  
