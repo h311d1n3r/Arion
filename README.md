@@ -27,7 +27,7 @@ Arion currently implements the following features :
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Download a release](#install_release)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Build the library with Docker](#install_build_docker)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Build the library on host](#install_build_host)  
-[Performance comparison](#perfs)
+[Performance comparison](#perfs)  
 [How to use ?](#how)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Examples](#how_examples)  
 [Contributing](#contributing)
