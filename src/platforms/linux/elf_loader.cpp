@@ -9,7 +9,7 @@
 #include <array>
 #include <cstdint>
 #include <memory>
-#include <unicorn/unicorn.h>
+#include <arion/unicorn/unicorn.h>
 #include <unistd.h>
 
 using namespace arion;

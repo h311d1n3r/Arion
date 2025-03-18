@@ -2,11 +2,11 @@
 #define ARION_MEMORY_MANAGER_HPP
 
 #include <arion/common/global_defs.hpp>
-#include <capstone/capstone.h>
+#include <arion/capstone/capstone.h>
 #include <cstdint>
 #include <memory>
 #include <string>
-#include <unicorn/unicorn.h>
+#include <arion/unicorn/unicorn.h>
 #include <vector>
 
 class Arion;

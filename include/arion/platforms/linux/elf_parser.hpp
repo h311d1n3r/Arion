@@ -1,7 +1,7 @@
 #ifndef ARION_ELF_PARSER_HPP
 #define ARION_ELF_PARSER_HPP
 
-#include <LIEF/LIEF.hpp>
+#include <arion/LIEF/LIEF.hpp>
 #include <arion/common/global_defs.hpp>
 #include <string>
 

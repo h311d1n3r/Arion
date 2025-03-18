@@ -86,15 +86,33 @@ find_path(SPDLOG_INCLUDE_DIR spdlog/spdlog.h)
 
 else()
 
-set(UNICORN_INCLUDE_DIR lib/unicorn/include)
-set(CAPSTONE_INCLUDE_DIR lib/capstone/include)
-set(KEYSTONE_INCLUDE_DIR lib/keystone/include)
-set(LIEF_INCLUDE_DIR lib/lief/include)
-set(SPDLOG_INCLUDE_DIR lib/spdlog/include)
+set(UNICORN_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/unicorn/include)
+set(CAPSTONE_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/capstone/include)
+set(KEYSTONE_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/keystone/include)
+set(LIEF_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/lief/include)
+set(SPDLOG_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/spdlog/include)
 
 endif()
 
-target_include_directories(arion PUBLIC ${PROJECT_SOURCE_DIR}/include ${UNICORN_INCLUDE_DIR} ${CAPSTONE_INCLUDE_DIR} ${KEYSTONE_INCLUDE_DIR} ${LIEF_INCLUDE_DIR} ${SPDLOG_INCLUDE_DIR} ${UUID_INCLUDE_DIR})
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/arion)
+
+function(add_include_lib lib_path lib_name)
+    add_custom_target(
+            ${lib_name}_symlink ALL
+            COMMAND ${CMAKE_COMMAND} -E create_symlink
+            ${lib_path}/${lib_name}
+            ${CMAKE_BINARY_DIR}/include/arion/${lib_name}
+    )
+    add_dependencies(arion ${lib_name}_symlink)
+endfunction()
+
+add_include_lib(${UNICORN_INCLUDE_DIR} unicorn)
+add_include_lib(${CAPSTONE_INCLUDE_DIR} capstone)
+add_include_lib(${KEYSTONE_INCLUDE_DIR} keystone)
+add_include_lib(${LIEF_INCLUDE_DIR} LIEF)
+add_include_lib(${SPDLOG_INCLUDE_DIR} spdlog)
+
+target_include_directories(arion PUBLIC ${PROJECT_SOURCE_DIR}/include ${CMAKE_BINARY_DIR}/include ${UUID_INCLUDE_DIR})
 
 install(TARGETS arion
         LIBRARY DESTINATION lib
@@ -111,13 +129,14 @@ set(UNICORN_INCLUDE_INSTALL_DIR ${UNICORN_INCLUDE_DIR}/unicorn)
 set(CAPSTONE_INCLUDE_INSTALL_DIR ${CAPSTONE_INCLUDE_DIR}/capstone)
 set(KEYSTONE_INCLUDE_INSTALL_DIR ${KEYSTONE_INCLUDE_DIR}/keystone)
 set(LIEF_INCLUDE_INSTALL_DIR ${LIEF_INCLUDE_DIR}/LIEF)
+set(LIEF_BUILD_INCLUDE_INSTALL_DIR ${CMAKE_BINARY_DIR}/lib/lief/include/LIEF)
 set(SPDLOG_INCLUDE_INSTALL_DIR ${SPDLOG_INCLUDE_DIR}/spdlog)
-
 
 install(DIRECTORY ${UNICORN_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${CAPSTONE_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${KEYSTONE_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${LIEF_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
+install(DIRECTORY ${LIEF_BUILD_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${SPDLOG_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 
 # Build tools

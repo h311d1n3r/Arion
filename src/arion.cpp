@@ -9,10 +9,10 @@
 #include <arion/platforms/linux/lnx_syscall_manager.hpp>
 #include <exception>
 #include <filesystem>
-#include <keystone/keystone.h>
+#include <arion/keystone/keystone.h>
 #include <memory>
 #include <sys/wait.h>
-#include <unicorn/unicorn.h>
+#include <arion/unicorn/unicorn.h>
 
 using namespace arion;
 

@@ -1,7 +1,7 @@
 #include <arion/arion.hpp>
 #include <arion/common/logger.hpp>
 #include <memory>
-#include <spdlog/sinks/stdout_color_sinks.h>
+#include <arion/spdlog/sinks/stdout_color_sinks.h>
 
 using namespace arion;
 

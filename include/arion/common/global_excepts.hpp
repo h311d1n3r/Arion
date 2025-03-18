@@ -3,14 +3,14 @@
 
 #include <arion/common/global_defs.hpp>
 #include <arion/utils/convert_utils.hpp>
-#include <capstone/capstone.h>
+#include <arion/capstone/capstone.h>
 #include <cstdint>
 #include <dlfcn.h>
 #include <execinfo.h>
-#include <keystone/keystone.h>
+#include <arion/keystone/keystone.h>
 #include <string.h>
 #include <string>
-#include <unicorn/unicorn.h>
+#include <arion/unicorn/unicorn.h>
 
 #define EXCEPTION_MAX_FRAMES 64
 
