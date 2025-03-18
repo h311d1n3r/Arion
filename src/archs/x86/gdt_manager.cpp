@@ -5,7 +5,7 @@
 #include <arion/arion.hpp>
 #include <arion/common/global_excepts.hpp>
 #include <memory>
-#include <unicorn/x86.h>
+#include <arion/unicorn/x86.h>
 
 using namespace arion;
 

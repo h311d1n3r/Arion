@@ -3,14 +3,14 @@
 
 #include <arion/common/global_defs.hpp>
 #include <arion/common/global_excepts.hpp>
-#include <capstone/capstone.h>
+#include <arion/capstone/capstone.h>
 #include <cstdint>
-#include <keystone/keystone.h>
+#include <arion/keystone/keystone.h>
 #include <map>
 #include <memory>
 #include <string>
-#include <unicorn/unicorn.h>
-#include <unicorn/x86.h>
+#include <arion/unicorn/unicorn.h>
+#include <arion/unicorn/x86.h>
 #include <vector>
 
 namespace arion

@@ -15,12 +15,12 @@
 #include <arion/platforms/linux/elf_loader.hpp>
 #include <arion/platforms/linux/elf_parser.hpp>
 #include <arion/platforms/linux/lnx_syscall_manager.hpp>
-#include <capstone/capstone.h>
+#include <arion/capstone/capstone.h>
 #include <exception>
-#include <keystone/keystone.h>
+#include <arion/keystone/keystone.h>
 #include <memory>
 #include <string>
-#include <unicorn/unicorn.h>
+#include <arion/unicorn/unicorn.h>
 #include <vector>
 
 namespace arion

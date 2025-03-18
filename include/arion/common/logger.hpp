@@ -4,7 +4,7 @@
 #include <arion/common/global_excepts.hpp>
 #include <map>
 #include <memory>
-#include <spdlog/spdlog.h>
+#include <arion/spdlog/spdlog.h>
 #include <stack>
 
 class Arion;

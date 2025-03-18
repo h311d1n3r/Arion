@@ -9,8 +9,8 @@
 #include <cstdint>
 #include <memory>
 #include <sys/wait.h>
-#include <unicorn/unicorn.h>
-#include <unicorn/x86.h>
+#include <arion/unicorn/unicorn.h>
+#include <arion/unicorn/x86.h>
 
 using namespace arion;
 

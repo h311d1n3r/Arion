@@ -4,7 +4,7 @@
 #include <arion/common/hooks_manager.hpp>
 #include <exception>
 #include <memory>
-#include <unicorn/unicorn.h>
+#include <arion/unicorn/unicorn.h>
 
 using namespace arion;
 
