@@ -12,7 +12,12 @@ using namespace arion;
 int main()
 {
     // Arion::new_instance(args, fs_root, env, cwd, log_level)
-    std::shared_ptr<Arion> arion = Arion::new_instance({"/bin/ls"}, "/", {}, "/", ARION_LOG_LEVEL::OFF);
+    char cwd[1024];
+    if (getcwd(cwd, sizeof(cwd)) == NULL) {
+        std::cerr << "Error getting current working directory" << std::endl;
+        return 1;
+    }
+    std::shared_ptr<Arion> arion = Arion::new_instance({"/bin/ls"}, "/", {}, cwd, ARION_LOG_LEVEL::OFF);
     std::shared_ptr<ARION_CONTEXT> ctxt = arion->context->save();
     struct timespec start, end;
     clock_gettime(CLOCK_MONOTONIC, &start);

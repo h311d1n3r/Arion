@@ -25,7 +25,12 @@ void insn_hook(std::shared_ptr<Arion> arion, void *user_data)
 int main()
 {
     // Arion::new_instance(args, fs_root, env, cwd, log_level)
-    std::shared_ptr<Arion> arion = Arion::new_instance({"/bin/ls"}, "/", {}, "/", ARION_LOG_LEVEL::DEBUG);
+    char cwd[1024];
+    if (getcwd(cwd, sizeof(cwd)) == NULL) {
+        std::cerr << "Error getting current working directory" << std::endl;
+        return 1;
+    }
+    std::shared_ptr<Arion> arion = Arion::new_instance({"/bin/ls"}, "/", {}, cwd, ARION_LOG_LEVEL::DEBUG);
     std::cout << arion->mem->mappings_str() << std::endl;
     arion->hooks->hook_insn(insn_hook, UC_X86_INS_CPUID);
     arion->run();

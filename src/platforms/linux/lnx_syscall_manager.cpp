@@ -9,7 +9,6 @@
 #include <arion/platforms/linux/syscalls/process_syscalls.hpp>
 #include <arion/platforms/linux/syscalls/signal_syscalls.hpp>
 #include <arion/platforms/linux/syscalls/time_syscalls.hpp>
-
 using namespace arion;
 
 std::map<std::string, uint8_t> PARAMS_N_BY_SYSCALL_NAME = {{"read", 3},
@@ -535,6 +534,8 @@ void LinuxSyscallManager::init_syscall_funcs()
     this->add_syscall_entry("clone3", sys_clone3);
     this->add_syscall_entry("set_robust_list", sys_set_robust_list);
     this->add_syscall_entry("rseq", sys_rseq);
+    this->add_syscall_entry("getxattr", sys_getxattr);
+    this->add_syscall_entry("lgetxattr", sys_lgetxattr);
 }
 
 void LinuxSyscallManager::process_syscall(std::shared_ptr<Arion> arion)

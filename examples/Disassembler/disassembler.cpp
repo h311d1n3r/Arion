@@ -41,7 +41,12 @@ void block_hook(std::shared_ptr<Arion> arion, ADDR addr, size_t sz, void *user_d
 int main()
 {
     // Arion::new_instance(args, fs_root, env, cwd, log_level)
-    std::shared_ptr<Arion> arion = Arion::new_instance({"/bin/ls"}, "/", {}, "/", ARION_LOG_LEVEL::OFF);
+    char cwd[1024];
+    if (getcwd(cwd, sizeof(cwd)) == NULL) {
+        std::cerr << "Error getting current working directory" << std::endl;
+        return 1;
+    }
+    std::shared_ptr<Arion> arion = Arion::new_instance({"/bin/ls"}, "/", {}, cwd, ARION_LOG_LEVEL::OFF);
     std::cout << arion->mem->mappings_str() << std::endl;
     arion->hooks->hook_code(instr_hook);
     arion->hooks->hook_block(block_hook);
