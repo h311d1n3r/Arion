@@ -12,6 +12,7 @@
 #include <arion/common/memory_manager.hpp>
 #include <arion/common/socket_manager.hpp>
 #include <arion/common/threading_manager.hpp>
+#include <arion/common/config.hpp>
 #include <arion/platforms/linux/elf_loader.hpp>
 #include <arion/platforms/linux/elf_parser.hpp>
 #include <arion/platforms/linux/lnx_syscall_manager.hpp>
@@ -65,6 +66,7 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     std::unique_ptr<CodeTracer> tracer;
     std::unique_ptr<Logger> logger;
     std::unique_ptr<LOADER_PARAMS> loader_params;
+    std::unique_ptr<CONFIG> config;
     std::vector<std::shared_ptr<arion::SIGNAL>> pending_signals;
     uc_engine *uc;
     std::vector<ks_engine *> ks;

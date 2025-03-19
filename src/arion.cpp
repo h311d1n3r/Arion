@@ -4,6 +4,7 @@
 #include <arion/common/global_excepts.hpp>
 #include <arion/common/hooks_manager.hpp>
 #include <arion/common/memory_manager.hpp>
+#include <arion/common/config.hpp>
 #include <arion/platforms/linux/elf_loader.hpp>
 #include <arion/platforms/linux/elf_parser.hpp>
 #include <arion/platforms/linux/lnx_syscall_manager.hpp>
@@ -58,6 +59,7 @@ std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program_args
         arion->pid = pid;
         arion->pgid = pid;
     }
+    arion->config = std::make_unique<CONFIG>();
     arion->program_args = program_args;
     arion->program_env = program_env;
     std::string program_path = program_args.at(0);
