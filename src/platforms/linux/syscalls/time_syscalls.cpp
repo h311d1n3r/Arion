@@ -94,6 +94,4 @@ uint64_t sys_clock_nanosleep(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM
         arion->mem->write(remain_addr, (BYTE *)&remain, sizeof(struct timespec));
 
     return nanosleep_ret;
-    
-    return 0;
 }
