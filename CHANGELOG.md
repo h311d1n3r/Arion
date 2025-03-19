@@ -1,7 +1,7 @@
 # 1.0.1alpha
 
-- Bump Cmake requirements
-- added changelog.md/version.txt
+- Bumped CMake requirements
+- Added CHANGELOG.md/VERSION.txt
 
 
 # 1.0.0alpha
