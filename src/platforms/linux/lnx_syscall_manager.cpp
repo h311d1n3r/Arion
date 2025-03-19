@@ -533,6 +533,8 @@ void LinuxSyscallManager::init_syscall_funcs()
     this->add_syscall_entry("getrandom", sys_getrandom);
     this->add_syscall_entry("statx", sys_statx);
     this->add_syscall_entry("clone3", sys_clone3);
+    this->add_syscall_entry("set_robust_list", sys_set_robust_list);
+    this->add_syscall_entry("rseq", sys_rseq);
 }
 
 void LinuxSyscallManager::process_syscall(std::shared_ptr<Arion> arion)
