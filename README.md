@@ -79,6 +79,24 @@ You can find examples inside the `examples` directory. These examples are by no 
 
 <a name="contributing"/>
 
+## Development Mode
+
+Arion can be compiled with -DDEV=1 to increase build speed. 
+This require externals libs to be compiled with the following cmake flags:
+
+for all libraries
+```
+-DCMAKE_POSITION_INDEPENDENT_CODE=ON
+```
+
+for spdlog specific flags:
+```
+-DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_BUILD_TYPE=Debug -DCMAKE_DEBUG_POSTFIX=d
+```
+
+It is higly recommended to use library version from lib/. 
+Capstone > 6.0.0alpha is required.
+
 ## Contributing
 
 Feel free to contribute to the project by implementing new features on the `dev` branch.  
