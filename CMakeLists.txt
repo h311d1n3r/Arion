@@ -11,6 +11,24 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -rdynamic -O0")
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
+set(UNICORN_ARCH "x86;arm;arm64" CACHE STRING "Build only x86, ARM, and ARM64 for Unicorn")
+
+set(CAPSTONE_X86_SUPPORT ON CACHE BOOL "Enable X86 support in Capstone")
+set(CAPSTONE_ARM_SUPPORT ON CACHE BOOL "Disable ARM support in Capstone")
+set(CAPSTONE_ARM64_SUPPORT ON CACHE BOOL "Disable ARM64 support in Capstone")
+set(CAPSTONE_MIPS_SUPPORT OFF CACHE BOOL "Disable MIPS support in Capstone")
+set(CAPSTONE_PPC_SUPPORT OFF CACHE BOOL "Disable PPC support in Capstone")
+set(CAPSTONE_SPARC_SUPPORT OFF CACHE BOOL "Disable SPARC support in Capstone")
+set(CAPSTONE_SYSZ_SUPPORT OFF CACHE BOOL "Disable SYSZ support in Capstone")
+set(CAPSTONE_XCORE_SUPPORT OFF CACHE BOOL "Disable XCore support in Capstone")
+
+set(KEYSTONE_ARCH "X86;ARM;ARM64" CACHE STRING "Build only X86, ARM, and ARM64 for Keystone")
+
+set(LIEF_PYTHON_API OFF CACHE BOOL "Disable Python bindings for LIEF")
+set(LIEF_DOC OFF CACHE BOOL "Disable LIEF documentation")
+set(LIEF_EXAMPLES OFF CACHE BOOL "Disable LIEF examples")
+set(LIEF_TESTS OFF CACHE BOOL "Disable LIEF tests")
+
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 # Copy vdso.bin to build directory to prevent absolute path inclusion
