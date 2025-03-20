@@ -14,8 +14,8 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 set(UNICORN_ARCH "x86;arm;arm64" CACHE STRING "Build only x86, ARM, and ARM64 for Unicorn")
 
 set(CAPSTONE_X86_SUPPORT ON CACHE BOOL "Enable X86 support in Capstone")
-set(CAPSTONE_ARM_SUPPORT ON CACHE BOOL "Disable ARM support in Capstone")
-set(CAPSTONE_ARM64_SUPPORT ON CACHE BOOL "Disable ARM64 support in Capstone")
+set(CAPSTONE_ARM_SUPPORT ON CACHE BOOL "Enable ARM support in Capstone")
+set(CAPSTONE_ARM64_SUPPORT ON CACHE BOOL "Enable ARM64 support in Capstone")
 
 set(CAPSTONE_MIPS_SUPPORT OFF CACHE BOOL "Disable MIPS support in Capstone")
 set(CAPSTONE_PPC_SUPPORT OFF CACHE BOOL "Disable PPC support in Capstone")

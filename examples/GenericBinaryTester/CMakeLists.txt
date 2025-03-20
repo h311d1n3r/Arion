@@ -10,3 +10,5 @@ add_executable(gpt gpt.cpp)
 
 target_link_libraries(gpt PRIVATE ${ARION_LIB})
 target_include_directories(gpt PRIVATE ${ARION_INCLUDE_DIR}/arion)
+
+add_subdirectory(binaries/sleep)

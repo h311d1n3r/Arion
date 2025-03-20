@@ -5,6 +5,7 @@
 #include <arion/utils/convert_utils.hpp>
 #include <iostream>
 #include <memory>
+#include <filesystem>
 
 using namespace arion;
 
@@ -14,14 +15,11 @@ int main(int argc, char *argv[])
         std::cerr << "Usage: " << argv[0] << " <binary>" << std::endl;
         return 1;
     }
+    std::unique_ptr<CONFIG> config = std::make_unique<CONFIG>();
+    config->log_lvl = ARION_LOG_LEVEL::DEBUG;
+    config->enable_sleep_syscall = true;
     // Arion::new_instance(args, fs_root, env, cwd, log_level)
-    char cwd[1024];
-    if (getcwd(cwd, sizeof(cwd)) == NULL) {
-        std::cerr << "Error getting current working directory" << std::endl;
-        return 1;
-    }
-    std::shared_ptr<Arion> arion = Arion::new_instance({argv[1]}, "/", {}, cwd, ARION_LOG_LEVEL::DEBUG);
-    arion->config->enable_sleep_syscall = true;
+    std::shared_ptr<Arion> arion = Arion::new_instance({argv[1]}, "/", {}, std::filesystem::current_path(), std::move(config));
     std::cout << arion->mem->mappings_str() << std::endl;
     arion->run();
     return 0;

@@ -2149,7 +2149,9 @@ uint64_t sys_getxattr(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
     ADDR value_addr = params.at(2);
     size_t size = params.at(3);
 
-    std::string path = arion->mem->read_c_string(path_addr);
+    std::string fs_path = arion->fs->get_fs_path();
+    std::string file_name = arion->mem->read_c_string(path_addr);
+    std::string path = arion->fs->to_fs_path(file_name);
     std::string name = arion->mem->read_c_string(name_addr);
 
     std::vector<BYTE> value(size);
@@ -2173,7 +2175,9 @@ uint64_t sys_lgetxattr(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> para
     ADDR value_addr = params.at(2);
     size_t size = params.at(3);
 
-    std::string path = arion->mem->read_c_string(path_addr);
+    std::string fs_path = arion->fs->get_fs_path();
+    std::string file_name = arion->mem->read_c_string(path_addr);
+    std::string path = arion->fs->to_fs_path(file_name);
     std::string name = arion->mem->read_c_string(name_addr);
 
     std::vector<BYTE> value(size);
