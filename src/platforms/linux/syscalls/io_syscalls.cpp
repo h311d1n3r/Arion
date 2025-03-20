@@ -21,6 +21,7 @@
 #include <sys/uio.h>
 #include <sys/un.h>
 #include <sys/vfs.h>
+#include <sys/xattr.h>
 
 using namespace arion;
 using namespace arion_poly_struct;
@@ -2139,4 +2140,56 @@ uint64_t sys_statx(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     else
         arion->mem->write(statx_buf_addr, (BYTE *)&statx_buf, sizeof(struct stat));
     return statx_ret;
+}
+
+uint64_t sys_getxattr(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+{
+    ADDR path_addr = params.at(0);
+    ADDR name_addr = params.at(1);
+    ADDR value_addr = params.at(2);
+    size_t size = params.at(3);
+
+    std::string fs_path = arion->fs->get_fs_path();
+    std::string file_name = arion->mem->read_c_string(path_addr);
+    std::string path = arion->fs->to_fs_path(file_name);
+    std::string name = arion->mem->read_c_string(name_addr);
+
+    std::vector<BYTE> value(size);
+    ssize_t ret = getxattr(path.c_str(), name.c_str(), value.data(), size);
+    if (ret == -1) {
+        ret = -errno;
+    }
+
+    if (ret >= 0)
+    {
+        arion->mem->write(value_addr, value.data(), ret);
+    }
+
+    return ret;
+}
+
+uint64_t sys_lgetxattr(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+{
+    ADDR path_addr = params.at(0);
+    ADDR name_addr = params.at(1);
+    ADDR value_addr = params.at(2);
+    size_t size = params.at(3);
+
+    std::string fs_path = arion->fs->get_fs_path();
+    std::string file_name = arion->mem->read_c_string(path_addr);
+    std::string path = arion->fs->to_fs_path(file_name);
+    std::string name = arion->mem->read_c_string(name_addr);
+
+    std::vector<BYTE> value(size);
+    ssize_t ret = lgetxattr(path.c_str(), name.c_str(), value.data(), size);
+    if (ret == -1) {
+        ret = -errno;
+    }
+
+    if (ret >= 0)
+    {
+        arion->mem->write(value_addr, value.data(), ret);
+    }
+
+    return ret;
 }

@@ -68,5 +68,6 @@ uint64_t sys_recvmmsg(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
 uint64_t sys_sendmmsg(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params);
 uint64_t sys_renameat2(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params);
 uint64_t sys_statx(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params);
-
+uint64_t sys_getxattr(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params);
+uint64_t sys_lgetxattr(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params);
 #endif // ARION_IO_SYSCALLS_HPP

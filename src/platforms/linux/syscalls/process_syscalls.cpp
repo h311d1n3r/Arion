@@ -6,6 +6,7 @@
 #include <asm/ldt.h>
 #include <linux/futex.h>
 #include <linux/sched.h>
+#include <linux/rseq.h>
 #include <sched.h>
 
 using namespace arion;
@@ -297,4 +298,39 @@ uint64_t sys_clone3(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
         child_pid = fork_process(arion);
     arion->sync_threads();
     return child_pid;
+}
+
+// disapear in linux kernel > 6.X
+uint64_t sys_set_robust_list(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+{
+    ADDR head = params.at(0);
+    size_t len = params.at(1);
+
+    if (len != sizeof(struct robust_list_head))
+        return EINVAL;
+
+    pid_t curr_tid = arion->threads->get_running_tid();
+    std::unique_ptr<ARION_THREAD> arion_t = std::move(arion->threads->threads_map.at(curr_tid));
+    arion_t->robust_list_head = head;
+    arion->threads->threads_map[curr_tid] = std::move(arion_t);
+    return 0;
+}
+
+uint64_t sys_rseq(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+{
+    ADDR rseq_addr = params.at(0);
+    uint32_t rseq_len = params.at(1);
+    int rseq_flags = params.at(2);
+    uint32_t rseq_sig = params.at(3);
+
+    if (rseq_len != sizeof(struct rseq))
+        return EINVAL;
+
+    pid_t curr_tid = arion->threads->get_running_tid();
+    std::unique_ptr<ARION_THREAD> arion_t = std::move(arion->threads->threads_map.at(curr_tid));
+    arion_t->rseq_addr = rseq_addr;
+    arion_t->rseq_len = rseq_len;
+    arion_t->rseq_sig = rseq_sig;
+    arion->threads->threads_map[curr_tid] = std::move(arion_t);
+    return 0;
 }
