@@ -76,6 +76,18 @@ enum ARION_EXPORT CPU_ARCH
     ARM_ARCH,
     ARM64_ARCH
 };
+
+enum ARION_EXPORT ARION_LOG_LEVEL
+{
+    TRACE,
+    DEBUG,
+    INFO,
+    WARN,
+    ERROR,
+    CRITICAL,
+    OFF
+};
+
 } // namespace arion
 
 #endif // ARION_GLOBAL_DEFS_HPP
