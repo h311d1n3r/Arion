@@ -5,6 +5,7 @@
 #include <arion/utils/convert_utils.hpp>
 #include <iostream>
 #include <memory>
+#include <filesystem>
 
 using namespace arion;
 
@@ -27,8 +28,10 @@ void fork_hook(std::shared_ptr<Arion> arion, std::shared_ptr<Arion> child, void 
 
 int main()
 {
+    std::unique_ptr<CONFIG> config = std::make_unique<CONFIG>();
+    config->log_lvl = ARION_LOG_LEVEL::OFF;
     // Arion::new_instance(args, fs_root, env, cwd, log_level)
-    std::shared_ptr<Arion> arion = Arion::new_instance({"./target"}, "/", {}, "/", ARION_LOG_LEVEL::OFF);
+    std::shared_ptr<Arion> arion = Arion::new_instance({"./target"}, "/", {}, std::filesystem::current_path(), std::move(config));
     std::cout << arion->mem->mappings_str() << std::endl;
     arion->hooks->hook_execve(execve_hook);
     arion->hooks->hook_fork(fork_hook);
