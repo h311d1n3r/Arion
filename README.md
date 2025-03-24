@@ -64,7 +64,7 @@ Check the [Releases](https://github.com/h311d1n3r/Arion/releases/) tab on the Gi
 ## Performance comparison
 Since Arion is entirely written in C++, it has a much lower execution time than Qiling because of its to-and-fro in the Python context.  
 The next two graphs have been realized with the same program, run in the same context with both Arion and Qiling.
-In the first graph, the variable is the amount of syscalls executed by the target wheras in the second it is the amount of basic blocks hit, when all basic blocks are hooked.  
+In the first graph, the variable is the amount of syscalls executed by the target whereas in the second it is the amount of basic blocks hit, when all basic blocks are hooked.  
 <div align="center"><img src="./res/img/arion_ql_syscalls.png" alt="Arion/Ql graph 1" width="900"></div>
 <div align="center"><img src="./res/img/arion_ql_bbs.png" alt="Arion/Ql graph 2" width="900"></div>
 

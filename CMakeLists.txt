@@ -63,6 +63,7 @@ add_custom_command(
 
 add_library(arion SHARED ${SOURCES} vdso.o)
 
+target_compile_definitions(arion PRIVATE ARION_ONLY) # Useful flag to prevent using some header parts when compiling a module against Arion
 set_property(TARGET arion PROPERTY POSITION_INDEPENDENT_CODE 1)
 set_property(TARGET arion PROPERTY OUTPUT_NAME "arion")
 
@@ -106,7 +107,7 @@ set_target_properties(${SPDLOG_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 endif()
 
-target_link_libraries(arion PUBLIC ${UNICORN_LIB} ${CAPSTONE_LIB} ${KEYSTONE_LIB} PRIVATE ${LIEF_LIB} ${SPDLOG_LIB} ${UUID_LIB})
+target_link_libraries(arion PUBLIC ${UNICORN_LIB} ${CAPSTONE_LIB} ${KEYSTONE_LIB} ${LIEF_LIB} ${SPDLOG_LIB} ${UUID_LIB})
 
 # This library should not bring version issues
 find_path(UUID_INCLUDE_DIR uuid/uuid.h)
@@ -172,7 +173,7 @@ install(DIRECTORY ${CAPSTONE_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${KEYSTONE_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${LIEF_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 
-if(!DEV)
+if(NOT DEV)
 install(DIRECTORY ${LIEF_BUILD_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 endif()
 
