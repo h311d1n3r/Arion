@@ -71,8 +71,8 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     // Logger should not be exported because spdlog should not be included in Arion modules
     std::unique_ptr<Logger> logger;
     #endif
+    std::unique_ptr<Config> config;
     std::unique_ptr<LOADER_PARAMS> loader_params;
-    std::unique_ptr<CONFIG> config;
     std::vector<std::shared_ptr<arion::SIGNAL>> pending_signals;
     uc_engine *uc;
     std::vector<ks_engine *> ks;
@@ -81,7 +81,7 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     static std::shared_ptr<Arion> ARION_EXPORT
     new_instance(std::vector<std::string> program_args, std::string fs_path = "/",
                  std::vector<std::string> program_env = std::vector<std::string>(), std::string cwd = "",
-                 std::unique_ptr<CONFIG> config = std::move(std::make_unique<CONFIG>()),
+                 std::unique_ptr<Config> config = std::move(std::make_unique<Config>()),
                  pid_t pid = 0);
     static std::map<pid_t, std::weak_ptr<Arion>> ARION_EXPORT get_arion_instances();
     static bool ARION_EXPORT has_arion_instance(pid_t pid);

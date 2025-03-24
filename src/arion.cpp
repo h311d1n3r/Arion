@@ -42,7 +42,7 @@ std::map<arion::CPU_ARCH, std::vector<std::pair<cs_arch, cs_mode>>> arion::ARION
 
 std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program_args, std::string fs_path,
                                            std::vector<std::string> program_env, std::string cwd,
-                                           std::unique_ptr<CONFIG> config,
+                                           std::unique_ptr<Config> config,
                                            pid_t pid)
 {
     if (!program_args.size())
@@ -64,7 +64,7 @@ std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program_args
     arion->program_args = program_args;
     arion->program_env = program_env;
     std::string program_path = program_args.at(0);
-    arion->logger = Logger::initialize(arion, arion->config->log_lvl);
+    arion->logger = Logger::initialize(arion, arion->config->get_field<ARION_LOG_LEVEL>("log_lvl"));
     arion->logger->info(std::string("Initializing Arion instance for image \"") + program_path + std::string("\"."));
     arion->fs = FileSystemManager::initialize(arion, fs_path, cwd);
     if (!std::filesystem::exists(program_path))
@@ -309,7 +309,7 @@ std::shared_ptr<Arion> Arion::copy()
 {
     std::shared_ptr<Arion> arion_cpy =
         Arion::new_instance(this->program_args, this->fs->get_fs_path(), this->program_env, this->fs->get_cwd_path(), 
-                            std::make_unique<CONFIG>(*this->config));
+                            std::make_unique<Config>(this->config->clone()));
     std::shared_ptr<ARION_CONTEXT> ctx = this->context->save();
     arion_cpy->context->restore(ctx);
     return arion_cpy;
@@ -409,7 +409,7 @@ void Arion::execve(std::string file_path, std::vector<std::string> argv, std::ve
     else
         argv.push_back(file_path);
     std::shared_ptr<Arion> new_inst = Arion::new_instance(argv, this->fs->get_fs_path(), envp, this->fs->get_cwd_path(),
-                                                          std::make_unique<CONFIG>(*this->config), this->pid);
+                                                          std::make_unique<Config>(this->config->clone()), this->pid);
     std::shared_ptr<Arion> parent = this->parent.lock();
     if (!parent)
         throw ExpiredWeakPtrException("Arion");

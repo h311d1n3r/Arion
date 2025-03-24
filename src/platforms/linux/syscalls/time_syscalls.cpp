@@ -73,7 +73,7 @@ uint64_t sys_clock_nanosleep(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM
     ADDR t_addr = params.at(2);
     ADDR remain_addr = params.at(3);
 
-    if (!arion->config || !arion->config->enable_sleep_syscall) {
+    if (!arion->config || !arion->config->get_field<bool>("enable_sleep_syscall")) {
         return 0;
     }
     

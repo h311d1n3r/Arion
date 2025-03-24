@@ -41,8 +41,8 @@ void block_hook(std::shared_ptr<Arion> arion, ADDR addr, size_t sz, void *user_d
 
 int main()
 {
-    std::unique_ptr<CONFIG> config = std::make_unique<CONFIG>();
-    config->log_lvl = ARION_LOG_LEVEL::OFF;
+    std::unique_ptr<Config> config = std::make_unique<Config>();
+    config->set_field<ARION_LOG_LEVEL>("log_lvl", ARION_LOG_LEVEL::OFF);
     // Arion::new_instance(args, fs_root, env, cwd, log_level)
     std::shared_ptr<Arion> arion = Arion::new_instance({"/bin/ls"}, "/", {}, std::filesystem::current_path(), std::move(config));
     std::cout << arion->mem->mappings_str() << std::endl;

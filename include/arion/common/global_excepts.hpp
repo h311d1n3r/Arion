@@ -109,6 +109,20 @@ class FileNotInFsException : public ArionException
                          std::string("\".")) {};
 };
 
+class ConfigKeyNotFoundException : public ArionException
+{
+  public:
+    explicit ConfigKeyNotFoundException(std::string key)
+        : ArionException(std::string("Configuration doesn't have a \"") + key + std::string("\" key.")) {};
+};
+
+class ConfigWrongTypeAccessException : public ArionException
+{
+  public:
+    explicit ConfigWrongTypeAccessException(std::string key)
+        : ArionException(std::string("Configuration key \"") + key + std::string("\" was accessed with a wrong type.")) {};
+};
+
 class WrongContextFileMagicException : public ArionException
 {
   public:
