@@ -1,11 +1,13 @@
-# 1.0.1alpha
+# 1.0.2-alpha
+- Added CMake package
+- Added config for Arion instance
+- Implemented some syscalls
 
+# 1.0.1-alpha
 - Bumped CMake requirements
 - Added CHANGELOG.md/VERSION.txt
 
-
-# 1.0.0alpha
-
+# 1.0.0-alpha
 - Emulating Linux ELFs for x86, x86-64, ARM, ARM64
 - Emulating more than 120 syscalls
 - Fork handling

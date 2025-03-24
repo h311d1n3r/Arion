@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.24)
 project(Arion)
+set(ARION_VERSION 1.0.2-alpha)
+
+include(CMakePackageConfigHelpers)
 
 option(DEV "Enable development mode. Bypasses compilation of dependencies." OFF)
 
@@ -107,7 +110,7 @@ set_target_properties(${SPDLOG_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 endif()
 
-target_link_libraries(arion PUBLIC ${UNICORN_LIB} ${CAPSTONE_LIB} ${KEYSTONE_LIB} ${LIEF_LIB} ${SPDLOG_LIB} ${UUID_LIB})
+target_link_libraries(arion PRIVATE ${UNICORN_LIB} ${CAPSTONE_LIB} ${KEYSTONE_LIB} ${LIEF_LIB} ${SPDLOG_LIB} ${UUID_LIB})
 
 # This library should not bring version issues
 find_path(UUID_INCLUDE_DIR uuid/uuid.h)
@@ -148,12 +151,41 @@ add_include_lib(${KEYSTONE_INCLUDE_DIR} keystone)
 add_include_lib(${LIEF_INCLUDE_DIR} LIEF)
 add_include_lib(${SPDLOG_INCLUDE_DIR} spdlog)
 
-target_include_directories(arion PUBLIC ${PROJECT_SOURCE_DIR}/include ${CMAKE_BINARY_DIR}/include ${UUID_INCLUDE_DIR})
+target_include_directories(arion PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include> $<INSTALL_INTERFACE:include> $<INSTALL_INTERFACE:include/arion> ${UUID_INCLUDE_DIR})
 
 install(TARGETS arion
+        EXPORT arionTargets
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
         INCLUDES DESTINATION include)
+
+# Install CMake package
+
+install(
+        EXPORT arionTargets
+        FILE arionTargets.cmake
+        NAMESPACE arion::
+        DESTINATION lib/cmake/arion
+)
+
+write_basic_package_version_file(
+        "${CMAKE_CURRENT_BINARY_DIR}/arionConfigVersion.cmake"
+        VERSION ${ARION_VERSION}
+        COMPATIBILITY AnyNewerVersion
+)
+
+configure_package_config_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/arionConfig.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/arionConfig.cmake"
+        INSTALL_DESTINATION lib/cmake/arion
+)
+
+install(
+        FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/arionConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/arionConfigVersion.cmake"
+        DESTINATION lib/cmake/arion
+)
 
 set(ARION_INCLUDE_INSTALL_DIR ${PROJECT_SOURCE_DIR}/include/arion)
 
