@@ -1,5 +1,7 @@
 # 1.0.2-alpha
 - Added CMake package
+- Reduced compilation time
+- Fixed dependency issues when linking in DEV mode
 - Added config for Arion instance
 - Implemented some syscalls
 

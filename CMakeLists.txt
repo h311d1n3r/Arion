@@ -78,14 +78,22 @@ endif()
 # This library should not bring version issues
 find_library(UUID_LIB uuid REQUIRED)
 
+set(ARION_LIB_LINK_MODE PRIVATE)
+
 if(DEV)
+
+set(ARION_LIB_LINK_MODE INTERFACE)
 
 # Find libraries on the system
 find_library(UNICORN_LIB unicorn REQUIRED)
 find_library(KEYSTONE_LIB keystone REQUIRED)
 find_library(CAPSTONE_LIB capstone REQUIRED)
 find_library(LIEF_LIB LIEF REQUIRED)
-find_library(SPDLOG_LIB spdlogd REQUIRED)
+# Try to load debug version of spdlog first
+find_library(SPDLOG_LIB spdlogd)
+if(NOT SPDLOG_LIB)
+find_library(SPDLOG_LIB spdlog REQUIRED)
+endif()
 
 else()
 
@@ -110,7 +118,7 @@ set_target_properties(${SPDLOG_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 endif()
 
-target_link_libraries(arion PRIVATE ${UNICORN_LIB} ${CAPSTONE_LIB} ${KEYSTONE_LIB} ${LIEF_LIB} ${SPDLOG_LIB} ${UUID_LIB})
+target_link_libraries(arion ${ARION_LIB_LINK_MODE} ${UNICORN_LIB} ${CAPSTONE_LIB} ${KEYSTONE_LIB} ${LIEF_LIB} ${SPDLOG_LIB} ${UUID_LIB})
 
 # This library should not bring version issues
 find_path(UUID_INCLUDE_DIR uuid/uuid.h)

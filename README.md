@@ -88,18 +88,6 @@ Feel free to contribute to the project by implementing new features on the `dev`
 
 ### Development Mode
 
-Arion can be compiled with "DEV" option enabled (`-DDEV=ON`) to increase build speed.  
-This requires external libs to be compiled with the following CMake flags:  
-  
-For all libraries  
-```
--DCMAKE_POSITION_INDEPENDENT_CODE=ON
-```
-
-spdlog specific flags:  
-```
--DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_BUILD_TYPE=Debug -DCMAKE_DEBUG_POSTFIX=d
-```
-
-It is higly recommended to use library versions on the exact same commits as lib/.  
-Capstone > 6.0.0alpha is required.
+Arion can be compiled with `DEV` option enabled (`-DDEV=ON`) to increase build speed.  
+This mode uses system libraries instead of building and embedding the ones of `lib/`.  
+It is highly recommended to use library versions on the exact same commits as `lib/`.
