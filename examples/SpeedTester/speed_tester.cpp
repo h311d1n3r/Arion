@@ -6,13 +6,16 @@
 #include <iostream>
 #include <memory>
 #include <time.h>
+#include <filesystem>
 
 using namespace arion;
 
 int main()
 {
+    std::unique_ptr<Config> config = std::make_unique<Config>();
+    config->set_field<ARION_LOG_LEVEL>("log_lvl", ARION_LOG_LEVEL::OFF);
     // Arion::new_instance(args, fs_root, env, cwd, log_level)
-    std::shared_ptr<Arion> arion = Arion::new_instance({"/bin/ls"}, "/", {}, "/", ARION_LOG_LEVEL::OFF);
+    std::shared_ptr<Arion> arion = Arion::new_instance({"/bin/ls"}, "/", {}, std::filesystem::current_path(), std::move(config));
     std::shared_ptr<ARION_CONTEXT> ctxt = arion->context->save();
     struct timespec start, end;
     clock_gettime(CLOCK_MONOTONIC, &start);

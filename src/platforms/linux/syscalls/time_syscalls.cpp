@@ -73,5 +73,25 @@ uint64_t sys_clock_nanosleep(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM
     ADDR t_addr = params.at(2);
     ADDR remain_addr = params.at(3);
 
-    return 0;
+    if (!arion->config || !arion->config->get_field<bool>("enable_sleep_syscall")) {
+        return 0;
+    }
+    
+    struct timespec t;
+    std::vector<BYTE> value(sizeof(t));
+    value = arion->mem->read(t_addr, sizeof(t));
+    if (value.size() != sizeof(t)) {
+        return -EFAULT;
+    }
+    std::memcpy(&t, value.data(), sizeof(t));
+
+    struct timespec remain;
+    int nanosleep_ret = clock_nanosleep(clock_id, flags, &t, &remain);
+    if (nanosleep_ret == -1)
+        nanosleep_ret = -errno;
+
+    if (remain_addr)
+        arion->mem->write(remain_addr, (BYTE *)&remain, sizeof(struct timespec));
+
+    return nanosleep_ret;
 }

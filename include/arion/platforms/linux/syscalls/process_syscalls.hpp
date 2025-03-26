@@ -13,5 +13,7 @@ uint64_t sys_set_thread_area(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM
 uint64_t sys_set_tls(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params);
 uint64_t sys_exit_group(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params);
 uint64_t sys_clone3(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params);
+uint64_t sys_set_robust_list(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params);
+uint64_t sys_rseq(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params);
 
 #endif // ARION_PROCESS_SYSCALLS_HPP

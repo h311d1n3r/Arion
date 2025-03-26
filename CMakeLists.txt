@@ -1,5 +1,8 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.24)
 project(Arion)
+set(ARION_VERSION 1.0.2-alpha)
+
+include(CMakePackageConfigHelpers)
 
 option(DEV "Enable development mode. Bypasses compilation of dependencies." OFF)
 
@@ -10,6 +13,41 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -rdynamic -O0")
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
+
+set(UNICORN_ARCH "x86;arm;arm64" CACHE STRING "Build only x86, ARM, and ARM64 for Unicorn")
+
+set(CAPSTONE_X86_SUPPORT ON CACHE BOOL "Enable X86 support in Capstone")
+set(CAPSTONE_ARM_SUPPORT ON CACHE BOOL "Enable ARM support in Capstone")
+set(CAPSTONE_ARM64_SUPPORT ON CACHE BOOL "Enable ARM64 support in Capstone")
+
+set(CAPSTONE_MIPS_SUPPORT OFF CACHE BOOL "Disable MIPS support in Capstone")
+set(CAPSTONE_PPC_SUPPORT OFF CACHE BOOL "Disable PPC support in Capstone")
+set(CAPSTONE_SPARC_SUPPORT OFF CACHE BOOL "Disable SPARC support in Capstone")
+set(CAPSTONE_SYSZ_SUPPORT OFF CACHE BOOL "Disable SYSZ support in Capstone")
+set(CAPSTONE_XCORE_SUPPORT OFF CACHE BOOL "Disable XCore support in Capstone")
+set(CAPSTONE_M68K_SUPPORT OFF CACHE BOOL "Disable XCore support in Capstone")
+set(CAPSTONE_SYSTEMZ_SUPPORT OFF CACHE BOOL "Disable XCore support in Capstone")
+set(CAPSTONE_TMS320C64X_SUPPORT OFF CACHE BOOL "Disable XCore support in Capstone")
+set(CAPSTONE_EVM_SUPPORT OFF CACHE BOOL "Disable XCore support in Capstone")
+set(CAPSTONE_MOS65XX_SUPPORT OFF CACHE BOOL "Disable XCore support in Capstone")
+set(CAPSTONE_WASM_SUPPORT OFF CACHE BOOL "Disable XCore support in Capstone")
+set(CAPSTONE_BPF_SUPPORT OFF CACHE BOOL "Disable XCore support in Capstone")
+set(CAPSTONE_RISCV_SUPPORT OFF CACHE BOOL "Disable XCore support in Capstone")
+set(CAPSTONE_SH_SUPPORT OFF CACHE BOOL "Disable XCore support in Capstone")
+set(CAPSTONE_TRICORE_SUPPORT OFF CACHE BOOL "Disable TRICORE support in Capstone")
+set(CAPSTONE_ALPHA_SUPPORT OFF CACHE BOOL "Disable ALPHA support in Capstone")
+set(CAPSTONE_HPPA_SUPPORT OFF CACHE BOOL "Disable HPPA support in Capstone")
+set(CAPSTONE_LOONGARCH_SUPPORT OFF CACHE BOOL "Disable LOONGARCH support in Capstone")
+set(CAPSTONE_XTENSA_SUPPORT OFF CACHE BOOL "Disable XTENSA support in Capstone")
+set(CAPSTONE_ARC_SUPPORT OFF CACHE BOOL "Disable ARC support in Capstone")
+set(CAPSTONE_M680X_SUPPORT OFF CACHE BOOL "Disable XCore support in Capstone")
+
+set(KEYSTONE_ARCH "X86;ARM;ARM64" CACHE STRING "Build only X86, ARM, and ARM64 for Keystone")
+set(LIEF_PYTHON_API OFF CACHE BOOL "Disable Python bindings for LIEF")
+set(LIEF_DOC OFF CACHE BOOL "Disable LIEF documentation")
+set(LIEF_EXAMPLES OFF CACHE BOOL "Disable LIEF examples")
+set(LIEF_TESTS OFF CACHE BOOL "Disable LIEF tests")
+set(LIEF_ARCHITECTURES "x86;arm;arm64" CACHE STRING "Build only x86, ARM, and ARM64 for LIEF")
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
@@ -28,6 +66,7 @@ add_custom_command(
 
 add_library(arion SHARED ${SOURCES} vdso.o)
 
+target_compile_definitions(arion PRIVATE ARION_ONLY) # Useful flag to prevent using some header parts when compiling a module against Arion
 set_property(TARGET arion PROPERTY POSITION_INDEPENDENT_CODE 1)
 set_property(TARGET arion PROPERTY OUTPUT_NAME "arion")
 
@@ -39,14 +78,22 @@ endif()
 # This library should not bring version issues
 find_library(UUID_LIB uuid REQUIRED)
 
+set(ARION_LIB_LINK_MODE PRIVATE)
+
 if(DEV)
+
+set(ARION_LIB_LINK_MODE INTERFACE)
 
 # Find libraries on the system
 find_library(UNICORN_LIB unicorn REQUIRED)
 find_library(KEYSTONE_LIB keystone REQUIRED)
 find_library(CAPSTONE_LIB capstone REQUIRED)
 find_library(LIEF_LIB LIEF REQUIRED)
-find_library(SPDLOG_LIB spdlogd REQUIRED)
+# Try to load debug version of spdlog first
+find_library(SPDLOG_LIB spdlogd)
+if(NOT SPDLOG_LIB)
+find_library(SPDLOG_LIB spdlog REQUIRED)
+endif()
 
 else()
 
@@ -71,7 +118,7 @@ set_target_properties(${SPDLOG_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 endif()
 
-target_link_libraries(arion PUBLIC ${UNICORN_LIB} ${CAPSTONE_LIB} ${KEYSTONE_LIB} PRIVATE ${LIEF_LIB} ${SPDLOG_LIB} ${UUID_LIB})
+target_link_libraries(arion ${ARION_LIB_LINK_MODE} ${UNICORN_LIB} ${CAPSTONE_LIB} ${KEYSTONE_LIB} ${LIEF_LIB} ${SPDLOG_LIB} ${UUID_LIB})
 
 # This library should not bring version issues
 find_path(UUID_INCLUDE_DIR uuid/uuid.h)
@@ -112,12 +159,41 @@ add_include_lib(${KEYSTONE_INCLUDE_DIR} keystone)
 add_include_lib(${LIEF_INCLUDE_DIR} LIEF)
 add_include_lib(${SPDLOG_INCLUDE_DIR} spdlog)
 
-target_include_directories(arion PUBLIC ${PROJECT_SOURCE_DIR}/include ${CMAKE_BINARY_DIR}/include ${UUID_INCLUDE_DIR})
+target_include_directories(arion PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include> $<INSTALL_INTERFACE:include> $<INSTALL_INTERFACE:include/arion> ${UUID_INCLUDE_DIR})
 
 install(TARGETS arion
+        EXPORT arionTargets
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
         INCLUDES DESTINATION include)
+
+# Install CMake package
+
+install(
+        EXPORT arionTargets
+        FILE arionTargets.cmake
+        NAMESPACE arion::
+        DESTINATION lib/cmake/arion
+)
+
+write_basic_package_version_file(
+        "${CMAKE_CURRENT_BINARY_DIR}/arionConfigVersion.cmake"
+        VERSION ${ARION_VERSION}
+        COMPATIBILITY AnyNewerVersion
+)
+
+configure_package_config_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/arionConfig.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/arionConfig.cmake"
+        INSTALL_DESTINATION lib/cmake/arion
+)
+
+install(
+        FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/arionConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/arionConfigVersion.cmake"
+        DESTINATION lib/cmake/arion
+)
 
 set(ARION_INCLUDE_INSTALL_DIR ${PROJECT_SOURCE_DIR}/include/arion)
 
@@ -136,7 +212,11 @@ install(DIRECTORY ${UNICORN_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${CAPSTONE_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${KEYSTONE_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${LIEF_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
+
+if(NOT DEV)
 install(DIRECTORY ${LIEF_BUILD_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
+endif()
+
 install(DIRECTORY ${SPDLOG_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 
 # Build tools

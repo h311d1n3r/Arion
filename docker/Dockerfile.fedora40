@@ -21,12 +21,24 @@ ENV PATH="/opt/cmake/bin:$PATH"
 
 WORKDIR /app
 
-COPY . .
+COPY include ./include
+COPY src ./src
+COPY tools ./tools
+COPY lib ./lib
+COPY res ./res
+COPY cmake ./cmake
+COPY .git ./.git
+COPY CMakeLists.txt .
+COPY .gitmodules .
+COPY .gitattributes .
+COPY .gitignore .
 
 RUN git submodule update --init --recursive
 
 RUN cmake -DCMAKE_BUILD_TYPE=Release -B docker_build
 RUN cmake --build docker_build --parallel 4
+
+RUN cmake --install docker_build --prefix /app/docker_build/install
 
 RUN mkdir -p /app/docker_build/rpm_package/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 RUN mkdir -p /app/docker_build/rpm_package/usr/include
@@ -40,6 +52,7 @@ RUN cp -r /app/docker_build/lib/lief/include/LIEF /app/docker_build/rpm_package/
 RUN cp -r /app/lib/spdlog/include/spdlog /app/docker_build/rpm_package/usr/include/arion/
 RUN cp -r /app/lib/unicorn/include/unicorn /app/docker_build/rpm_package/usr/include/arion/
 RUN cp -r /app/docker_build/libarion.so /app/docker_build/rpm_package/usr/lib/
+RUN cp -r /app/docker_build/install/lib/cmake /app/docker_build/rpm_package/usr/lib/
 RUN find /app/docker_build/rpm_package/usr/include/ -type f -exec chmod 666 {} +
 
 RUN echo "Name: arion" > /app/docker_build/rpm_package/SPECS/arion.spec && \
@@ -60,7 +73,8 @@ RUN echo "Name: arion" > /app/docker_build/rpm_package/SPECS/arion.spec && \
     echo "cp -r /app/docker_build/rpm_package/usr/lib/* %{buildroot}/usr/lib/" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
     echo "%files" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
     echo "/usr/include/arion" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
-    echo "/usr/lib/libarion.so" >> /app/docker_build/rpm_package/SPECS/arion.spec
+    echo "/usr/lib/libarion.so" >> /app/docker_build/rpm_package/SPECS/arion.spec \
+    echo "/usr/lib/cmake/arion" >> /app/docker_build/rpm_package/SPECS/arion.spec
 
 RUN rpmbuild --define "_topdir /app/docker_build/rpm_package" -bb /app/docker_build/rpm_package/SPECS/arion.spec
 

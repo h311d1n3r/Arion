@@ -36,6 +36,10 @@ struct ARION_EXPORT ARION_THREAD
     int64_t lock = 0;
     arion::ADDR wait_status_addr = 0;
     bool paused = false;
+    arion::ADDR robust_list_head = 0;
+    arion::ADDR rseq_addr = 0;
+    uint32_t rseq_len = 0;
+    uint32_t rseq_sig = 0;
     ARION_THREAD() {};
     ARION_THREAD(int exit_signal, uint64_t flags, arion::ADDR child_tid_addr, arion::ADDR parent_tid_addr,
                  std::unique_ptr<std::map<arion::REG, arion::RVAL>> regs_state)
