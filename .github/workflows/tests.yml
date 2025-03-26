@@ -34,9 +34,9 @@ jobs:
     - name: Run Tests
       run: |
         for test_dir in ${{github.workspace}}/tests/*/; do
-          if [[ -f "$test_dir/test" && -f "$test_dir/res.txt" ]]; then
+          if [[ -f "$test_dir/build/test" && -f "$test_dir/res.txt" ]]; then
             echo "Running test : $test_dir"
-            output=$("$test_dir/test")
+            output=$("cd $test_dir/build && ./test")
             echo "$output" | md5sum > "$test_dir/output.md5"
             md5sum "$test_dir/res.txt" > "$test_dir/res.md5"
             if ! diff -q "$test_dir/output.md5" "$test_dir/res.md5"; then
