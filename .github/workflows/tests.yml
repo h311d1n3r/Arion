@@ -34,20 +34,20 @@ jobs:
     - name: Run Tests
       run: |
         for test_dir in ${{github.workspace}}/tests/*/; do
-          if [[ -f "$test_dir/build/test" && -f "$test_dir/res.txt" ]]; then
-            echo "Running test : $test_dir"
-            pushd "$test_dir/build" > /dev/null
-            output=$(./test)
-            popd > /dev/null
-            echo "$output" | md5sum | awk '{print $1}' > "$test_dir/output.md5"
-            md5sum "$test_dir/res.txt" | awk '{print $1}' > "$test_dir/res.md5"
-            if ! diff -q "$test_dir/output.md5" "$test_dir/res.md5"; then
-              echo "Failure."
-              exit 1
-            else
-              echo "Success."
-            fi
+          echo "Building test : $test_dir"
+          mkdir -p "$test_dir/build"
+          pushd "$test_dir/build" > /dev/null
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+          cmake --build . --parallel
+          echo "Running test : $test_dir"
+          output=$(./test)
+          popd > /dev/null
+          echo "$output" | md5sum | awk '{print $1}' > "$test_dir/output.md5"
+          md5sum "$test_dir/res.txt" | awk '{print $1}' > "$test_dir/res.md5"
+          if ! diff -q "$test_dir/output.md5" "$test_dir/res.md5"; then
+            echo "Failure."
+            exit 1
           else
-            echo "Skipping $test_dir: \"test\" binary or \"res.txt\" missing"
+            echo "Success."
           fi
           done
