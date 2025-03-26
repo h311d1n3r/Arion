@@ -44,7 +44,6 @@ jobs:
               exit 1
             else
               echo "Success."
-              exit 1
             fi
           else
             echo "Skipping $test_dir: \"test\" binary or \"res.txt\" missing"
