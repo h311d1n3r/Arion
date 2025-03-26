@@ -50,4 +50,4 @@ jobs:
           else
             echo "Success."
           fi
-          done
+        done
