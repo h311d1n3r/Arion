@@ -123,6 +123,20 @@ class ConfigWrongTypeAccessException : public ArionException
         : ArionException(std::string("Configuration key \"") + key + std::string("\" was accessed with a wrong type.")) {};
 };
 
+class BaremetalKeyNotFoundException : public ArionException
+{
+  public:
+    explicit BaremetalKeyNotFoundException(std::string key)
+        : ArionException(std::string("Baremetal doesn't have a \"") + key + std::string("\" key.")) {};
+};
+
+class BaremetalWrongTypeAccessException : public ArionException
+{
+  public:
+    explicit BaremetalWrongTypeAccessException(std::string key)
+        : ArionException(std::string("Baremetal key \"") + key + std::string("\" was accessed with a wrong type.")) {};
+};
+
 class WrongContextFileMagicException : public ArionException
 {
   public:
