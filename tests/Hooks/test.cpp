@@ -30,7 +30,7 @@ void block_hook(std::shared_ptr<Arion> arion, arion::ADDR addr, size_t sz, void 
 int main() {
     std::unique_ptr<Config> config = std::make_unique<Config>();
     config->set_field<arion::ARION_LOG_LEVEL>("log_lvl", arion::ARION_LOG_LEVEL::OFF);
-    std::shared_ptr<Arion> arion = Arion::new_instance({"./target"}, "/", {}, std::filesystem::current_path(), std::move(config));
+    std::shared_ptr<Arion> arion = Arion::new_instance(std::vector<std::string>{"./target"}, "/", {}, std::filesystem::current_path(), std::move(config));
     arion->hooks->hook_intr(intr_hook);
     arion->hooks->hook_insn(insn_hook, UC_X86_INS_SYSCALL);
     arion->hooks->hook_code(code_hook);

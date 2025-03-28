@@ -16,6 +16,7 @@
 #include <arion/common/socket_manager.hpp>
 #include <arion/common/threading_manager.hpp>
 #include <arion/common/config.hpp>
+#include <arion/common/baremetal.hpp>
 #include <arion/platforms/linux/elf_loader.hpp>
 #include <arion/platforms/linux/elf_parser.hpp>
 #include <arion/platforms/linux/lnx_syscall_manager.hpp>
@@ -26,6 +27,7 @@
 #include <string>
 #include <arion/unicorn/unicorn.h>
 #include <vector>
+#include <variant>
 
 namespace arion
 {
@@ -33,6 +35,8 @@ extern std::map<arion::CPU_ARCH, std::pair<uc_arch, uc_mode>> ARION_TO_UC_ARCH;
 extern std::map<arion::CPU_ARCH, std::vector<std::pair<ks_arch, ks_mode>>> ARION_TO_KS_ARCH;
 extern std::map<arion::CPU_ARCH, std::vector<std::pair<cs_arch, cs_mode>>> ARION_TO_CS_ARCH;
 }; // namespace arion
+
+using ProgramType = std::variant<std::vector<std::string>, std::unique_ptr<Baremetal>>;
 
 class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
 {
@@ -50,6 +54,7 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     pid_t pgid;
     void init_engines(arion::CPU_ARCH arch);
     void init_program(std::shared_ptr<ElfParser> prog_parser);
+    void init_baremetal_program();
     void init_dynamic_program(std::shared_ptr<ElfParser> prog_parser);
     void init_static_program(std::shared_ptr<ElfParser> prog_parser);
     void close_engines();
@@ -72,6 +77,7 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     std::unique_ptr<Logger> logger;
     #endif
     std::unique_ptr<Config> config;
+    std::unique_ptr<Baremetal> baremetal;
     std::unique_ptr<LOADER_PARAMS> loader_params;
     std::vector<std::shared_ptr<arion::SIGNAL>> pending_signals;
     uc_engine *uc;
@@ -79,7 +85,7 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     std::vector<csh *> cs;
     bool is_zombie = false;
     static std::shared_ptr<Arion> ARION_EXPORT
-    new_instance(std::vector<std::string> program_args, std::string fs_path = "/",
+    new_instance(ProgramType program, std::string fs_path = "/",
                  std::vector<std::string> program_env = std::vector<std::string>(), std::string cwd = "",
                  std::unique_ptr<Config> config = std::move(std::make_unique<Config>()),
                  pid_t pid = 0);
