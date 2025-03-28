@@ -49,7 +49,7 @@ ADDR BaremetalLoader::map_default_instance(std::shared_ptr<std::vector<uint8_t>>
     auto code_end = arion->mem->align_up(coderaw->size());
 
     arion->logger->debug("Baremetal Codesize is " + std::to_string(coderaw->size()) + \
-                         ". Rouned up to " + std::to_string(code_end));
+                         ". Rounded up to " + std::to_string(code_end));
 
     const std::string data_section = "[data]";
     arion->mem->map(load_addr + code_end, DEFAULT_DATA_SIZE, PROT_READ | PROT_WRITE, data_section);

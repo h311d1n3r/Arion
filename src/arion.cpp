@@ -93,13 +93,12 @@ std::shared_ptr<Arion> Arion::new_instance(ProgramType program, std::string fs_p
             if (!arion->fs->is_in_fs(program_path))
                 throw FileNotInFsException(fs_path, program_path);
 
-            arion->hooks = HooksManager::initialize(arion);
-            arion->threads = ThreadingManager::initialize(arion);
-            arion->tracer = CodeTracer::initialize(arion);
-
             std::shared_ptr<ElfParser> prog_parser = std::make_shared<ElfParser>(ElfParser(arion, program_path));
             prog_parser->process();
             arion->init_engines(prog_parser->arch);
+            arion->hooks = HooksManager::initialize(arion);
+            arion->threads = ThreadingManager::initialize(arion);
+            arion->tracer = CodeTracer::initialize(arion);
             arion->init_program(prog_parser);
         }
 
