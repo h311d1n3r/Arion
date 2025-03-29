@@ -44,6 +44,9 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     std::weak_ptr<Arion> parent;
     std::vector<std::shared_ptr<Arion>> children;
     std::exception_ptr uc_exception = nullptr;
+    bool afl_mode = false;
+    std::vector<int> afl_signals;
+    bool hard_stop = false;
     bool running = false;
     bool sync = false;
     pid_t pid;
@@ -89,10 +92,12 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     ~Arion();
     void cleanup_process();
     void ARION_EXPORT run();
-    void ARION_EXPORT stop();
+    void ARION_EXPORT stop(bool hard_stop=true);
     void crash(std::exception_ptr exception);
     void ARION_EXPORT sync_threads();
     bool ARION_EXPORT is_running();
+    void init_afl_mode(std::vector<int> signals);
+    void stop_afl_mode();
     std::shared_ptr<Arion> copy();
     bool ARION_EXPORT has_parent();
     std::shared_ptr<Arion> ARION_EXPORT get_parent();

@@ -86,6 +86,7 @@ set(ARION_LIB_LINK_MODE INTERFACE)
 
 # Find libraries on the system
 find_library(UNICORN_LIB unicorn REQUIRED)
+find_library(UNICORNAFL_LIB unicornafl REQUIRED)
 find_library(KEYSTONE_LIB keystone REQUIRED)
 find_library(CAPSTONE_LIB capstone REQUIRED)
 find_library(LIEF_LIB LIEF REQUIRED)
@@ -99,18 +100,21 @@ else()
 
 # Embed exact libraries with required versions
 add_subdirectory(lib/unicorn EXCLUDE_FROM_ALL)
+add_subdirectory(lib/unicornafl EXCLUDE_FROM_ALL)
 add_subdirectory(lib/capstone EXCLUDE_FROM_ALL)
 add_subdirectory(lib/keystone EXCLUDE_FROM_ALL)
 add_subdirectory(lib/lief EXCLUDE_FROM_ALL)
 add_subdirectory(lib/spdlog EXCLUDE_FROM_ALL)
 
 set(UNICORN_LIB unicorn)
+set(UNICORNAFL_LIB unicornafl)
 set(CAPSTONE_LIB capstone)
 set(KEYSTONE_LIB keystone)
 set(LIEF_LIB LIB_LIEF)
 set(SPDLOG_LIB spdlog)
 
 set_target_properties(${UNICORN_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set_target_properties(${UNICORNAFL_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 set_target_properties(${CAPSTONE_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 set_target_properties(${KEYSTONE_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 set_target_properties(${LIEF_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
@@ -118,7 +122,7 @@ set_target_properties(${SPDLOG_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 endif()
 
-target_link_libraries(arion ${ARION_LIB_LINK_MODE} ${UNICORN_LIB} ${CAPSTONE_LIB} ${KEYSTONE_LIB} ${LIEF_LIB} ${SPDLOG_LIB} ${UUID_LIB})
+target_link_libraries(arion ${ARION_LIB_LINK_MODE} ${UNICORN_LIB} ${UNICORNAFL_LIB} ${CAPSTONE_LIB} ${KEYSTONE_LIB} ${LIEF_LIB} ${SPDLOG_LIB} ${UUID_LIB})
 
 # This library should not bring version issues
 find_path(UUID_INCLUDE_DIR uuid/uuid.h)
@@ -126,6 +130,7 @@ find_path(UUID_INCLUDE_DIR uuid/uuid.h)
 if(DEV)
 
 find_path(UNICORN_INCLUDE_DIR unicorn/unicorn.h)
+find_path(UNICORNAFL_INCLUDE_DIR unicornafl/unicornafl.h)
 find_path(KEYSTONE_INCLUDE_DIR keystone/keystone.h)
 find_path(CAPSTONE_INCLUDE_DIR capstone/capstone.h)
 find_path(LIEF_INCLUDE_DIR LIEF/LIEF.hpp)
@@ -134,6 +139,7 @@ find_path(SPDLOG_INCLUDE_DIR spdlog/spdlog.h)
 else()
 
 set(UNICORN_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/unicorn/include)
+set(UNICORNAFL_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/unicornafl/include)
 set(CAPSTONE_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/capstone/include)
 set(KEYSTONE_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/keystone/include)
 set(LIEF_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/lief/include)
@@ -154,6 +160,7 @@ function(add_include_lib lib_path lib_name)
 endfunction()
 
 add_include_lib(${UNICORN_INCLUDE_DIR} unicorn)
+add_include_lib(${UNICORNAFL_INCLUDE_DIR} unicornafl)
 add_include_lib(${CAPSTONE_INCLUDE_DIR} capstone)
 add_include_lib(${KEYSTONE_INCLUDE_DIR} keystone)
 add_include_lib(${LIEF_INCLUDE_DIR} LIEF)
@@ -202,6 +209,7 @@ install(DIRECTORY ${ARION_INCLUDE_INSTALL_DIR} DESTINATION include)
 # Deploy headers of libraries
 
 set(UNICORN_INCLUDE_INSTALL_DIR ${UNICORN_INCLUDE_DIR}/unicorn)
+set(UNICORNAFL_INCLUDE_INSTALL_DIR ${UNICORNAFL_INCLUDE_DIR}/unicornafl)
 set(CAPSTONE_INCLUDE_INSTALL_DIR ${CAPSTONE_INCLUDE_DIR}/capstone)
 set(KEYSTONE_INCLUDE_INSTALL_DIR ${KEYSTONE_INCLUDE_DIR}/keystone)
 set(LIEF_INCLUDE_INSTALL_DIR ${LIEF_INCLUDE_DIR}/LIEF)
@@ -209,6 +217,7 @@ set(LIEF_BUILD_INCLUDE_INSTALL_DIR ${CMAKE_BINARY_DIR}/lib/lief/include/LIEF)
 set(SPDLOG_INCLUDE_INSTALL_DIR ${SPDLOG_INCLUDE_DIR}/spdlog)
 
 install(DIRECTORY ${UNICORN_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
+install(DIRECTORY ${UNICORNAFL_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${CAPSTONE_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${KEYSTONE_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${LIEF_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
