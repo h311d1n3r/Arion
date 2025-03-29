@@ -222,6 +222,8 @@ bool Arion::run_current(bool multi_process, bool main_inst)
         std::rethrow_exception(this->uc_exception);
     if (uc_run_err != UC_ERR_OK && !this->sync)
         throw UnicornRunException(uc_run_err);
+    if(this->hard_stop)
+        return false;
     if (this->sync)
     {
         this->sync = false;
@@ -271,6 +273,7 @@ void Arion::cleanup_process()
 
 void Arion::run()
 {
+    this->hard_stop = false;
     this->running = true;
     uc_err uc_ctl_err = uc_ctl(this->uc, UC_CTL_WRITE(UC_CTL_UC_USE_EXITS, 1), 1);
     if (uc_ctl_err != UC_ERR_OK)
@@ -282,12 +285,15 @@ void Arion::run()
             break;
         this->run_children();
     }
-    this->running = false;
-    this->cleanup_process();
+    if(this->running)
+        this->running = false;
+    if(!this->hard_stop)
+        this->cleanup_process();
 }
 
-void Arion::stop()
+void Arion::stop(bool hard_stop)
 {
+    this->hard_stop = hard_stop;
     uc_err uc_stop_err = uc_emu_stop(this->uc);
     if (uc_stop_err != UC_ERR_OK)
         throw UnicornStopException(uc_stop_err);
@@ -296,13 +302,13 @@ void Arion::stop()
 void Arion::crash(std::exception_ptr exception)
 {
     this->uc_exception = exception;
-    this->stop();
+    this->stop(false);
 }
 
 void Arion::sync_threads()
 {
     this->sync = true;
-    this->stop();
+    this->stop(false);
 }
 
 std::shared_ptr<Arion> Arion::copy()
@@ -318,6 +324,16 @@ std::shared_ptr<Arion> Arion::copy()
 bool Arion::is_running()
 {
     return this->running;
+}
+
+void Arion::init_afl_mode(std::vector<int> signals) {
+    this->afl_mode = true;
+    this->afl_signals = signals;
+}
+
+void Arion::stop_afl_mode() {
+    this->afl_mode = false;
+    this->afl_signals.clear();
 }
 
 bool Arion::has_parent()
@@ -447,6 +463,8 @@ void Arion::set_pgid(pid_t pgid)
 
 void Arion::send_signal(pid_t source_pid, int signo)
 {
+    if(this->afl_mode && std::find(this->afl_signals.begin(), this->afl_signals.end(), signo) != this->afl_signals.end())
+        abort(); // Will cause a crash in AFL instance
     std::shared_ptr<SIGNAL> sig = std::make_shared<SIGNAL>(source_pid, signo);
     this->pending_signals.push_back(sig);
 }
