@@ -8,7 +8,7 @@ char flag2[] = "REPLACED";
 int main() {
     std::unique_ptr<Config> config = std::make_unique<Config>();
     config->set_field<arion::ARION_LOG_LEVEL>("log_lvl", arion::ARION_LOG_LEVEL::OFF);
-    std::shared_ptr<Arion> arion = Arion::new_instance({"./target"}, "/", {}, std::filesystem::current_path(), std::move(config));
+    std::shared_ptr<Arion> arion = Arion::new_instance(std::vector<std::string>{"./target"}, "/", {}, std::filesystem::current_path(), std::move(config));
     for(std::shared_ptr<ARION_MAPPING> mapping : arion->mem->get_mappings()) {
         if(mapping->perms & 4) {
             std::vector<arion::BYTE> data = arion->mem->read(mapping->start_addr, mapping->end_addr - mapping->start_addr);
