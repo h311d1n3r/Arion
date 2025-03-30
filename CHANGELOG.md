@@ -4,6 +4,7 @@
 - Fixed dependency issues when linking in DEV mode
 - Added config for Arion instance
 - Implemented some syscalls
+- Added UnicornAFL fuzzing mode
 
 # 1.0.1-alpha
 - Bumped CMake requirements
