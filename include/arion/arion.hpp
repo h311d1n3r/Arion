@@ -26,6 +26,7 @@
 #include <string>
 #include <arion/unicorn/unicorn.h>
 #include <vector>
+#include <optional>
 
 namespace arion
 {
@@ -56,7 +57,7 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     void init_dynamic_program(std::shared_ptr<ElfParser> prog_parser);
     void init_static_program(std::shared_ptr<ElfParser> prog_parser);
     void close_engines();
-    bool run_current(bool multi_process, bool main_inst);
+    bool run_current(bool multi_process, bool main_inst, std::optional<arion::ADDR> start = std::nullopt, std::optional<arion::ADDR> end = std::nullopt);
     void run_children();
 
   public:
@@ -91,7 +92,9 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     static std::weak_ptr<Arion> ARION_EXPORT get_arion_instance(pid_t pid);
     ~Arion();
     void cleanup_process();
-    void ARION_EXPORT run();
+    void ARION_EXPORT run(std::optional<arion::ADDR> start = std::nullopt, std::optional<arion::ADDR> end = std::nullopt);
+    void ARION_EXPORT run_from(arion::ADDR start);
+    void ARION_EXPORT run_to(arion::ADDR end);
     void ARION_EXPORT stop(bool hard_stop=true);
     void crash(std::exception_ptr exception);
     void ARION_EXPORT sync_threads();
