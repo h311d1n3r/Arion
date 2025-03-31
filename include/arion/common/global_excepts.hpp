@@ -123,20 +123,6 @@ class ConfigWrongTypeAccessException : public ArionException
         : ArionException(std::string("Configuration key \"") + key + std::string("\" was accessed with a wrong type.")) {};
 };
 
-class BaremetalKeyNotFoundException : public ArionException
-{
-  public:
-    explicit BaremetalKeyNotFoundException(std::string key)
-        : ArionException(std::string("Baremetal doesn't have a \"") + key + std::string("\" key.")) {};
-};
-
-class BaremetalWrongTypeAccessException : public ArionException
-{
-  public:
-    explicit BaremetalWrongTypeAccessException(std::string key)
-        : ArionException(std::string("Baremetal key \"") + key + std::string("\" was accessed with a wrong type.")) {};
-};
-
 class WrongContextFileMagicException : public ArionException
 {
   public:
@@ -159,6 +145,13 @@ class PathTooLongException : public ArionException
   public:
     explicit PathTooLongException(std::string file_path)
         : ArionException(std::string("File path \"") + file_path + std::string("\" is too long.")) {};
+};
+
+class ArionCustomBaremetalConfigurationNotSet : public ArionException
+{
+  public:
+  explicit ArionCustomBaremetalConfigurationNotSet()
+      : ArionException(std::string("Custom configuration has been set but no mappings were provided.")) {};
 };
 
 class ElfParsingException : public ArionException

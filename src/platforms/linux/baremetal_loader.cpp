@@ -22,18 +22,10 @@ std::unique_ptr<LOADER_PARAMS> BaremetalLoader::process()
 
     std::shared_ptr<LOADER_PARAMS> params = std::make_shared<LOADER_PARAMS>();
     this->arch_sz = arion->abi->get_attrs()->arch_sz;
-    auto coderaw = arion->baremetal->get_field<std::shared_ptr<std::vector<uint8_t>>>("coderaw");
-    if (!arion->baremetal->get_field<bool>("setup_memory")) {
-        arion->logger->info("No baremetal configuration. Using Default instance for baremetal");
-        params->load_address = this->map_default_instance(coderaw, this->arch_sz == 64 ? LINUX_64_LOAD_ADDR : LINUX_32_LOAD_ADDR);
-        params->stack_address = this->map_stack(params);
-        this->init_main_thread(params);
-    }
-    else {
-        arion->logger->info("Custom memory configuration isn't supported yet for baremetal");
-        arion->cleanup_process();
-        exit(-1);
-    }
+    auto coderaw = arion->baremetal->coderaw;
+    params->load_address = this->map_default_instance(coderaw, this->arch_sz == 64 ? LINUX_64_LOAD_ADDR : LINUX_32_LOAD_ADDR);
+    params->stack_address = this->map_stack(params);
+    this->init_main_thread(params);
     return std::make_unique<LOADER_PARAMS>(*params.get());
 }
 
@@ -74,6 +66,7 @@ ADDR BaremetalLoader::map_stack(std::shared_ptr<LOADER_PARAMS> params)
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
+    arion->logger->info("arch_sz = " + std::to_string(this->arch_sz));
     ADDR stack_load_addr = this->arch_sz == 64 ? LINUX_64_STACK_ADDR : LINUX_32_STACK_ADDR;
     ADDR stack_sz = this->arch_sz == 64 ? LINUX_64_STACK_SZ : LINUX_32_STACK_SZ;
     REG sp_reg = arion->abi->get_attrs()->regs.sp;

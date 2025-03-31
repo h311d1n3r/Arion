@@ -31,15 +31,17 @@ class BaremetalLoader
   private:
     const std::vector<std::string> program_env;
     std::weak_ptr<Arion> arion;
-    uint16_t arch_sz;
     ADDR map_default_instance(std::shared_ptr<std::vector<uint8_t>> coderaw, ADDR load_addr);
-    ADDR map_stack(std::shared_ptr<LOADER_PARAMS> params);
-    void init_main_thread(std::shared_ptr<LOADER_PARAMS> params);
     void setup_envp(std::vector<ADDR> envp_ptrs);
 
   public:
+    uint16_t arch_sz;
+    void ARION_EXPORT init_main_thread(std::shared_ptr<LOADER_PARAMS> params);
+    ADDR ARION_EXPORT map_stack(std::shared_ptr<LOADER_PARAMS> params);
+
     BaremetalLoader(std::weak_ptr<Arion> arion, const std::vector<std::string> program_env)
         : arion(arion), program_env(program_env) {};
+    ARION_EXPORT BaremetalLoader(std::weak_ptr<Arion> arion) : arion(arion) {};
     std::unique_ptr<LOADER_PARAMS> process();
 };
 

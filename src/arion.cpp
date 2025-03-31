@@ -105,10 +105,10 @@ std::shared_ptr<Arion> Arion::new_instance(ProgramType program, std::string fs_p
         else if constexpr (std::is_same_v<T, std::unique_ptr<Baremetal>>) {
             arion->logger->info("Initializing Arion instance for Baremetal program.");
             arion->baremetal = std::move(arg);
-            auto arch = arion->baremetal->get_field<CPU_ARCH>("arch");
+            auto arch = arion->baremetal->arch;
             arion->init_engines(arch);
 
-            auto code = arion->baremetal->get_field<std::shared_ptr<std::vector<uint8_t>>>("coderaw");
+            auto code = arion->baremetal->coderaw;
             if(code->empty())
                 throw std::runtime_error("Baremetal coderaw is empty!");
 
@@ -213,7 +213,7 @@ void Arion::init_program(std::shared_ptr<ElfParser> prog_parser)
 void Arion::init_baremetal_program()
 {
     std::shared_ptr<Arion> curr_instance = shared_from_this();
-    auto arch = this->baremetal->get_field<CPU_ARCH>("arch");
+    auto arch = this->baremetal->arch;
     this->abi = AbiManager::initialize(curr_instance, arch);
     if (arch == CPU_ARCH::X86_ARCH)
     {
@@ -221,9 +221,11 @@ void Arion::init_baremetal_program()
         this->gdt_manager->setup();
     }
     this->syscalls = LinuxSyscallManager::initialize(curr_instance); // must initialize AbiManager first
-    BaremetalLoader loader(curr_instance,this->program_env);
-    this->loader_params = loader.process();
-    
+    if (!this->baremetal->setup_memory) {
+        this->logger->info("No baremetal configuration. Using Default instance for baremetal");
+        BaremetalLoader loader(curr_instance,this->program_env);
+        this->loader_params = loader.process();
+    }
 }
 
 void Arion::init_dynamic_program(std::shared_ptr<ElfParser> prog_parser)
@@ -336,6 +338,9 @@ void Arion::cleanup_process()
 
 void Arion::run(std::optional<ADDR> start, std::optional<ADDR> end)
 {
+    if (!this->loader_params && this->baremetal->setup_memory) {
+        throw ArionCustomBaremetalConfigurationNotSet();
+    }
     this->hard_stop = false;
     this->running = true;
     if(!end.has_value()) {
