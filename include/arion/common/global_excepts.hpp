@@ -514,6 +514,21 @@ class UnicornStopException : public ArionException
                          std::string("\".")) {};
 };
 
+class UnicornAflException : public ArionException
+{
+  public:
+    explicit UnicornAflException(std::string err)
+        : ArionException(std::string("An error occurred while using UnicornAFL engine : \"") + err +
+                         std::string("\".")) {};
+};
+
+class UnicornAflNoExitsException : public ArionException
+{
+  public:
+    explicit UnicornAflNoExitsException()
+        : ArionException(std::string("At least one exit must be specified when fuzzing with UnicornAFL engine.")) {};
+};
+
 class KeystoneOpenException : public ArionException
 {
   public:

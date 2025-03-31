@@ -256,7 +256,7 @@ void Arion::close_engines()
     }
 }
 
-bool Arion::run_current(bool multi_process, bool main_inst)
+bool Arion::run_current(bool multi_process, bool main_inst, std::optional<ADDR> start, std::optional<ADDR> end)
 {
     if (!main_inst)
         this->run_children();
@@ -271,13 +271,22 @@ bool Arion::run_current(bool multi_process, bool main_inst)
         return true;
     }
     REG pc = this->abi->get_attrs()->regs.pc;
-    uint64_t pc_addr = this->abi->read_arch_reg(pc);
+    ADDR pc_addr;
+    if(start.has_value()) {
+        pc_addr = start.value();
+        this->abi->write_arch_reg(pc, pc_addr);
+    } else pc_addr = this->abi->read_arch_reg(pc);
     uc_err uc_run_err =
-        uc_emu_start(this->uc, pc_addr, 0, 0, (multi_process || multi_thread) ? ARION_CYCLES_PER_THREAD : 0);
+        uc_emu_start(this->uc, pc_addr, end.value_or(0), 0, (multi_process || multi_thread) ? ARION_CYCLES_PER_THREAD : 0);
+    pc_addr = this->abi->read_arch_reg(pc);
     if (this->uc_exception)
         std::rethrow_exception(this->uc_exception);
     if (uc_run_err != UC_ERR_OK && !this->sync)
         throw UnicornRunException(uc_run_err);
+    if(this->hard_stop || pc_addr == end) {
+        this->hard_stop = true;
+        return false;
+    }
     if (this->sync)
     {
         this->sync = false;
@@ -325,25 +334,41 @@ void Arion::cleanup_process()
     Arion::instances.erase(this->pid);
 }
 
-void Arion::run()
+void Arion::run(std::optional<ADDR> start, std::optional<ADDR> end)
 {
+    this->hard_stop = false;
     this->running = true;
-    uc_err uc_ctl_err = uc_ctl(this->uc, UC_CTL_WRITE(UC_CTL_UC_USE_EXITS, 1), 1);
-    if (uc_ctl_err != UC_ERR_OK)
-        throw UnicornCtlException(uc_ctl_err);
+    if(!end.has_value()) {
+        uc_err uc_ctl_err = uc_ctl(this->uc, UC_CTL_WRITE(UC_CTL_UC_USE_EXITS, 1), 1);
+        if (uc_ctl_err != UC_ERR_OK)
+            throw UnicornCtlException(uc_ctl_err);
+    }
 
+    bool first_round = true;
     while (true)
     {
-        if (!this->run_current(this->children.size() > 0, true))
+        if (!this->run_current(this->children.size() > 0, true, first_round ? start : std::nullopt, end))
             break;
         this->run_children();
+        if(first_round) first_round = false;
     }
-    this->running = false;
-    this->cleanup_process();
+    if(this->running)
+        this->running = false;
+    if(!this->hard_stop)
+        this->cleanup_process();
 }
 
-void Arion::stop()
+void Arion::run_from(ADDR start) {
+    this->run(start);
+}
+
+void Arion::run_to(ADDR end) {
+    this->run(std::nullopt, end);
+}
+
+void Arion::stop(bool hard_stop)
 {
+    this->hard_stop = hard_stop;
     uc_err uc_stop_err = uc_emu_stop(this->uc);
     if (uc_stop_err != UC_ERR_OK)
         throw UnicornStopException(uc_stop_err);
@@ -352,13 +377,13 @@ void Arion::stop()
 void Arion::crash(std::exception_ptr exception)
 {
     this->uc_exception = exception;
-    this->stop();
+    this->stop(false);
 }
 
 void Arion::sync_threads()
 {
     this->sync = true;
-    this->stop();
+    this->stop(false);
 }
 
 std::shared_ptr<Arion> Arion::copy()
@@ -374,6 +399,16 @@ std::shared_ptr<Arion> Arion::copy()
 bool Arion::is_running()
 {
     return this->running;
+}
+
+void Arion::init_afl_mode(std::vector<int> signals) {
+    this->afl_mode = true;
+    this->afl_signals = signals;
+}
+
+void Arion::stop_afl_mode() {
+    this->afl_mode = false;
+    this->afl_signals.clear();
 }
 
 bool Arion::has_parent()
@@ -503,6 +538,8 @@ void Arion::set_pgid(pid_t pgid)
 
 void Arion::send_signal(pid_t source_pid, int signo)
 {
+    if(this->afl_mode && std::find(this->afl_signals.begin(), this->afl_signals.end(), signo) != this->afl_signals.end())
+        abort(); // Will cause a crash in AFL instance
     std::shared_ptr<SIGNAL> sig = std::make_shared<SIGNAL>(source_pid, signo);
     this->pending_signals.push_back(sig);
 }
