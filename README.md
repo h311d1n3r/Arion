@@ -13,6 +13,7 @@ Inspired by [**Qiling**](https://github.com/qilingframework/qiling), Arion in it
 ### Features
 Arion currently implements the following features :  
 - **Emulating Linux ELFs for x86, x86-64, ARM, ARM64**  
+- **Snapshot fuzzing with UnicornAFL**  
 - **Emulating more than 120 syscalls**  
 - **Fork handling**  
 - **Multithreading handling (unstable)**  
