@@ -44,20 +44,20 @@ Check the [Releases](https://github.com/h311d1n3r/Arion/releases/) tab on the Gi
 <a name="install_build_docker"/>
 
 ### Build the library with Docker
-1. Clone the repository `git clone https://github.com/h311d1n3r/Arion.git && cd Arion`.  
-2. Check the available Dockerfiles under `Arion/docker`.  
-3. Build the docker image of your choice `./scripts/docker_build.sh {OS}{OS_VERSION} {BUILD_VERSION}`.  
+1. Clone the repository `git clone https://github.com/h311d1n3r/Arion.git && cd Arion`  
+2. Check the available Dockerfiles under `Arion/docker`  
+3. Build the docker image of your choice `./scripts/docker_build.sh {OS}{OS_VERSION} {BUILD_VERSION}`  
 4. You can build against **Arion** library from inside the docker or extract it on your host.  
 
 <a name="install_build_host"/>
 
 ### Build the tool on host  
-1. Clone the repository `git clone https://github.com/h311d1n3r/Arion.git && cd Arion`.  
+1. Clone the repository `git clone https://github.com/h311d1n3r/Arion.git && cd Arion`  
 2. Initialize git dependencies : `git submodule update --init`  
-3. Create the build directory `mkdir build && cd build`.  
-4. Run CMake to configure the project `cmake ..`.  
-5. Run make to compile the project `make -j4`.  
-6. Run make install to deploy the project `sudo make install`.  
+3. Create the build directory `mkdir build && cd build`  
+4. Run CMake to configure the project `cmake ..`  
+5. Run make to compile the project `make -j4`  
+6. Run make install to deploy the project `sudo make install`  
 
 <a name="perfs"/>
 
