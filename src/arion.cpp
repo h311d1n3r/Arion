@@ -463,6 +463,7 @@ void Arion::execve(std::string file_path, std::vector<std::string> argv, std::ve
     this->cleanup_process();
     Arion::instances[new_inst->pid] = new_inst;
     this->hooks->trigger_arion_hook(EXECVE_HOOK, new_inst);
+    new_inst->run();
 }
 
 std::vector<std::string> Arion::get_program_args()

@@ -5,8 +5,8 @@
 #include <arion/platforms/linux/syscalls/process_syscalls.hpp>
 #include <asm/ldt.h>
 #include <linux/futex.h>
-#include <linux/sched.h>
 #include <linux/rseq.h>
+#include <linux/sched.h>
 #include <sched.h>
 
 using namespace arion;
@@ -102,7 +102,6 @@ uint64_t sys_execve(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     ADDR argv_addr = params.at(1);
     ADDR envp_addr = params.at(2);
 
-    REG ret_reg = arion->abi->get_attrs()->syscalling_conv.ret_reg;
     std::string file_name = arion->mem->read_c_string(file_name_addr);
     std::string file_name_fs = arion->fs->to_fs_path(file_name);
     std::vector<std::string> argv;
@@ -120,8 +119,8 @@ uint64_t sys_execve(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
             envp.push_back(arion->mem->read_c_string(addr));
     }
     arion->execve(file_name_fs, argv, envp);
-    arion->sync_threads();
-    return arion->abi->read_arch_reg(ret_reg);
+    arion->stop(true);
+    return 0;
 }
 
 uint64_t sys_exit(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
