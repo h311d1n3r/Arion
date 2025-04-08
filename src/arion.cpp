@@ -460,9 +460,9 @@ void Arion::execve(std::string file_path, std::vector<std::string> argv, std::ve
         parent->replace_child(new_inst->pid, new_inst);
         new_inst->parent = this->parent;
     }
+    this->hooks->trigger_arion_hook(EXECVE_HOOK, new_inst);
     this->cleanup_process();
     Arion::instances[new_inst->pid] = new_inst;
-    this->hooks->trigger_arion_hook(EXECVE_HOOK, new_inst);
     new_inst->run();
 }
 
