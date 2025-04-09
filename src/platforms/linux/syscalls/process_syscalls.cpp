@@ -119,7 +119,6 @@ uint64_t sys_execve(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
             envp.push_back(arion->mem->read_c_string(addr));
     }
     arion->execve(file_name_fs, argv, envp);
-    arion->stop(true);
     return 0;
 }
 

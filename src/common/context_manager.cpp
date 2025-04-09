@@ -63,6 +63,11 @@ void ContextManager::restore(std::shared_ptr<ARION_CONTEXT> ctx)
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
+    std::shared_ptr<ArionGroup> group = arion->get_group();
+    pid_t pid = arion->get_pid();
+    if (!group->has_arion_instance(pid) || group->get_arion_instance(pid) != arion)
+        group->add_arion_instance(arion, pid, arion->get_pgid());
+
     for (auto arion_f_it = arion->fs->files.begin(); arion_f_it != arion->fs->files.end();)
     {
         auto &arion_f = *arion_f_it;
