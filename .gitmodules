@@ -13,3 +13,6 @@
 [submodule "lib/keystone"]
 	path = lib/keystone
 	url = https://github.com/keystone-engine/keystone.git
+[submodule "lib/unicornafl"]
+	path = lib/unicornafl
+	url = https://github.com/AFLplusplus/unicornafl.git

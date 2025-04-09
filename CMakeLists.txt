@@ -49,8 +49,6 @@ set(LIEF_EXAMPLES OFF CACHE BOOL "Disable LIEF examples")
 set(LIEF_TESTS OFF CACHE BOOL "Disable LIEF tests")
 set(LIEF_ARCHITECTURES "x86;arm;arm64" CACHE STRING "Build only x86, ARM, and ARM64 for LIEF")
 
-file(GLOB_RECURSE SOURCES "src/*.cpp")
-
 # Copy vdso.bin to build directory to prevent absolute path inclusion
 add_custom_command(
     OUTPUT ${CMAKE_BINARY_DIR}/vdso.bin
@@ -63,6 +61,9 @@ add_custom_command(
     COMMAND ld -r -b binary -o vdso.o vdso.bin
     DEPENDS vdso.bin
 )
+
+# UnicornAFL is added as part of source code with using add_subdirectory because its CMakeLists.txt would load embedded Unicorn
+file(GLOB_RECURSE SOURCES "src/*.cpp" "lib/unicornafl/unicornafl.cpp")
 
 add_library(arion SHARED ${SOURCES} vdso.o)
 
@@ -126,6 +127,7 @@ find_path(UUID_INCLUDE_DIR uuid/uuid.h)
 if(DEV)
 
 find_path(UNICORN_INCLUDE_DIR unicorn/unicorn.h)
+find_path(UNICORNAFL_INCLUDE_DIR unicornafl/unicornafl.h)
 find_path(KEYSTONE_INCLUDE_DIR keystone/keystone.h)
 find_path(CAPSTONE_INCLUDE_DIR capstone/capstone.h)
 find_path(LIEF_INCLUDE_DIR LIEF/LIEF.hpp)
@@ -134,6 +136,7 @@ find_path(SPDLOG_INCLUDE_DIR spdlog/spdlog.h)
 else()
 
 set(UNICORN_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/unicorn/include)
+set(UNICORNAFL_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/unicornafl/include)
 set(CAPSTONE_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/capstone/include)
 set(KEYSTONE_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/keystone/include)
 set(LIEF_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/lief/include)
@@ -154,12 +157,16 @@ function(add_include_lib lib_path lib_name)
 endfunction()
 
 add_include_lib(${UNICORN_INCLUDE_DIR} unicorn)
+add_include_lib(${UNICORNAFL_INCLUDE_DIR} unicornafl)
 add_include_lib(${CAPSTONE_INCLUDE_DIR} capstone)
 add_include_lib(${KEYSTONE_INCLUDE_DIR} keystone)
 add_include_lib(${LIEF_INCLUDE_DIR} LIEF)
 add_include_lib(${SPDLOG_INCLUDE_DIR} spdlog)
 
-target_include_directories(arion PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include> $<INSTALL_INTERFACE:include> $<INSTALL_INTERFACE:include/arion> ${UUID_INCLUDE_DIR})
+# Needed because UnicornAFL is built with CMakeLists.txt
+set(UNICORNAFL_BUILD_INCLUDE_DIRS $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/lib/unicornafl/include> $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/lib/unicornafl/include/unicornafl>)
+
+target_include_directories(arion PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include> ${UNICORNAFL_BUILD_INCLUDE_DIRS} $<INSTALL_INTERFACE:include> $<INSTALL_INTERFACE:include/arion> ${UUID_INCLUDE_DIR})
 
 install(TARGETS arion
         EXPORT arionTargets
@@ -202,6 +209,7 @@ install(DIRECTORY ${ARION_INCLUDE_INSTALL_DIR} DESTINATION include)
 # Deploy headers of libraries
 
 set(UNICORN_INCLUDE_INSTALL_DIR ${UNICORN_INCLUDE_DIR}/unicorn)
+set(UNICORNAFL_INCLUDE_INSTALL_DIR ${UNICORNAFL_INCLUDE_DIR}/unicornafl)
 set(CAPSTONE_INCLUDE_INSTALL_DIR ${CAPSTONE_INCLUDE_DIR}/capstone)
 set(KEYSTONE_INCLUDE_INSTALL_DIR ${KEYSTONE_INCLUDE_DIR}/keystone)
 set(LIEF_INCLUDE_INSTALL_DIR ${LIEF_INCLUDE_DIR}/LIEF)
@@ -209,6 +217,7 @@ set(LIEF_BUILD_INCLUDE_INSTALL_DIR ${CMAKE_BINARY_DIR}/lib/lief/include/LIEF)
 set(SPDLOG_INCLUDE_INSTALL_DIR ${SPDLOG_INCLUDE_DIR}/spdlog)
 
 install(DIRECTORY ${UNICORN_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
+install(DIRECTORY ${UNICORNAFL_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${CAPSTONE_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${KEYSTONE_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${LIEF_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
