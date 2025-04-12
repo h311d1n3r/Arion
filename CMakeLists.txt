@@ -94,6 +94,7 @@ find_library(LIEF_LIB LIEF REQUIRED)
 find_library(SPDLOG_LIB spdlogd)
 if(NOT SPDLOG_LIB)
 find_library(SPDLOG_LIB spdlog REQUIRED)
+find_library(UDBSERVER_LIB udbserver REQUIRED)
 endif()
 
 else()
@@ -117,9 +118,26 @@ set_target_properties(${KEYSTONE_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 set_target_properties(${LIEF_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 set_target_properties(${SPDLOG_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
+set(UDBSERVER_LIB "${CMAKE_SOURCE_DIR}/lib/udbserver/build/libudbserver.a")
+
+add_custom_target(udbserver_build ALL
+    DEPENDS ${UDBSERVER_LIB}
+)
+
+add_custom_command(
+    COMMENT "Building the udbserver library"
+    OUTPUT ${UDBSERVER_LIB}
+    COMMAND mkdir -p ${CMAKE_SOURCE_DIR}/lib/udbserver/build
+    COMMAND cargo install cargo-c
+    COMMAND cargo cinstall --release --prefix=/usr --destdir=${CMAKE_SOURCE_DIR}/lib/udbserver/build
+    COMMAND find "${CMAKE_SOURCE_DIR}/lib/udbserver/build/usr" -name "libudbserver.a" -exec cp {} "${CMAKE_SOURCE_DIR}/lib/udbserver/build/libudbserver.a" \\\;
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/lib/udbserver
+    DEPENDS "${CMAKE_SOURCE_DIR}/lib/udbserver/Cargo.toml"
+)
+
 endif()
 
-target_link_libraries(arion ${ARION_LIB_LINK_MODE} ${UNICORN_LIB} ${CAPSTONE_LIB} ${KEYSTONE_LIB} ${LIEF_LIB} ${SPDLOG_LIB} ${UUID_LIB})
+target_link_libraries(arion ${ARION_LIB_LINK_MODE} ${UNICORN_LIB} ${CAPSTONE_LIB} ${KEYSTONE_LIB} ${LIEF_LIB} ${SPDLOG_LIB} ${UUID_LIB} ${UDBSERVER_LIB})
 
 # This library should not bring version issues
 find_path(UUID_INCLUDE_DIR uuid/uuid.h)
@@ -132,6 +150,7 @@ find_path(KEYSTONE_INCLUDE_DIR keystone/keystone.h)
 find_path(CAPSTONE_INCLUDE_DIR capstone/capstone.h)
 find_path(LIEF_INCLUDE_DIR LIEF/LIEF.hpp)
 find_path(SPDLOG_INCLUDE_DIR spdlog/spdlog.h)
+find_path(UDBSERVER_LIB udbserver.h)
 
 else()
 

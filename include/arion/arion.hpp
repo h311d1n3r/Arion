@@ -142,6 +142,7 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     void set_group(std::shared_ptr<ArionGroup> group);
     void reset_group();
     void ARION_EXPORT send_signal(pid_t source_pid, int signo);
+    void ARION_EXPORT run_gdbserver(uint32_t port);
 };
 
 #endif // ARION_ARION_HPP
