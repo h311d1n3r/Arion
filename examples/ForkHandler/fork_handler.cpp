@@ -33,7 +33,7 @@ int main()
     std::shared_ptr<ArionGroup> arion_group = std::make_shared<ArionGroup>();
     // Arion::new_instance(args, fs_root, env, cwd, log_level, config)
     std::shared_ptr<Arion> arion =
-        Arion::new_instance({"./target"}, "/", {}, std::filesystem::current_path(), std::move(config));
+        Arion::new_instance(std::vector<std::string>{"./target"}, "/", {}, std::filesystem::current_path(), std::move(config));
     arion_group->add_arion_instance(arion);
     std::cout << arion->mem->mappings_str() << std::endl;
     arion->hooks->hook_execve(execve_hook);

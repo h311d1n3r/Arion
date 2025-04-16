@@ -219,6 +219,7 @@ std::shared_ptr<Arion> Arion::new_instance(ProgramType program, std::string fs_p
 
     }, program);
 
+
     return arion;
 }
 
@@ -242,6 +243,7 @@ Arion::~Arion()
     this->context.reset();
     this->fs.reset();
     this->logger.reset();
+    this->baremetal.reset();
 
     this->close_engines();
 }

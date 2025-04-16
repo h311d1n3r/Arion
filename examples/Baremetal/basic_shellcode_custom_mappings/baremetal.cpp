@@ -9,6 +9,9 @@
 #include <iostream>
 #include <memory>
 #include <filesystem>
+#include <sstream>
+#include <iomanip>
+#include <cstdint>
 
 using namespace arion;
 
@@ -60,29 +63,26 @@ int main()
 
     auto coderaw = baremetal->coderaw;
     coderaw->insert(coderaw->end(), std::begin(shellcode), std::end(shellcode));
+    std::shared_ptr<ArionGroup> arion_group = std::make_shared<ArionGroup>();
 
-    std::vector<std::string> env = {};
     // Arion::new_instance(args, fs_root, env, cwd, log_level)
     std::cout << "bitsize bm = " + std::to_string(baremetal->bitsize) << std::endl; //bitsize = 64
-    std::shared_ptr<Arion> arion = Arion::new_instance(std::move(baremetal), "/", env, std::filesystem::current_path(), std::move(config));
-    std::cout << "bitsize bm = " + std::to_string(arion->shared_from_this()->baremetal->bitsize) << std::endl; //bitsize = junk data
-    std::cout << "config = " + std::to_string(arion->config->get_field<arion::ARION_LOG_LEVEL>("log_lvl")) << std::endl; //exception log_lvl not found
+    std::shared_ptr<Arion> arion =
+        Arion::new_instance(std::move(baremetal), "/", {}, std::filesystem::current_path(), std::move(config));
+    arion_group->add_arion_instance(arion);
+    std::cout << "bitsize bm = " + std::to_string(arion->baremetal->bitsize) << std::endl; //bitsize = junk data
 
-    std::shared_ptr<LOADER_PARAMS> params = std::make_shared<LOADER_PARAMS>();
-    BaremetalLoader loader(arion->shared_from_this());
+    // std::shared_ptr<LOADER_PARAMS> params = std::make_shared<LOADER_PARAMS>();
+    // BaremetalLoader loader(arion->shared_from_this());
 
-    
-   
-
-
-    loader.arch_sz = arion->baremetal->bitsize;
-    params->stack_address = loader.map_stack(params);
-    loader.init_main_thread(params);
-    arion->loader_params = std::make_unique<LOADER_PARAMS>(*params.get());
+    // loader.arch_sz = arion->baremetal->bitsize;
+    // params->stack_address = loader.map_stack(params);
+    // loader.init_main_thread(params);
+    // arion->loader_params = std::make_unique<LOADER_PARAMS>(*params.get());
 
     std::cout << arion->mem->mappings_str() << std::endl;
     arion->hooks->hook_code(instr_hook);
     arion->hooks->hook_block(block_hook);
-    arion->run();
+    arion_group->run();
     return 0;
 }

@@ -7,7 +7,7 @@ int main()
     config->set_field<arion::ARION_LOG_LEVEL>("log_lvl", arion::ARION_LOG_LEVEL::OFF);
     std::shared_ptr<ArionGroup> group = std::make_shared<ArionGroup>();
     std::shared_ptr<Arion> arion =
-        Arion::new_instance({"./target"}, "/", {}, std::filesystem::current_path(), std::move(config));
+        Arion::new_instance(std::vector<std::string>{"./target"}, "/", {}, std::filesystem::current_path(), std::move(config));
     group->add_arion_instance(arion);
     group->run();
 }
