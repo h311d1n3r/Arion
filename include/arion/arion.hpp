@@ -2,18 +2,15 @@
 #define ARION_ARION_HPP
 
 #include <arion/archs/x86/gdt_manager.hpp>
+#include <arion/capstone/capstone.h>
 #include <arion/common/abi_manager.hpp>
 #include <arion/common/code_tracer.hpp>
+#include <arion/common/config.hpp>
 #include <arion/common/context_manager.hpp>
 #include <arion/common/file_system_manager.hpp>
 #include <arion/common/global_defs.hpp>
 #include <arion/common/hooks_manager.hpp>
-#ifdef ARION_ONLY
-// Logger should not be exported because spdlog should not be included in Arion modules
 #include <arion/common/logger.hpp>
-#endif
-#include <arion/capstone/capstone.h>
-#include <arion/common/config.hpp>
 #include <arion/common/memory_manager.hpp>
 #include <arion/common/socket_manager.hpp>
 #include <arion/common/threading_manager.hpp>
@@ -91,10 +88,7 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     std::unique_ptr<LinuxSyscallManager> syscalls;
     std::unique_ptr<GdtManager> gdt_manager;
     std::unique_ptr<CodeTracer> tracer;
-#ifdef ARION_ONLY
-    // Logger should not be exported because spdlog should not be included in Arion modules
     std::unique_ptr<Logger> logger;
-#endif
     std::unique_ptr<Config> config;
     std::unique_ptr<LOADER_PARAMS> loader_params;
     std::vector<std::shared_ptr<arion::SIGNAL>> pending_signals;
