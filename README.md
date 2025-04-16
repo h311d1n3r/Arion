@@ -30,7 +30,9 @@ Arion currently implements the following features :
 [How to use ?](#how)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Examples](#how_examples)  
 [Contributing](#contributing)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Development Mode](#dev_mode)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Development Mode](#dev_mode)  
+[Sponsors](#sponsors)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[GitAds](#gitads)  
 
 <a name="install"/>
 
@@ -92,4 +94,11 @@ Arion can be compiled with `DEV` option enabled (`-DDEV=ON`) to increase build s
 This mode uses system libraries instead of building and embedding the ones of `lib/`.  
 It is highly recommended to use library versions on the exact same commits as `lib/`.
 
-<!-- GitAds-Verify: QQ2GBHSGB3S5M2M8KUQTGTZBP5F993X5 -->
+<a name="sponsors"/>
+
+### Sponsors
+
+<a name="gitads"/>
+
+## GitAds
+[![Sponsored by GitAds](https://gitads.dev/v1/ad-serve?source=h311d1n3r/arion@github)](https://gitads.dev/v1/ad-track?source=h311d1n3r/arion@github)
