@@ -96,9 +96,9 @@ It is highly recommended to use library versions on the exact same commits as `l
 
 <a name="sponsors"/>
 
-### Sponsors
+## Sponsors
 
 <a name="gitads"/>
 
-## GitAds
+### GitAds
 [![Sponsored by GitAds](https://gitads.dev/v1/ad-serve?source=h311d1n3r/arion@github)](https://gitads.dev/v1/ad-track?source=h311d1n3r/arion@github)
