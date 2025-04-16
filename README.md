@@ -91,3 +91,5 @@ Feel free to contribute to the project by implementing new features on the `dev`
 Arion can be compiled with `DEV` option enabled (`-DDEV=ON`) to increase build speed.  
 This mode uses system libraries instead of building and embedding the ones of `lib/`.  
 It is highly recommended to use library versions on the exact same commits as `lib/`.
+
+<!-- GitAds-Verify: QQ2GBHSGB3S5M2M8KUQTGTZBP5F993X5 -->
