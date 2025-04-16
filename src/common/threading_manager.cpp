@@ -2,10 +2,10 @@
 #include <arion/common/global_excepts.hpp>
 #include <arion/common/threading_manager.hpp>
 #include <arion/platforms/linux/lnx_kernel_utils.hpp>
+#include <arion/unicorn/unicorn.h>
 #include <asm/ldt.h>
 #include <memory>
 #include <sys/wait.h>
-#include <arion/unicorn/unicorn.h>
 
 using namespace arion;
 
@@ -379,7 +379,7 @@ bool ThreadingManager::signal_wait(pid_t tid, pid_t target_pid)
         throw WaitSameProcessException(target_pid);
     if (this->sigwait_list.find(tid) != this->sigwait_list.end())
         throw ThreadAlreadySigWaitingException(arion->get_pid(), tid);
-    if (target_pid > 0 && !Arion::has_arion_instance(target_pid))
+    if (target_pid > 0 && !arion->get_group()->has_arion_instance(target_pid))
         return false;
     if (target_pid == 0 && !arion->get_pgid_children(arion->get_pgid()).size())
         return false;
@@ -576,7 +576,7 @@ void ThreadingManager::handle_wait_signals()
             new_pending_signals.push_back(sig);
             continue;
         }
-        std::weak_ptr<Arion> source_instance_weak = Arion::get_arion_instance(sig->source_pid);
+        std::weak_ptr<Arion> source_instance_weak = arion->get_group()->get_arion_instance(sig->source_pid);
         std::shared_ptr<Arion> source_instance = source_instance_weak.lock();
         if (!arion)
             throw ExpiredWeakPtrException("Arion");
@@ -597,10 +597,7 @@ void ThreadingManager::handle_wait_signals()
             arion->abi->write_arch_reg(ret_reg, sig->source_pid);
             this->threads_map[running_tid] = std::move(arion_t);
             if (sig->signo == SIGCHLD)
-            {
-                source_instance->cleanup_process();
                 arion->remove_child(sig->source_pid);
-            }
         }
         else
             new_pending_signals.push_back(sig);

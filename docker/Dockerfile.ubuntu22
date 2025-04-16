@@ -53,6 +53,7 @@ RUN cp -r /app/lib/lief/include/LIEF /app/docker_build/deb_package/usr/include/a
 RUN cp -r /app/docker_build/lib/lief/include/LIEF /app/docker_build/deb_package/usr/include/arion/
 RUN cp -r /app/lib/spdlog/include/spdlog /app/docker_build/deb_package/usr/include/arion/
 RUN cp -r /app/lib/unicorn/include/unicorn /app/docker_build/deb_package/usr/include/arion/
+RUN cp -r /app/lib/unicornafl/include/unicornafl /app/docker_build/deb_package/usr/include/arion/
 RUN cp -r /app/docker_build/libarion.so /app/docker_build/deb_package/usr/lib/
 RUN find /app/docker_build/deb_package/usr/include/ -type f -exec chmod 666 {} +
 
