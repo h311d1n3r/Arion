@@ -35,16 +35,14 @@ ADDR BaremetalLoader::map_default_instance(std::shared_ptr<std::vector<uint8_t>>
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    const std::string code_section = "[code]";
-    arion->mem->map(load_addr, coderaw->size(), PROT_EXEC | PROT_READ | PROT_WRITE, code_section);
+    arion->mem->map(load_addr, coderaw->size(), PROT_EXEC | PROT_READ | PROT_WRITE, "[code]");
     arion->mem->write(load_addr, coderaw->data(), coderaw->size());
     auto code_end = arion->mem->align_up(coderaw->size());
 
     arion->logger->debug("Baremetal Codesize is " + std::to_string(coderaw->size()) + \
                          ". Rounded up to " + std::to_string(code_end));
 
-    const std::string data_section = "[data]";
-    arion->mem->map(load_addr + code_end, DEFAULT_DATA_SIZE, PROT_READ | PROT_WRITE, data_section);
+    arion->mem->map(load_addr + code_end, DEFAULT_DATA_SIZE, PROT_READ | PROT_WRITE, "[data]");
     return load_addr;
 
 }
@@ -66,7 +64,6 @@ ADDR BaremetalLoader::map_stack(std::shared_ptr<LOADER_PARAMS> params)
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    arion->logger->info("arch_sz = " + std::to_string(this->arch_sz));
     ADDR stack_load_addr = this->arch_sz == 64 ? LINUX_64_STACK_ADDR : LINUX_32_STACK_ADDR;
     ADDR stack_sz = this->arch_sz == 64 ? LINUX_64_STACK_SZ : LINUX_32_STACK_SZ;
     REG sp_reg = arion->abi->get_attrs()->regs.sp;

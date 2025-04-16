@@ -67,7 +67,6 @@ file(GLOB_RECURSE SOURCES "src/*.cpp" "lib/unicornafl/unicornafl.cpp")
 
 add_library(arion SHARED ${SOURCES} vdso.o)
 
-target_compile_definitions(arion PRIVATE ARION_ONLY) # Useful flag to prevent using some header parts when compiling a module against Arion
 set_property(TARGET arion PROPERTY POSITION_INDEPENDENT_CODE 1)
 set_property(TARGET arion PROPERTY OUTPUT_NAME "arion")
 
