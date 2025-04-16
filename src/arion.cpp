@@ -1,28 +1,26 @@
 #include <arion/arion.hpp>
 #include <arion/common/abi_manager.hpp>
+#include <arion/common/config.hpp>
 #include <arion/common/global_defs.hpp>
 #include <arion/common/global_excepts.hpp>
 #include <arion/common/hooks_manager.hpp>
 #include <arion/common/memory_manager.hpp>
 #include <arion/common/config.hpp>
 #include <arion/common/baremetal.hpp>
+#include <arion/keystone/keystone.h>
 #include <arion/platforms/linux/elf_loader.hpp>
 #include <arion/platforms/linux/baremetal_loader.hpp>
 #include <arion/platforms/linux/elf_parser.hpp>
 #include <arion/platforms/linux/lnx_syscall_manager.hpp>
+#include <arion/unicorn/unicorn.h>
 #include <exception>
 #include <filesystem>
-#include <arion/keystone/keystone.h>
 #include <memory>
 #include <sys/wait.h>
 #include <arion/unicorn/unicorn.h>
 #include <variant>
 
 using namespace arion;
-
-pid_t Arion::NEXT_PID = ARION_PROCESS_PID;
-std::map<pid_t, std::weak_ptr<Arion>> Arion::instances;
-
 using ProgramType = std::variant<std::vector<std::string>, std::unique_ptr<Baremetal>>;
 
 std::map<arion::CPU_ARCH, std::pair<uc_arch, uc_mode>> arion::ARION_TO_UC_ARCH{
@@ -45,26 +43,126 @@ std::map<arion::CPU_ARCH, std::vector<std::pair<cs_arch, cs_mode>>> arion::ARION
      {{cs_arch::CS_ARCH_ARM, cs_mode::CS_MODE_ARM}, {cs_arch::CS_ARCH_ARM, cs_mode::CS_MODE_THUMB}}},
     {CPU_ARCH::ARM64_ARCH, {{cs_arch::CS_ARCH_AARCH64, cs_mode::CS_MODE_LITTLE_ENDIAN}}}};
 
-std::shared_ptr<Arion> Arion::new_instance(ProgramType program, std::string fs_path,
-                                           std::vector<std::string> program_env, std::string cwd,
-                                           std::unique_ptr<Config> config,
-                                           pid_t pid)
+size_t ArionGroup::count_arion_instances()
 {
-    std::shared_ptr<Arion> arion = std::make_shared<Arion>();
-    
-    if (!pid)
+    return this->instances.size();
+}
+
+std::map<pid_t, std::shared_ptr<Arion>> ArionGroup::get_arion_instances()
+{
+    return this->instances;
+}
+
+bool ArionGroup::has_arion_instance(pid_t pid)
+{
+    return this->instances.find(pid) != this->instances.end();
+}
+
+std::shared_ptr<Arion> ArionGroup::get_arion_instance(pid_t pid)
+{
+    auto instance_it = this->instances.find(pid);
+    if (instance_it == this->instances.end())
+        throw NoProcessWithPidException(pid);
+    return instance_it->second;
+}
+
+void ArionGroup::add_arion_instance(std::shared_ptr<Arion> arion, std::optional<pid_t> pid, std::optional<pid_t> pgid)
+{
+    pid_t pid_val;
+    if (!pid.has_value())
     {
-        arion->pid = Arion::NEXT_PID;
-        arion->pgid = Arion::NEXT_PID;
-        Arion::NEXT_PID++;
-        Arion::instances[arion->pid] = arion;
+        pid_val = this->next_pid;
+        arion->set_pid(pid_val);
+        arion->set_pgid(pgid.value_or(pid_val));
+        this->next_pid++;
     }
     else
     {
-        arion->pid = pid;
-        arion->pgid = pid;
+        pid_val = pid.value();
+        arion->set_pid(pid_val);
+        arion->set_pgid(pgid.value_or(pid_val));
     }
+    arion->set_group(shared_from_this());
+    this->instances[pid_val] = arion;
+}
 
+void ArionGroup::remove_arion_instance(pid_t pid)
+{
+    std::shared_ptr<Arion> instance = this->get_arion_instance(pid);
+    this->instances.erase(pid);
+    instance->reset_group();
+}
+
+void ArionGroup::run()
+{
+    std::map<pid_t, std::shared_ptr<Arion>>::iterator instance_it;
+    while ((instance_it = this->instances.begin()) != this->instances.end())
+    {
+        while (instance_it != this->instances.end())
+        {
+            auto weak_instance = *instance_it;
+            std::shared_ptr<Arion> instance = weak_instance.second;
+            if (!instance->is_zombie)
+            {
+                if (!instance->run_current())
+                {
+                    if (instance->has_parent())
+                    {
+                        std::shared_ptr<Arion> parent = instance->get_parent();
+                        instance->is_zombie = true;
+                        parent->send_signal(instance->get_pid(), SIGCHLD);
+                    }
+                    else
+                    {
+                        instance->clear_children();
+                        instance_it = this->instances.erase(instance_it);
+                        continue;
+                    }
+                }
+                instance->set_run_start(std::nullopt);
+            }
+            else if (!instance->has_parent())
+            {
+                instance->clear_children();
+                instance_it = this->instances.erase(instance_it);
+                continue;
+            }
+            instance_it++;
+        }
+    }
+}
+
+void ArionGroup::stop_curr()
+{
+    std::shared_ptr instance = this->get_arion_instance(this->curr_pid);
+    instance->stop();
+}
+
+pid_t ArionGroup::get_curr_pid()
+{
+    return this->curr_pid;
+}
+
+void ArionGroup::set_curr_pid(pid_t pid)
+{
+    this->curr_pid = pid;
+}
+
+pid_t ArionGroup::get_next_pid()
+{
+    return this->next_pid;
+}
+
+void ArionGroup::set_next_pid(pid_t pid)
+{
+    this->next_pid = pid;
+}
+
+std::shared_ptr<Arion> Arion::new_instance(ProgramType program, std::string fs_path,
+                                           std::vector<std::string> program_env, std::string cwd,
+                                           std::unique_ptr<Config> config)
+{
+    std::shared_ptr<Arion> arion = std::make_shared<Arion>();
     arion->config = std::move(config);
 
     arion->context = ContextManager::initialize(arion);
@@ -124,28 +222,15 @@ std::shared_ptr<Arion> Arion::new_instance(ProgramType program, std::string fs_p
     return arion;
 }
 
-std::map<pid_t, std::weak_ptr<Arion>> Arion::get_arion_instances()
-{
-    return Arion::instances;
-}
-
-bool Arion::has_arion_instance(pid_t pid)
-{
-    return Arion::instances.find(pid) != Arion::instances.end();
-}
-
-std::weak_ptr<Arion> Arion::get_arion_instance(pid_t pid)
-{
-    auto instance_it = Arion::instances.find(pid);
-    if (instance_it == Arion::instances.end())
-        throw NoProcessWithPidException(pid);
-    return instance_it->second;
-}
-
 Arion::~Arion()
 {
     this->logger->debug("Destroying Arion instance.");
-    this->children.clear();
+
+    std::shared_ptr<ArionGroup> group = this->group.lock();
+    if (group && group->has_arion_instance(this->pid) && group->get_arion_instance(this->pid).get() == this)
+        group->remove_arion_instance(this->pid);
+    this->group.reset();
+
     this->parent.reset();
     this->syscalls.reset();
     this->abi.reset();
@@ -157,6 +242,7 @@ Arion::~Arion()
     this->context.reset();
     this->fs.reset();
     this->logger.reset();
+
     this->close_engines();
 }
 
@@ -258,10 +344,15 @@ void Arion::close_engines()
     }
 }
 
-bool Arion::run_current(bool multi_process, bool main_inst, std::optional<ADDR> start, std::optional<ADDR> end)
+bool Arion::run_current()
 {
-    if (!main_inst)
-        this->run_children();
+    std::shared_ptr<ArionGroup> group = this->group.lock();
+    if (!group)
+        throw ExpiredWeakPtrException("ArionGroup");
+
+    group->set_curr_pid(this->pid);
+    bool multi_process = group->count_arion_instances() > 1;
+    this->running = true;
     size_t threads_count = this->threads->get_threads_count();
     if (!threads_count)
         return false;
@@ -274,19 +365,30 @@ bool Arion::run_current(bool multi_process, bool main_inst, std::optional<ADDR> 
     }
     REG pc = this->abi->get_attrs()->regs.pc;
     ADDR pc_addr;
-    if(start.has_value()) {
-        pc_addr = start.value();
+    if (this->start.has_value())
+    {
+        pc_addr = this->start.value();
         this->abi->write_arch_reg(pc, pc_addr);
-    } else pc_addr = this->abi->read_arch_reg(pc);
-    uc_err uc_run_err =
-        uc_emu_start(this->uc, pc_addr, end.value_or(0), 0, (multi_process || multi_thread) ? ARION_CYCLES_PER_THREAD : 0);
+    }
+    else
+        pc_addr = this->abi->read_arch_reg(pc);
+
+    if (!this->end.has_value())
+    {
+        uc_err uc_ctl_err = uc_ctl(this->uc, UC_CTL_WRITE(UC_CTL_UC_USE_EXITS, 1), 1);
+        if (uc_ctl_err != UC_ERR_OK)
+            throw UnicornCtlException(uc_ctl_err);
+    }
+    uc_err uc_run_err = uc_emu_start(this->uc, pc_addr, this->end.value_or(0), 0,
+                                     (multi_process || multi_thread) ? ARION_CYCLES_PER_THREAD : 0);
     pc_addr = this->abi->read_arch_reg(pc);
     if (this->uc_exception)
         std::rethrow_exception(this->uc_exception);
     if (uc_run_err != UC_ERR_OK && !this->sync)
         throw UnicornRunException(uc_run_err);
-    if(this->hard_stop || pc_addr == end) {
-        this->hard_stop = true;
+    if (this->end.has_value() && pc_addr == this->end.value())
+    {
+        this->end = 0;
         return false;
     }
     if (this->sync)
@@ -298,82 +400,28 @@ bool Arion::run_current(bool multi_process, bool main_inst, std::optional<ADDR> 
     if (!threads_count)
         return false;
     this->threads->switch_to_next_thread();
+    this->running = false;
     return true;
 }
 
-void Arion::run_children()
+void Arion::set_run_bounds(std::optional<ADDR> start, std::optional<ADDR> end)
 {
-    std::vector<std::shared_ptr<Arion>> children_cpy;
-    for (std::weak_ptr<Arion> child : this->children)
-    {
-        std::shared_ptr<Arion> child_ = child.lock();
-        if (!child_)
-            throw ExpiredWeakPtrException("Arion");
-        children_cpy.push_back(child_);
-    }
-    for (std::shared_ptr<Arion> child : children_cpy)
-    {
-        if (child->is_zombie)
-            continue;
-        if (!child->run_current(true, false))
-        {
-            child->is_zombie = true;
-            this->send_signal(child->pid, SIGCHLD);
-        }
-    }
+    this->start = start;
+    this->end = end;
 }
 
-void Arion::cleanup_process()
+void Arion::set_run_start(std::optional<arion::ADDR> start)
 {
-    for (std::weak_ptr<Arion> child : this->children)
-    {
-        std::shared_ptr<Arion> child_ = child.lock();
-        if (!child_)
-            throw ExpiredWeakPtrException("Arion");
-        child_->cleanup_process();
-    }
-    this->children.clear();
-    Arion::instances.erase(this->pid);
+    this->start = start;
 }
 
-void Arion::run(std::optional<ADDR> start, std::optional<ADDR> end)
+void Arion::set_run_end(std::optional<arion::ADDR> end)
 {
-    if (!this->loader_params && this->baremetal->setup_memory) {
-        throw ArionCustomBaremetalConfigurationNotSet();
-    }
-    this->hard_stop = false;
-    this->running = true;
-    if(!end.has_value()) {
-        uc_err uc_ctl_err = uc_ctl(this->uc, UC_CTL_WRITE(UC_CTL_UC_USE_EXITS, 1), 1);
-        if (uc_ctl_err != UC_ERR_OK)
-            throw UnicornCtlException(uc_ctl_err);
-    }
-
-    bool first_round = true;
-    while (true)
-    {
-        if (!this->run_current(this->children.size() > 0, true, first_round ? start : std::nullopt, end))
-            break;
-        this->run_children();
-        if(first_round) first_round = false;
-    }
-    if(this->running)
-        this->running = false;
-    if(!this->hard_stop)
-        this->cleanup_process();
+    this->end = end;
 }
 
-void Arion::run_from(ADDR start) {
-    this->run(start);
-}
-
-void Arion::run_to(ADDR end) {
-    this->run(std::nullopt, end);
-}
-
-void Arion::stop(bool hard_stop)
+void Arion::stop()
 {
-    this->hard_stop = hard_stop;
     uc_err uc_stop_err = uc_emu_stop(this->uc);
     if (uc_stop_err != UC_ERR_OK)
         throw UnicornStopException(uc_stop_err);
@@ -382,20 +430,24 @@ void Arion::stop(bool hard_stop)
 void Arion::crash(std::exception_ptr exception)
 {
     this->uc_exception = exception;
-    this->stop(false);
+    this->stop();
 }
 
 void Arion::sync_threads()
 {
     this->sync = true;
-    this->stop(false);
+    this->stop();
 }
 
 std::shared_ptr<Arion> Arion::copy()
 {
     std::shared_ptr<Arion> arion_cpy =
-        Arion::new_instance(this->program_args, this->fs->get_fs_path(), this->program_env, this->fs->get_cwd_path(), 
+        Arion::new_instance(this->program_args, this->fs->get_fs_path(), this->program_env, this->fs->get_cwd_path(),
                             std::make_unique<Config>(this->config->clone()));
+    std::shared_ptr<ArionGroup> group = this->group.lock();
+    if (!group)
+        throw ExpiredWeakPtrException("ArionGroup");
+    group->add_arion_instance(arion_cpy, std::nullopt, this->get_pgid());
     std::shared_ptr<ARION_CONTEXT> ctx = this->context->save();
     arion_cpy->context->restore(ctx);
     return arion_cpy;
@@ -406,12 +458,14 @@ bool Arion::is_running()
     return this->running;
 }
 
-void Arion::init_afl_mode(std::vector<int> signals) {
+void Arion::init_afl_mode(std::vector<int> signals)
+{
     this->afl_mode = true;
     this->afl_signals = signals;
 }
 
-void Arion::stop_afl_mode() {
+void Arion::stop_afl_mode()
+{
     this->afl_mode = false;
     this->afl_signals.clear();
 }
@@ -431,14 +485,25 @@ std::shared_ptr<Arion> Arion::get_parent()
 
 std::vector<std::shared_ptr<Arion>> Arion::get_children()
 {
-    return this->children;
+    std::vector<std::shared_ptr<Arion>> children_vec;
+    for (std::weak_ptr<Arion> child_weak : this->children)
+    {
+        std::shared_ptr<Arion> child = child_weak.lock();
+        if (!child)
+            throw ExpiredWeakPtrException("Arion");
+        children_vec.push_back(child);
+    }
+    return children_vec;
 }
 
 std::vector<std::shared_ptr<Arion>> Arion::get_pgid_children(pid_t pgid)
 {
     std::vector<std::shared_ptr<Arion>> pgid_children;
-    for (std::shared_ptr<Arion> child : this->children)
+    for (std::weak_ptr<Arion> child_weak : this->children)
     {
+        std::shared_ptr<Arion> child = child_weak.lock();
+        if (!child)
+            throw ExpiredWeakPtrException("Arion");
         if (child->get_pgid() == pgid)
             pgid_children.push_back(child);
     }
@@ -461,23 +526,22 @@ bool Arion::has_child(pid_t child_pid)
 
 bool Arion::is_child_of(pid_t parent_pid)
 {
-    auto parent_it = Arion::instances.find(parent_pid);
-    if (parent_it == Arion::instances.end())
-        throw NoProcessWithPidException(parent_pid);
-    std::shared_ptr<Arion> parent = parent_it->second.lock();
-    if (!parent)
-        throw ExpiredWeakPtrException("Arion");
+    std::shared_ptr<ArionGroup> group = this->group.lock();
+    if (!group)
+        throw ExpiredWeakPtrException("ArionGroup");
+    std::shared_ptr<Arion> parent = group->get_arion_instance(parent_pid);
     return parent->has_child(this->get_pid());
 }
 
 std::shared_ptr<Arion> Arion::get_child(pid_t child_pid)
 {
-    auto child_it =
+    auto child_weak_it =
         std::find_if(this->children.begin(), this->children.end(),
                      [child_pid](std::weak_ptr<Arion> it_child) { return it_child.lock()->pid == child_pid; });
-    if (child_it == this->children.end())
+    if (child_weak_it == this->children.end())
         throw NoChildWithPidException(this->pid, child_pid);
-    return *child_it;
+    std::shared_ptr<Arion> child = child_weak_it->lock();
+    return child;
 }
 
 void Arion::replace_child(pid_t child_pid, std::shared_ptr<Arion> child)
@@ -492,10 +556,27 @@ void Arion::replace_child(pid_t child_pid, std::shared_ptr<Arion> child)
 
 void Arion::remove_child(pid_t child_pid)
 {
-    this->children.erase(
-        std::remove_if(this->children.begin(), this->children.end(),
-                       [child_pid](std::weak_ptr<Arion> child) { return child.lock()->pid == child_pid; }),
-        this->children.end());
+    this->children.erase(std::remove_if(this->children.begin(), this->children.end(),
+                                        [child_pid](std::weak_ptr<Arion> child_weak) {
+                                            std::shared_ptr<Arion> child = child_weak.lock();
+                                            if (!child)
+                                                throw ExpiredWeakPtrException("Arion");
+                                            child->parent.reset();
+                                            return child->pid == child_pid;
+                                        }),
+                         this->children.end());
+}
+
+void Arion::clear_children()
+{
+    for (std::weak_ptr<Arion> child_weak : this->children)
+    {
+        std::shared_ptr<Arion> child = child_weak.lock();
+        if (!child)
+            throw ExpiredWeakPtrException("Arion");
+        child->parent.reset();
+    }
+    this->children.clear();
 }
 
 void Arion::execve(std::string file_path, std::vector<std::string> argv, std::vector<std::string> envp)
@@ -504,16 +585,21 @@ void Arion::execve(std::string file_path, std::vector<std::string> argv, std::ve
         argv[0] = file_path;
     else
         argv.push_back(file_path);
+
+    std::shared_ptr<ArionGroup> group = this->group.lock();
+    if (!group)
+        throw ExpiredWeakPtrException("ArionGroup");
     std::shared_ptr<Arion> new_inst = Arion::new_instance(argv, this->fs->get_fs_path(), envp, this->fs->get_cwd_path(),
-                                                          std::make_unique<Config>(this->config->clone()), this->pid);
+                                                          std::make_unique<Config>(this->config->clone()));
+    group->add_arion_instance(new_inst, this->get_pid(), this->get_pgid());
     std::shared_ptr<Arion> parent = this->parent.lock();
-    if (!parent)
-        throw ExpiredWeakPtrException("Arion");
-    parent->replace_child(new_inst->pid, new_inst);
-    new_inst->parent = this->parent;
-    this->cleanup_process();
-    Arion::instances[new_inst->pid] = new_inst;
+    if (parent)
+    {
+        parent->replace_child(new_inst->pid, new_inst);
+        new_inst->parent = this->parent;
+    }
     this->hooks->trigger_arion_hook(EXECVE_HOOK, new_inst);
+    this->stop();
 }
 
 std::vector<std::string> Arion::get_program_args()
@@ -536,14 +622,43 @@ pid_t Arion::get_pgid()
     return this->pgid;
 }
 
+void Arion::set_pid(pid_t pid)
+{
+    this->pid = pid;
+}
+
 void Arion::set_pgid(pid_t pgid)
 {
     this->pgid = pgid;
 }
 
+bool Arion::has_group()
+{
+    return !this->group.expired();
+}
+
+std::shared_ptr<ArionGroup> Arion::get_group()
+{
+    std::shared_ptr<ArionGroup> group = this->group.lock();
+    if (!group)
+        throw ExpiredWeakPtrException("ArionGroup");
+    return group;
+}
+
+void Arion::set_group(std::shared_ptr<ArionGroup> group)
+{
+    this->group = group;
+}
+
+void Arion::reset_group()
+{
+    this->group.reset();
+}
+
 void Arion::send_signal(pid_t source_pid, int signo)
 {
-    if(this->afl_mode && std::find(this->afl_signals.begin(), this->afl_signals.end(), signo) != this->afl_signals.end())
+    if (this->afl_mode &&
+        std::find(this->afl_signals.begin(), this->afl_signals.end(), signo) != this->afl_signals.end())
         abort(); // Will cause a crash in AFL instance
     std::shared_ptr<SIGNAL> sig = std::make_shared<SIGNAL>(source_pid, signo);
     this->pending_signals.push_back(sig);

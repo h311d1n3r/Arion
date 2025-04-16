@@ -56,13 +56,15 @@ int main()
 
     auto coderaw = baremetal->coderaw;
     coderaw->insert(coderaw->end(), std::begin(shellcode), std::end(shellcode));
-
     config->set_field<ARION_LOG_LEVEL>("log_lvl", ARION_LOG_LEVEL::DEBUG);
+    std::shared_ptr<ArionGroup> arion_group = std::make_shared<ArionGroup>();
     // Arion::new_instance(args, fs_root, env, cwd, log_level)
-    std::shared_ptr<Arion> arion = Arion::new_instance(std::move(baremetal), "/", {}, std::filesystem::current_path(), std::move(config));
+    std::shared_ptr<Arion> arion = 
+        Arion::new_instance(std::move(baremetal), "/", {}, std::filesystem::current_path(), std::move(config));
+    arion_group->add_arion_instance(arion);
     std::cout << arion->mem->mappings_str() << std::endl;
     arion->hooks->hook_code(instr_hook);
     arion->hooks->hook_block(block_hook);
-    arion->run();
+    arion_group->run();
     return 0;
 }
