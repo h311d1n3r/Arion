@@ -37,8 +37,6 @@ Arion currently implements the following features :
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Examples](#how_examples)  
 [Contributing](#contributing)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Development Mode](#dev_mode)  
-[Sponsors](#sponsors)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[GitAds](#gitads)  
 
 <a name="install"/>
 
@@ -99,16 +97,3 @@ Feel free to contribute to the project by implementing new features on the `dev`
 Arion can be compiled with `DEV` option enabled (`-DDEV=ON`) to increase build speed.  
 This mode uses system libraries instead of building and embedding the ones of `lib/`.  
 It is highly recommended to use library versions on the exact same commits as `lib/`.
-
-<a name="sponsors"/>
-
-## Sponsors
-
-<a name="gitads"/>
-
-### GitAds
-<p align="center">
-  <a href="https://gitads.dev/v1/ad-track?source=h311d1n3r/arion@github">
-    <img src="https://gitads.dev/v1/ad-serve?source=h311d1n3r/arion@github" alt="Sponsored by GitAds" />
-  </a>
-</p>
