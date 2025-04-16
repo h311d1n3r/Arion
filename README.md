@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://gitads.dev/v1/ad-track?source=h311d1n3r/arion@github">
+    <img src="https://gitads.dev/v1/ad-serve?source=h311d1n3r/arion@github" alt="Sponsored by GitAds" />
+  </a>
+</p>
+
 # Arion
 
 <div align="center"><img src="./res/img/logo.png" alt="Arion Logo" width="300"></div>
@@ -101,4 +107,8 @@ It is highly recommended to use library versions on the exact same commits as `l
 <a name="gitads"/>
 
 ### GitAds
-[![Sponsored by GitAds](https://gitads.dev/v1/ad-serve?source=h311d1n3r/arion@github)](https://gitads.dev/v1/ad-track?source=h311d1n3r/arion@github)
+<p align="center">
+  <a href="https://gitads.dev/v1/ad-track?source=h311d1n3r/arion@github">
+    <img src="https://gitads.dev/v1/ad-serve?source=h311d1n3r/arion@github" alt="Sponsored by GitAds" />
+  </a>
+</p>
