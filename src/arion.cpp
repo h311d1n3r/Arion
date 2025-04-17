@@ -21,7 +21,6 @@
 #include <variant>
 
 using namespace arion;
-using ProgramType = std::variant<std::vector<std::string>, std::unique_ptr<Baremetal>>;
 
 std::map<arion::CPU_ARCH, std::pair<uc_arch, uc_mode>> arion::ARION_TO_UC_ARCH{
     {CPU_ARCH::X86_ARCH, {uc_arch::UC_ARCH_X86, uc_mode::UC_MODE_32}},
@@ -158,11 +157,10 @@ void ArionGroup::set_next_pid(pid_t pid)
     this->next_pid = pid;
 }
 
-std::shared_ptr<Arion> Arion::new_instance(ProgramType program, std::string fs_path,
-                                           std::vector<std::string> program_env, std::string cwd,
-                                           std::unique_ptr<Config> config)
-{
-    std::shared_ptr<Arion> arion = std::make_shared<Arion>();
+void Arion::new_instance_common(std::string fs_path, std::vector<std::string> program_env, 
+    std::string cwd, std::unique_ptr<Config> config) {
+
+    std::shared_ptr<Arion> arion = shared_from_this();
     arion->config = std::move(config);
 
     arion->context = ContextManager::initialize(arion);
@@ -174,52 +172,60 @@ std::shared_ptr<Arion> Arion::new_instance(ProgramType program, std::string fs_p
 
     arion->program_env = program_env;
 
-    std::visit([&](auto&& arg) {
-        using T = std::decay_t<decltype(arg)>;
+}
 
-        if constexpr (std::is_same_v<T, std::vector<std::string>>) {
-            if (arg.empty())
-                throw InvalidArgumentException("Program arguments must at least contain target name.");
+std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program, std::string fs_path,
+                                           std::vector<std::string> program_env, std::string cwd,
+                                           std::unique_ptr<Config> config)
+{
+    std::shared_ptr<Arion> arion = std::make_shared<Arion>();
+    arion->new_instance_common(fs_path, program_env, cwd, std::move(config));
+    
+    if (program.empty())
+        throw InvalidArgumentException("Program arguments must at least contain target name.");
 
-            arion->program_args = arg;
-            std::string program_path = arg.at(0);
+    arion->program_args = program;
+    std::string program_path = program.at(0);
 
-            arion->logger->info("Initializing Arion instance for image \"" + program_path + "\".");
+    arion->logger->info("Initializing Arion instance for image \"" + program_path + "\".");
 
-            if (!std::filesystem::exists(program_path))
-                throw FileNotFoundException(program_path);
-            if (!arion->fs->is_in_fs(program_path))
-                throw FileNotInFsException(fs_path, program_path);
+    if (!std::filesystem::exists(program_path))
+        throw FileNotFoundException(program_path);
+    if (!arion->fs->is_in_fs(program_path))
+        throw FileNotInFsException(fs_path, program_path);
 
-            std::shared_ptr<ElfParser> prog_parser = std::make_shared<ElfParser>(ElfParser(arion, program_path));
-            prog_parser->process();
-            arion->init_engines(prog_parser->arch);
-            arion->hooks = HooksManager::initialize(arion);
-            arion->threads = ThreadingManager::initialize(arion);
-            arion->tracer = CodeTracer::initialize(arion);
-            arion->init_program(prog_parser);
-        }
+    std::shared_ptr<ElfParser> prog_parser = std::make_shared<ElfParser>(ElfParser(arion, program_path));
+    prog_parser->process();
+    arion->init_engines(prog_parser->arch);
+    arion->hooks = HooksManager::initialize(arion);
+    arion->threads = ThreadingManager::initialize(arion);
+    arion->tracer = CodeTracer::initialize(arion);
+    arion->init_program(prog_parser);
+    return arion;
 
-        else if constexpr (std::is_same_v<T, std::unique_ptr<Baremetal>>) {
-            arion->logger->info("Initializing Arion instance for Baremetal program.");
-            arion->baremetal = std::move(arg);
-            auto arch = arion->baremetal->arch;
-            arion->init_engines(arch);
+}
 
-            auto code = arion->baremetal->coderaw;
-            if(code->empty())
-                throw std::runtime_error("Baremetal coderaw is empty!");
+std::shared_ptr<Arion> Arion::new_instance(std::unique_ptr<Baremetal> baremetal, std::string fs_path,
+    std::vector<std::string> program_env, std::string cwd,
+    std::unique_ptr<Config> config)
+{
 
-            arion->hooks = HooksManager::initialize(arion);
-            arion->threads = ThreadingManager::initialize(arion);
-            arion->tracer = CodeTracer::initialize(arion);
+    std::shared_ptr<Arion> arion = std::make_shared<Arion>();
+    arion->new_instance_common(fs_path, program_env, cwd, std::move(config));
+    arion->logger->info("Initializing Arion instance for Baremetal program.");
+    arion->baremetal = std::move(baremetal);
+    auto arch = arion->baremetal->arch;
+    arion->init_engines(arch);
 
-            arion->init_baremetal_program();
-        }
+    auto code = arion->baremetal->coderaw;
+    if(code->empty())
+        throw std::runtime_error("Baremetal coderaw is empty!");
 
-    }, program);
+    arion->hooks = HooksManager::initialize(arion);
+    arion->threads = ThreadingManager::initialize(arion);
+    arion->tracer = CodeTracer::initialize(arion);
 
-
+    arion->init_baremetal_program();
     return arion;
 }
 

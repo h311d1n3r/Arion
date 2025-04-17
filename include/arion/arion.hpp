@@ -35,7 +35,6 @@ extern std::map<arion::CPU_ARCH, std::vector<std::pair<ks_arch, ks_mode>>> ARION
 extern std::map<arion::CPU_ARCH, std::vector<std::pair<cs_arch, cs_mode>>> ARION_TO_CS_ARCH;
 }; // namespace arion
 
-using ProgramType = std::variant<std::vector<std::string>, std::unique_ptr<Baremetal>>;
 class ARION_EXPORT ArionGroup : public std::enable_shared_from_this<ArionGroup>
 {
   private:
@@ -75,6 +74,8 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     bool sync = false;
     pid_t pid;
     pid_t pgid;
+    void new_instance_common(std::string fs_path, std::vector<std::string> program_env, 
+                             std::string cwd, std::unique_ptr<Config> config);
     void init_engines(arion::CPU_ARCH arch);
     void init_program(std::shared_ptr<ElfParser> prog_parser);
     void init_baremetal_program();
@@ -103,9 +104,13 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     std::vector<csh *> cs;
     bool is_zombie = false;
     static std::shared_ptr<Arion> ARION_EXPORT
-    new_instance(ProgramType program, std::string fs_path = "/",
+    new_instance(std::vector<std::string> program, std::string fs_path = "/",
                  std::vector<std::string> program_env = std::vector<std::string>(), std::string cwd = "",
                  std::unique_ptr<Config> config = std::make_unique<Config>());
+    static std::shared_ptr<Arion> ARION_EXPORT
+    new_instance(std::unique_ptr<Baremetal> baremetal, std::string fs_path = "/",
+                  std::vector<std::string> program_env = std::vector<std::string>(), std::string cwd = "",
+                  std::unique_ptr<Config> config = std::make_unique<Config>());
     ~Arion();
     void ARION_EXPORT set_run_bounds(std::optional<arion::ADDR> start = std::nullopt,
                                      std::optional<arion::ADDR> end = std::nullopt);

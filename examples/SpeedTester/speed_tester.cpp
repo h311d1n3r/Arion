@@ -17,7 +17,7 @@ int main()
     std::shared_ptr<ArionGroup> arion_group = std::make_shared<ArionGroup>();
     // Arion::new_instance(args, fs_root, env, cwd, log_level, config)
     std::shared_ptr<Arion> arion =
-        Arion::new_instance(std::vector<std::string>{"/bin/ls"}, "/", {}, std::filesystem::current_path(), std::move(config));
+        Arion::new_instance({"/bin/ls"}, "/", {}, std::filesystem::current_path(), std::move(config));
     arion_group->add_arion_instance(arion);
     std::shared_ptr<ARION_CONTEXT> ctxt = arion->context->save();
     struct timespec start, end;

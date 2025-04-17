@@ -56,7 +56,6 @@ int main()
     std::unique_ptr<Baremetal> baremetal = std::make_unique<Baremetal>();
     baremetal->setup_memory = true; // Tell arion to not create defaults mappings for shellcode
     
-
     auto coderaw = baremetal->coderaw;
     coderaw->insert(coderaw->end(), std::begin(shellcode), std::end(shellcode));
     std::shared_ptr<ArionGroup> arion_group = std::make_shared<ArionGroup>();
