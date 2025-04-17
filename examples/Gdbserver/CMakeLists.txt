@@ -5,6 +5,6 @@ set(CMAKE_CXX_STANDARD 17)
 
 find_package(arion REQUIRED)
 
-add_executable(disassembler disassembler.cpp)
+add_executable(gdbserver gdbserver.cpp)
 
-target_link_libraries(disassembler PRIVATE arion::arion)
+target_link_libraries(gdbserver PRIVATE arion::arion)
