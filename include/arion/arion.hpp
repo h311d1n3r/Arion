@@ -2,6 +2,7 @@
 #define ARION_ARION_HPP
 
 #include <arion/archs/x86/gdt_manager.hpp>
+#include <arion/capstone/capstone.h>
 #include <arion/common/abi_manager.hpp>
 #include <arion/common/code_tracer.hpp>
 #include <arion/common/context_manager.hpp>
@@ -9,8 +10,6 @@
 #include <arion/common/global_defs.hpp>
 #include <arion/common/hooks_manager.hpp>
 #include <arion/common/logger.hpp>
-#include <arion/capstone/capstone.h>
-#include <arion/common/config.hpp>
 #include <arion/common/memory_manager.hpp>
 #include <arion/common/socket_manager.hpp>
 #include <arion/common/threading_manager.hpp>
