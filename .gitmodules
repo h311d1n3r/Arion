@@ -18,4 +18,4 @@
 	url = https://github.com/AFLplusplus/unicornafl.git
 [submodule "lib/udbserver"]
 	path = lib/udbserver
-	url = https://github.com/bet4it/udbserver
+	url = https://github.com/bet4it/udbserver.git

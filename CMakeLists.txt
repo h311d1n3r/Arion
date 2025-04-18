@@ -49,6 +49,12 @@ set(LIEF_EXAMPLES OFF CACHE BOOL "Disable LIEF examples")
 set(LIEF_TESTS OFF CACHE BOOL "Disable LIEF tests")
 set(LIEF_ARCHITECTURES "x86;arm;arm64" CACHE STRING "Build only x86, ARM, and ARM64 for LIEF")
 
+# Check for cargo installation
+find_program(CARGO_EXECUTABLE cargo)
+if (NOT CARGO_EXECUTABLE)
+    message(FATAL_ERROR "cargo could not be found. Please install it to proceed.")
+endif()
+
 # Copy vdso.bin to build directory to prevent absolute path inclusion
 add_custom_command(
     OUTPUT ${CMAKE_BINARY_DIR}/vdso.bin
@@ -118,7 +124,10 @@ set_target_properties(${KEYSTONE_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 set_target_properties(${LIEF_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 set_target_properties(${SPDLOG_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
-set(UDBSERVER_LIB "${CMAKE_SOURCE_DIR}/lib/udbserver/build/libudbserver.a")
+set(UDBSERVER_PATH "${CMAKE_SOURCE_DIR}/lib/udbserver")
+set(UDBSERVER_BUILD_PATH "${UDBSERVER_PATH}/build")
+set(UDBSERVER_LIB_NAME "libudbserver.a")
+set(UDBSERVER_LIB "${UDBSERVER_BUILD_PATH}/${UDBSERVER_LIB_NAME}")
 
 add_custom_target(udbserver_build ALL
     DEPENDS ${UDBSERVER_LIB}
@@ -127,12 +136,12 @@ add_custom_target(udbserver_build ALL
 add_custom_command(
     COMMENT "Building the udbserver library"
     OUTPUT ${UDBSERVER_LIB}
-    COMMAND mkdir -p ${CMAKE_SOURCE_DIR}/lib/udbserver/build
+    COMMAND mkdir -p ${UDBSERVER_BUILD_PATH}
     COMMAND cargo install cargo-c
-    COMMAND cargo cinstall --release --prefix=/usr --destdir=${CMAKE_SOURCE_DIR}/lib/udbserver/build
-    COMMAND find "${CMAKE_SOURCE_DIR}/lib/udbserver/build/usr" -name "libudbserver.a" -exec cp {} "${CMAKE_SOURCE_DIR}/lib/udbserver/build/libudbserver.a" \\\;
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/lib/udbserver
-    DEPENDS "${CMAKE_SOURCE_DIR}/lib/udbserver/Cargo.toml"
+    COMMAND cargo cinstall --release --prefix=/usr --destdir=${UDBSERVER_BUILD_PATH}
+    COMMAND find "${UDBSERVER_BUILD_PATH}/usr" -name ${UDBSERVER_LIB_NAME} -exec cp {} ${UDBSERVER_LIB} \\\;
+    WORKING_DIRECTORY ${UDBSERVER_PATH}
+    DEPENDS "${UDBSERVER_PATH}/Cargo.toml"
 )
 
 endif()
