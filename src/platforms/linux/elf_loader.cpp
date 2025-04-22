@@ -11,7 +11,6 @@
 #include <memory>
 #include <arion/unicorn/unicorn.h>
 #include <unistd.h>
-#include <iostream>
 
 using namespace arion;
 
@@ -50,7 +49,6 @@ std::unique_ptr<LOADER_PARAMS> ElfLoader::process()
     else
         params->arm_traps_address = 0;
     this->init_main_thread(params);
-    REG pc = arion->abi->get_attrs()->regs.pc;
     return std::make_unique<LOADER_PARAMS>(*params.get());
 }
 

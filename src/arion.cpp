@@ -18,7 +18,6 @@
 #include <memory>
 #include <sys/wait.h>
 #include <arion/unicorn/unicorn.h>
-#include <variant>
 #include <iostream>
 
 using namespace arion;
