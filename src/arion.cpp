@@ -19,6 +19,7 @@
 #include <sys/wait.h>
 #include <arion/unicorn/unicorn.h>
 #include <variant>
+#include <iostream>
 
 using namespace arion;
 
@@ -393,6 +394,11 @@ bool Arion::run_current()
         uc_err uc_ctl_err = uc_ctl(this->uc, UC_CTL_WRITE(UC_CTL_UC_USE_EXITS, 1), 1);
         if (uc_ctl_err != UC_ERR_OK)
             throw UnicornCtlException(uc_ctl_err);
+    }
+    // Unicorn clear the lsb bit when writing pc registers, but don't save the thumb state, must fix address
+    if (this->abi->get_thumb_mode()) {
+        this->logger->debug("Program is in ARM Thumb Mode");
+        pc_addr |= 1;
     }
     uc_err uc_run_err = uc_emu_start(this->uc, pc_addr, this->end.value_or(0), 0,
                                      (multi_process || multi_thread) ? ARION_CYCLES_PER_THREAD : 0);
