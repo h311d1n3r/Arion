@@ -49,6 +49,12 @@ set(LIEF_EXAMPLES OFF CACHE BOOL "Disable LIEF examples")
 set(LIEF_TESTS OFF CACHE BOOL "Disable LIEF tests")
 set(LIEF_ARCHITECTURES "x86;arm;arm64" CACHE STRING "Build only x86, ARM, and ARM64 for LIEF")
 
+# Check for cargo installation
+find_program(CARGO_EXECUTABLE cargo)
+if (NOT CARGO_EXECUTABLE)
+    message(FATAL_ERROR "cargo could not be found. Please install it to proceed.")
+endif()
+
 # Copy vdso.bin to build directory to prevent absolute path inclusion
 add_custom_command(
     OUTPUT ${CMAKE_BINARY_DIR}/vdso.bin
@@ -94,6 +100,7 @@ find_library(LIEF_LIB LIEF REQUIRED)
 find_library(SPDLOG_LIB spdlogd)
 if(NOT SPDLOG_LIB)
 find_library(SPDLOG_LIB spdlog REQUIRED)
+find_library(UDBSERVER_LIB udbserver REQUIRED)
 endif()
 
 else()
@@ -117,9 +124,29 @@ set_target_properties(${KEYSTONE_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 set_target_properties(${LIEF_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 set_target_properties(${SPDLOG_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
+set(UDBSERVER_PATH "${CMAKE_SOURCE_DIR}/lib/udbserver")
+set(UDBSERVER_BUILD_PATH "${UDBSERVER_PATH}/build")
+set(UDBSERVER_LIB_NAME "libudbserver.a")
+set(UDBSERVER_LIB "${UDBSERVER_BUILD_PATH}/${UDBSERVER_LIB_NAME}")
+
+add_custom_target(udbserver_build ALL
+    DEPENDS ${UDBSERVER_LIB}
+)
+
+add_custom_command(
+    COMMENT "Building the udbserver library"
+    OUTPUT ${UDBSERVER_LIB}
+    COMMAND mkdir -p ${UDBSERVER_BUILD_PATH}
+    COMMAND cargo install cargo-c
+    COMMAND cargo cinstall --release --prefix=/usr --destdir=${UDBSERVER_BUILD_PATH}
+    COMMAND find "${UDBSERVER_BUILD_PATH}/usr" -name ${UDBSERVER_LIB_NAME} -exec cp {} ${UDBSERVER_LIB} \\\;
+    WORKING_DIRECTORY ${UDBSERVER_PATH}
+    DEPENDS "${UDBSERVER_PATH}/Cargo.toml"
+)
+
 endif()
 
-target_link_libraries(arion ${ARION_LIB_LINK_MODE} ${UNICORN_LIB} ${CAPSTONE_LIB} ${KEYSTONE_LIB} ${LIEF_LIB} ${SPDLOG_LIB} ${UUID_LIB})
+target_link_libraries(arion ${ARION_LIB_LINK_MODE} ${UNICORN_LIB} ${CAPSTONE_LIB} ${KEYSTONE_LIB} ${LIEF_LIB} ${SPDLOG_LIB} ${UUID_LIB} ${UDBSERVER_LIB})
 
 # This library should not bring version issues
 find_path(UUID_INCLUDE_DIR uuid/uuid.h)
@@ -132,6 +159,7 @@ find_path(KEYSTONE_INCLUDE_DIR keystone/keystone.h)
 find_path(CAPSTONE_INCLUDE_DIR capstone/capstone.h)
 find_path(LIEF_INCLUDE_DIR LIEF/LIEF.hpp)
 find_path(SPDLOG_INCLUDE_DIR spdlog/spdlog.h)
+find_path(UDBSERVER_LIB udbserver.h)
 
 else()
 

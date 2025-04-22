@@ -22,6 +22,11 @@
 
 using namespace arion;
 
+// Replace import of udbserver with extern "C" // C++ mangling import problem
+extern "C" {
+    void udbserver(void* handle, uint16_t port, uint64_t start_addr);
+}
+
 std::map<arion::CPU_ARCH, std::pair<uc_arch, uc_mode>> arion::ARION_TO_UC_ARCH{
     {CPU_ARCH::X86_ARCH, {uc_arch::UC_ARCH_X86, uc_mode::UC_MODE_32}},
     {CPU_ARCH::X8664_ARCH, {uc_arch::UC_ARCH_X86, uc_mode::UC_MODE_64}},
@@ -258,8 +263,10 @@ void Arion::init_engines(arion::CPU_ARCH arch)
 {
     std::pair<uc_arch, uc_mode> uc_cpu_arch = ARION_TO_UC_ARCH[arch];
     uc_err uc_open_err = uc_open(uc_cpu_arch.first, uc_cpu_arch.second, &this->uc);
+
     if (uc_open_err != UC_ERR_OK)
         throw UnicornOpenException(uc_open_err);
+
     std::vector<std::pair<ks_arch, ks_mode>> ks_cpu_archs = ARION_TO_KS_ARCH[arch];
     for (std::pair<ks_arch, ks_mode> ks_cpu_arch : ks_cpu_archs)
     {
@@ -670,4 +677,9 @@ void Arion::send_signal(pid_t source_pid, int signo)
         abort(); // Will cause a crash in AFL instance
     std::shared_ptr<SIGNAL> sig = std::make_shared<SIGNAL>(source_pid, signo);
     this->pending_signals.push_back(sig);
+}
+
+void Arion::run_gdbserver(uint32_t port)
+{
+    udbserver(this->uc, port, 0);
 }
