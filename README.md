@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://gitads.dev/v1/ad-track?source=h311d1n3r/arion@github">
+    <img src="https://gitads.dev/v1/ad-serve?source=h311d1n3r/arion@github" alt="Sponsored by GitAds" />
+  </a>
+</p>
+
 # Arion
 
 <div align="center"><img src="./res/img/logo.png" alt="Arion Logo" width="300"></div>
@@ -18,6 +24,7 @@ Arion currently implements the following features :
 - **Fork handling**  
 - **Multithreading handling (unstable)**  
 - **Saving / restoring context**  
+- **GDB debugging with udbserver**
 - **Hooking the target with ~20 functions**  
 - **Memory reading / writing**  
 - **File system management**  
