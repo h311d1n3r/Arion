@@ -18,8 +18,9 @@
 using namespace arion;
 
 // Replace import of udbserver with extern "C" // C++ mangling import problem
-extern "C" {
-    void udbserver(void* handle, uint16_t port, uint64_t start_addr);
+extern "C"
+{
+    void udbserver(void *handle, uint16_t port, uint64_t start_addr);
 }
 
 std::map<arion::CPU_ARCH, std::pair<uc_arch, uc_mode>> arion::ARION_TO_UC_ARCH{
@@ -175,7 +176,7 @@ std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program_args
         throw FileNotFoundException(program_path);
     if (!arion->fs->is_in_fs(program_path))
         throw FileNotInFsException(fs_path, program_path);
-    std::shared_ptr<ElfParser> prog_parser = std::make_shared<ElfParser>(ElfParser(arion, program_path));
+    std::shared_ptr<ElfParser> prog_parser = std::make_shared<ElfParser>(arion, program_path);
     prog_parser->process();
     arion->init_engines(prog_parser->arch);
     arion->context = ContextManager::initialize(arion);
