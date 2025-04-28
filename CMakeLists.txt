@@ -123,9 +123,7 @@ endfunction()
 add_arion_dependency(UNICORN_LIB unicorn unicorn)
 add_arion_dependency(CAPSTONE_LIB capstone capstone)
 add_arion_dependency(KEYSTONE_LIB keystone keystone)
-set(SPDLOG_FMT_EXTERNAL TRUE)
 add_arion_dependency(LIEF_LIB lief LIB_LIEF)
-set(SPDLOG_FMT_EXTERNAL FALSE)
 add_arion_dependency(SPDLOG_LIB spdlog spdlog)
 
 set(UDBSERVER_PATH "${CMAKE_SOURCE_DIR}/lib/udbserver")
@@ -198,8 +196,10 @@ add_include_lib(${SPDLOG_INCLUDE_DIR} spdlog)
 
 # Needed because UnicornAFL is built with CMakeLists.txt
 set(UNICORNAFL_BUILD_INCLUDE_DIRS $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/lib/unicornafl/include> $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/lib/unicornafl/include/unicornafl>)
+# Needed to get config.h after LIEF was built a first time
+set(LIEF_POST_BUILD_INCLUDE_DIR $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/lib/lief/include>)
 
-target_include_directories(arion PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include> ${UNICORNAFL_BUILD_INCLUDE_DIRS} $<INSTALL_INTERFACE:include> $<INSTALL_INTERFACE:include/arion> ${UUID_INCLUDE_DIR})
+target_include_directories(arion PUBLIC ${LIEF_POST_BUILD_INCLUDE_DIR} $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include> $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/arion> ${UNICORNAFL_BUILD_INCLUDE_DIRS} $<INSTALL_INTERFACE:include> $<INSTALL_INTERFACE:include/arion> ${UUID_INCLUDE_DIR})
 
 # Tests with GoogleTest
 add_subdirectory(${CMAKE_SOURCE_DIR}/lib/googletest)
