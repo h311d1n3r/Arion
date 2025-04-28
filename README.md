@@ -31,7 +31,6 @@ Arion currently implements the following features :
 [How to use ?](#how)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Examples](#how_examples)  
 [Contributing](#contributing)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Development Mode](#dev_mode)
 
 <a name="install"/>
 
@@ -57,8 +56,13 @@ Check the [Releases](https://github.com/h311d1n3r/Arion/releases/) tab on the Gi
 1. Clone the repository `git clone https://github.com/h311d1n3r/Arion.git && cd Arion`.  
 2. Initialize git dependencies : `git submodule update --init`  
 3. Create the build directory `mkdir build && cd build`.  
+#### With Ninja
+4. Run CMake to configure the project `cmake -G Ninja ..`.  
+5. Run make to compile the project `ninja -j7`.  
+6. Run make install to deploy the project `sudo ninja install`.  
+#### With Make
 4. Run CMake to configure the project `cmake ..`.  
-5. Run make to compile the project `make -j4`.  
+5. Run make to compile the project `make -j7`.  
 6. Run make install to deploy the project `sudo make install`.  
 
 <a name="perfs"/>
@@ -85,11 +89,3 @@ You can find examples inside the `examples` directory. These examples are by no 
 ## Contributing
 
 Feel free to contribute to the project by implementing new features on the `dev` branch.  
-
-<a name="dev_mode"/>
-
-### Development Mode
-
-Arion can be compiled with `DEV` option enabled (`-DDEV=ON`) to increase build speed.  
-This mode uses system libraries instead of building and embedding the ones of `lib/`.  
-It is highly recommended to use library versions on the exact same commits as `lib/`.
