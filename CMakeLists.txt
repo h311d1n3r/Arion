@@ -201,6 +201,22 @@ set(UNICORNAFL_BUILD_INCLUDE_DIRS $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/lib/un
 
 target_include_directories(arion PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include> ${UNICORNAFL_BUILD_INCLUDE_DIRS} $<INSTALL_INTERFACE:include> $<INSTALL_INTERFACE:include/arion> ${UUID_INCLUDE_DIR})
 
+# Tests with GoogleTest
+add_subdirectory(${CMAKE_SOURCE_DIR}/lib/googletest)
+enable_testing()
+file(GLOB_RECURSE TEST_SOURCES "tests/ReadWrite/*.cpp")
+add_executable(
+  arion_test
+  ${TEST_SOURCES}
+)
+target_link_libraries(
+  arion_test
+  arion
+  GTest::gtest_main
+)
+include(GoogleTest)
+gtest_discover_tests(arion_test)
+
 install(TARGETS arion
         EXPORT arionTargets
         LIBRARY DESTINATION lib
