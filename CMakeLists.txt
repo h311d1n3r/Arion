@@ -79,7 +79,7 @@ set_property(TARGET arion PROPERTY OUTPUT_NAME "arion")
 find_library(UUID_LIB uuid REQUIRED)
 
 # Main goal of this function is to prevent building a submodule everytime Arion is built (config.h files messing up)
-function(add_arion_dependency lib_var mod_name target_name)
+function(add_arion_dependency lib_var mod_name target_name invalidate)
     set(mod_path "${CMAKE_SOURCE_DIR}/lib/${mod_name}")
     if(NOT EXISTS "${mod_path}")
         message(FATAL_ERROR "Module not found: ${mod_path}")
@@ -87,7 +87,7 @@ function(add_arion_dependency lib_var mod_name target_name)
 
     file(TIMESTAMP "${mod_path}" new_timestamp)
 
-    set(mod_updated FALSE)
+    set(mod_updated ${invalidate})
 
     set(timestamp_dir "${CMAKE_BINARY_DIR}/arion_times")
     set(timestamp_file "${CMAKE_BINARY_DIR}/arion_times/${mod_name}.txt")
@@ -120,11 +120,12 @@ function(add_arion_dependency lib_var mod_name target_name)
 endfunction()
 
 # Embed exact libraries with required versions
-add_arion_dependency(UNICORN_LIB unicorn unicorn)
-add_arion_dependency(CAPSTONE_LIB capstone capstone)
-add_arion_dependency(KEYSTONE_LIB keystone keystone)
-add_arion_dependency(LIEF_LIB lief LIB_LIEF)
-add_arion_dependency(SPDLOG_LIB spdlog spdlog)
+add_arion_dependency(UNICORN_LIB unicorn unicorn FALSE)
+add_arion_dependency(CAPSTONE_LIB capstone capstone FALSE)
+add_arion_dependency(KEYSTONE_LIB keystone keystone FALSE)
+# Due to spdlog embedding by LIEF and because they have good caching we invalidate these two libraries
+add_arion_dependency(LIEF_LIB lief LIB_LIEF TRUE)
+add_arion_dependency(SPDLOG_LIB spdlog spdlog TRUE)
 
 set(UDBSERVER_PATH "${CMAKE_SOURCE_DIR}/lib/udbserver")
 set(UDBSERVER_CARGO_PATH "${UDBSERVER_PATH}/Cargo.toml")
