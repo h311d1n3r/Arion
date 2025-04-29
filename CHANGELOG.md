@@ -2,6 +2,7 @@
 - Added udbserver
 - Fixed submodules compilation issue
 - Removed DEV mode
+- Implemented Google Test
 - Added CMake package
 - Fixed dependency issues when linking in DEV mode
 - Added config for Arion instance

@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.24)
 project(Arion)
-set(ARION_VERSION 1.0.2-alpha)
+set(ARION_VERSION 1.0.1-alpha)
 
 include(CMakePackageConfigHelpers)
+
+option(TEST "Generate test targets" OFF)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -202,21 +204,36 @@ set(LIEF_POST_BUILD_INCLUDE_DIR $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/lib/lief/i
 
 target_include_directories(arion PUBLIC ${LIEF_POST_BUILD_INCLUDE_DIR} $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include> $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/arion> ${UNICORNAFL_BUILD_INCLUDE_DIRS} $<INSTALL_INTERFACE:include> $<INSTALL_INTERFACE:include/arion> ${UUID_INCLUDE_DIR})
 
-# Tests with GoogleTest
-add_subdirectory(${CMAKE_SOURCE_DIR}/lib/googletest)
-enable_testing()
-file(GLOB_RECURSE TEST_SOURCES "tests/ReadWrite/*.cpp")
-add_executable(
-  arion_test
-  ${TEST_SOURCES}
-)
-target_link_libraries(
-  arion_test
-  arion
-  GTest::gtest_main
-)
-include(GoogleTest)
-gtest_discover_tests(arion_test)
+if(TEST)
+    # Tests with GoogleTest
+    add_subdirectory(${CMAKE_SOURCE_DIR}/lib/googletest)
+    enable_testing()
+    file(GLOB TEST_TARGETS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} tests/targets/*)
+    foreach(target_dir ${TEST_TARGETS})
+        if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${target_dir}/CMakeLists.txt")
+            get_filename_component(target_name ${target_dir} NAME)
+            ExternalProject_Add(${target_name}
+                SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${target_dir}
+                BINARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${target_dir}/build
+                CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                INSTALL_COMMAND ""
+                BUILD_ALWAYS 1
+            )
+        endif()
+    endforeach()
+    file(GLOB_RECURSE TEST_SOURCES "tests/src/*.cpp")
+    add_executable(
+      arion_test
+      ${TEST_SOURCES}
+    )
+    target_link_libraries(
+      arion_test
+      arion
+      GTest::gtest_main
+    )
+    include(GoogleTest)
+    gtest_discover_tests(arion_test)
+endif()
 
 install(TARGETS arion
         EXPORT arionTargets

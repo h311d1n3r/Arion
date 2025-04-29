@@ -34,6 +34,8 @@ Arion currently implements the following features :
 [Installation](#install)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Download a release](#install_release)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Build the library with Docker](#install_build_docker)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Build the library on host machine](#install_build_host)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Enable testing](#install_build_host_testing)  
 [Performance comparison](#perfs)  
 [How to use ?](#how)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Examples](#how_examples)  
@@ -58,19 +60,25 @@ Check the [Releases](https://github.com/h311d1n3r/Arion/releases/) tab on the Gi
 
 <a name="install_build_host"/>
 
-### Build the tool on host  
+### Build the library on host machine  
 > Rust must be installed on host (required by [udbserver](https://github.com/bet4it/udbserver))  
 1. Clone the repository `git clone https://github.com/h311d1n3r/Arion.git && cd Arion`  
 2. Initialize git dependencies : `git submodule update --init`  
 3. Create the build directory `mkdir build && cd build`  
-#### With Ninja
+<u>With Ninja</u>
 4. Run CMake to configure the project `cmake -G Ninja ..`  
 5. Run make to compile the project `ninja -j7`  
 6. Run make install to deploy the project `sudo ninja install`  
-#### With Make
+<u>With Make</u>
 4. Run CMake to configure the project `cmake ..`  
 5. Run make to compile the project `make -j7`  
 6. Run make install to deploy the project `sudo make install`  
+
+<a name="install_build_host_testing"/>
+
+#### Enable testing
+You can generate test targets by adding `-DTEST=ON` to the cmake command you use to configure the project.  
+Then, run the tests with `ctest` from your build directory.  
 
 <a name="perfs"/>
 
