@@ -129,6 +129,8 @@ add_arion_dependency(KEYSTONE_LIB keystone keystone FALSE)
 add_arion_dependency(LIEF_LIB lief LIB_LIEF TRUE)
 add_arion_dependency(SPDLOG_LIB spdlog spdlog TRUE)
 
+set(UNICORN_LIB_DIR ${CMAKE_BINARY_DIR}/lib/unicorn)
+
 set(UDBSERVER_PATH "${CMAKE_SOURCE_DIR}/lib/udbserver")
 set(UDBSERVER_CARGO_PATH "${UDBSERVER_PATH}/Cargo.toml")
 set(UDBSERVER_TARGET_PATH "${CMAKE_BINARY_DIR}/lib/udbserver/target")
@@ -141,7 +143,7 @@ add_custom_command(
     COMMENT "Building the udbserver library"
     COMMAND mkdir -p ${UDBSERVER_BUILD_PATH}
     COMMAND cargo install cargo-c
-    COMMAND CARGO_TARGET_DIR=${UDBSERVER_TARGET_PATH} cargo cinstall --release --prefix=/usr --destdir=${UDBSERVER_BUILD_PATH}
+    COMMAND RUSTFLAGS=-L"${UNICORN_LIB_DIR}" CARGO_TARGET_DIR=${UDBSERVER_TARGET_PATH} cargo cinstall --release --prefix=/usr --destdir=${UDBSERVER_BUILD_PATH}
     COMMAND find "${UDBSERVER_BUILD_PATH}/usr" -name ${UDBSERVER_LIB_NAME} -exec cp {} ${UDBSERVER_LIB} \;
     WORKING_DIRECTORY ${UDBSERVER_PATH}
     DEPENDS ${UDBSERVER_CARGO_PATH}
@@ -150,7 +152,7 @@ add_custom_command(
 
 add_custom_target(
     udbserver_build
-    DEPENDS ${UDBSERVER_LIB}
+    DEPENDS unicorn
 )
     
 add_dependencies(arion udbserver_build)
