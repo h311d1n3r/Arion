@@ -107,6 +107,7 @@ function(add_arion_dependency lib_var mod_name target_name invalidate)
     if(NOT mod_updated)
         file(GLOB_RECURSE found_lib_obj "${CMAKE_BINARY_DIR}/lib/${mod_name}/*.o")
         if(found_lib_obj)
+            add_custom_target(${target_name})
             set(${lib_var} ${found_lib_obj} PARENT_SCOPE)
         else()
             set(mod_updated TRUE)
@@ -143,16 +144,18 @@ add_custom_command(
     COMMENT "Building the udbserver library"
     COMMAND mkdir -p ${UDBSERVER_BUILD_PATH}
     COMMAND cargo install cargo-c
-    COMMAND RUSTFLAGS=-L"${UNICORN_LIB_DIR}" CARGO_TARGET_DIR=${UDBSERVER_TARGET_PATH} cargo cinstall --release --prefix=/usr --destdir=${UDBSERVER_BUILD_PATH}
+    COMMAND /bin/sh -c "RUSTFLAGS='-L native=${UNICORN_LIB_DIR} -l static=unicorn' CARGO_TARGET_DIR=${UDBSERVER_TARGET_PATH} \
+        cargo cinstall --release --prefix=/usr --destdir=${UDBSERVER_BUILD_PATH}"
     COMMAND find "${UDBSERVER_BUILD_PATH}/usr" -name ${UDBSERVER_LIB_NAME} -exec cp {} ${UDBSERVER_LIB} \;
     WORKING_DIRECTORY ${UDBSERVER_PATH}
     DEPENDS ${UDBSERVER_CARGO_PATH}
+    DEPENDS unicorn
     VERBATIM
 )
 
 add_custom_target(
     udbserver_build
-    DEPENDS unicorn
+    DEPENDS ${UDBSERVER_LIB}
 )
     
 add_dependencies(arion udbserver_build)
