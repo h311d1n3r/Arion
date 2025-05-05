@@ -1,6 +1,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <cstdint>
 
 int main()
 {

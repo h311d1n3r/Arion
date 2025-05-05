@@ -1,6 +1,7 @@
 #include <iostream>
 #include <thread>
 #include <vector>
+#include <cstdint>
 
 size_t id = 0;
 
