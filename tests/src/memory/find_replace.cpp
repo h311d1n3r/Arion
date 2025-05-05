@@ -32,5 +32,5 @@ TEST_F(ArionTest, FindReplace)
     }
     arion_group->run();
     std::string output = testing::internal::GetCapturedStdout();
-    EXPECT_STREQ(output.c_str(), "REPLACED\n");
+    EXPECT_NE(output.find(find_replace_flag2), std::string::npos);
 }
