@@ -231,10 +231,20 @@ if(TEST)
       arion_test
       ${TEST_SOURCES}
     )
+    target_include_directories(
+        arion_test
+        PUBLIC
+        include
+        tests/include
+    )
     target_link_libraries(
       arion_test
       arion
       GTest::gtest_main
+    )
+    target_compile_definitions(
+        arion_test PRIVATE
+        ARION_TEST_TARGETS_PATH="${CMAKE_CURRENT_SOURCE_DIR}/tests/targets"
     )
     include(GoogleTest)
     gtest_discover_tests(arion_test)

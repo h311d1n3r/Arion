@@ -27,28 +27,10 @@ jobs:
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --parallel 4
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -DTEST=ON --parallel 4
 
     - name: Install
       run: sudo cmake --install ${{github.workspace}}/build
 
-    - name: Run Tests
-      run: |
-        for test_dir in ${{github.workspace}}/tests/*/; do
-          echo "Building test : $test_dir"
-          mkdir -p "$test_dir/build"
-          pushd "$test_dir/build" > /dev/null
-          cmake .. -DCMAKE_BUILD_TYPE=Release
-          cmake --build . --parallel
-          echo "Running test : $test_dir"
-          output=$(./test)
-          popd > /dev/null
-          echo "$output" | md5sum | awk '{print $1}' > "$test_dir/output.md5"
-          md5sum "$test_dir/res.txt" | awk '{print $1}' > "$test_dir/res.md5"
-          if ! diff -q "$test_dir/output.md5" "$test_dir/res.md5"; then
-            echo "Failure."
-            exit 1
-          else
-            echo "Success."
-          fi
-        done
+    - name: Run tests
+      run: ctest --test-dir build --output-on-failure
