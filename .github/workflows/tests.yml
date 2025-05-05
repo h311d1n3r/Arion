@@ -24,10 +24,10 @@ jobs:
       run: sudo apt update && sudo apt upgrade && sudo apt -y install uuid-dev coreutils gcc-multilib g++-multilib make cmake
 
     - name: Configure
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DTEST=ON
 
     - name: Build
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -DTEST=ON --parallel 4
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --parallel 4
 
     - name: Install
       run: sudo cmake --install ${{github.workspace}}/build
