@@ -164,6 +164,8 @@ class ARION_EXPORT AbiManager
     virtual ks_engine ARION_EXPORT *curr_ks() = 0;
     virtual csh ARION_EXPORT *curr_cs() = 0;
     virtual void ARION_EXPORT setup() = 0;
+    virtual void ARION_EXPORT set_thumb_state(uint32_t entrypoint);
+    virtual bool ARION_EXPORT get_thumb_mode();
 
     template <typename T> T ARION_EXPORT read_reg(arion::REG reg)
     {

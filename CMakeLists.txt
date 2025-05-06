@@ -50,7 +50,7 @@ set(LIEF_TESTS OFF CACHE BOOL "Disable LIEF tests")
 set(LIEF_ARCHITECTURES "x86;arm;arm64" CACHE STRING "Build only x86, ARM, and ARM64 for LIEF")
 
 # Check for cargo installation
-find_program(CARGO_EXECUTABLE cargo)
+find_program(CARGO_EXECUTABLE NAMES cargo PATHS "$ENV{HOME}/.cargo/bin")
 if (NOT CARGO_EXECUTABLE)
     message(FATAL_ERROR "cargo could not be found. Please install it to proceed.")
 endif()
