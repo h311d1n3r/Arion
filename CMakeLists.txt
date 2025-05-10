@@ -14,7 +14,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -rdynamic -O0")
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
-set(UNICORN_ARCH "x86;arm;arm64" CACHE STRING "Build only x86, ARM, and ARM64 for Unicorn")
+set(UNICORN_ARCH "x86;arm;aarch64" CACHE STRING "Build only x86, ARM, and ARM64 for Unicorn")
 
 set(CAPSTONE_X86_SUPPORT ON CACHE BOOL "Enable X86 support in Capstone")
 set(CAPSTONE_ARM_SUPPORT ON CACHE BOOL "Enable ARM support in Capstone")

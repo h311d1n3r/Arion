@@ -17,7 +17,7 @@
 
 using namespace arion;
 
-// Replace import of udbserver with extern "C" // C++ mangling import problem
+// Replace import of udbserver with extern "C" to prevent C++ mangling import problem
 extern "C"
 {
     void udbserver(void *handle, uint16_t port, uint64_t start_addr);
