@@ -64,8 +64,8 @@ ADDR ElfLoader::map_elf_segments(const std::shared_ptr<ElfParser> parser, ADDR l
     {
         ADDR seg_data_start_addr = seg->virt_addr + load_addr;
         ADDR seg_start_addr = seg_data_start_addr;
-        seg_start_addr -= (seg_start_addr % seg->align);
         ADDR seg_end_addr = seg_start_addr + seg->virt_sz;
+        seg_start_addr -= (seg_start_addr % seg->align);
         seg_end_addr += (seg->align - (seg_end_addr % seg->align));
         size_t data_seg_sz = seg_end_addr - seg_data_start_addr;
         if (seg->phy_sz > data_seg_sz)

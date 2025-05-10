@@ -1,4 +1,0 @@
-Found flag in memory.
-Flag is : FIND_ME_IN_MEMORY
-Flag2 is : REPLACED
-REPLACED

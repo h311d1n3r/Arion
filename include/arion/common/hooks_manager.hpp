@@ -7,7 +7,7 @@
 #include <map>
 #include <memory>
 #include <stack>
-#include <unicorn/unicorn.h>
+#include <arion/unicorn/unicorn.h>
 #include <variant>
 
 class Arion; // forward declaration to prevent circular dependencies

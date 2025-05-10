@@ -65,9 +65,7 @@ uint64_t sys_kill(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     pid_t pid = params.at(0);
     int sig = params.at(1);
 
-    std::shared_ptr<Arion> target = Arion::get_arion_instance(pid).lock();
-    if (!target)
-        throw ExpiredWeakPtrException("Arion");
+    std::shared_ptr<Arion> target = arion->get_group()->get_arion_instance(pid);
 
     target->send_signal(arion->get_pid(), sig);
     return 0;
@@ -89,9 +87,7 @@ uint64_t sys_tgkill(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     if (entry_it == tg_it->second.end())
         return EINVAL;
 
-    std::shared_ptr<Arion> target = Arion::get_arion_instance((*entry_it)->pid).lock();
-    if (!target)
-        throw ExpiredWeakPtrException("Arion");
+    std::shared_ptr<Arion> target = arion->get_group()->get_arion_instance((*entry_it)->pid);
 
     target->send_signal(arion->get_pid(), sig);
     arion->sync_threads();
