@@ -135,14 +135,14 @@ tar -xf "gcc-${GCC_VERSION}.tar.xz"
 rm "gcc-${GCC_VERSION}.tar.xz"
 cd "$GCC_BUILD_DIR"
 echo "[STAGE 1] Configuring GCC..."
-LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" "$GCC_SOURCE_DIR/configure" -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} --prefix="$TOOLCHAINS_DIR" --enable-checking=release --enable-languages=c --without-headers --disable-shared --disable-threads --disable-multilib --disable-libatomic --disable-libgomp --disable-libquadmath --disable-libssp --disable-libstdcxx --disable-nls
+LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" "$GCC_SOURCE_DIR/configure" -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} --prefix="$TOOLCHAINS_DIR" --enable-checking=release --enable-languages=c --without-headers --disable-shared --disable-threads --disable-multilib --disable-libatomic --disable-libgomp --disable-libquadmath --disable-libssp --disable-bootstrap --disable-libstdcxx --disable-nls
 echo "[STAGE 1] Building GCC..."
 LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" make -j$(($(nproc)-1)) all-gcc
 echo "[STAGE 1] Deploying GCC..."
 LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" make install-gcc
 rm -rf *
 echo "[STAGE 1] Configuring libgcc..."
-"$GCC_SOURCE_DIR/configure" -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} --prefix="$TOOLCHAINS_DIR" --enable-checking=release --enable-languages=c --without-headers --disable-shared --disable-threads --disable-multilib --disable-libatomic --disable-libgomp --disable-libquadmath --disable-libssp --disable-libstdcxx --disable-nls
+"$GCC_SOURCE_DIR/configure" -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} --prefix="$TOOLCHAINS_DIR" --enable-checking=release --enable-languages=c --without-headers --disable-shared --disable-threads --disable-multilib --disable-libatomic --disable-libgomp --disable-libquadmath --disable-libssp --disable-bootstrap --disable-libstdcxx --disable-nls
 echo "[STAGE 1] Building libgcc..."
 make -j$(($(nproc)-1)) all-target-libgcc
 echo "[STAGE 1] Deploying libgcc..."
@@ -191,14 +191,14 @@ rm -rf "$GLIBC_BUILD_DIR"
 cd "$GCC_BUILD_DIR"
 rm -rf *
 echo "[STAGE 2] Configuring GCC..."
-LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" "$GCC_SOURCE_DIR/configure" -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} --prefix="$TOOLCHAINS_DIR" --with-sysroot="$ROOTFS_DIR" --enable-checking=release --enable-languages=c,c++ --disable-multilib --disable-nls
+LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" "$GCC_SOURCE_DIR/configure" -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} --prefix="$TOOLCHAINS_DIR" --with-sysroot="$ROOTFS_DIR" --enable-checking=release --enable-languages=c,c++ --disable-multilib --disable-bootstrap --disable-nls
 echo "[STAGE 2] Building GCC..."
 LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" make -j$(($(nproc)-1)) all-gcc
 echo "[STAGE 2] Deploying GCC..."
 LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" make install-gcc
 rm -rf *
 echo "[STAGE 2] Configuring libgcc/libstdc++..."
-"$GCC_SOURCE_DIR/configure" -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} --prefix="$TOOLCHAINS_DIR" --with-sysroot="$ROOTFS_DIR" --enable-checking=release --enable-languages=c,c++ --disable-multilib --disable-nls
+"$GCC_SOURCE_DIR/configure" -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} --prefix="$TOOLCHAINS_DIR" --with-sysroot="$ROOTFS_DIR" --enable-checking=release --enable-languages=c,c++ --disable-multilib --disable-bootstrap --disable-nls
 echo "[STAGE 2] Building libgcc..."
 make -j$(($(nproc)-1)) all-target-libgcc
 echo "[STAGE 2] Building libstdc++..."
@@ -209,8 +209,8 @@ echo "[STAGE 2] Deploying libstdc++..."
 make install-target-libstdc++-v3
 cp -r "$TOOLCHAINS_DIR/$GNU_ARCH/"* "$ROOTFS_DIR/"
 echo "Creating GCC/G++ scripts..."
-echo -e '#!/bin/bash\nDIR="$(dirname "$0")"\n$DIR/'${GNU_ARC}'-gcc --sysroot="$DIR/../../'"rootfs"'" "$@"' > "$TOOLCHAINS_DIR/bin/gcc"
-echo -e '#!/bin/bash\nDIR="$(dirname "$0")"\n$DIR/'${GNU_ARC}'-g++ --sysroot="$DIR/../../'"rootfs"'" "$@"' > "$TOOLCHAINS_DIR/bin/g++"
+echo -e '#!/bin/bash\nDIR="$(dirname "$0")"\n$DIR/'${GNU_ARCH}'-gcc --sysroot="$DIR/../../'"rootfs"'" "$@"' > "$TOOLCHAINS_DIR/bin/gcc"
+echo -e '#!/bin/bash\nDIR="$(dirname "$0")"\n$DIR/'${GNU_ARCH}'-g++ --sysroot="$DIR/../../'"rootfs"'" "$@"' > "$TOOLCHAINS_DIR/bin/g++"
 chmod +x "$TOOLCHAINS_DIR/bin/gcc"
 chmod +x "$TOOLCHAINS_DIR/bin/g++"
 
