@@ -159,7 +159,7 @@ rm "linux-${KERNEL_VERSION}.tar.xz"
 KERNEL_SOURCE_DIR="$ARCH_DIR/linux-${KERNEL_VERSION}"
 cd $KERNEL_SOURCE_DIR
 echo "Installing kernel headers in rootfs..."
-make ARCH=$ARCH INSTALL_HDR_PATH=${ROOTFS_DIR}/usr headers_install
+make ARCH=${ARCH//-/_} INSTALL_HDR_PATH=${ROOTFS_DIR}/usr headers_install
 rm -rf "$KERNEL_SOURCE_DIR"
 
 cd "$ARCH_DIR"
