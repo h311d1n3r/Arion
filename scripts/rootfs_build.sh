@@ -5,23 +5,24 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-ARCH=$1
-BR_PATH=$2
+SUPPORTED_ARCHS=("x86" "x86-64" "arm" "arm64")
 
-if [[ -z "$ARCH" || -z "$BR_PATH" ]]; then
-    echo "Usage: $0 <arch_name|all> <buildroot_path>"
+ARCH=$1
+
+if [[ -z "$ARCH" ]]; then
+    echo "Usage: $0 <arch_name|all>"
     exit 1
 fi
 
 if [[ "$ARCH" == "all" ]]; then
     declare -a pids=()
 
-    for CONFIG in "$PROJECT_ROOT"/rootfs/br_configs/arion_*_defconfig; do
-        BASE_NAME=$(basename "$CONFIG")
-        TARGET_ARCH="${BASE_NAME#arion_}"
-        TARGET_ARCH="${TARGET_ARCH%_defconfig}"
-        "$0" "$TARGET_ARCH" "$BR_PATH" &
-        pids+=($!)
+    for TARGET_ARCH in "${SUPPORTED_ARCHS[@]}"; do
+        ARCH_DIR=$PROJECT_ROOT/rootfs/$TARGET_ARCH
+        if [[ -d "$ARCH_DIR" ]]; then
+            "$0" "$TARGET_ARCH" &
+            pids+=($!)
+        fi
     done
 
     for pid in "${pids[@]}"; do
@@ -31,60 +32,74 @@ if [[ "$ARCH" == "all" ]]; then
     exit 0
 fi
 
-BR_CONFIG="$PROJECT_ROOT/rootfs/br_configs/arion_${ARCH}_defconfig"
+ARCH_SUPPORTED=false
+for TARGET_ARCH in "${SUPPORTED_ARCHS[@]}"; do
+    if [[ "$ARCH" == "$TARGET_ARCH" ]]; then
+        ARCH_SUPPORTED=true
+        break
+    fi
+done
 
-if [[ ! -f "$BR_CONFIG" ]]; then
-    echo "Error: Buildroot config for $ARCH not found!"
+if ! $ARCH_SUPPORTED; then
+    echo "Unknown/Unsupported architecture. List of supported architectures :"
+    for TARGET_ARCH in "${SUPPORTED_ARCHS[@]}"; do
+        echo "- ${TARGET_ARCH}"
+    done
     exit 1
 fi
 
-if [[ ! -d "$BR_PATH" ]]; then
-    echo "Error: Buildroot path does not exist !"
-    exit 1
+echo "Building $ARCH rootfs..."
+
+ARCH_DIR="$PROJECT_ROOT/rootfs/$ARCH"
+if [[ -d "$ARCH_DIR" ]]; then
+    rm -rf "$ARCH_DIR"
 fi
+mkdir -p "$ARCH_DIR"
 
-BR_OUTPUT="${BR_PATH}/output"
-if [[ -d "$BR_OUTPUT" ]]; then
-    echo "Cleaning up Buildroot output..."
-    rm -rf $BR_OUTPUT
+ROOTFS_DIR="$ARCH_DIR/rootfs"
+if [[ -d "$ROOTFS_DIR" ]]; then
+    rm -rf "$ROOTFS_DIR"
 fi
+mkdir -p "$ROOTFS_DIR"
 
-cd "$BR_PATH"
-
-echo "Configuring Buildroot for $ARCH..."
-make BR2_DEFCONFIG="$BR_CONFIG" defconfig
-
-echo "Building rootfs for $ARCH..."
-make -j$(($(nproc)-1))
-
-ARCH_ROOTFS="${BR_OUTPUT}/${ARCH}_rootfs"
-
-echo "Processing post-build patches..."
-if [[ -d "$ARCH_ROOTFS" ]]; then
-    rm -rf "$ARCH_ROOTFS"
-fi
-mkdir $ARCH_ROOTFS
-cd $BR_OUTPUT
-tar -xf images/rootfs.tar -C "$ARCH_ROOTFS"
-cp -r "${BR_OUTPUT}/host/${ARCH}-buildroot-linux-gnu/sysroot/"* "${ARCH_ROOTFS}/"
-BR_GCC_DIR=$(find ${BR_OUTPUT}/host/lib/gcc/${ARCH}-buildroot-linux-gnu/ -mindepth 1 -maxdepth 1 -type d | head -n1)
-cp -r "${BR_GCC_DIR}/"* "${ARCH_ROOTFS}/usr/lib/"
-
-TOOLCHAINS_DIR="${BR_OUTPUT}/${ARCH}_toolchains"
+TOOLCHAINS_DIR="$ARCH_DIR/toolchains"
 if [[ -d "$TOOLCHAINS_DIR" ]]; then
     rm -rf "$TOOLCHAINS_DIR"
 fi
-mkdir $TOOLCHAINS_DIR
+mkdir -p "$TOOLCHAINS_DIR"
+
+case "$ARCH" in
+  x86)
+    GNU_ARCH="i686-linux-gnu"
+    ;;
+  x86-64)
+    GNU_ARCH="x86_64-linux-gnu"
+    ;;
+  arm)
+    GNU_ARCH="arm-linux-gnueabi"
+    ;;
+  arm64)
+    GNU_ARCH="aarch64-linux-gnu"
+    ;;
+  *)
+    echo "Unsupported architecture: $ARCH"
+    exit 1
+    ;;
+esac
+
+mkdir -p "${ROOTFS_DIR}"/{bin,sbin,etc,lib,lib64,proc,sys,dev,tmp,usr/{bin,sbin,lib,include},var,root,home}
+
+cd "$ARCH_DIR"
 
 echo "Building static Binutils cross toolchains..."
-BINUTILS_BUILD_DIR="${BR_OUTPUT}/${ARCH}_binutils"
+BINUTILS_BUILD_DIR="$ARCH_DIR/binutils-build"
 if [[ -d "$BINUTILS_BUILD_DIR" ]]; then
     rm -rf "$BINUTILS_BUILD_DIR"
 fi
-mkdir $BINUTILS_BUILD_DIR
+mkdir -p "$BINUTILS_BUILD_DIR"
 BINUTILS_VERSION=$(curl -s https://ftp.gnu.org/gnu/binutils/ | grep -oP 'binutils-\d+\.\d+\.tar\.xz' | sed -E 's|binutils-([0-9.]+)\.tar\.xz|\1|' | sort -V | tail -n1)
 echo "Identified Binutils LTS version: $BINUTILS_VERSION. Downloading source code..."
-BINUTILS_SOURCE_DIR="${BR_OUTPUT}/binutils-${BINUTILS_VERSION}"
+BINUTILS_SOURCE_DIR="$ARCH_DIR/binutils-${BINUTILS_VERSION}"
 if [[ -d "$BINUTILS_SOURCE_DIR" ]]; then
     rm -rf "$BINUTILS_SOURCE_DIR"
 fi
@@ -93,7 +108,7 @@ tar -xf "binutils-${BINUTILS_VERSION}.tar.xz"
 rm "binutils-${BINUTILS_VERSION}.tar.xz"
 cd "$BINUTILS_BUILD_DIR"
 echo "Configuring Binutils..."
-$BINUTILS_SOURCE_DIR/configure -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${ARCH}-linux-gnu --prefix="$TOOLCHAINS_DIR" --with-build-sysroot="$ARCH_ROOTFS" --disable-nls --program-suffix=-"$BINUTILS_VERSION"
+$BINUTILS_SOURCE_DIR/configure -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} --prefix="$TOOLCHAINS_DIR" --disable-nls
 make configure-host
 echo "Building Binutils..."
 make -j$(($(nproc)-1)) LDFLAGS="-all-static"
@@ -101,17 +116,17 @@ echo "Deploying Binutils..."
 make install
 rm -rf $BINUTILS_BUILD_DIR $BINUTILS_SOURCE_DIR
 
-cd $BR_OUTPUT
+cd "$ARCH_DIR"
 
-echo "Building static GCC and G++ cross toolchains..."
-GCC_BUILD_DIR="${BR_OUTPUT}/${ARCH}_gcc"
+echo "[STAGE 1] Building static GCC and G++ cross toolchains..."
+GCC_BUILD_DIR="$ARCH_DIR/gcc-build"
 if [[ -d "$GCC_BUILD_DIR" ]]; then
     rm -rf "$GCC_BUILD_DIR"
 fi
-mkdir $GCC_BUILD_DIR
+mkdir -p "$GCC_BUILD_DIR"
 GCC_VERSION=$(curl -s https://ftp.gnu.org/gnu/gcc/ | grep -oP 'gcc-\d+\.\d+\.\d+/' | sed -E 's|gcc-([0-9.]+)/|\1|' | sort -V | tail -n1)
 echo "Identified GCC LTS version: $GCC_VERSION. Downloading source code..."
-GCC_SOURCE_DIR="${BR_OUTPUT}/gcc-${GCC_VERSION}"
+GCC_SOURCE_DIR="$ARCH_DIR/gcc-${GCC_VERSION}"
 if [[ -d "$GCC_SOURCE_DIR" ]]; then
     rm -rf "$GCC_SOURCE_DIR"
 fi
@@ -119,27 +134,87 @@ curl -LO "https://ftp.gnu.org/gnu/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.
 tar -xf "gcc-${GCC_VERSION}.tar.xz"
 rm "gcc-${GCC_VERSION}.tar.xz"
 cd "$GCC_BUILD_DIR"
-echo "Configuring GCC..."
-LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" $GCC_SOURCE_DIR/configure -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${ARCH}-linux-gnu --prefix="$TOOLCHAINS_DIR" --with-build-sysroot="$ARCH_ROOTFS" --enable-checking=release --enable-languages=c,c++ --program-suffix=-${GCC_VERSION} --without-headers --disable-hosted-libstdcxx
-echo "Building GCC..."
+echo "[STAGE 1] Configuring GCC..."
+LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" "$GCC_SOURCE_DIR/configure" -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} --prefix="$TOOLCHAINS_DIR" --enable-checking=release --enable-languages=c --without-headers --disable-shared --disable-threads --disable-multilib --disable-libatomic --disable-libgomp --disable-libquadmath --disable-libssp --disable-libstdcxx --disable-nls
+echo "[STAGE 1] Building GCC..."
 LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" make -j$(($(nproc)-1)) all-gcc
-echo "Deploying GCC..."
+echo "[STAGE 1] Deploying GCC..."
 LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" make install-gcc
+rm -rf *
+echo "[STAGE 1] Configuring libgcc..."
+"$GCC_SOURCE_DIR/configure" -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} --prefix="$TOOLCHAINS_DIR" --enable-checking=release --enable-languages=c --without-headers --disable-shared --disable-threads --disable-multilib --disable-libatomic --disable-libgomp --disable-libquadmath --disable-libssp --disable-libstdcxx --disable-nls
+echo "[STAGE 1] Building libgcc..."
+make -j$(($(nproc)-1)) all-target-libgcc
+echo "[STAGE 1] Deploying libgcc..."
+make install-target-libgcc
+
+cd "$ARCH_DIR"
+
+KERNEL_DIR_VERSION=$(curl -s https://cdn.kernel.org/pub/linux/kernel/ | grep -oP 'v\d+\.x' | sort -V | tail -n1)
+KERNEL_VERSION=$(curl -s https://cdn.kernel.org/pub/linux/kernel/${KERNEL_DIR_VERSION}/ | grep -oP '\d+\.\d+\.*\d*\.tar\.xz' | sed 's/^linux-//' | sed 's/\.tar\.xz$//' | sort -V | tail -n1)
+echo "Identified Linux kernel LTS version: $KERNEL_VERSION. Downloading source code..."
+curl -LO https://cdn.kernel.org/pub/linux/kernel/${KERNEL_DIR_VERSION}/linux-${KERNEL_VERSION}.tar.xz
+tar -xf "linux-${KERNEL_VERSION}.tar.xz"
+rm "linux-${KERNEL_VERSION}.tar.xz"
+KERNEL_SOURCE_DIR="$ARCH_DIR/linux-${KERNEL_VERSION}"
+cd $KERNEL_SOURCE_DIR
+echo "Installing kernel headers in rootfs..."
+make ARCH=$ARCH INSTALL_HDR_PATH=${ROOTFS_DIR}/usr headers_install
+rm -rf "$KERNEL_SOURCE_DIR"
+
+cd "$ARCH_DIR"
+
+export PATH="$TOOLCHAINS_DIR/bin:$PATH"
+
+GLIBC_BUILD_DIR="$ARCH_DIR/glibc-build"
+if [[ -d "$GLIBC_BUILD_DIR" ]]; then
+    rm -rf "$GLIBC_BUILD_DIR"
+fi
+mkdir -p "$GLIBC_BUILD_DIR"
+GLIBC_VERSION=$(curl -s https://ftp.gnu.org/gnu/libc/ | grep -oP 'glibc-\d+\.\d+\.tar\.xz' | sort -V | tail -n1 | sed -E 's/^glibc-([0-9.]+)\.tar\.xz$/\1/')
+echo "Identified glibc LTS version: $GLIBC_VERSION. Downloading source code..."
+curl -LO "https://ftp.gnu.org/gnu/libc/glibc-${GLIBC_VERSION}.tar.xz"
+tar -xf "glibc-${GLIBC_VERSION}.tar.xz"
+rm "glibc-${GLIBC_VERSION}.tar.xz"
+GLIBC_SOURCE_DIR="$ARCH_DIR/glibc-${GLIBC_VERSION}"
+cd "$GLIBC_BUILD_DIR"
+"$GLIBC_SOURCE_DIR/configure" --prefix=/usr --build=x86_64-linux-gnu --host=${GNU_ARCH} --target=${GNU_ARCH} --with-headers="$ROOTFS_DIR/usr/include" --disable-multilib --disable-werror --enable-kernel="$KERNEL_VERSION" --disable-sanity-checks BUILD_CC="gcc" CXX= CC="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-gcc" AR="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ar" RANLIB="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ranlib" AS="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-as" LD="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ld" STRIP="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-strip"
+make install-bootstrap-headers=yes install-headers install_root=${ROOTFS_DIR} CXX= CC="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-gcc" AR="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ar" RANLIB="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ranlib" AS="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-as" LD="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ld" STRIP="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-strip"
+make csu/subdir_lib CXX= CC="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-gcc" AR="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ar" RANLIB="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ranlib" AS="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-as" LD="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ld" STRIP="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-strip"
+install csu/crt1.o csu/crti.o csu/crtn.o ${ROOTFS_DIR}/usr/lib
+make -j$(($(nproc)-1)) CXX= CC="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-gcc" AR="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ar" RANLIB="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ranlib" AS="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-as" LD="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ld" STRIP="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-strip"
+make install install_root=${ROOTFS_DIR} CXX= CC="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-gcc" AR="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ar" RANLIB="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ranlib" AS="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-as" LD="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ld" STRIP="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-strip"
+
+rm -rf "$GLIBC_SOURCE_DIR"
+rm -rf "$GLIBC_BUILD_DIR"
+
+cd "$GCC_BUILD_DIR"
+rm -rf *
+echo "[STAGE 2] Configuring GCC..."
+LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" "$GCC_SOURCE_DIR/configure" -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} --prefix="$TOOLCHAINS_DIR" --with-sysroot="$ROOTFS_DIR" --enable-checking=release --enable-languages=c,c++ --disable-multilib --disable-nls
+echo "[STAGE 2] Building GCC..."
+LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" make -j$(($(nproc)-1)) all-gcc
+echo "[STAGE 2] Deploying GCC..."
+LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" make install-gcc
+rm -rf *
+echo "[STAGE 2] Configuring libgcc/libstdc++..."
+"$GCC_SOURCE_DIR/configure" -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} --prefix="$TOOLCHAINS_DIR" --with-sysroot="$ROOTFS_DIR" --enable-checking=release --enable-languages=c,c++ --disable-multilib --disable-nls
+echo "[STAGE 2] Building libgcc..."
+make -j$(($(nproc)-1)) all-target-libgcc
+echo "[STAGE 2] Building libstdc++..."
+make -j$(($(nproc)-1)) all-target-libstdc++-v3
+echo "[STAGE 2] Deploying libgcc..."
+make install-target-libgcc
+echo "[STAGE 2] Deploying libstdc++..."
+make install-target-libstdc++-v3
+cp -r "$TOOLCHAINS_DIR/$GNU_ARCH/"* "$ROOTFS_DIR/"
 echo "Creating GCC/G++ scripts..."
-echo -e '#!/bin/bash\nDIR="$(dirname "$0")"\n$DIR/gcc-'${GCC_VERSION}' --sysroot="$DIR/../../'"${ARCH}_rootfs"'" -I"$DIR/../../'"${ARCH}_rootfs/usr/include"'" "$@"' > "$TOOLCHAINS_DIR/bin/gcc"
-echo -e '#!/bin/bash\nDIR="$(dirname "$0")"\n$DIR/g++-'${GCC_VERSION}' --sysroot="$DIR/../../'"${ARCH}_rootfs"'" -I"$DIR/../../'"${ARCH}_rootfs/usr/include"'" "$@"' > "$TOOLCHAINS_DIR/bin/g++"
+echo -e '#!/bin/bash\nDIR="$(dirname "$0")"\n$DIR/'${GNU_ARC}'-gcc --sysroot="$DIR/../../'"rootfs"'" "$@"' > "$TOOLCHAINS_DIR/bin/gcc"
+echo -e '#!/bin/bash\nDIR="$(dirname "$0")"\n$DIR/'${GNU_ARC}'-g++ --sysroot="$DIR/../../'"rootfs"'" "$@"' > "$TOOLCHAINS_DIR/bin/g++"
 chmod +x "$TOOLCHAINS_DIR/bin/gcc"
 chmod +x "$TOOLCHAINS_DIR/bin/g++"
-rm -rf $GCC_BUILD_DIR $GCC_SOURCE_DIR
 
-ROOTFS_BUILD_DIR="${PROJECT_ROOT}/rootfs/build/${ARCH}"
-echo "Moving ${ARCH}_rootfs and ${ARCH}_toolchains to Arion's rootfs/build/${ARCH} directory..."
-if [[ ! -d "$ROOTFS_BUILD_DIR" ]]; then
-    mkdir -p "$ROOTFS_BUILD_DIR"
-fi
-mv "$ARCH_ROOTFS" "$ROOTFS_BUILD_DIR/"
-mv "$TOOLCHAINS_DIR" "$ROOTFS_BUILD_DIR/"
+rm -rf "$GCC_SOURCE_DIR"
+rm -rf "$GCC_BUILD_DIR"
 
-echo "Cleaning up Buildroot output..."
-rm -rf $BR_OUTPUT
-echo "Build completed: $ROOTFS_BUILD_DIR"
+echo "Done."

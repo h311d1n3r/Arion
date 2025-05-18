@@ -2,6 +2,7 @@
 - Added udbserver
 - Fixed submodules compilation issue
 - Removed DEV mode
+- Added architecture rootfs and static toolchains build/download
 - Implemented Google Test
 - Added CMake package
 - Fixed dependency issues when linking in DEV mode
