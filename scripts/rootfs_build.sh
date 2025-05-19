@@ -18,11 +18,8 @@ if [[ "$ARCH" == "all" ]]; then
     declare -a pids=()
 
     for TARGET_ARCH in "${SUPPORTED_ARCHS[@]}"; do
-        ARCH_DIR=$PROJECT_ROOT/rootfs/$TARGET_ARCH
-        if [[ -d "$ARCH_DIR" ]]; then
-            "$0" "$TARGET_ARCH" &
-            pids+=($!)
-        fi
+        "$0" "$TARGET_ARCH" &
+        pids+=($!)
     done
 
     for pid in "${pids[@]}"; do
@@ -87,6 +84,12 @@ case "$ARCH" in
     ;;
 esac
 
+if [[ "$GNU_ARCH" == "x86_64-linux-gnu" ]]; then
+    TARGET_PREFIX_OPTION="--program-prefix=${GNU_ARCH}-"
+else
+    TARGET_PREFIX_OPTION=""
+fi
+
 mkdir -p "${ROOTFS_DIR}"/{bin,sbin,etc,lib,lib64,proc,sys,dev,tmp,usr/{bin,sbin,lib,include},var,root,home}
 
 cd "$ARCH_DIR"
@@ -108,7 +111,7 @@ tar -xf "binutils-${BINUTILS_VERSION}.tar.xz"
 rm "binutils-${BINUTILS_VERSION}.tar.xz"
 cd "$BINUTILS_BUILD_DIR"
 echo "Configuring Binutils..."
-$BINUTILS_SOURCE_DIR/configure -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} --prefix="$TOOLCHAINS_DIR" --disable-nls
+$BINUTILS_SOURCE_DIR/configure -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} $TARGET_PREFIX_OPTION --prefix="$TOOLCHAINS_DIR" --disable-nls
 make configure-host
 echo "Building Binutils..."
 make -j$(($(nproc)-1)) LDFLAGS="-all-static"
@@ -133,16 +136,19 @@ fi
 curl -LO "https://ftp.gnu.org/gnu/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz"
 tar -xf "gcc-${GCC_VERSION}.tar.xz"
 rm "gcc-${GCC_VERSION}.tar.xz"
+cd "$GCC_SOURCE_DIR"
+echo "[STAGE 1] Downloading GCC dependencies..."
+./contrib/download_prerequisites
 cd "$GCC_BUILD_DIR"
 echo "[STAGE 1] Configuring GCC..."
-LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" "$GCC_SOURCE_DIR/configure" -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} --prefix="$TOOLCHAINS_DIR" --enable-checking=release --enable-languages=c --without-headers --disable-shared --disable-threads --disable-multilib --disable-libatomic --disable-libgomp --disable-libquadmath --disable-libssp --disable-bootstrap --disable-libstdcxx --disable-nls
+LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" "$GCC_SOURCE_DIR/configure" -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} $TARGET_PREFIX_OPTION --prefix="$TOOLCHAINS_DIR" --enable-checking=release --enable-languages=c --without-headers --disable-shared --disable-threads --disable-multilib --disable-libatomic --disable-libgomp --disable-libquadmath --disable-libssp --disable-bootstrap --disable-libstdcxx --disable-nls
 echo "[STAGE 1] Building GCC..."
 LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" make -j$(($(nproc)-1)) all-gcc
 echo "[STAGE 1] Deploying GCC..."
 LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" make install-gcc
 rm -rf *
 echo "[STAGE 1] Configuring libgcc..."
-"$GCC_SOURCE_DIR/configure" -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} --prefix="$TOOLCHAINS_DIR" --enable-checking=release --enable-languages=c --without-headers --disable-shared --disable-threads --disable-multilib --disable-libatomic --disable-libgomp --disable-libquadmath --disable-libssp --disable-bootstrap --disable-libstdcxx --disable-nls
+"$GCC_SOURCE_DIR/configure" -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} $TARGET_PREFIX_OPTION --prefix="$TOOLCHAINS_DIR" --enable-checking=release --enable-languages=c --without-headers --disable-threads --disable-multilib --disable-libatomic --disable-libgomp --disable-libquadmath --disable-libssp --disable-bootstrap --disable-libstdcxx --disable-nls
 echo "[STAGE 1] Building libgcc..."
 make -j$(($(nproc)-1)) all-target-libgcc
 echo "[STAGE 1] Deploying libgcc..."
@@ -178,7 +184,7 @@ tar -xf "glibc-${GLIBC_VERSION}.tar.xz"
 rm "glibc-${GLIBC_VERSION}.tar.xz"
 GLIBC_SOURCE_DIR="$ARCH_DIR/glibc-${GLIBC_VERSION}"
 cd "$GLIBC_BUILD_DIR"
-"$GLIBC_SOURCE_DIR/configure" --prefix=/usr --build=x86_64-linux-gnu --host=${GNU_ARCH} --target=${GNU_ARCH} --with-headers="$ROOTFS_DIR/usr/include" --disable-multilib --disable-werror --enable-kernel="$KERNEL_VERSION" --disable-sanity-checks BUILD_CC="gcc" CXX= CC="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-gcc" AR="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ar" RANLIB="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ranlib" AS="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-as" LD="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ld" STRIP="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-strip"
+"$GLIBC_SOURCE_DIR/configure" --prefix=/usr --build=x86_64-linux-gnu --host=${GNU_ARCH} --target=${GNU_ARCH} --with-headers="$ROOTFS_DIR/usr/include" --without-selinux --disable-multilib --disable-werror --enable-kernel="$KERNEL_VERSION" --disable-sanity-checks BUILD_CC="gcc" CXX= CC="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-gcc" AR="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ar" RANLIB="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ranlib" AS="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-as" LD="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ld" STRIP="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-strip"
 make install-bootstrap-headers=yes install-headers install_root=${ROOTFS_DIR} CXX= CC="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-gcc" AR="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ar" RANLIB="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ranlib" AS="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-as" LD="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ld" STRIP="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-strip"
 make csu/subdir_lib CXX= CC="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-gcc" AR="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ar" RANLIB="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ranlib" AS="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-as" LD="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-ld" STRIP="${TOOLCHAINS_DIR}/bin/${GNU_ARCH}-strip"
 install csu/crt1.o csu/crti.o csu/crtn.o ${ROOTFS_DIR}/usr/lib
@@ -191,14 +197,14 @@ rm -rf "$GLIBC_BUILD_DIR"
 cd "$GCC_BUILD_DIR"
 rm -rf *
 echo "[STAGE 2] Configuring GCC..."
-LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" "$GCC_SOURCE_DIR/configure" -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} --prefix="$TOOLCHAINS_DIR" --with-sysroot="$ROOTFS_DIR" --enable-checking=release --enable-languages=c,c++ --disable-multilib --disable-bootstrap --disable-nls
+LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" "$GCC_SOURCE_DIR/configure" -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} $TARGET_PREFIX_OPTION --prefix="$TOOLCHAINS_DIR" --with-sysroot="$ROOTFS_DIR" --enable-checking=release --enable-languages=c,c++ --disable-multilib --disable-bootstrap --disable-nls
 echo "[STAGE 2] Building GCC..."
 LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" make -j$(($(nproc)-1)) all-gcc
 echo "[STAGE 2] Deploying GCC..."
 LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" make install-gcc
 rm -rf *
 echo "[STAGE 2] Configuring libgcc/libstdc++..."
-"$GCC_SOURCE_DIR/configure" -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} --prefix="$TOOLCHAINS_DIR" --with-sysroot="$ROOTFS_DIR" --enable-checking=release --enable-languages=c,c++ --disable-multilib --disable-bootstrap --disable-nls
+"$GCC_SOURCE_DIR/configure" -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=${GNU_ARCH} $TARGET_PREFIX_OPTION --prefix="$TOOLCHAINS_DIR" --with-sysroot="$ROOTFS_DIR" --enable-checking=release --enable-languages=c,c++ --disable-multilib --disable-bootstrap --disable-nls
 echo "[STAGE 2] Building libgcc..."
 make -j$(($(nproc)-1)) all-target-libgcc
 echo "[STAGE 2] Building libstdc++..."
