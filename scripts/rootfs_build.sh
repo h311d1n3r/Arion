@@ -144,7 +144,7 @@ echo "[STAGE 1] Deploying GCC..."
 LDFLAGS_FOR_TARGET="-static" LDFLAGS="-static" make install-gcc
 rm -rf *
 echo "[STAGE 1] Configuring libgcc..."
-"$GCC_SOURCE_DIR/configure" -v --build=x86_64-build-linux-gnu --host=x86_64-build-linux-gnu --target=${GNU_ARCH} --prefix="$TOOLCHAINS_DIR" --enable-checking=release --enable-languages=c --without-headers --disable-threads --disable-multilib --disable-libatomic --disable-libgomp --disable-libquadmath --disable-libssp --disable-nls
+"$GCC_SOURCE_DIR/configure" -v --build=x86_64-build-linux-gnu --host=x86_64-build-linux-gnu --target=${GNU_ARCH} --prefix="$TOOLCHAINS_DIR" --enable-checking=release --enable-languages=c --without-headers --disable-threads --disable-multilib --disable-libatomic --disable-libgomp --disable-shared --disable-libquadmath --disable-libssp --disable-nls
 echo "[STAGE 1] Building libgcc..."
 make -j$(($(nproc)-1)) all-target-libgcc
 echo "[STAGE 1] Deploying libgcc..."
