@@ -24,6 +24,9 @@ jobs:
     - name: APT dependencies
       run: sudo apt update && sudo apt upgrade && sudo apt -y install uuid-dev coreutils gcc-multilib g++-multilib make cmake
 
+    - name: Download rootfs
+      run: ${{github.workspace}}/scripts/rootfs_download.sh all
+
     - name: Configure
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DTEST=ON
 
