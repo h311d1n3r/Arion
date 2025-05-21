@@ -14,6 +14,9 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -rdynamic -O0")
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
+set(ARION_SUPPORTED_ARCHS x86 x86-64 arm arm64)
+set(ARION_SUPPORTED_GNU_TRIPLETS i686-linux-gnu x86_64-linux-gnu arm-linux-gnueabi aarch64-linux-gnu)
+
 set(UNICORN_ARCH "x86;arm;aarch64" CACHE STRING "Build only x86, ARM, and ARM64 for Unicorn")
 
 set(CAPSTONE_X86_SUPPORT ON CACHE BOOL "Enable X86 support in Capstone")
@@ -53,6 +56,15 @@ set(LIEF_ARCHITECTURES "x86;arm;arm64" CACHE STRING "Build only x86, ARM, and AR
 find_program(CARGO_EXECUTABLE cargo)
 if (NOT CARGO_EXECUTABLE)
     message(FATAL_ERROR "cargo could not be found. Please install it to proceed.")
+endif()
+
+if (TEST)
+    foreach(ARCH IN LISTS ARION_SUPPORTED_ARCHS)
+        set(ROOTFS_PATH "${CMAKE_SOURCE_DIR}/rootfs/${ARCH}")
+        if(NOT IS_DIRECTORY "${ROOTFS_PATH}")
+            message(FATAL_ERROR "[TEST] Missing rootfs for architecture '${ARCH}'.\nYou can either download it (faster and more stable) or build it with appropriate scripts.")
+        endif()
+    endforeach()
 endif()
 
 # Copy vdso.bin to build directory to prevent absolute path inclusion
@@ -214,18 +226,31 @@ if(TEST)
     add_subdirectory(${CMAKE_SOURCE_DIR}/lib/googletest)
     enable_testing()
     file(GLOB TEST_TARGETS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} tests/targets/*)
-    foreach(target_dir ${TEST_TARGETS})
-        if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${target_dir}/CMakeLists.txt")
-            get_filename_component(target_name ${target_dir} NAME)
-            ExternalProject_Add(${target_name}
-                SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${target_dir}
-                BINARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${target_dir}/build
-                CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-                INSTALL_COMMAND ""
-                BUILD_ALWAYS 1
-            )
-        endif()
+
+    list(LENGTH ARION_SUPPORTED_ARCHS archs_len)
+    math(EXPR archs_last_i "${archs_len} - 1")
+    foreach(i RANGE 0 ${archs_last_i})
+        list(GET ARION_SUPPORTED_ARCHS ${i} arch)
+        list(GET ARION_SUPPORTED_GNU_TRIPLETS ${i} gnu_triplet)
+        set(arch_toolchains_bin ${CMAKE_CURRENT_SOURCE_DIR}/rootfs/${arch}/toolchains/bin)
+
+        foreach(target_dir ${TEST_TARGETS})
+            if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${target_dir}/CMakeLists.txt")
+                get_filename_component(target_name ${target_dir} NAME)
+                ExternalProject_Add(${target_name}_${arch}
+                    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${target_dir}
+                    BINARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${target_dir}/build_${arch}
+                    CMAKE_ARGS
+                        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                        -DCMAKE_C_COMPILER=${arch_toolchains_bin}/gcc
+                        -DCMAKE_CXX_COMPILER=${arch_toolchains_bin}/g++
+                    INSTALL_COMMAND ""
+                    BUILD_ALWAYS 1
+                )
+            endif()
+        endforeach()
     endforeach()
+
     file(GLOB_RECURSE TEST_SOURCES "tests/src/*.cpp")
     add_executable(
       arion_test
@@ -244,7 +269,7 @@ if(TEST)
     )
     target_compile_definitions(
         arion_test PRIVATE
-        ARION_TEST_TARGETS_PATH="${CMAKE_CURRENT_SOURCE_DIR}/tests/targets"
+        ARION_ROOT_PATH="${CMAKE_CURRENT_SOURCE_DIR}"
     )
     include(GoogleTest)
     gtest_discover_tests(arion_test)

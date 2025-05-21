@@ -1,6 +1,7 @@
 build/
 build.dev/
 build.release/
+build_*/
 .cache/
 .idea/
 cmake-build-release/
