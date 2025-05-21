@@ -95,7 +95,6 @@ if [[ -d "$BINUTILS_BUILD_DIR" ]]; then
 fi
 mkdir -p "$BINUTILS_BUILD_DIR"
 BINUTILS_VERSION=$(curl -s https://ftp.gnu.org/gnu/binutils/ | grep -oP 'binutils-\d+\.\d+\.tar\.xz' | sed -E 's|binutils-([0-9.]+)\.tar\.xz|\1|' | sort -V | tail -n1)
-BINUTILS_VERSION="2.44"
 echo "Identified Binutils LTS version: $BINUTILS_VERSION. Downloading source code..."
 BINUTILS_SOURCE_DIR="$ARCH_DIR/binutils-${BINUTILS_VERSION}"
 if [[ -d "$BINUTILS_SOURCE_DIR" ]]; then
@@ -122,7 +121,6 @@ if [[ -d "$GCC_BUILD_DIR" ]]; then
     rm -rf "$GCC_BUILD_DIR"
 fi
 mkdir -p "$GCC_BUILD_DIR"
-GCC_VERSION="15.1.0"
 GCC_VERSION=$(curl -s https://ftp.gnu.org/gnu/gcc/ | grep -oP 'gcc-\d+\.\d+\.\d+/' | sed -E 's|gcc-([0-9.]+)/|\1|' | sort -V | tail -n1)
 echo "Identified GCC LTS version: $GCC_VERSION. Downloading source code..."
 GCC_SOURCE_DIR="$ARCH_DIR/gcc-${GCC_VERSION}"
@@ -173,7 +171,6 @@ if [[ -d "$GLIBC_BUILD_DIR" ]]; then
     rm -rf "$GLIBC_BUILD_DIR"
 fi
 mkdir -p "$GLIBC_BUILD_DIR"
-GLIBC_VERSION="2.41"
 GLIBC_VERSION=$(curl -s https://ftp.gnu.org/gnu/libc/ | grep -oP 'glibc-\d+\.\d+\.tar\.xz' | sort -V | tail -n1 | sed -E 's/^glibc-([0-9.]+)\.tar\.xz$/\1/')
 echo "Identified glibc LTS version: $GLIBC_VERSION. Downloading source code..."
 curl -LO "https://ftp.gnu.org/gnu/libc/glibc-${GLIBC_VERSION}.tar.xz"
