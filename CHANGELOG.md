@@ -10,6 +10,7 @@
 - Implemented some syscalls
 - Added UnicornAFL fuzzing mode
 - Run from/to address
+- Signals rework
 - ArionGroup class (preparing IPC)
 - Bumped CMake requirements
 - Added CHANGELOG.md and VERSION

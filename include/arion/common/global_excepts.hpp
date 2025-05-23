@@ -1,16 +1,16 @@
 #ifndef ARION_GLOBAL_EXCEPTS_HPP
 #define ARION_GLOBAL_EXCEPTS_HPP
 
-#include <arion/common/global_defs.hpp>
-#include <arion/utils/convert_utils.hpp>
 #include <arion/capstone/capstone.h>
+#include <arion/common/global_defs.hpp>
+#include <arion/keystone/keystone.h>
+#include <arion/unicorn/unicorn.h>
+#include <arion/utils/convert_utils.hpp>
 #include <cstdint>
 #include <dlfcn.h>
 #include <execinfo.h>
-#include <arion/keystone/keystone.h>
 #include <string.h>
 #include <string>
-#include <arion/unicorn/unicorn.h>
 
 #define EXCEPTION_MAX_FRAMES 64
 
@@ -120,7 +120,8 @@ class ConfigWrongTypeAccessException : public ArionException
 {
   public:
     explicit ConfigWrongTypeAccessException(std::string key)
-        : ArionException(std::string("Configuration key \"") + key + std::string("\" was accessed with a wrong type.")) {};
+        : ArionException(std::string("Configuration key \"") + key +
+                         std::string("\" was accessed with a wrong type.")) {};
 };
 
 class WrongContextFileMagicException : public ArionException
@@ -250,6 +251,15 @@ class WrongThreadIdException : public ArionException
     explicit WrongThreadIdException() : ArionException("Specified thread id does not exist.") {};
 };
 
+class UnknownSignalException : public ArionException
+{
+  public:
+    explicit UnknownSignalException(pid_t pid, pid_t tid, int signo)
+        : ArionException(std::string("Thread ") + int_to_hex<pid_t>(tid) + std::string(" from process ") +
+                         int_to_hex<pid_t>(pid) + std::string(" received unknown signal \"") + int_to_hex<int>(signo) +
+                         std::string("\".")) {};
+};
+
 class NoSighandlerForSignalException : public ArionException
 {
   public:
@@ -262,9 +272,9 @@ class NoSighandlerForSignalException : public ArionException
 class UnhandledSyncSignalException : public ArionException
 {
   public:
-    explicit UnhandledSyncSignalException(pid_t pid, pid_t tid, std::string sig_name)
+    explicit UnhandledSyncSignalException(pid_t pid, pid_t tid, std::string sig_desc)
         : ArionException(std::string("Thread ") + int_to_hex<pid_t>(tid) + std::string(" from process ") +
-                         int_to_hex<pid_t>(pid) + std::string(" crashed with unhandled signal \"") + sig_name +
+                         int_to_hex<pid_t>(pid) + std::string(" crashed with unhandled signal \"") + sig_desc +
                          std::string("\".")) {};
 };
 

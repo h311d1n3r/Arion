@@ -15,9 +15,9 @@ uint64_t sys_rt_sigaction(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> p
     ADDR old_act_addr = params.at(2);
     size_t sig_set_sz = params.at(3);
 
-    if (old_act_addr && arion->threads->has_sighandler(signo))
+    if (old_act_addr && arion->signals->has_sighandler(signo))
     {
-        std::shared_ptr<struct ksigaction> old_act = arion->threads->get_sighandler(signo);
+        std::shared_ptr<struct ksigaction> old_act = arion->signals->get_sighandler(signo);
         std::vector<BYTE> old_act_data(sizeof(struct ksigaction));
         memcpy(old_act_data.data(), old_act.get(), sizeof(struct ksigaction));
         arion->mem->write(old_act_addr, old_act_data.data(), old_act_data.size());
@@ -27,16 +27,24 @@ uint64_t sys_rt_sigaction(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> p
         std::vector<BYTE> act_data = arion->mem->read(act_addr, sizeof(struct ksigaction));
         std::shared_ptr<struct ksigaction> act = std::make_shared<struct ksigaction>();
         memcpy(act.get(), act_data.data(), act_data.size());
-        arion->threads->set_sighandler(signo, act);
+        arion->signals->set_sighandler(signo, act);
     }
     return 0;
+}
+
+uint64_t sys_rt_sigreturn(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+{
+}
+
+uint64_t sys_sigreturn(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+{
 }
 
 uint64_t sys_pause(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
 {
     pid_t curr_tid = arion->threads->get_running_tid();
     std::unique_ptr<ARION_THREAD> arion_t = std::move(arion->threads->threads_map.at(curr_tid));
-    arion_t->paused = true;
+    arion_t->stopped = true;
     arion->threads->threads_map[curr_tid] = std::move(arion_t);
     return 0;
 }
@@ -49,13 +57,7 @@ uint64_t sys_wait4(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     ADDR rusage_addr = params.at(3);
 
     pid_t curr_tid = arion->threads->get_running_tid();
-    bool waiting = arion->threads->signal_wait_curr(pid);
-    if (waiting)
-    {
-        std::unique_ptr<ARION_THREAD> arion_t = std::move(arion->threads->threads_map.at(curr_tid));
-        arion_t->wait_status_addr = stat_addr;
-        arion->threads->threads_map[curr_tid] = std::move(arion_t);
-    }
+    bool waiting = arion->threads->signal_wait_curr(pid, stat_addr);
     arion->sync_threads();
     return 0;
 }
@@ -114,10 +116,9 @@ uint64_t sys_waitid(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
         else
             wait_pid = 0;
         break;
-    case P_ALL:
         wait_pid = -1;
     }
-    arion->threads->signal_wait_curr(wait_pid);
+    arion->threads->signal_wait_curr(wait_pid, 0);
     arion->sync_threads();
     return 0;
 }

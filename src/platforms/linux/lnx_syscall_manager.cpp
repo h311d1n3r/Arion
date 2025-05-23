@@ -1,4 +1,3 @@
-#include <arion/utils/convert_utils.hpp>
 #include <arion/arion.hpp>
 #include <arion/platforms/linux/lnx_syscall_manager.hpp>
 #include <arion/platforms/linux/syscalls/id_syscalls.hpp>
@@ -9,6 +8,7 @@
 #include <arion/platforms/linux/syscalls/process_syscalls.hpp>
 #include <arion/platforms/linux/syscalls/signal_syscalls.hpp>
 #include <arion/platforms/linux/syscalls/time_syscalls.hpp>
+#include <arion/utils/convert_utils.hpp>
 using namespace arion;
 
 std::map<std::string, uint8_t> PARAMS_N_BY_SYSCALL_NAME = {{"read", 3},
@@ -29,6 +29,7 @@ std::map<std::string, uint8_t> PARAMS_N_BY_SYSCALL_NAME = {{"read", 3},
                                                            {"rt_sigaction", 4},
                                                            {"rt_sigprocmask", 4},
                                                            {"rt_sigreturn", 0},
+                                                           {"sigreturn", 0},
                                                            {"ioctl", 3},
                                                            {"pread64", 4},
                                                            {"pwrite64", 4},
@@ -421,6 +422,8 @@ void LinuxSyscallManager::init_syscall_funcs()
     this->add_syscall_entry("munmap", sys_munmap);
     this->add_syscall_entry("brk", sys_brk);
     this->add_syscall_entry("rt_sigaction", sys_rt_sigaction);
+    this->add_syscall_entry("rt_sigreturn", sys_rt_sigreturn);
+    this->add_syscall_entry("sigreturn", sys_sigreturn);
     this->add_syscall_entry("ioctl", sys_ioctl);
     this->add_syscall_entry("pread64", sys_pread64);
     this->add_syscall_entry("pwrite64", sys_pwrite64);
