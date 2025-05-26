@@ -74,7 +74,7 @@ bool SignalManager::invalid_insn_hook(std::shared_ptr<Arion> arion, void *user_d
     return true;
 }
 
-SignalManager::SignalManager(std::weak_ptr<Arion> arion)
+SignalManager::SignalManager(std::weak_ptr<Arion> arion) : arion(arion)
 {
     std::shared_ptr<Arion> arion_ = arion.lock();
     if (!arion_)
@@ -145,6 +145,8 @@ bool SignalManager::handle_sighandler(pid_t source_pid, int signo)
     arion->abi->write_arch_reg(param_regs.at(0), (uint64_t)signo);
     if (handler->flags & SA_SIGINFO)
     {
+        this->ucontext_regs = std::move(
+            arion->abi->dump_regs()); // For now, clone context registers instead of using ucontext from siginfo_t
         std::unique_ptr<siginfo_t> info = std::make_unique<siginfo_t>();
         memset(info.get(), 0, sizeof(siginfo_t));
         // TODO : Fill siginfo_t struct with missing fields
@@ -184,7 +186,7 @@ void SignalManager::handle_signal(pid_t source_pid, int signo)
     if (signal_it == this->signals.end())
         throw UnknownSignalException(arion->get_pid(), arion->threads->get_running_tid(), signo);
     std::string signal_desc = signal_it->second;
-    arion->logger->debug("SIGNAL " + signal_desc);
+    arion->logger->debug("SIGNAL : " + signal_desc);
 
     if (this->handle_sighandler(source_pid, signo))
         return;
@@ -310,4 +312,16 @@ std::shared_ptr<struct ksigaction> SignalManager::get_sighandler(int signo)
 void SignalManager::set_sighandler(int signo, std::shared_ptr<struct ksigaction> sighandler)
 {
     this->sighandlers[signo] = sighandler;
+}
+
+bool SignalManager::sigreturn()
+{
+    std::shared_ptr<Arion> arion = this->arion.lock();
+    if (!arion)
+        throw ExpiredWeakPtrException("Arion");
+
+    if (!this->ucontext_regs)
+        return false;
+    arion->abi->load_regs(std::move(this->ucontext_regs));
+    return true;
 }

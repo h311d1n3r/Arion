@@ -245,7 +245,6 @@ if(TEST)
                         -DCMAKE_C_COMPILER=${arch_toolchains_bin}/gcc
                         -DCMAKE_CXX_COMPILER=${arch_toolchains_bin}/g++
                     INSTALL_COMMAND ""
-                    BUILD_ALWAYS 1
                 )
             endif()
         endforeach()

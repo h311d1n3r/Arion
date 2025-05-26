@@ -14,6 +14,7 @@ class SignalManager
     std::weak_ptr<Arion> arion;
     std::map<int, std::shared_ptr<struct ksigaction>> sighandlers;
     std::map<pid_t, pid_t> sigwait_list;
+    std::unique_ptr<std::map<arion::REG, arion::RVAL>> ucontext_regs;
     static std::map<int, std::string> signals;
     static void intr_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data);
     static bool invalid_memory_hook(std::shared_ptr<Arion> arion, uc_mem_type access, uint64_t addr, int size,
@@ -30,6 +31,7 @@ class SignalManager
     bool has_sighandler(int signo);
     std::shared_ptr<struct ksigaction> get_sighandler(int signo);
     void set_sighandler(int signo, std::shared_ptr<struct ksigaction> sighandler);
+    bool sigreturn();
 };
 
 #endif // ARION_SIGNAL_MANAGER_HPP

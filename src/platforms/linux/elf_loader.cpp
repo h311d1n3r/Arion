@@ -4,12 +4,12 @@
 #include <arion/common/global_excepts.hpp>
 #include <arion/common/memory_manager.hpp>
 #include <arion/platforms/linux/elf_loader.hpp>
+#include <arion/unicorn/unicorn.h>
 #include <arion/utils/fs_utils.hpp>
 #include <arion/utils/math_utils.hpp>
 #include <array>
 #include <cstdint>
 #include <memory>
-#include <arion/unicorn/unicorn.h>
 #include <unistd.h>
 
 using namespace arion;
