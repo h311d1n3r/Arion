@@ -31,4 +31,5 @@ void AbiManagerX86::setup()
         throw ExpiredWeakPtrException("Arion");
 
     arion->hooks->hook_intr(AbiManagerX86::int_hook);
+    // May implement sysenter hook by the future instead of patching vdso.bin to remove that instruction
 }

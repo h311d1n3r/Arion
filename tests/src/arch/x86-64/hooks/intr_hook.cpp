@@ -9,12 +9,12 @@ void intr_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data)
         intr_hook_bkpt_hit = true;
 }
 
-TEST_P(ArionMultiarchTest, IntrHook)
+TEST_F(ArionTest, IntrHook)
 {
     std::unique_ptr<Config> config = std::make_unique<Config>();
     config->set_field<arion::ARION_LOG_LEVEL>("log_lvl", arion::ARION_LOG_LEVEL::OFF);
     std::shared_ptr<ArionGroup> arion_group = std::make_shared<ArionGroup>();
-    std::string rootfs_path = this->arion_root_path + "/rootfs/" + this->arch + "/rootfs";
+    std::string rootfs_path = this->arion_root_path + "/rootfs/x86-64/rootfs";
     std::shared_ptr<Arion> arion = Arion::new_instance({rootfs_path + "/root/simple_syscalls/simple_syscalls"},
                                                        rootfs_path, {}, rootfs_path + "/root", std::move(config));
     arion->hooks->hook_intr(intr_hook);
