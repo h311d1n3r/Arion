@@ -20,8 +20,7 @@ class ARION_EXPORT Logger
     static std::stack<uint64_t> free_logger_ids;
     static uint64_t gen_next_id();
     uint64_t id;
-    pid_t curr_pid;
-    pid_t curr_tid;
+    uint64_t curr_pid;
     arion::ARION_LOG_LEVEL log_lvl;
     std::weak_ptr<Arion> arion;
 #ifdef ARION_ONLY

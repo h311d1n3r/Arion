@@ -398,7 +398,7 @@ inline std::map<uint64_t, std::string> NAME_BY_SYSCALL_NO = {{0, "restart_syscal
                                                              {419, "mq_timedreceive"},
                                                              {420, "semtimedop"},
                                                              {421, "rt_sigtimedwait"},
-                                                             {422, "futex"},
+                                                             {422, "futex_time64"},
                                                              {423, "sched_rr_get_interval"},
                                                              {424, "pidfd_send_signal"},
                                                              {425, "io_uring_setup"},

@@ -210,6 +210,7 @@ std::map<std::string, uint8_t> PARAMS_N_BY_SYSCALL_NAME = {{"read", 3},
                                                            {"tkill", 2},
                                                            {"time", 1},
                                                            {"futex", 6},
+                                                           {"futex_time64", 6},
                                                            {"sched_setaffinity", 3},
                                                            {"sched_getaffinity", 3},
                                                            {"io_setup", 2},
@@ -510,6 +511,7 @@ void LinuxSyscallManager::init_syscall_funcs()
     this->add_syscall_entry("gettid", sys_gettid);
     this->add_syscall_entry("time", sys_time);
     this->add_syscall_entry("futex", sys_futex);
+    this->add_syscall_entry("futex_time64", sys_futex_time64);
     this->add_syscall_entry("getdents64", sys_getdents64);
     this->add_syscall_entry("set_tid_address", sys_set_tid_address);
     this->add_syscall_entry("set_thread_area", sys_set_thread_area);

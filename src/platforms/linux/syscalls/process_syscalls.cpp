@@ -128,8 +128,7 @@ uint64_t sys_exit(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
 
     REG pc_reg = arion->abi->get_attrs()->regs.pc;
     REG ret_reg = arion->abi->get_attrs()->syscalling_conv.ret_reg;
-    ADDR pc = arion->abi->read_arch_reg(pc_reg);
-    size_t sys_instr_sz = arion->mem->read_instrs(pc, 1).at(0).size;
+    ADDR exit_pc = arion->abi->read_arch_reg(pc_reg);
     pid_t curr_tid = arion->threads->get_running_tid();
     std::unique_ptr<ARION_THREAD> arion_t = std::move(arion->threads->threads_map.at(curr_tid));
     if (arion_t->flags & CLONE_CHILD_CLEARTID)
@@ -140,8 +139,12 @@ uint64_t sys_exit(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     arion->threads->threads_map[curr_tid] = std::move(arion_t);
     arion->threads->remove_thread_entry(curr_tid);
     arion->sync_threads();
-    pc = arion->abi->read_arch_reg(pc_reg);
-    arion->abi->write_reg(pc_reg, pc - sys_instr_sz);
+    if (!arion->abi->does_hook_intr())
+    {
+        size_t sys_instr_sz = arion->mem->read_instrs(exit_pc, 1).at(0).size;
+        ADDR pc = arion->abi->read_arch_reg(pc_reg);
+        arion->abi->write_reg(pc_reg, pc - sys_instr_sz);
+    }
     return arion->abi->read_arch_reg(ret_reg);
 }
 
@@ -154,6 +157,42 @@ uint64_t sys_futex(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     ADDR uaddr2 = params.at(4);
     uint32_t val3 = params.at(5);
 
+    uint64_t ret_val = 0;
+    int masked_op = op & (FUTEX_PRIVATE_FLAG - 1);
+    if (masked_op == FUTEX_WAIT || masked_op == FUTEX_WAIT_BITSET)
+    {
+        uint32_t uaddr_val = 0;
+        if (uaddr)
+            uaddr_val = arion->mem->read_val(uaddr, 4);
+        if (uaddr_val != val)
+            return EAGAIN;
+        if (masked_op == FUTEX_WAIT)
+            arion->threads->futex_wait_curr(uaddr, ARION_MAX_U32);
+        else
+            arion->threads->futex_wait_curr(uaddr, val3);
+        ret_val = 0;
+    }
+    else if (masked_op == FUTEX_WAKE || masked_op == FUTEX_WAKE_BITSET)
+    {
+        if (masked_op == FUTEX_WAKE)
+            ret_val = arion->threads->futex_wake(uaddr, ARION_MAX_U32);
+        else
+            ret_val = arion->threads->futex_wake(uaddr, val3);
+    }
+    arion->sync_threads();
+    return ret_val;
+}
+
+uint64_t sys_futex_time64(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+{
+    ADDR uaddr = params.at(0);
+    int op = params.at(1);
+    uint32_t val = params.at(2);
+    ADDR time_addr = params.at(3);
+    ADDR uaddr2 = params.at(4);
+    uint32_t val3 = params.at(5);
+
+    // TODO: Use 64-bit time structure
     uint64_t ret_val = 0;
     int masked_op = op & (FUTEX_PRIVATE_FLAG - 1);
     if (masked_op == FUTEX_WAIT || masked_op == FUTEX_WAIT_BITSET)
