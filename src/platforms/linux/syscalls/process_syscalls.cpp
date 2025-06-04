@@ -244,7 +244,8 @@ uint64_t sys_set_thread_area(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM
     if (arion->abi->get_attrs()->arch == CPU_ARCH::X86_ARCH)
     {
         if (u_info->entry_number == 0xFFFFFFFF)
-            u_info->entry_number = arion->gdt_manager->find_free_idx(12);
+            u_info->entry_number = 12;
+        u_info->entry_number = arion->gdt_manager->find_free_idx(u_info->entry_number);
         arion->gdt_manager->insert_entry(u_info->entry_number, u_info->base_addr, u_info->limit,
                                          ARION_A_PRESENT | ARION_A_DATA | ARION_A_DATA_WRITABLE | ARION_A_PRIV_3 |
                                              ARION_A_DIR_CON_BIT,
@@ -253,6 +254,8 @@ uint64_t sys_set_thread_area(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM
             arion->mem->map(u_info->base_addr,
                             u_info->limit_in_pages ? (u_info->limit * ARION_SYSTEM_PAGE_SZ) : u_info->limit, 0x6,
                             "[TLS]");
+        uint16_t selector = arion->gdt_manager->setup_selector(u_info->entry_number, ARION_S_GDT | ARION_S_PRIV_3);
+        arion->abi->write_reg<RVAL16>(UC_X86_REG_GS, selector);
     }
 
     arion->mem->write(u_info_addr, (BYTE *)u_info, sizeof(struct user_desc));

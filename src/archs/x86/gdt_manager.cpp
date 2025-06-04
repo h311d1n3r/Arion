@@ -4,8 +4,8 @@
 #include <arion/archs/x86/gdt_manager.hpp>
 #include <arion/arion.hpp>
 #include <arion/common/global_excepts.hpp>
-#include <memory>
 #include <arion/unicorn/x86.h>
+#include <memory>
 
 using namespace arion;
 

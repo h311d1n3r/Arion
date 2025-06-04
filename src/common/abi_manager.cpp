@@ -6,11 +6,11 @@
 #include <arion/common/abi_manager.hpp>
 #include <arion/common/global_defs.hpp>
 #include <arion/common/global_excepts.hpp>
+#include <arion/unicorn/unicorn.h>
+#include <arion/unicorn/x86.h>
 #include <cstdint>
 #include <memory>
 #include <sys/wait.h>
-#include <arion/unicorn/unicorn.h>
-#include <arion/unicorn/x86.h>
 
 using namespace arion;
 
@@ -222,6 +222,8 @@ std::unique_ptr<std::map<REG, RVAL>> AbiManager::init_thread_regs(ADDR pc, ADDR 
     case 32:
         regs->operator[](this->attrs->regs.pc).r32 = pc;
         regs->operator[](this->attrs->regs.sp).r32 = sp;
+        if (this->attrs->regs.tls && tls)
+            regs->operator[](this->attrs->regs.tls).r16 = tls;
         break;
     default:
         throw UnsupportedCpuArchException();

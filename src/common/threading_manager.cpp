@@ -188,6 +188,7 @@ pid_t ThreadingManager::clone_thread(uint64_t flags, ADDR new_sp, ADDR new_tls, 
     REG tls_reg = arion->abi->get_attrs()->regs.tls;
     REG ret_reg = arion->abi->get_attrs()->syscalling_conv.ret_reg;
     ADDR pc = arion->abi->read_arch_reg(pc_reg);
+    ADDR tls_addr = new_tls;
     if (!new_sp)
         new_sp = arion->abi->read_arch_reg(sp_reg);
     ADDR next_pc;
@@ -204,7 +205,7 @@ pid_t ThreadingManager::clone_thread(uint64_t flags, ADDR new_sp, ADDR new_tls, 
     {
     case CPU_ARCH::X8664_ARCH: {
         if (!new_tls || !(flags & CLONE_SETTLS))
-            new_tls = arion->abi->read_arch_reg(tls_reg);
+            tls_addr = arion->abi->read_arch_reg(tls_reg);
         break;
     }
     case CPU_ARCH::X86_ARCH: {
@@ -213,10 +214,12 @@ pid_t ThreadingManager::clone_thread(uint64_t flags, ADDR new_sp, ADDR new_tls, 
             struct user_desc *u_desc = (struct user_desc *)malloc(sizeof(struct user_desc));
             std::vector<BYTE> u_desc_data = arion->mem->read(new_tls, sizeof(struct user_desc));
             memcpy(u_desc, u_desc_data.data(), u_desc_data.size());
+            u_desc->entry_number = arion->gdt_manager->find_free_idx(u_desc->entry_number);
             arion->gdt_manager->insert_entry(u_desc->entry_number, u_desc->base_addr, u_desc->limit,
                                              ARION_A_PRESENT | ARION_A_DATA | ARION_A_DATA_WRITABLE | ARION_A_PRIV_3 |
                                                  ARION_A_DIR_CON_BIT,
                                              ARION_F_PROT_32);
+            tls_addr = arion->gdt_manager->setup_selector(u_desc->entry_number, ARION_S_GDT | ARION_S_PRIV_3);
             free(u_desc);
         }
         break;
@@ -224,7 +227,7 @@ pid_t ThreadingManager::clone_thread(uint64_t flags, ADDR new_sp, ADDR new_tls, 
     default:
         break;
     }
-    std::unique_ptr<std::map<REG, RVAL>> regs = arion->abi->init_thread_regs(next_pc, new_sp, new_tls);
+    std::unique_ptr<std::map<REG, RVAL>> regs = arion->abi->init_thread_regs(next_pc, new_sp, tls_addr);
     regs->operator[](ret_reg).r64 = 0;
     std::unique_ptr<ARION_THREAD> arion_t =
         std::make_unique<ARION_THREAD>(exit_signal, flags, child_tid_addr, parent_tid_addr, std::move(regs));
