@@ -33,6 +33,7 @@ struct ARION_EXPORT ARION_THREAD
     arion::ADDR child_tid_addr;
     arion::ADDR parent_tid_addr;
     std::unique_ptr<std::map<arion::REG, arion::RVAL>> regs_state = nullptr;
+    arion::ADDR tls_addr;
     arion::ADDR wait_status_addr = 0;
     bool stopped = false;
     arion::ADDR robust_list_head = 0;
@@ -41,15 +42,15 @@ struct ARION_EXPORT ARION_THREAD
     uint32_t rseq_sig = 0;
     ARION_THREAD() {};
     ARION_THREAD(int exit_signal, uint64_t flags, arion::ADDR child_tid_addr, arion::ADDR parent_tid_addr,
-                 std::unique_ptr<std::map<arion::REG, arion::RVAL>> regs_state)
+                 std::unique_ptr<std::map<arion::REG, arion::RVAL>> regs_state, arion::ADDR tls_addr)
         : exit_signal(exit_signal), flags(flags), child_tid_addr(child_tid_addr), parent_tid_addr(parent_tid_addr),
-          regs_state(std::move(regs_state)) {};
+          regs_state(std::move(regs_state)), tls_addr(tls_addr) {};
     ARION_THREAD(ARION_THREAD *arion_t)
         : tid(arion_t->tid), tgid(arion_t->tgid), exit_signal(arion_t->exit_signal), flags(arion_t->flags),
           child_tid_addr(arion_t->child_tid_addr), parent_tid_addr(arion_t->parent_tid_addr),
           regs_state(arion_t->regs_state ? std::make_unique<std::map<arion::REG, arion::RVAL>>(*arion_t->regs_state)
                                          : nullptr),
-          wait_status_addr(arion_t->wait_status_addr), stopped(arion_t->stopped) {};
+          tls_addr(arion_t->tls_addr), wait_status_addr(arion_t->wait_status_addr), stopped(arion_t->stopped) {};
 };
 std::vector<arion::BYTE> serialize_arion_thread(ARION_THREAD *arion_t);
 ARION_THREAD *deserialize_arion_thread(std::vector<arion::BYTE> srz_thread);

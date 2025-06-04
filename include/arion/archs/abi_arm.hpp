@@ -611,7 +611,7 @@ inline std::map<uint64_t, CPU_INTR> IDT = {/*{1, UDEF},
                                            {21, LSERR},
                                            {22, UNALIGNED}*/};
 
-inline ABI_REGISTERS ABI_REGS = ABI_REGISTERS(UC_ARM_REG_PC, UC_ARM_REG_SP, UC_ARM_REG_INVALID);
+inline ABI_REGISTERS ABI_REGS = ABI_REGISTERS(UC_ARM_REG_PC, UC_ARM_REG_SP);
 
 inline ABI_CALLING_CONVENTION ABI_CALLING_CONV =
     ABI_CALLING_CONVENTION(UC_ARM_REG_R0, {UC_ARM_REG_R0, UC_ARM_REG_R1, UC_ARM_REG_R2, UC_ARM_REG_R3});
@@ -651,9 +651,10 @@ class AbiManagerARM : public AbiManager
         : AbiManager(std::make_shared<ABI_ATTRIBUTES>(arion_arm::ABI_ATTRS), arion_arm::ARCH_REGS,
                      arion_arm::ARCH_REGS_SZ, arion_arm::CTXT_REGS, arion_arm::IDT, true) {};
 
-    std::array<arion::BYTE, VSYSCALL_ENTRY_SZ> gen_vsyscall_entry(uint64_t syscall_no);
     ks_engine *curr_ks();
     csh *curr_cs();
+    arion::ADDR dump_tls();
+    void load_tls(arion::ADDR new_tls);
 };
 
 #endif // ARION_ABI_ARM_HPP

@@ -1,5 +1,6 @@
 #include <arion/archs/abi_x86.hpp>
 #include <arion/arion.hpp>
+#include <asm/ldt.h>
 
 using namespace arion;
 
@@ -11,11 +12,6 @@ ks_engine *AbiManagerX86::curr_ks()
 csh *AbiManagerX86::curr_cs()
 {
     return this->cs.at(0);
-}
-
-std::array<arion::BYTE, VSYSCALL_ENTRY_SZ> AbiManagerX86::gen_vsyscall_entry(uint64_t syscall_no)
-{
-    return std::array<arion::BYTE, VSYSCALL_ENTRY_SZ>();
 }
 
 void AbiManagerX86::int_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data)
@@ -32,4 +28,53 @@ void AbiManagerX86::setup()
 
     arion->hooks->hook_intr(AbiManagerX86::int_hook);
     // May implement sysenter hook by the future instead of patching vdso.bin to remove that instruction
+}
+
+ADDR AbiManagerX86::dump_tls()
+{
+    std::shared_ptr<Arion> arion = this->arion.lock();
+    if (!arion)
+        throw ExpiredWeakPtrException("Arion");
+
+    RVAL16 tls_selector = arion->abi->read_reg<RVAL16>(UC_X86_REG_GS);
+    if (!tls_selector)
+        return 0;
+
+    return tls_selector;
+}
+
+uint16_t AbiManagerX86::new_tls(ADDR udesc_addr)
+{
+    std::shared_ptr<Arion> arion = this->arion.lock();
+    if (!arion)
+        throw ExpiredWeakPtrException("Arion");
+
+    struct user_desc *u_desc = (struct user_desc *)malloc(sizeof(struct user_desc));
+    std::vector<BYTE> u_desc_data = arion->mem->read(udesc_addr, sizeof(struct user_desc));
+    memcpy(u_desc, u_desc_data.data(), u_desc_data.size());
+
+    if (u_desc->entry_number == 0xFFFFFFFF)
+        u_desc->entry_number = 12;
+    u_desc->entry_number = arion->gdt_manager->find_free_idx(u_desc->entry_number);
+    arion->gdt_manager->insert_entry(
+        u_desc->entry_number, u_desc->base_addr, u_desc->limit,
+        ARION_A_PRESENT | ARION_A_DATA | ARION_A_DATA_WRITABLE | ARION_A_PRIV_3 | ARION_A_DIR_CON_BIT, ARION_F_PROT_32);
+    if (!arion->mem->is_mapped(u_desc->base_addr))
+        arion->mem->map(u_desc->base_addr,
+                        u_desc->limit_in_pages ? (u_desc->limit * ARION_SYSTEM_PAGE_SZ) : u_desc->limit, 0x6, "[TLS]");
+    uint16_t selector = arion->gdt_manager->setup_selector(u_desc->entry_number, ARION_S_GDT | ARION_S_PRIV_3);
+
+    arion->mem->write(udesc_addr, (BYTE *)u_desc, sizeof(struct user_desc));
+    free(u_desc);
+
+    return selector;
+}
+
+void AbiManagerX86::load_tls(ADDR new_tls)
+{
+    std::shared_ptr<Arion> arion = this->arion.lock();
+    if (!arion)
+        throw ExpiredWeakPtrException("Arion");
+
+    arion->abi->write_reg<RVAL16>(UC_X86_REG_GS, new_tls);
 }

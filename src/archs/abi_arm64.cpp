@@ -5,11 +5,6 @@
 
 using namespace arion;
 
-std::array<arion::BYTE, VSYSCALL_ENTRY_SZ> AbiManagerARM64::gen_vsyscall_entry(uint64_t syscall_no)
-{
-    return std::array<arion::BYTE, VSYSCALL_ENTRY_SZ>();
-}
-
 void AbiManagerARM64::int_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data)
 {
     if (intno == 0x2)
@@ -68,4 +63,35 @@ void AbiManagerARM64::setup()
     arion->hooks->hook_intr(AbiManagerARM64::int_hook);
     this->enable_lse();
     this->enable_vfp();
+}
+
+ADDR AbiManagerARM64::dump_tls()
+{
+    uc_arm64_cp_reg tpidr_el0 = {0};
+    tpidr_el0.crn = 13;
+    tpidr_el0.crm = 0;
+    tpidr_el0.op0 = 3;
+    tpidr_el0.op1 = 3;
+    tpidr_el0.op2 = 2;
+
+    uc_err uc_reg_err = uc_reg_read(this->uc, UC_ARM64_REG_CP_REG, &tpidr_el0);
+    if (uc_reg_err != UC_ERR_OK)
+        throw UnicornRegWriteException(uc_reg_err);
+
+    return tpidr_el0.val;
+}
+
+void AbiManagerARM64::load_tls(ADDR new_tls)
+{
+    uc_arm64_cp_reg tpidr_el0 = {0};
+    tpidr_el0.crn = 13;
+    tpidr_el0.crm = 0;
+    tpidr_el0.op0 = 3;
+    tpidr_el0.op1 = 3;
+    tpidr_el0.op2 = 2;
+    tpidr_el0.val = new_tls;
+
+    uc_err uc_reg_err = uc_reg_write(this->uc, UC_ARM64_REG_CP_REG, &tpidr_el0);
+    if (uc_reg_err != UC_ERR_OK)
+        throw UnicornRegWriteException(uc_reg_err);
 }

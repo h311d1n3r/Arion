@@ -42,3 +42,21 @@ void AbiManagerX8664::setup()
 
     arion->hooks->hook_insn(AbiManagerX8664::syscall_hook, UC_X86_INS_SYSCALL);
 }
+
+ADDR AbiManagerX8664::dump_tls()
+{
+    std::shared_ptr<Arion> arion = this->arion.lock();
+    if (!arion)
+        throw ExpiredWeakPtrException("Arion");
+
+    return arion->abi->read_reg<RVAL64>(UC_X86_REG_FS_BASE);
+}
+
+void AbiManagerX8664::load_tls(ADDR new_tls)
+{
+    std::shared_ptr<Arion> arion = this->arion.lock();
+    if (!arion)
+        throw ExpiredWeakPtrException("Arion");
+
+    arion->abi->write_reg<RVAL64>(UC_X86_REG_FS_BASE, new_tls);
+}

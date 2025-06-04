@@ -23,7 +23,10 @@ std::shared_ptr<ARION_CONTEXT> ContextManager::save()
     {
         std::unique_ptr<ARION_THREAD> arion_t_cpy = std::make_unique<ARION_THREAD>(arion_t.second.get());
         if (arion_t_cpy->tid == running_tid)
+        {
             arion_t_cpy->regs_state = arion->abi->dump_regs();
+            arion_t_cpy->tls_addr = arion->abi->dump_tls();
+        }
         thread_list.push_back(std::move(arion_t_cpy));
     }
     std::vector<std::unique_ptr<ARION_FUTEX>> futex_list;
@@ -127,6 +130,7 @@ void ContextManager::restore(std::shared_ptr<ARION_CONTEXT> ctx)
         arion->threads->futex_wait(arion_f->tid, arion_f->futex_addr, arion_f->futex_bitmask);
     arion->threads->set_running_tid(ctx->running_tid);
     arion->abi->load_regs(std::move(arion->threads->threads_map[ctx->running_tid]->regs_state));
+    arion->abi->load_tls(std::move(arion->threads->threads_map[ctx->running_tid]->tls_addr));
 }
 
 void ContextManager::save_to_file(std::string file_path)

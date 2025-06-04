@@ -208,7 +208,7 @@ CPU_INTR AbiManager::get_idt_entry(uint64_t intno)
     return cpu_idt_it->second;
 }
 
-std::unique_ptr<std::map<REG, RVAL>> AbiManager::init_thread_regs(ADDR pc, ADDR sp, ADDR tls)
+std::unique_ptr<std::map<REG, RVAL>> AbiManager::init_thread_regs(ADDR pc, ADDR sp)
 {
     std::unique_ptr<std::map<REG, RVAL>> regs = this->dump_regs();
     switch (this->attrs->arch_sz)
@@ -216,14 +216,10 @@ std::unique_ptr<std::map<REG, RVAL>> AbiManager::init_thread_regs(ADDR pc, ADDR 
     case 64:
         regs->operator[](this->attrs->regs.pc).r64 = pc;
         regs->operator[](this->attrs->regs.sp).r64 = sp;
-        if (this->attrs->regs.tls)
-            regs->operator[](this->attrs->regs.tls).r64 = tls;
         break;
     case 32:
         regs->operator[](this->attrs->regs.pc).r32 = pc;
         regs->operator[](this->attrs->regs.sp).r32 = sp;
-        if (this->attrs->regs.tls && tls)
-            regs->operator[](this->attrs->regs.tls).r16 = tls;
         break;
     default:
         throw UnsupportedCpuArchException();

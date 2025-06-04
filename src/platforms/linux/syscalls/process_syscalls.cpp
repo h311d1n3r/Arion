@@ -1,3 +1,4 @@
+#include <arion/archs/abi_x86.hpp>
 #include <arion/archs/x86/gdt_manager.hpp>
 #include <arion/arion.hpp>
 #include <arion/common/global_defs.hpp>
@@ -34,25 +35,6 @@ pid_t fork_process(std::shared_ptr<Arion> arion)
     forked_process->abi->write_arch_reg(pc_reg, next_pc);
     pid_t forked_pid = arion->add_child(forked_process);
     arion->hooks->trigger_arion_hook(ARION_HOOK_TYPE::FORK_HOOK, forked_process);
-
-    // Quick & dirty fix : coprocessor registers should be placed in context and better TLS management should be
-    // provided
-    if (arion->abi->get_attrs()->arch == CPU_ARCH::ARM64_ARCH)
-    {
-        uc_arm64_cp_reg tpidr = {0};
-        tpidr.crn = 13;
-        tpidr.crm = 0;
-        tpidr.op0 = 3;
-        tpidr.op1 = 3;
-        tpidr.op2 = 2;
-        uc_err uc_reg_err = uc_reg_read(arion->uc, UC_ARM64_REG_CP_REG, &tpidr); // TPIDR_EL0
-        if (uc_reg_err != UC_ERR_OK)
-            throw UnicornRegReadException(uc_reg_err);
-
-        uc_reg_err = uc_reg_write(forked_process->uc, UC_ARM64_REG_CP_REG, &tpidr); // TPIDR_EL0
-        if (uc_reg_err != UC_ERR_OK)
-            throw UnicornRegWriteException(uc_reg_err);
-    }
 
     if (!hooks_intr)
     {
@@ -237,29 +219,13 @@ uint64_t sys_set_thread_area(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM
 
     if (!u_info_addr)
         return EFAULT;
-    struct user_desc *u_info = (struct user_desc *)malloc(sizeof(struct user_desc));
-    std::vector<BYTE> data = arion->mem->read(u_info_addr, sizeof(struct user_desc));
-    memcpy(u_info, data.data(), data.size());
 
+    ADDR new_tls = u_info_addr;
     if (arion->abi->get_attrs()->arch == CPU_ARCH::X86_ARCH)
-    {
-        if (u_info->entry_number == 0xFFFFFFFF)
-            u_info->entry_number = 12;
-        u_info->entry_number = arion->gdt_manager->find_free_idx(u_info->entry_number);
-        arion->gdt_manager->insert_entry(u_info->entry_number, u_info->base_addr, u_info->limit,
-                                         ARION_A_PRESENT | ARION_A_DATA | ARION_A_DATA_WRITABLE | ARION_A_PRIV_3 |
-                                             ARION_A_DIR_CON_BIT,
-                                         ARION_F_PROT_32);
-        if (!arion->mem->is_mapped(u_info->base_addr))
-            arion->mem->map(u_info->base_addr,
-                            u_info->limit_in_pages ? (u_info->limit * ARION_SYSTEM_PAGE_SZ) : u_info->limit, 0x6,
-                            "[TLS]");
-        uint16_t selector = arion->gdt_manager->setup_selector(u_info->entry_number, ARION_S_GDT | ARION_S_PRIV_3);
-        arion->abi->write_reg<RVAL16>(UC_X86_REG_GS, selector);
-    }
+        new_tls = static_cast<AbiManagerX86 *>(arion->abi.get())->new_tls(u_info_addr);
 
-    arion->mem->write(u_info_addr, (BYTE *)u_info, sizeof(struct user_desc));
-    free(u_info);
+    arion->abi->load_tls(new_tls);
+
     return 0;
 }
 
@@ -267,28 +233,10 @@ uint64_t sys_set_tls(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params
 {
     ADDR tls_addr = params.at(0);
 
-    switch (arion->abi->get_attrs()->arch)
-    {
-    case CPU_ARCH::ARM_ARCH: {
-        uc_arm_cp_reg cp15 = {0};
-        cp15.cp = 15;
-        cp15.is64 = 0;
-        cp15.sec = 0;
-        cp15.crn = 13;
-        cp15.crm = 0;
-        cp15.opc1 = 0;
-        cp15.opc2 = 3;
-        cp15.val = tls_addr;
+    if (arion->abi->get_attrs()->arch == CPU_ARCH::X86_ARCH)
+        tls_addr = static_cast<AbiManagerX86 *>(arion->abi.get())->new_tls(tls_addr);
 
-        uc_err uc_reg_err = uc_reg_write(arion->uc, UC_ARM_REG_CP_REG, &cp15); // TPIDRURO
-        if (uc_reg_err != UC_ERR_OK)
-            throw UnicornRegWriteException(uc_reg_err);
-
-        arion->mem->write_ptr(LINUX_32_ARM_GETTLS_ADDR + 0x10, tls_addr);
-    }
-    default:
-        break;
-    }
+    arion->abi->load_tls(tls_addr);
 
     return tls_addr;
 }
