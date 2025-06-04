@@ -11,6 +11,7 @@
 - Added UnicornAFL fuzzing mode
 - Run from/to address
 - Signals rework
+- Threads rework
 - ArionGroup class (preparing IPC)
 - Bumped CMake requirements
 - Added CHANGELOG.md and VERSION
