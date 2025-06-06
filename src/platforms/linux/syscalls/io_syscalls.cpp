@@ -26,27 +26,28 @@
 using namespace arion;
 using namespace arion_poly_struct;
 
-std::map<uint8_t, std::pair<std::string, SYSCALL_FUNC>> socket_sys_to_func = {
-    {SYS_SOCKET, {"socket", sys_socket}},
-    {SYS_BIND, {"bind", sys_bind}},
-    {SYS_CONNECT, {"connect", sys_connect}},
-    {SYS_LISTEN, {"listen", sys_listen}},
-    {SYS_ACCEPT, {"accept", sys_accept}},
-    {SYS_GETSOCKNAME, {"getsockname", sys_getsockname}},
-    {SYS_GETPEERNAME, {"getpeername", sys_getpeername}},
-    {SYS_SOCKETPAIR, {"socketpair", sys_socketpair}},
-    {SYS_SEND, {"send", sys_send}},
-    {SYS_RECV, {"recv", sys_recv}},
-    {SYS_SENDTO, {"sendto", sys_sendto}},
-    {SYS_RECVFROM, {"recvfrom", sys_recvfrom}},
-    {SYS_SHUTDOWN, {"shutdown", sys_shutdown}},
-    {SYS_SETSOCKOPT, {"setsockopt", sys_setsockopt}},
-    {SYS_GETSOCKOPT, {"getsockopt", sys_getsockopt}},
-    {SYS_SENDMSG, {"sendmsg", sys_sendmsg}},
-    {SYS_RECVMSG, {"recvmsg", sys_recvmsg}},
-    {SYS_ACCEPT4, {"accept4", sys_accept4}},
-    {SYS_RECVMMSG, {"recvmmsg", sys_recvmmsg}},
-    {SYS_SENDMMSG, {"sendmmsg", sys_sendmmsg}}};
+std::map<uint8_t,
+         std::pair<std::string, std::function<uint64_t(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)>>>
+    socket_sys_to_func = {{SYS_SOCKET, {"socket", sys_socket}},
+                          {SYS_BIND, {"bind", sys_bind}},
+                          {SYS_CONNECT, {"connect", sys_connect}},
+                          {SYS_LISTEN, {"listen", sys_listen}},
+                          {SYS_ACCEPT, {"accept", sys_accept}},
+                          {SYS_GETSOCKNAME, {"getsockname", sys_getsockname}},
+                          {SYS_GETPEERNAME, {"getpeername", sys_getpeername}},
+                          {SYS_SOCKETPAIR, {"socketpair", sys_socketpair}},
+                          {SYS_SEND, {"send", sys_send}},
+                          {SYS_RECV, {"recv", sys_recv}},
+                          {SYS_SENDTO, {"sendto", sys_sendto}},
+                          {SYS_RECVFROM, {"recvfrom", sys_recvfrom}},
+                          {SYS_SHUTDOWN, {"shutdown", sys_shutdown}},
+                          {SYS_SETSOCKOPT, {"setsockopt", sys_setsockopt}},
+                          {SYS_GETSOCKOPT, {"getsockopt", sys_getsockopt}},
+                          {SYS_SENDMSG, {"sendmsg", sys_sendmsg}},
+                          {SYS_RECVMSG, {"recvmsg", sys_recvmsg}},
+                          {SYS_ACCEPT4, {"accept4", sys_accept4}},
+                          {SYS_RECVMMSG, {"recvmmsg", sys_recvmmsg}},
+                          {SYS_SENDMMSG, {"sendmmsg", sys_sendmmsg}}};
 
 std::string get_path_at(std::shared_ptr<Arion> arion, int dfd, std::string file_name)
 {
@@ -786,7 +787,7 @@ uint64_t sys_socketcall(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> par
     }
     auto func_pair = func_it->second;
     std::string func_name = func_pair.first;
-    SYSCALL_FUNC func = func_pair.second;
+    auto func = func_pair.second;
     uint8_t params_n = PARAMS_N_BY_SYSCALL_NAME.at(func_name);
     std::vector<SYS_PARAM> call_params;
     for (uint8_t param_i = 0; param_i < params_n; param_i++)

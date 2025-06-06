@@ -93,35 +93,35 @@ void Logger::refresh_prefix()
 void Logger::trace(std::string str)
 {
     this->refresh_prefix();
-    this->logger->trace(str);
+    this->logger->trace(str + arion_log_colors_str.at(ARION_LOG_COLOR::DEFAULT));
 }
 
 void Logger::debug(std::string str)
 {
     this->refresh_prefix();
-    this->logger->debug(str);
+    this->logger->debug(str + arion_log_colors_str.at(ARION_LOG_COLOR::DEFAULT));
 }
 
 void Logger::info(std::string str)
 {
     this->refresh_prefix();
-    this->logger->info(str);
+    this->logger->info(str + arion_log_colors_str.at(ARION_LOG_COLOR::DEFAULT));
 }
 
 void Logger::warn(std::string str)
 {
     this->refresh_prefix();
-    this->logger->warn(str);
+    this->logger->warn(str + arion_log_colors_str.at(ARION_LOG_COLOR::DEFAULT));
 }
 
 void Logger::error(std::string str)
 {
     this->refresh_prefix();
-    this->logger->error(str);
+    this->logger->error(str + arion_log_colors_str.at(ARION_LOG_COLOR::DEFAULT));
 }
 
 void Logger::critical(std::string str)
 {
     this->refresh_prefix();
-    this->logger->critical(str);
+    this->logger->critical(str + arion_log_colors_str.at(ARION_LOG_COLOR::DEFAULT));
 }

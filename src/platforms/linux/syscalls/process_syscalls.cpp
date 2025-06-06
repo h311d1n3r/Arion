@@ -12,41 +12,6 @@
 
 using namespace arion;
 
-pid_t fork_process(std::shared_ptr<Arion> arion)
-{
-    CPU_ARCH arch = arion->abi->get_attrs()->arch;
-
-    REG pc_reg = arion->abi->get_attrs()->regs.pc;
-    std::shared_ptr<Arion> forked_process = arion->copy();
-    REG ret_reg = forked_process->abi->get_attrs()->syscalling_conv.ret_reg;
-    forked_process->abi->write_arch_reg(ret_reg, 0);
-    ADDR pc = arion->abi->read_arch_reg(pc_reg);
-    ADDR next_pc;
-    size_t sys_instr_sz;
-    bool hooks_intr = arion->abi->does_hook_intr();
-    // For architectures that hook with hook_intr, next_pc is already returned
-    if (hooks_intr)
-        next_pc = pc;
-    else
-    {
-        sys_instr_sz = arion->mem->read_instrs(pc, 1).at(0).size;
-        next_pc = pc + sys_instr_sz;
-    }
-    forked_process->abi->write_arch_reg(pc_reg, next_pc);
-    pid_t forked_pid = arion->add_child(forked_process);
-    arion->hooks->trigger_arion_hook(ARION_HOOK_TYPE::FORK_HOOK, forked_process);
-
-    if (!hooks_intr)
-    {
-        // If PC register was manually edited by user during fork hook, remove syscall instruction size
-        ADDR user_edited_pc = arion->abi->read_arch_reg(pc_reg);
-        if (user_edited_pc != pc)
-            arion->abi->write_arch_reg(pc_reg, user_edited_pc - sys_instr_sz);
-    }
-
-    return forked_pid;
-}
-
 uint64_t sys_clone(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
 {
     uint64_t clone_flags = params.at(0);
@@ -66,14 +31,14 @@ uint64_t sys_clone(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     if (clone_flags & CLONE_THREAD)
         child_pid = arion->threads->clone_thread(clone_flags, new_sp, new_tls, child_tidptr, parent_tidptr, 0);
     else
-        child_pid = fork_process(arion);
+        child_pid = arion->threads->fork_process(clone_flags, new_sp, new_tls, child_tidptr, parent_tidptr, 0);
     arion->sync_threads();
     return child_pid;
 }
 
 uint64_t sys_fork(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
 {
-    pid_t child_pid = fork_process(arion);
+    pid_t child_pid = arion->threads->fork_process(0, 0, 0, 0, 0, 0);
     arion->sync_threads();
     return child_pid;
 }
@@ -113,10 +78,10 @@ uint64_t sys_exit(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     ADDR exit_pc = arion->abi->read_arch_reg(pc_reg);
     pid_t curr_tid = arion->threads->get_running_tid();
     std::unique_ptr<ARION_THREAD> arion_t = std::move(arion->threads->threads_map.at(curr_tid));
-    if (arion_t->flags & CLONE_CHILD_CLEARTID)
+    if (arion_t->child_cleartid_addr)
     {
-        arion->mem->write_val(arion_t->child_tid_addr, 0, sizeof(pid_t));
-        arion->threads->futex_wake(arion_t->child_tid_addr, ARION_MAX_U32);
+        arion->mem->write_val(arion_t->child_cleartid_addr, 0, sizeof(pid_t));
+        arion->threads->futex_wake(arion_t->child_cleartid_addr, ARION_MAX_U32);
     }
     arion->threads->threads_map[curr_tid] = std::move(arion_t);
     arion->threads->remove_thread_entry(curr_tid);
@@ -207,7 +172,7 @@ uint64_t sys_set_tid_address(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM
 
     pid_t curr_tid = arion->threads->get_running_tid();
     std::unique_ptr<ARION_THREAD> arion_t = std::move(arion->threads->threads_map.at(curr_tid));
-    arion_t->child_tid_addr = tid_ptr;
+    arion_t->child_cleartid_addr = tid_ptr;
     arion->mem->write_val(tid_ptr, curr_tid, sizeof(pid_t));
     arion->threads->threads_map[curr_tid] = std::move(arion_t);
     return curr_tid;
@@ -255,10 +220,10 @@ uint64_t sys_exit_group(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> par
         tids.push_back(arion_t_entry.first);
         pid_t tid = arion_t_entry.first;
         std::unique_ptr<ARION_THREAD> arion_t = std::move(arion_t_entry.second);
-        if (arion_t->flags & CLONE_CHILD_CLEARTID)
+        if (arion_t->child_cleartid_addr)
         {
-            arion->mem->write_val(arion_t->child_tid_addr, 0, sizeof(pid_t));
-            arion->threads->futex_wake(arion_t->child_tid_addr, ARION_MAX_U32);
+            arion->mem->write_val(arion_t->child_cleartid_addr, 0, sizeof(pid_t));
+            arion->threads->futex_wake(arion_t->child_cleartid_addr, ARION_MAX_U32);
         }
         arion->threads->threads_map[tid] = std::move(arion_t);
     }
@@ -283,12 +248,13 @@ uint64_t sys_clone3(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
         child_pid = arion->threads->clone_thread(args->flags, args->stack + args->stack_size, args->tls,
                                                  args->child_tid, args->parent_tid, args->exit_signal);
     else
-        child_pid = fork_process(arion);
+        child_pid = arion->threads->fork_process(args->flags, args->stack + args->stack_size, args->tls,
+                                                 args->child_tid, args->parent_tid, args->exit_signal);
     arion->sync_threads();
     return child_pid;
 }
 
-// disapear in linux kernel > 6.X
+// obsolete in linux kernel > 6.X
 uint64_t sys_set_robust_list(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
 {
     ADDR head = params.at(0);

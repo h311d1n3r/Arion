@@ -64,15 +64,16 @@ Check the [Releases](https://github.com/h311d1n3r/Arion/releases/) tab on the Gi
 > Rust must be installed on host (required by [udbserver](https://github.com/bet4it/udbserver))  
 1. Clone the repository `git clone https://github.com/h311d1n3r/Arion.git && cd Arion`  
 2. Initialize git dependencies : `git submodule update --init`  
-3. Create the build directory `mkdir build && cd build`  
+3. Pull LFS files : `git lfs pull`
+4. Create the build directory `mkdir build && cd build`  
 <u>With Ninja</u>
-4. Run CMake to configure the project `cmake -G Ninja ..`  
-5. Run make to compile the project `ninja -j7`  
-6. Run make install to deploy the project `sudo ninja install`  
+5. Run CMake to configure the project `cmake -G Ninja ..`  
+6. Run make to compile the project `ninja -j7`  
+7. Run make install to deploy the project `sudo ninja install`  
 <u>With Make</u>
-4. Run CMake to configure the project `cmake ..`  
-5. Run make to compile the project `make -j7`  
-6. Run make install to deploy the project `sudo make install`  
+5. Run CMake to configure the project `cmake ..`  
+6. Run make to compile the project `make -j7`  
+7. Run make install to deploy the project `sudo make install`  
 
 <a name="install_build_host_testing"/>
 

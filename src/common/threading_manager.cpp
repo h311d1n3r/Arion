@@ -3,6 +3,7 @@
 #include <arion/common/global_excepts.hpp>
 #include <arion/common/threading_manager.hpp>
 #include <arion/unicorn/unicorn.h>
+#include <linux/sched.h>
 #include <memory>
 
 using namespace arion;
@@ -40,8 +41,10 @@ std::vector<BYTE> serialize_arion_thread(ARION_THREAD *arion_t)
     srz_thread.insert(srz_thread.end(), (BYTE *)&arion_t->tid, (BYTE *)&arion_t->tid + sizeof(pid_t));
     srz_thread.insert(srz_thread.end(), (BYTE *)&arion_t->exit_signal, (BYTE *)&arion_t->exit_signal + sizeof(int));
     srz_thread.insert(srz_thread.end(), (BYTE *)&arion_t->flags, (BYTE *)&arion_t->flags + sizeof(uint64_t));
-    srz_thread.insert(srz_thread.end(), (BYTE *)&arion_t->child_tid_addr,
-                      (BYTE *)&arion_t->child_tid_addr + sizeof(ADDR));
+    srz_thread.insert(srz_thread.end(), (BYTE *)&arion_t->child_cleartid_addr,
+                      (BYTE *)&arion_t->child_cleartid_addr + sizeof(ADDR));
+    srz_thread.insert(srz_thread.end(), (BYTE *)&arion_t->child_settid_addr,
+                      (BYTE *)&arion_t->child_settid_addr + sizeof(ADDR));
     srz_thread.insert(srz_thread.end(), (BYTE *)&arion_t->parent_tid_addr,
                       (BYTE *)&arion_t->parent_tid_addr + sizeof(ADDR));
     if (arion_t->regs_state)
@@ -72,7 +75,9 @@ ARION_THREAD *deserialize_arion_thread(std::vector<BYTE> srz_thread)
     off += sizeof(int);
     memcpy(&arion_t->flags, srz_thread.data() + off, sizeof(uint64_t));
     off += sizeof(uint64_t);
-    memcpy(&arion_t->child_tid_addr, srz_thread.data() + off, sizeof(ADDR));
+    memcpy(&arion_t->child_cleartid_addr, srz_thread.data() + off, sizeof(ADDR));
+    off += sizeof(ADDR);
+    memcpy(&arion_t->child_settid_addr, srz_thread.data() + off, sizeof(ADDR));
     off += sizeof(ADDR);
     memcpy(&arion_t->parent_tid_addr, srz_thread.data() + off, sizeof(ADDR));
     off += sizeof(ADDR);
@@ -201,22 +206,87 @@ pid_t ThreadingManager::clone_thread(uint64_t flags, ADDR new_sp, ADDR new_tls, 
         size_t sys_instr_sz = arion->mem->read_instrs(pc, 1).at(0).size;
         next_pc = pc + sys_instr_sz;
     }
+
+    ADDR child_cleartid_addr = 0;
+    if (flags & CLONE_CHILD_CLEARTID)
+        child_cleartid_addr = child_tid_addr;
+    ADDR child_settid_addr = 0;
+    if (flags & CLONE_CHILD_SETTID)
+        child_settid_addr = child_tid_addr;
+
     if (!new_tls || (flags & CLONE_SETTLS))
         new_tls = arion->abi->dump_tls();
     else if (arion->abi->get_attrs()->arch == CPU_ARCH::X86_ARCH)
         new_tls = static_cast<AbiManagerX86 *>(arion->abi.get())->new_tls(new_tls);
     std::unique_ptr<std::map<REG, RVAL>> regs = arion->abi->init_thread_regs(next_pc, new_sp);
     regs->operator[](ret_reg).r64 = 0;
-    std::unique_ptr<ARION_THREAD> arion_t =
-        std::make_unique<ARION_THREAD>(exit_signal, flags, child_tid_addr, parent_tid_addr, std::move(regs), new_tls);
+    std::unique_ptr<ARION_THREAD> arion_t = std::make_unique<ARION_THREAD>(
+        exit_signal, flags, child_cleartid_addr, child_settid_addr, parent_tid_addr, std::move(regs), new_tls);
 
     pid_t parent_tid = arion->threads->get_running_tid();
     pid_t child_tid = arion->threads->add_thread_entry(std::move(arion_t));
     if (flags & CLONE_CHILD_SETTID)
-        arion->mem->write_val(child_tid_addr, child_tid, sizeof(pid_t));
+        arion->mem->write_val(child_settid_addr, child_tid, sizeof(pid_t));
     if (flags & CLONE_PARENT_SETTID)
         arion->mem->write_val(parent_tid_addr, parent_tid, sizeof(pid_t));
     return child_tid;
+}
+
+pid_t ThreadingManager::fork_process(uint64_t flags, arion::ADDR new_sp, arion::ADDR new_tls,
+                                     arion::ADDR child_tid_addr, arion::ADDR parent_tid_addr, int exit_signal)
+{
+    std::shared_ptr<Arion> arion = this->arion.lock();
+    if (!arion)
+        throw ExpiredWeakPtrException("Arion");
+
+    CPU_ARCH arch = arion->abi->get_attrs()->arch;
+
+    REG pc_reg = arion->abi->get_attrs()->regs.pc;
+    std::shared_ptr<Arion> forked_process = arion->copy();
+    pid_t curr_tid = forked_process->threads->get_running_tid();
+    for (auto &thread_entry : forked_process->threads->threads_map)
+        if (thread_entry.first != curr_tid)
+            forked_process->threads->remove_thread_entry(thread_entry.first);
+    REG ret_reg = forked_process->abi->get_attrs()->syscalling_conv.ret_reg;
+    forked_process->abi->write_arch_reg(ret_reg, 0);
+    ADDR pc = arion->abi->read_arch_reg(pc_reg);
+    ADDR next_pc;
+    size_t sys_instr_sz;
+    bool hooks_intr = arion->abi->does_hook_intr();
+    // For architectures that hook with hook_intr, next_pc is already returned
+    if (hooks_intr)
+        next_pc = pc;
+    else
+    {
+        sys_instr_sz = arion->mem->read_instrs(pc, 1).at(0).size;
+        next_pc = pc + sys_instr_sz;
+    }
+
+    ADDR child_cleartid_addr = 0;
+    if (flags & CLONE_CHILD_CLEARTID)
+        child_cleartid_addr = child_tid_addr;
+    ADDR child_settid_addr = 0;
+    if (flags & CLONE_CHILD_SETTID)
+        child_settid_addr = child_tid_addr;
+
+    forked_process->abi->write_arch_reg(pc_reg, next_pc);
+    pid_t forked_pid = arion->add_child(forked_process);
+    arion->hooks->trigger_arion_hook(ARION_HOOK_TYPE::FORK_HOOK, forked_process);
+
+    if (flags & CLONE_CHILD_SETTID)
+        arion->mem->write_val(child_settid_addr, curr_tid, sizeof(pid_t));
+    if (flags & CLONE_PARENT_SETTID)
+        arion->mem->write_val(parent_tid_addr, curr_tid, sizeof(pid_t));
+
+    if (!hooks_intr)
+    {
+        // If PC register was manually edited by user during fork hook, remove syscall instruction size
+        ADDR user_edited_pc = arion->abi->read_arch_reg(pc_reg);
+        if (user_edited_pc != pc)
+            arion->abi->write_arch_reg(pc_reg, user_edited_pc - sys_instr_sz);
+    }
+
+    return forked_pid;
 }
 
 void ThreadingManager::switch_to_thread(pid_t tid)

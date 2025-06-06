@@ -30,7 +30,8 @@ struct ARION_EXPORT ARION_THREAD
     pid_t tgid;
     int exit_signal;
     uint64_t flags;
-    arion::ADDR child_tid_addr;
+    arion::ADDR child_cleartid_addr;
+    arion::ADDR child_settid_addr;
     arion::ADDR parent_tid_addr;
     std::unique_ptr<std::map<arion::REG, arion::RVAL>> regs_state = nullptr;
     arion::ADDR tls_addr;
@@ -41,13 +42,16 @@ struct ARION_EXPORT ARION_THREAD
     uint32_t rseq_len = 0;
     uint32_t rseq_sig = 0;
     ARION_THREAD() {};
-    ARION_THREAD(int exit_signal, uint64_t flags, arion::ADDR child_tid_addr, arion::ADDR parent_tid_addr,
-                 std::unique_ptr<std::map<arion::REG, arion::RVAL>> regs_state, arion::ADDR tls_addr)
-        : exit_signal(exit_signal), flags(flags), child_tid_addr(child_tid_addr), parent_tid_addr(parent_tid_addr),
-          regs_state(std::move(regs_state)), tls_addr(tls_addr) {};
+    ARION_THREAD(int exit_signal, uint64_t flags, arion::ADDR child_cleartid_addr, arion::ADDR child_settid_addr,
+                 arion::ADDR parent_tid_addr, std::unique_ptr<std::map<arion::REG, arion::RVAL>> regs_state,
+                 arion::ADDR tls_addr)
+        : exit_signal(exit_signal), flags(flags), child_cleartid_addr(child_cleartid_addr),
+          child_settid_addr(child_settid_addr), parent_tid_addr(parent_tid_addr), regs_state(std::move(regs_state)),
+          tls_addr(tls_addr) {};
     ARION_THREAD(ARION_THREAD *arion_t)
         : tid(arion_t->tid), tgid(arion_t->tgid), exit_signal(arion_t->exit_signal), flags(arion_t->flags),
-          child_tid_addr(arion_t->child_tid_addr), parent_tid_addr(arion_t->parent_tid_addr),
+          child_cleartid_addr(arion_t->child_cleartid_addr), child_settid_addr(arion_t->child_settid_addr),
+          parent_tid_addr(arion_t->parent_tid_addr),
           regs_state(arion_t->regs_state ? std::make_unique<std::map<arion::REG, arion::RVAL>>(*arion_t->regs_state)
                                          : nullptr),
           tls_addr(arion_t->tls_addr), wait_status_addr(arion_t->wait_status_addr), stopped(arion_t->stopped) {};
@@ -83,6 +87,8 @@ class ARION_EXPORT ThreadingManager
     void ARION_EXPORT remove_thread_entry(pid_t tid);
     void ARION_EXPORT clear_threads();
     pid_t clone_thread(uint64_t flags, arion::ADDR new_sp, arion::ADDR new_tls, arion::ADDR child_tid_addr,
+                       arion::ADDR parent_tid_addr, int exit_signal);
+    pid_t fork_process(uint64_t flags, arion::ADDR new_sp, arion::ADDR new_tls, arion::ADDR child_tid_addr,
                        arion::ADDR parent_tid_addr, int exit_signal);
     void switch_to_thread(pid_t tid);
     void switch_to_next_thread();

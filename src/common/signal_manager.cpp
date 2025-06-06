@@ -186,7 +186,7 @@ void SignalManager::handle_signal(pid_t source_pid, int signo)
     if (signal_it == this->signals.end())
         throw UnknownSignalException(arion->get_pid(), arion->threads->get_running_tid(), signo);
     std::string signal_desc = signal_it->second;
-    arion->logger->debug("SIGNAL : " + signal_desc);
+    arion->logger->debug("SIGNAL -> " + signal_desc);
 
     if (this->handle_sighandler(source_pid, signo))
         return;
