@@ -42,7 +42,7 @@ ADDR BaremetalLoader::map_default_instance(std::shared_ptr<std::vector<uint8_t>>
     arion->logger->debug("Baremetal Codesize is " + std::to_string(coderaw->size()) + \
                          ". Rounded up to " + std::to_string(code_end));
 
-    arion->mem->map(load_addr + code_end, DEFAULT_DATA_SIZE, LINUX_STACK_PERMS, "[data]");
+    arion->mem->map(load_addr + code_end, DEFAULT_DATA_SIZE, LINUX_RW, "[data]");
     return load_addr;
 
 }
@@ -68,7 +68,7 @@ ADDR BaremetalLoader::map_stack(std::shared_ptr<LOADER_PARAMS> params)
     ADDR stack_sz = this->arch_sz == 64 ? LINUX_64_STACK_SZ : LINUX_32_STACK_SZ;
     REG sp_reg = arion->abi->get_attrs()->regs.sp;
 
-    arion->mem->map(stack_load_addr, stack_sz, LINUX_STACK_PERMS, "[stack]");
+    arion->mem->map(stack_load_addr, stack_sz, LINUX_RW, "[stack]");
     arion->abi->write_reg(sp_reg, stack_load_addr + stack_sz);
 
     std::vector<ADDR> envp_ptrs;
