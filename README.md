@@ -19,6 +19,7 @@ Inspired by [**Qiling**](https://github.com/qilingframework/qiling), Arion in it
 ### Features
 Arion currently implements the following features :  
 - **Emulating Linux ELFs for x86, x86-64, ARM, ARM64**  
+- **Snapshot fuzzing with UnicornAFL**  
 - **Emulating more than 120 syscalls**  
 - **Fork handling**  
 - **Multithreading handling (unstable)**  
@@ -58,7 +59,8 @@ Check the [Releases](https://github.com/h311d1n3r/Arion/releases/) tab on the Gi
 <a name="install_build_host"/>
 
 ### Build the tool on host  
-1. Clone the repository `git clone https://github.com/h311d1n3r/Arion.git && cd Arion`  
+> Rust must be installed on host (required by [udbserver](https://github.com/bet4it/udbserver))  
+1. Clone the repository `git clone https://github.com/h311d1n3r/Arion.git && cd Arion`.  
 2. Initialize git dependencies : `git submodule update --init`  
 3. Create the build directory `mkdir build && cd build`  
 4. Run CMake to configure the project `cmake ..`  

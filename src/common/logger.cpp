@@ -1,9 +1,19 @@
 #include <arion/arion.hpp>
 #include <arion/common/logger.hpp>
-#include <memory>
 #include <arion/spdlog/sinks/stdout_color_sinks.h>
+#include <memory>
 
 using namespace arion;
+
+inline std::map<arion::ARION_LOG_LEVEL, spdlog::level::level_enum> ARION_LOG_LVL_TO_SPDLOG = {
+    {arion::ARION_LOG_LEVEL::TRACE, spdlog::level::level_enum::trace},
+    {arion::ARION_LOG_LEVEL::DEBUG, spdlog::level::level_enum::debug},
+    {arion::ARION_LOG_LEVEL::INFO, spdlog::level::level_enum::info},
+    {arion::ARION_LOG_LEVEL::WARN, spdlog::level::level_enum::warn},
+    {arion::ARION_LOG_LEVEL::ERROR, spdlog::level::level_enum::err},
+    {arion::ARION_LOG_LEVEL::CRITICAL, spdlog::level::level_enum::critical},
+    {arion::ARION_LOG_LEVEL::OFF, spdlog::level::level_enum::off},
+};
 
 uint64_t Logger::curr_id = 1;
 
@@ -45,8 +55,8 @@ Logger::Logger(std::weak_ptr<Arion> arion) : arion(arion)
 
 void Logger::set_log_level(ARION_LOG_LEVEL lvl)
 {
-    auto lvl_it = arion_log_lvl_to_spdlog.find(lvl);
-    if (lvl_it == arion_log_lvl_to_spdlog.end())
+    auto lvl_it = ARION_LOG_LVL_TO_SPDLOG.find(lvl);
+    if (lvl_it == ARION_LOG_LVL_TO_SPDLOG.end())
         throw WrongLogLevelException();
     this->logger->set_level(lvl_it->second);
     this->log_lvl = lvl;

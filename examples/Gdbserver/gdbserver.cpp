@@ -6,7 +6,6 @@
 #include <filesystem>
 #include <iostream>
 #include <memory>
-#include <time.h>
 
 using namespace arion;
 
@@ -19,16 +18,8 @@ int main()
     std::shared_ptr<Arion> arion =
         Arion::new_instance({"/bin/ls"}, "/", {}, std::filesystem::current_path(), std::move(config));
     arion_group->add_arion_instance(arion);
-    std::shared_ptr<ARION_CONTEXT> ctxt = arion->context->save();
-    struct timespec start, end;
-    clock_gettime(CLOCK_MONOTONIC, &start);
-    for (uint16_t i = 0; i < 100; i++)
-    {
-        arion_group->run();
-        arion->context->restore(ctxt);
-    }
-    clock_gettime(CLOCK_MONOTONIC, &end);
-    double elapsed = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-    std::cout << "100 executions of /bin/ls in " << +elapsed << " seconds";
+    std::cout << arion->mem->mappings_str() << std::endl;
+    arion->run_gdbserver(1337);
+    arion_group->run();
     return 0;
 }

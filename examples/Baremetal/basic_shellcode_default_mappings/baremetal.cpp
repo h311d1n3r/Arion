@@ -1,11 +1,20 @@
 #include <arion/arion.hpp>
 #include <arion/common/global_defs.hpp>
+#include <arion/common/baremetal.hpp>
 #include <arion/components/code_trace_analysis.hpp>
 #include <arion/unicorn/x86.h>
 #include <arion/utils/convert_utils.hpp>
-#include <filesystem>
 #include <iostream>
 #include <memory>
+#include <filesystem>
+
+using namespace arion;
+
+unsigned char shellcode[] = {
+    0xb8, 0x3c, 0x00, 0x00, 0x00,  // mov eax, 60
+    0x48, 0x31, 0xff,              // xor rdi, rdi
+    0x0f, 0x05                     // syscall
+};
 
 using namespace arion;
 
@@ -42,11 +51,16 @@ void block_hook(std::shared_ptr<Arion> arion, ADDR addr, size_t sz, void *user_d
 int main()
 {
     std::unique_ptr<Config> config = std::make_unique<Config>();
-    config->set_field<ARION_LOG_LEVEL>("log_lvl", ARION_LOG_LEVEL::OFF);
+    std::unique_ptr<Baremetal> baremetal = std::make_unique<Baremetal>();
+    //baremetal->set_field<bool>("setup_memory", true);
+
+    auto coderaw = baremetal->coderaw;
+    coderaw->insert(coderaw->end(), std::begin(shellcode), std::end(shellcode));
+    config->set_field<ARION_LOG_LEVEL>("log_lvl", ARION_LOG_LEVEL::DEBUG);
     std::shared_ptr<ArionGroup> arion_group = std::make_shared<ArionGroup>();
-    // Arion::new_instance(args, fs_root, env, cwd, log_level, config)
-    std::shared_ptr<Arion> arion =
-        Arion::new_instance({"/bin/ls"}, "/", {}, std::filesystem::current_path(), std::move(config));
+    // Arion::new_instance(args, fs_root, env, cwd, log_level)
+    std::shared_ptr<Arion> arion = 
+        Arion::new_instance(std::move(baremetal), "/", {}, std::filesystem::current_path(), std::move(config));
     arion_group->add_arion_instance(arion);
     std::cout << arion->mem->mappings_str() << std::endl;
     arion->hooks->hook_code(instr_hook);

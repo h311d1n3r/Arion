@@ -2,7 +2,7 @@ FROM fedora:40
 
 ARG VERSION=1.0.0
 
-RUN dnf update && dnf install -y \
+RUN dnf update -y && dnf install -y \
     git \
     gcc \
     g++ \
@@ -11,13 +11,15 @@ RUN dnf update && dnf install -y \
     pkg-config \
     make \
     rpm-build \
-    curl
+    curl \
+    openssl-devel
 
 RUN curl -LO https://github.com/Kitware/CMake/releases/download/v3.28.2/cmake-3.28.2-linux-x86_64.tar.gz
 RUN tar -zxvf cmake-3.28.2-linux-x86_64.tar.gz
 RUN rm cmake-3.28.2-linux-x86_64.tar.gz
 RUN mv cmake-3.28.2-linux-x86_64 /opt/cmake
-ENV PATH="/opt/cmake/bin:$PATH"
+RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
+ENV PATH="/opt/cmake/bin:/root/.cargo/bin:$PATH"
 
 WORKDIR /app
 
@@ -51,6 +53,7 @@ RUN cp -r /app/lib/lief/include/LIEF /app/docker_build/rpm_package/usr/include/a
 RUN cp -r /app/docker_build/lib/lief/include/LIEF /app/docker_build/rpm_package/usr/include/arion/
 RUN cp -r /app/lib/spdlog/include/spdlog /app/docker_build/rpm_package/usr/include/arion/
 RUN cp -r /app/lib/unicorn/include/unicorn /app/docker_build/rpm_package/usr/include/arion/
+RUN cp -r /app/lib/unicornafl/include/unicornafl /app/docker_build/rpm_package/usr/include/arion/
 RUN cp -r /app/docker_build/libarion.so /app/docker_build/rpm_package/usr/lib/
 RUN cp -r /app/docker_build/install/lib/cmake /app/docker_build/rpm_package/usr/lib/
 RUN find /app/docker_build/rpm_package/usr/include/ -type f -exec chmod 666 {} +
@@ -73,7 +76,7 @@ RUN echo "Name: arion" > /app/docker_build/rpm_package/SPECS/arion.spec && \
     echo "cp -r /app/docker_build/rpm_package/usr/lib/* %{buildroot}/usr/lib/" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
     echo "%files" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
     echo "/usr/include/arion" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
-    echo "/usr/lib/libarion.so" >> /app/docker_build/rpm_package/SPECS/arion.spec \
+    echo "/usr/lib/libarion.so" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
     echo "/usr/lib/cmake/arion" >> /app/docker_build/rpm_package/SPECS/arion.spec
 
 RUN rpmbuild --define "_topdir /app/docker_build/rpm_package" -bb /app/docker_build/rpm_package/SPECS/arion.spec

@@ -642,9 +642,9 @@ class AbiManagerARM : public AbiManager
 {
   private:
     static void int_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data);
-    bool is_thumb();
     void enable_vfp();
     void setup();
+    bool is_thumb;
 
   public:
     AbiManagerARM()
@@ -654,6 +654,8 @@ class AbiManagerARM : public AbiManager
     std::array<arion::BYTE, VSYSCALL_ENTRY_SZ> gen_vsyscall_entry(uint64_t syscall_no);
     ks_engine *curr_ks();
     csh *curr_cs();
+    void set_thumb_state(uint32_t entrypoint);
+    bool get_thumb_mode();
 };
 
 #endif // ARION_ABI_ARM_HPP

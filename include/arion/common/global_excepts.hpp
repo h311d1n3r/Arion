@@ -147,6 +147,13 @@ class PathTooLongException : public ArionException
         : ArionException(std::string("File path \"") + file_path + std::string("\" is too long.")) {};
 };
 
+class ArionCustomBaremetalConfigurationNotSet : public ArionException
+{
+  public:
+  explicit ArionCustomBaremetalConfigurationNotSet()
+      : ArionException(std::string("Custom configuration has been set but no mappings were provided.")) {};
+};
+
 class ElfParsingException : public ArionException
 {
   public:
@@ -498,6 +505,21 @@ class UnicornStopException : public ArionException
     explicit UnicornStopException(uc_err err)
         : ArionException(std::string("An error occurred while stopping Unicorn engine : \"") + uc_strerror(err) +
                          std::string("\".")) {};
+};
+
+class UnicornAflException : public ArionException
+{
+  public:
+    explicit UnicornAflException(std::string err)
+        : ArionException(std::string("An error occurred while using UnicornAFL engine : \"") + err +
+                         std::string("\".")) {};
+};
+
+class UnicornAflNoExitsException : public ArionException
+{
+  public:
+    explicit UnicornAflNoExitsException()
+        : ArionException(std::string("At least one exit must be specified when fuzzing with UnicornAFL engine.")) {};
 };
 
 class KeystoneOpenException : public ArionException
