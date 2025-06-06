@@ -1,9 +1,6 @@
 #cmake build file
 build/
-build.dev/
-build.release/
-cmake-build-release/
-cmake-build-debug/
+build_*/
 
 #misc
 .cache/

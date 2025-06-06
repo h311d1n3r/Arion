@@ -22,9 +22,10 @@
 
 using namespace arion;
 
-// Replace import of udbserver with extern "C" // C++ mangling import problem
-extern "C" {
-    void udbserver(void* handle, uint16_t port, uint64_t start_addr);
+// Replace import of udbserver with extern "C" to prevent C++ mangling import problem
+extern "C"
+{
+    void udbserver(void *handle, uint16_t port, uint64_t start_addr);
 }
 
 std::map<arion::CPU_ARCH, std::pair<uc_arch, uc_mode>> arion::ARION_TO_UC_ARCH{
@@ -106,14 +107,14 @@ void ArionGroup::run()
         {
             auto weak_instance = *instance_it;
             std::shared_ptr<Arion> instance = weak_instance.second;
-            if (!instance->is_zombie)
+            if (!instance->is_zombie() && !instance->is_stopped())
             {
                 if (!instance->run_current())
                 {
                     if (instance->has_parent())
                     {
                         std::shared_ptr<Arion> parent = instance->get_parent();
-                        instance->is_zombie = true;
+                        instance->set_zombie();
                         parent->send_signal(instance->get_pid(), SIGCHLD);
                     }
                     else
@@ -204,6 +205,7 @@ std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program, std
     arion->init_engines(prog_parser->arch);
     arion->hooks = HooksManager::initialize(arion);
     arion->threads = ThreadingManager::initialize(arion);
+    arion->signals = SignalManager::initialize(arion);
     arion->tracer = CodeTracer::initialize(arion);
     arion->init_program(prog_parser);
     return arion;
@@ -247,6 +249,7 @@ Arion::~Arion()
     this->syscalls.reset();
     this->abi.reset();
     this->tracer.reset();
+    this->signals.reset();
     this->threads.reset();
     this->hooks.reset();
     this->sock.reset();
@@ -372,7 +375,6 @@ bool Arion::run_current()
     if (!threads_count)
         return false;
     bool multi_thread = threads_count > 1;
-    this->threads->handle_signals();
     if (this->threads->is_curr_locked())
     {
         this->threads->switch_to_next_thread();
@@ -675,13 +677,37 @@ void Arion::reset_group()
     this->group.reset();
 }
 
+bool Arion::is_stopped()
+{
+    return this->stopped;
+}
+
+void Arion::set_stopped()
+{
+    this->stopped = true;
+}
+
+void Arion::set_resumed()
+{
+    this->stopped = false;
+}
+
+bool Arion::is_zombie()
+{
+    return this->zombie;
+}
+
+void Arion::set_zombie()
+{
+    this->zombie = true;
+}
+
 void Arion::send_signal(pid_t source_pid, int signo)
 {
     if (this->afl_mode &&
         std::find(this->afl_signals.begin(), this->afl_signals.end(), signo) != this->afl_signals.end())
         abort(); // Will cause a crash in AFL instance
-    std::shared_ptr<SIGNAL> sig = std::make_shared<SIGNAL>(source_pid, signo);
-    this->pending_signals.push_back(sig);
+    this->signals->handle_signal(source_pid, signo);
 }
 
 void Arion::run_gdbserver(uint32_t port)

@@ -20,11 +20,8 @@ using namespace arion;
 #define HEAP_SZ 0x1000
 #define DEFAULT_DATA_SIZE 0x1000 * 100
 
-#define PROT_READ  1
-#define PROT_EXEC  2
-#define PROT_WRITE 4
-
 #define LINUX_STACK_PERMS 6
+#define LINUX_RWX 1 | 2 | 4
 
 class BaremetalLoader
 {

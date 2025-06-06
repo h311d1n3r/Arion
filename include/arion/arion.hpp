@@ -11,6 +11,7 @@
 #include <arion/common/hooks_manager.hpp>
 #include <arion/common/logger.hpp>
 #include <arion/common/memory_manager.hpp>
+#include <arion/common/signal_manager.hpp>
 #include <arion/common/socket_manager.hpp>
 #include <arion/common/threading_manager.hpp>
 #include <arion/common/config.hpp>
@@ -72,6 +73,8 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     std::optional<arion::ADDR> start = std::nullopt, end = std::nullopt;
     bool running = false;
     bool sync = false;
+    bool stopped = false;
+    bool zombie = false;
     pid_t pid;
     pid_t pgid;
     void new_instance_common(std::string fs_path, std::vector<std::string> program_env, 
@@ -90,6 +93,7 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     std::unique_ptr<SocketManager> sock;
     std::unique_ptr<HooksManager> hooks;
     std::unique_ptr<ThreadingManager> threads;
+    std::unique_ptr<SignalManager> signals;
     std::unique_ptr<ContextManager> context;
     std::unique_ptr<LinuxSyscallManager> syscalls;
     std::unique_ptr<GdtManager> gdt_manager;
@@ -102,7 +106,6 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     uc_engine *uc;
     std::vector<ks_engine *> ks;
     std::vector<csh *> cs;
-    bool is_zombie = false;
     static std::shared_ptr<Arion> ARION_EXPORT
     new_instance(std::vector<std::string> program, std::string fs_path = "/",
                  std::vector<std::string> program_env = std::vector<std::string>(), std::string cwd = "",
@@ -146,6 +149,11 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     std::shared_ptr<ArionGroup> ARION_EXPORT get_group();
     void set_group(std::shared_ptr<ArionGroup> group);
     void reset_group();
+    bool is_stopped();
+    void set_stopped();
+    void set_resumed();
+    bool is_zombie();
+    void set_zombie();
     void ARION_EXPORT send_signal(pid_t source_pid, int signo);
     void ARION_EXPORT run_gdbserver(uint32_t port);
 };

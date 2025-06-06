@@ -1,19 +1,20 @@
-# 1.0.3-alpha
-- udbserver
-
-# 1.0.2-alpha
+# 1.0.1-alpha
+- Added udbserver
+- Fixed submodules compilation issue
+- Removed DEV mode
+- Added architecture rootfs and static toolchains build/download
+- Implemented Google Test
 - Added CMake package
-- Reduced compilation time
 - Fixed dependency issues when linking in DEV mode
 - Added config for Arion instance
 - Implemented some syscalls
 - Added UnicornAFL fuzzing mode
 - Run from/to address
+- Signals rework
+- Threads rework
 - ArionGroup class (preparing IPC)
-
-# 1.0.1-alpha
 - Bumped CMake requirements
-- Added CHANGELOG.md/VERSION.txt
+- Added CHANGELOG.md and VERSION
 
 # 1.0.0-alpha
 - Emulating Linux ELFs for x86, x86-64, ARM, ARM64

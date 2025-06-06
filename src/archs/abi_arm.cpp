@@ -5,11 +5,6 @@
 
 using namespace arion;
 
-std::array<arion::BYTE, VSYSCALL_ENTRY_SZ> AbiManagerARM::gen_vsyscall_entry(uint64_t syscall_no)
-{
-    return std::array<arion::BYTE, VSYSCALL_ENTRY_SZ>();
-}
-
 void AbiManagerARM::int_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data)
 {
     if (intno == 0x2)
@@ -79,4 +74,45 @@ void AbiManagerARM::setup()
     arion->hooks->hook_intr(AbiManagerARM::int_hook);
     this->enable_vfp();
     this->is_thumb = 0;
+}
+
+ADDR AbiManagerARM::dump_tls()
+{
+    uc_arm_cp_reg cp15 = {0};
+    cp15.cp = 15;
+    cp15.is64 = 0;
+    cp15.sec = 0;
+    cp15.crn = 13;
+    cp15.crm = 0;
+    cp15.opc1 = 0;
+    cp15.opc2 = 3;
+
+    uc_err uc_reg_err = uc_reg_read(this->uc, UC_ARM_REG_CP_REG, &cp15); // TPIDRURO
+    if (uc_reg_err != UC_ERR_OK)
+        throw UnicornRegWriteException(uc_reg_err);
+
+    return cp15.val;
+}
+
+void AbiManagerARM::load_tls(ADDR new_tls)
+{
+    std::shared_ptr<Arion> arion = this->arion.lock();
+    if (!arion)
+        throw ExpiredWeakPtrException("Arion");
+
+    uc_arm_cp_reg cp15 = {0};
+    cp15.cp = 15;
+    cp15.is64 = 0;
+    cp15.sec = 0;
+    cp15.crn = 13;
+    cp15.crm = 0;
+    cp15.opc1 = 0;
+    cp15.opc2 = 3;
+    cp15.val = new_tls;
+
+    uc_err uc_reg_err = uc_reg_write(this->uc, UC_ARM_REG_CP_REG, &cp15); // TPIDRURO
+    if (uc_reg_err != UC_ERR_OK)
+        throw UnicornRegWriteException(uc_reg_err);
+
+    arion->mem->write_ptr(LINUX_32_ARM_GETTLS_ADDR + 0x10, new_tls);
 }

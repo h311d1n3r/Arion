@@ -541,7 +541,7 @@ inline std::map<uint64_t, CPU_INTR> IDT = {{0, DIVIDE_ERROR},
                                            {18, MACHINE_CHECK},
                                            {19, SIMD_FLOATING_POINT_ERROR}};
 
-inline ABI_REGISTERS ABI_REGS = ABI_REGISTERS(UC_X86_REG_RIP, UC_X86_REG_RSP, UC_X86_REG_FS_BASE);
+inline ABI_REGISTERS ABI_REGS = ABI_REGISTERS(UC_X86_REG_RIP, UC_X86_REG_RSP);
 
 inline ABI_CALLING_CONVENTION ABI_CALLING_CONV = ABI_CALLING_CONVENTION(
     UC_X86_REG_RAX, {UC_X86_REG_RDI, UC_X86_REG_RSI, UC_X86_REG_RDX, UC_X86_REG_RCX, UC_X86_REG_R8, UC_X86_REG_R9});
@@ -582,6 +582,8 @@ class AbiManagerX8664 : public AbiManager
     std::array<arion::BYTE, VSYSCALL_ENTRY_SZ> gen_vsyscall_entry(uint64_t syscall_no);
     ks_engine *curr_ks();
     csh *curr_cs();
+    arion::ADDR dump_tls();
+    void load_tls(arion::ADDR new_tls);
 };
 
 #endif // ARION_ABI_X8664_HPP

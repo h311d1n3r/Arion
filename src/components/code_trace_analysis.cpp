@@ -236,6 +236,10 @@ bool CodeTraceReader::has_reg(REG reg)
     return std::find(this->ctxt_regs.begin(), this->ctxt_regs.end(), reg) != this->ctxt_regs.end();
 }
 
+CodeTraceAnalyzer::CodeTraceAnalyzer(std::string trace_path) : reader(trace_path)
+{
+}
+
 void CodeTraceAnalyzer::reach_address(arion::ADDR addr)
 {
     if (!this->reader.reach_addr(addr))
@@ -483,5 +487,39 @@ void CodeTraceComparator::search_uneq_hit_offset_mod(COMPARATOR_HIT_CALLBACK cal
         }
         else
             out_of_sync = false;
+    }
+}
+
+void ARION_EXPORT CodeTraceComparator::search_uneq_reg(COMPARATOR_HIT_CALLBACK callback, bool reset_cursors)
+{
+    if (reset_cursors)
+    {
+        this->reader1.reset_hit_cursor();
+        this->reader2.reset_hit_cursor();
+    }
+
+    std::unique_ptr<CODE_HIT> hit1;
+    std::unique_ptr<CODE_HIT> hit2;
+    while ((hit1 = this->reader1.next_hit()) && (hit2 = this->reader2.next_hit()))
+    {
+        std::unique_ptr<TRACE_MODULE> mod1 = this->reader1.get_module(hit1->mod_id);
+        std::unique_ptr<TRACE_MODULE> mod2 = this->reader2.get_module(hit2->mod_id);
+
+        for (const auto &[reg, rval1] : *hit1->regs)
+        {
+            auto it = hit2->regs->find(reg);
+            if (it == hit2->regs->end())
+                throw UnknownTraceRegException(reg);
+            const auto &rval2 = it->second;
+            if (memcmp(&rval1.r512, &rval2.r512, sizeof(RVAL512)))
+            {
+                if (!callback(std::make_unique<ANALYSIS_HIT>(this->reader1.get_hit_index(), mod1->name, hit1->off,
+                                                             hit1->sz, hit1->regs.get()),
+                              std::make_unique<ANALYSIS_HIT>(this->reader2.get_hit_index(), mod2->name, hit2->off,
+                                                             hit2->sz, hit2->regs.get())))
+                    return;
+                break;
+            }
+        }
     }
 }

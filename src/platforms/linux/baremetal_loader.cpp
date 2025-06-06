@@ -35,14 +35,14 @@ ADDR BaremetalLoader::map_default_instance(std::shared_ptr<std::vector<uint8_t>>
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    arion->mem->map(load_addr, coderaw->size(), PROT_EXEC | PROT_READ | PROT_WRITE, "[code]");
+    arion->mem->map(load_addr, coderaw->size(), LINUX_RWX, "[code]");
     arion->mem->write(load_addr, coderaw->data(), coderaw->size());
     auto code_end = arion->mem->align_up(coderaw->size());
 
     arion->logger->debug("Baremetal Codesize is " + std::to_string(coderaw->size()) + \
                          ". Rounded up to " + std::to_string(code_end));
 
-    arion->mem->map(load_addr + code_end, DEFAULT_DATA_SIZE, PROT_READ | PROT_WRITE, "[data]");
+    arion->mem->map(load_addr + code_end, DEFAULT_DATA_SIZE, LINUX_STACK_PERMS, "[data]");
     return load_addr;
 
 }
@@ -68,7 +68,7 @@ ADDR BaremetalLoader::map_stack(std::shared_ptr<LOADER_PARAMS> params)
     ADDR stack_sz = this->arch_sz == 64 ? LINUX_64_STACK_SZ : LINUX_32_STACK_SZ;
     REG sp_reg = arion->abi->get_attrs()->regs.sp;
 
-    arion->mem->map(stack_load_addr, stack_sz, PROT_READ | PROT_WRITE, "[stack]");
+    arion->mem->map(stack_load_addr, stack_sz, LINUX_STACK_PERMS, "[stack]");
     arion->abi->write_reg(sp_reg, stack_load_addr + stack_sz);
 
     std::vector<ADDR> envp_ptrs;
@@ -96,8 +96,8 @@ void BaremetalLoader::init_main_thread(std::shared_ptr<LOADER_PARAMS> params)
     ADDR entry_addr = params->load_address;
 
     ADDR sp_val = arion->abi->read_arch_reg(sp);
-    std::unique_ptr<std::map<REG, RVAL>> regs = arion->abi->init_thread_regs(entry_addr, sp_val, 0);
-    std::unique_ptr<ARION_THREAD> arion_t = std::make_unique<ARION_THREAD>(0, 0, 0, 0, std::move(regs));
+    std::unique_ptr<std::map<REG, RVAL>> regs = arion->abi->init_thread_regs(entry_addr, sp_val);
+    std::unique_ptr<ARION_THREAD> arion_t = std::make_unique<ARION_THREAD>(0, 0, 0, 0, std::move(regs), 0);
     arion->abi->load_regs(std::move(arion_t->regs_state));
     if (arion->baremetal->arch == CPU_ARCH::ARM_ARCH) {
         arion->abi->set_thumb_state(entry_addr);

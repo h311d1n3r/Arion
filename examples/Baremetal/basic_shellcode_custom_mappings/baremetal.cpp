@@ -40,14 +40,6 @@ void instr_hook(std::shared_ptr<Arion> arion, ADDR addr, size_t sz, void *user_d
     }
 }
 
-void block_hook(std::shared_ptr<Arion> arion, ADDR addr, size_t sz, void *user_data)
-{
-    ADDR rsp = arion->abi->read_reg<RVAL64>("RSP");
-    uint64_t curr_stack_val = arion->mem->read_val(rsp, sizeof(uint64_t));
-    std::cout << "New basic block at 0x" << std::hex << +addr << " RSP : 0x" << std::hex << +rsp << " [RSP] : 0x"
-              << std::hex << +curr_stack_val << std::endl;
-}
-
 int main()
 {
     std::unique_ptr<Config> config = std::make_unique<Config>();
@@ -85,7 +77,6 @@ int main()
     arion->loader_params = std::make_unique<LOADER_PARAMS>(*params.get());
     std::cout << arion->mem->mappings_str() << std::endl;
     arion->hooks->hook_code(instr_hook);
-    arion->hooks->hook_block(block_hook);
     arion_group->run();
     return 0;
 }

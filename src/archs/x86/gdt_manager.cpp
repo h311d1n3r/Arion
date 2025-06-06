@@ -4,8 +4,8 @@
 #include <arion/archs/x86/gdt_manager.hpp>
 #include <arion/arion.hpp>
 #include <arion/common/global_excepts.hpp>
-#include <memory>
 #include <arion/unicorn/x86.h>
+#include <memory>
 
 using namespace arion;
 
@@ -86,6 +86,21 @@ uint8_t GdtManager::find_free_idx(uint8_t start_idx)
         idx++;
     }
     throw NoFreeGdtEntryException();
+}
+
+uint32_t GdtManager::get_segment_base(uint16_t selector)
+{
+    std::shared_ptr<Arion> arion = this->arion.lock();
+    if (!arion)
+        throw ExpiredWeakPtrException("Arion");
+
+    uint8_t idx = selector >> 3;
+    uint64_t entry = arion->mem->read_val(this->gdt_addr + idx * ARION_GDT_ENTRY_SZ, ARION_GDT_ENTRY_SZ);
+
+    uint32_t base = (entry >> 16) & 0xFFFFFF;
+    base |= ((entry >> 56) & 0xFF) << 24;
+
+    return base;
 }
 
 void GdtManager::insert_entry(uint8_t idx, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags)
