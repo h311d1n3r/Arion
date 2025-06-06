@@ -5,7 +5,6 @@
 #include <arion/capstone/capstone.h>
 #include <arion/common/abi_manager.hpp>
 #include <arion/common/code_tracer.hpp>
-#include <arion/common/config.hpp>
 #include <arion/common/context_manager.hpp>
 #include <arion/common/file_system_manager.hpp>
 #include <arion/common/global_defs.hpp>
@@ -15,11 +14,15 @@
 #include <arion/common/signal_manager.hpp>
 #include <arion/common/socket_manager.hpp>
 #include <arion/common/threading_manager.hpp>
+#include <arion/common/config.hpp>
+#include <arion/common/baremetal.hpp>
 #include <arion/keystone/keystone.h>
 #include <arion/platforms/linux/elf_loader.hpp>
 #include <arion/platforms/linux/elf_parser.hpp>
 #include <arion/platforms/linux/lnx_syscall_manager.hpp>
 #include <arion/unicorn/unicorn.h>
+#include <vector>
+#include <variant>
 #include <exception>
 #include <memory>
 #include <optional>
@@ -74,8 +77,11 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     bool zombie = false;
     pid_t pid;
     pid_t pgid;
+    void new_instance_common(std::string fs_path, std::vector<std::string> program_env, 
+                             std::string cwd, std::unique_ptr<Config> config);
     void init_engines(arion::CPU_ARCH arch);
     void init_program(std::shared_ptr<ElfParser> prog_parser);
+    void init_baremetal_program();
     void init_dynamic_program(std::shared_ptr<ElfParser> prog_parser);
     void init_static_program(std::shared_ptr<ElfParser> prog_parser);
     void close_engines();
@@ -94,15 +100,20 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     std::unique_ptr<CodeTracer> tracer;
     std::unique_ptr<Logger> logger;
     std::unique_ptr<Config> config;
+    std::unique_ptr<Baremetal> baremetal;
     std::unique_ptr<LOADER_PARAMS> loader_params;
     std::vector<std::shared_ptr<arion::SIGNAL>> pending_signals;
     uc_engine *uc;
     std::vector<ks_engine *> ks;
     std::vector<csh *> cs;
     static std::shared_ptr<Arion> ARION_EXPORT
-    new_instance(std::vector<std::string> program_args, std::string fs_path = "/",
+    new_instance(std::vector<std::string> program, std::string fs_path = "/",
                  std::vector<std::string> program_env = std::vector<std::string>(), std::string cwd = "",
-                 std::unique_ptr<Config> config = std::move(std::make_unique<Config>()));
+                 std::unique_ptr<Config> config = std::make_unique<Config>());
+    static std::shared_ptr<Arion> ARION_EXPORT
+    new_instance(std::unique_ptr<Baremetal> baremetal, std::string fs_path = "/",
+                  std::vector<std::string> program_env = std::vector<std::string>(), std::string cwd = "",
+                  std::unique_ptr<Config> config = std::make_unique<Config>());
     ~Arion();
     void ARION_EXPORT set_run_bounds(std::optional<arion::ADDR> start = std::nullopt,
                                      std::optional<arion::ADDR> end = std::nullopt);

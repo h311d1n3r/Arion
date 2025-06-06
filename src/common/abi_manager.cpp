@@ -254,3 +254,6 @@ void AbiManager::write_arch_reg(arion::REG reg, uint64_t val)
         throw UnsupportedCpuArchException();
     }
 }
+
+void AbiManager::set_thumb_state(uint32_t entrypoint) {};
+bool AbiManager::get_thumb_mode() {return 0;}

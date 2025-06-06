@@ -11,20 +11,27 @@ void AbiManagerARM::int_hook(std::shared_ptr<Arion> arion, uint32_t intno, void 
         arion->syscalls->process_syscall(arion);
 }
 
-bool AbiManagerARM::is_thumb()
-{
-    RVAL32 cpsr = this->read_reg<RVAL32>(UC_ARM_REG_CPSR);
-    return cpsr & ARION_ARM_CPSR_THUMB_BIT;
+void AbiManagerARM::set_thumb_state(uint32_t entrypoint) {
+    if ((entrypoint & 1) == 1) {
+        this->is_thumb = 1;
+    }
+    else {
+        this->is_thumb = 0;
+    }
+}
+
+bool AbiManagerARM::get_thumb_mode() {
+    return this->is_thumb;
 }
 
 ks_engine *AbiManagerARM::curr_ks()
 {
-    return this->ks.at(this->is_thumb() ? ARION_THUMB_MODE : ARION_ARM_MODE);
+    return this->ks.at(this->is_thumb ? ARION_THUMB_MODE : ARION_ARM_MODE);
 }
 
 csh *AbiManagerARM::curr_cs()
 {
-    return this->cs.at(this->is_thumb() ? ARION_THUMB_MODE : ARION_ARM_MODE);
+    return this->cs.at(this->is_thumb ? ARION_THUMB_MODE : ARION_ARM_MODE);
 }
 
 void AbiManagerARM::enable_vfp()
@@ -64,9 +71,9 @@ void AbiManagerARM::setup()
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
-
     arion->hooks->hook_intr(AbiManagerARM::int_hook);
     this->enable_vfp();
+    this->is_thumb = 0;
 }
 
 ADDR AbiManagerARM::dump_tls()

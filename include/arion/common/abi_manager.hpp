@@ -163,6 +163,8 @@ class ARION_EXPORT AbiManager
     virtual void ARION_EXPORT setup() = 0;
     virtual arion::ADDR ARION_EXPORT dump_tls() = 0;
     virtual void ARION_EXPORT load_tls(arion::ADDR new_tls) = 0;
+    virtual void ARION_EXPORT set_thumb_state(uint32_t entrypoint);
+    virtual bool ARION_EXPORT get_thumb_mode();
 
     template <typename T> T ARION_EXPORT read_reg(arion::REG reg)
     {
