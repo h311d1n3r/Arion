@@ -1,10 +1,12 @@
 #ifndef ARION_LNX_KERNEL_UTILS_HPP
 #define ARION_LNX_KERNEL_UTILS_HPP
 
+#include <arion/utils/type_utils.hpp>
 #include <arion/common/global_defs.hpp>
 #include <arion/common/global_excepts.hpp>
 #include <arion/utils/struct_utils.hpp>
 #include <sys/stat.h>
+#include <fcntl.h>
 
 // Defined in https://elixir.bootlin.com/linux/v6.12.6/source/arch/x86/include/uapi/asm/signal.h#L93
 struct ksigaction
@@ -71,7 +73,7 @@ class StatStructFactory : public PolymorphicStructFactory<struct stat>
                                     {{arion::CPU_ARCH::X8664_ARCH}, PTR_SZ, "__unused3"}}) {};
 };
 
-inline StatStructFactory STAT_STRUCT_FACTORY;
+extern std::shared_ptr<StatStructFactory> STAT_STRUCT_FACTORY;
 
 class StatxStructFactory : public PolymorphicStructFactory<struct statx>
 {
@@ -109,7 +111,46 @@ class StatxStructFactory : public PolymorphicStructFactory<struct statx>
                                     }) {};
 };
 
-inline StatxStructFactory STATX_STRUCT_FACTORY;
+extern std::shared_ptr<StatxStructFactory> STATX_STRUCT_FACTORY;
 } // namespace arion_poly_struct
+
+class ArionErrCodeType : public ArionType {
+public:
+    ArionErrCodeType() : ArionType("Error Code", ARION_LOG_COLOR::MAGENTA) {};
+    std::string str(std::shared_ptr<Arion> arion, uint64_t val) override;
+};
+extern std::shared_ptr<ArionErrCodeType> ARION_ERR_CODE_TYPE;
+
+class ArionFileDescriptorType : public ArionType {
+public:
+    ArionFileDescriptorType() : ArionType("File Descriptor", ARION_LOG_COLOR::MAGENTA) {};
+    std::string str(std::shared_ptr<Arion> arion, uint64_t val) override;
+};
+extern std::shared_ptr<ArionFileDescriptorType> ARION_FILE_DESCRIPTOR_TYPE;
+
+class ArionAccessModeType : public ArionFlagType
+{
+  public:
+    ArionAccessModeType() : ArionFlagType("Access Mode", {{F_OK, "F_OK"}, {R_OK, "R_OK"}, {W_OK, "W_OK"}, {X_OK, "X_OK"}}) {};
+};
+extern std::shared_ptr<ArionAccessModeType> ARION_ACCESS_MODE_TYPE;
+
+class ArionOpenModeType : public ArionFlagType
+{
+  public:
+    ArionOpenModeType() : ArionFlagType("Open Mode", {{O_RDONLY, "O_RDONLY"}, {O_WRONLY, "O_WRONLY"}, {0x4, "O_EXEC"}, {O_RDWR, "O_RDWR"},
+                                                        {O_ACCMODE, "O_ACCMODE"}, {O_LARGEFILE, "O_LARGEFILE"}, {O_CREAT, "O_CREAT"}, {O_APPEND, "O_APPEND"},
+                                                        {O_CLOEXEC, "O_CLOEXEC"}, {O_DIRECTORY, "O_DIRECTORY"}, {O_DSYNC, "O_DSYNC"}, {O_EXCL, "O_EXCL"},
+                                                        {O_NOCTTY, "O_NOCTTY"}, {O_NOFOLLOW, "O_NOFOLLOW"}, {O_NONBLOCK, "O_NONBLOCK"}, {O_RSYNC, "O_RSYNC"},
+                                                        {O_SYNC, "O_SYNC"}, {O_TRUNC, "O_TRUNC"}}) {};
+};
+extern std::shared_ptr<ArionOpenModeType> ARION_OPEN_MODE_TYPE;
+
+class ArionStructStatType : public ArionStructType<struct stat>
+{
+  public:
+    ArionStructStatType() : ArionStructType("Struct stat", arion_poly_struct::STAT_STRUCT_FACTORY) {};
+};
+extern std::shared_ptr<ArionStructStatType> ARION_STRUCT_STAT_TYPE;
 
 #endif // ARION_LNX_KERNEL_UTILS_HPP

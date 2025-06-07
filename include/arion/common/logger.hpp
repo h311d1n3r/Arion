@@ -83,7 +83,7 @@ class ARION_EXPORT Logger
 #else
     std::shared_ptr<void> logger;
 #endif
-    void refresh_prefix();
+    void refresh_prefix(bool force = false);
 
   public:
     static std::unique_ptr<Logger> initialize(std::weak_ptr<Arion> arion,

@@ -9,6 +9,7 @@
 #include <memory>
 #include <stack>
 #include <string>
+#include <sstream>
 #include <vector>
 
 namespace arion_poly_struct
@@ -191,7 +192,98 @@ template <typename T> class PolymorphicStructFactory
         this->clear_structs();
     }
 
-  public:
+public:
+    size_t get_struct_sz(arion::CPU_ARCH arch) {
+        size_t struct_sz = 0;
+        uint8_t align = this->get_align(arch);
+        uint8_t ptr_sz = this->get_ptr_sz(arch);
+        uint16_t arch_sz = this->get_arch_sz(arch);
+        for (POLYMORPHIC_STRUCT_FIELD field : this->fields) {
+            if (field.constraint.arch != arion::CPU_ARCH::UNKNOWN_ARCH && arch != field.constraint.arch)
+                continue;
+            if (field.constraint.arch_sz != 0 && arch_sz != field.constraint.arch_sz)
+                continue;
+
+            switch (field.type)
+            {
+            case V8: {
+                uint8_t val;
+                struct_sz += sizeof(uint8_t);
+                break;
+            }
+            case V16: {
+                if (struct_sz % sizeof(uint16_t))
+                    struct_sz += sizeof(uint16_t) - (struct_sz % sizeof(uint16_t));
+                struct_sz += sizeof(uint16_t);
+                break;
+            }
+            case V32: {
+                if (struct_sz % sizeof(uint32_t))
+                    struct_sz += sizeof(uint32_t) - (struct_sz % sizeof(uint32_t));
+                struct_sz += sizeof(uint32_t);
+                break;
+            }
+            case V64: {
+                if (struct_sz % sizeof(uint64_t))
+                    struct_sz += sizeof(uint64_t) - (struct_sz % sizeof(uint64_t));
+                struct_sz += sizeof(uint64_t);
+                break;
+            }
+            case PTR_SZ: {
+                if (struct_sz % ptr_sz)
+                    struct_sz += ptr_sz - (struct_sz % ptr_sz);
+                struct_sz += ptr_sz;
+                break;
+            }
+            case A8: {
+                size_t arr_sz = field.sz * sizeof(uint8_t);
+                struct_sz += arr_sz;
+                break;
+            }
+            case A16: {
+                if (struct_sz % sizeof(uint16_t))
+                    struct_sz += sizeof(uint16_t) - (struct_sz % sizeof(uint16_t));
+                size_t arr_sz = field.sz * sizeof(uint16_t);
+                struct_sz += arr_sz;
+                break;
+            }
+            case A32: {
+                if (struct_sz % sizeof(uint32_t))
+                    struct_sz += sizeof(uint32_t) - (struct_sz % sizeof(uint32_t));
+                size_t arr_sz = field.sz * sizeof(uint32_t);
+                struct_sz += arr_sz;
+                break;
+            }
+            case A64: {
+                if (struct_sz % sizeof(uint64_t))
+                    struct_sz += sizeof(uint64_t) - (struct_sz % sizeof(uint64_t));
+                size_t arr_sz = field.sz * sizeof(uint64_t);
+                struct_sz += arr_sz;
+                break;
+            }
+            case PTR_ARR: {
+                if (struct_sz % ptr_sz)
+                    struct_sz += ptr_sz - (struct_sz % ptr_sz);
+                size_t arr_sz = field.sz * ptr_sz;
+                struct_sz += arr_sz;
+                break;
+            }
+            default:
+                break;
+            }
+        }
+        if (struct_sz % align)
+        {
+            uint8_t align_sz = align - (struct_sz % align);
+            struct_sz += align_sz;
+        }
+        return struct_sz;
+    }
+
+    size_t get_host_struct_sz() {
+        return this->get_struct_sz(get_host_cpu_arch());
+    }
+
     STRUCT_ID feed(arion::CPU_ARCH arch, arion::BYTE *struct_inst)
     {
         uint8_t align = this->get_align(arch);
@@ -504,6 +596,112 @@ template <typename T> class PolymorphicStructFactory
         memcpy(struct_inst, data, min_sz);
         free(data);
         return struct_inst;
+    }
+
+    std::string to_string(STRUCT_ID id, arion::CPU_ARCH arch) {
+        auto struct_it = this->curr_structs.find(id);
+        if (struct_it == this->curr_structs.end())
+            throw WrongStructIdException();
+        std::unique_ptr<PolymorphicStruct> curr_struct = std::move(struct_it->second);
+
+        uint8_t align = this->get_align(arch);
+        uint8_t ptr_sz = this->get_ptr_sz(arch);
+        uint16_t arch_sz = this->get_arch_sz(arch);
+
+        std::stringstream ss;
+        ss << "{";
+
+        for (POLYMORPHIC_STRUCT_FIELD field : this->fields) {
+            if (field.constraint.arch != arion::CPU_ARCH::UNKNOWN_ARCH && arch != field.constraint.arch)
+                continue;
+            if (field.constraint.arch_sz != 0 && arch_sz != field.constraint.arch_sz)
+                continue;
+
+            if(ss.str().size() > 1) ss << ", ";
+            switch (field.type)
+            {
+                case V8:
+                case V16:
+                case V32:
+                case V64:
+                case PTR_SZ: {
+                    uint64_t val = 0;
+                    if (curr_struct->has_int_field(field.name))
+                        val = curr_struct->get_int_field(field.name);
+                    ss << int_to_hex<uint64_t>(val);
+                    break;
+                }
+                case A8: {
+                    ss << "{";
+                    if (curr_struct->has_arr_field(field.name)) {
+                        uint8_t* arr = (uint8_t*) curr_struct->get_arr_field(field.name);
+                        for(size_t arr_i = 0; arr_i < field.sz; arr_i++) {
+                            ss << int_to_hex<uint8_t>(arr[arr_i]);
+                            if(arr_i < field.sz - 1) ss << ", ";
+                        }
+                    }
+                    ss << "}";
+                    break;
+                }
+                case A16: {
+                    ss << "{";
+                    if (curr_struct->has_arr_field(field.name)) {
+                        uint16_t* arr = (uint16_t*) curr_struct->get_arr_field(field.name);
+                        for(size_t arr_i = 0; arr_i < field.sz; arr_i++) {
+                            ss << int_to_hex<uint16_t>(arr[arr_i]);
+                            if(arr_i < field.sz - 1) ss << ", ";
+                        }
+                    }
+                    ss << "}";
+                    break;
+                }
+                case A32: {
+                    ss << "{";
+                    if (curr_struct->has_arr_field(field.name)) {
+                        uint32_t* arr = (uint32_t*) curr_struct->get_arr_field(field.name);
+                        for(size_t arr_i = 0; arr_i < field.sz; arr_i++) {
+                            ss << int_to_hex<uint32_t>(arr[arr_i]);
+                            if(arr_i < field.sz - 1) ss << ", ";
+                        }
+                    }
+                    ss << "}";
+                    break;
+                }
+                case A64: {
+                    ss << "{";
+                    if (curr_struct->has_arr_field(field.name)) {
+                        uint64_t* arr = (uint64_t*) curr_struct->get_arr_field(field.name);
+                        for(size_t arr_i = 0; arr_i < field.sz; arr_i++) {
+                            ss << int_to_hex<uint64_t>(arr[arr_i]);
+                            if(arr_i < field.sz - 1) ss << ", ";
+                        }
+                    }
+                    ss << "}";
+                    break;
+                }
+                case PTR_ARR: {
+                    ss << "{";
+                    if (curr_struct->has_arr_field(field.name)) {
+                        void* arr = curr_struct->get_arr_field(field.name);
+                        for(size_t arr_i = 0; arr_i < field.sz; arr_i++) {
+                            uint64_t val = 0;
+                            memcpy(&val, (void*)((uint64_t)arr + arr_i * arch_sz), arch_sz);
+                            ss << int_to_hex<uint64_t>(val);
+                            if(arr_i < field.sz - 1) ss << ", ";
+                        }
+                    }
+                    ss << "}";
+                    break;
+                }
+                default:
+                    ss << "UNK_FIELD";
+                    break;
+            }
+        }
+
+        ss << "}";
+
+        return ss.str();
     }
 
     void release_struct(STRUCT_ID id)

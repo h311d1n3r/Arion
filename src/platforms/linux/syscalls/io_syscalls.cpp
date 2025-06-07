@@ -242,12 +242,12 @@ uint64_t sys_newstat(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params
         stat_ret = -errno;
     else
     {
-        STRUCT_ID stat_id = STAT_STRUCT_FACTORY.feed_host(&stat_buf);
+        STRUCT_ID stat_id = STAT_STRUCT_FACTORY->feed_host(&stat_buf);
         size_t arch_stat_len;
-        BYTE *arch_stat = STAT_STRUCT_FACTORY.build(stat_id, arion->abi->get_attrs()->arch, arch_stat_len);
+        BYTE *arch_stat = STAT_STRUCT_FACTORY->build(stat_id, arion->abi->get_attrs()->arch, arch_stat_len);
         arion->mem->write(stat_buf_addr, arch_stat, arch_stat_len);
         free(arch_stat);
-        STAT_STRUCT_FACTORY.release_struct(stat_id);
+        STAT_STRUCT_FACTORY->release_struct(stat_id);
     }
     return stat_ret;
 }
@@ -266,12 +266,12 @@ uint64_t sys_newfstat(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
         fstat_ret = -errno;
     else
     {
-        STRUCT_ID stat_id = STAT_STRUCT_FACTORY.feed_host(&stat_buf);
+        STRUCT_ID stat_id = STAT_STRUCT_FACTORY->feed_host(&stat_buf);
         size_t arch_stat_len;
-        BYTE *arch_stat = STAT_STRUCT_FACTORY.build(stat_id, arion->abi->get_attrs()->arch, arch_stat_len);
+        BYTE *arch_stat = STAT_STRUCT_FACTORY->build(stat_id, arion->abi->get_attrs()->arch, arch_stat_len);
         arion->mem->write(stat_buf_addr, arch_stat, arch_stat_len);
         free(arch_stat);
-        STAT_STRUCT_FACTORY.release_struct(stat_id);
+        STAT_STRUCT_FACTORY->release_struct(stat_id);
     }
     return fstat_ret;
 }
@@ -290,12 +290,12 @@ uint64_t sys_newlstat(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
         lstat_ret = -errno;
     else
     {
-        STRUCT_ID stat_id = STAT_STRUCT_FACTORY.feed_host(&stat_buf);
+        STRUCT_ID stat_id = STAT_STRUCT_FACTORY->feed_host(&stat_buf);
         size_t arch_stat_len;
-        BYTE *arch_stat = STAT_STRUCT_FACTORY.build(stat_id, arion->abi->get_attrs()->arch, arch_stat_len);
+        BYTE *arch_stat = STAT_STRUCT_FACTORY->build(stat_id, arion->abi->get_attrs()->arch, arch_stat_len);
         arion->mem->write(stat_buf_addr, arch_stat, arch_stat_len);
         free(arch_stat);
-        STAT_STRUCT_FACTORY.release_struct(stat_id);
+        STAT_STRUCT_FACTORY->release_struct(stat_id);
     }
     return lstat_ret;
 }
@@ -1635,12 +1635,12 @@ uint64_t sys_newfstatat(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> par
         fstatat_ret = -errno;
     else
     {
-        STRUCT_ID stat_id = STAT_STRUCT_FACTORY.feed_host(&stat_buf);
+        STRUCT_ID stat_id = STAT_STRUCT_FACTORY->feed_host(&stat_buf);
         size_t arch_stat_len;
-        BYTE *arch_stat = STAT_STRUCT_FACTORY.build(stat_id, arion->abi->get_attrs()->arch, arch_stat_len);
+        BYTE *arch_stat = STAT_STRUCT_FACTORY->build(stat_id, arion->abi->get_attrs()->arch, arch_stat_len);
         arion->mem->write(stat_buf_addr, arch_stat, arch_stat_len);
         free(arch_stat);
-        STAT_STRUCT_FACTORY.release_struct(stat_id);
+        STAT_STRUCT_FACTORY->release_struct(stat_id);
     }
     return fstatat_ret;
 }
@@ -2143,12 +2143,12 @@ uint64_t sys_statx(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
         statx_ret = -errno;
     else
     {
-        STRUCT_ID statx_id = STATX_STRUCT_FACTORY.feed_host(&statx_buf);
+        STRUCT_ID statx_id = STATX_STRUCT_FACTORY->feed_host(&statx_buf);
         size_t arch_statx_len;
-        BYTE *arch_statx = STATX_STRUCT_FACTORY.build(statx_id, arion->abi->get_attrs()->arch, arch_statx_len);
+        BYTE *arch_statx = STATX_STRUCT_FACTORY->build(statx_id, arion->abi->get_attrs()->arch, arch_statx_len);
         arion->mem->write(statx_buf_addr, arch_statx, arch_statx_len);
         free(arch_statx);
-        STATX_STRUCT_FACTORY.release_struct(statx_id);
+        STATX_STRUCT_FACTORY->release_struct(statx_id);
     }
     return statx_ret;
 }

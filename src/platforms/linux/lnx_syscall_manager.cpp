@@ -9,6 +9,7 @@
 #include <arion/platforms/linux/syscalls/process_syscalls.hpp>
 #include <arion/platforms/linux/syscalls/signal_syscalls.hpp>
 #include <arion/platforms/linux/syscalls/time_syscalls.hpp>
+#include <arion/platforms/linux/lnx_kernel_utils.hpp>
 #include <arion/utils/convert_utils.hpp>
 #include <arion/utils/type_utils.hpp>
 
@@ -410,151 +411,150 @@ void LinuxSyscallManager::add_syscall_entry(std::string name, std::shared_ptr<SY
 
 void LinuxSyscallManager::init_syscall_funcs()
 {
-    this->add_syscall_entry("read", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_read));
-    this->add_syscall_entry("write", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_write));
-    this->add_syscall_entry("open", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_open));
-    this->add_syscall_entry("close", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_close));
-    this->add_syscall_entry("newstat", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_newstat));
-    this->add_syscall_entry("newfstat", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_newfstat));
-    this->add_syscall_entry("newlstat", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_newlstat));
-    this->add_syscall_entry("poll", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_poll));
-    this->add_syscall_entry("lseek", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_lseek));
-    this->add_syscall_entry("mmap", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_mmap));
-    this->add_syscall_entry("mmap2", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_mmap2));
-    this->add_syscall_entry("mmap_pgoff", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_mmap2));
-    this->add_syscall_entry("mprotect", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_mprotect));
-    this->add_syscall_entry("munmap", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_munmap));
-    this->add_syscall_entry("brk", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_brk));
-    this->add_syscall_entry("rt_sigaction", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_rt_sigaction));
-    this->add_syscall_entry("rt_sigreturn", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_rt_sigreturn));
-    this->add_syscall_entry("sigreturn", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_sigreturn));
-    this->add_syscall_entry("ioctl", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_ioctl));
-    this->add_syscall_entry("pread64", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_pread64));
-    this->add_syscall_entry("pwrite64", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_pwrite64));
-    this->add_syscall_entry("readv", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_readv));
-    this->add_syscall_entry("writev", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_writev));
-    this->add_syscall_entry("access", std::make_shared<SYSCALL_FUNC>(
-                                          std::vector<ArionType>{ARION_RAW_STRING_TYPE, ARION_INT_TYPE}, sys_access));
-    this->add_syscall_entry("pselect6", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_pselect6));
-    this->add_syscall_entry("dup", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_dup));
-    this->add_syscall_entry("dup2", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_dup2));
-    this->add_syscall_entry("pause", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_pause));
-    this->add_syscall_entry("getpid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getpid));
-    this->add_syscall_entry("socket", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_socket));
-    this->add_syscall_entry("socketcall", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_socketcall));
-    this->add_syscall_entry("connect", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_connect));
-    this->add_syscall_entry("accept", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_accept));
-    this->add_syscall_entry("sendto", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_sendto));
-    this->add_syscall_entry("send", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_send));
-    this->add_syscall_entry("recvfrom", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_recvfrom));
-    this->add_syscall_entry("recv", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_recv));
-    this->add_syscall_entry("sendmsg", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_sendmsg));
-    this->add_syscall_entry("recvmsg", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_recvmsg));
-    this->add_syscall_entry("shutdown", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_shutdown));
-    this->add_syscall_entry("bind", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_bind));
-    this->add_syscall_entry("listen", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_listen));
-    this->add_syscall_entry("getsockname", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getsockname));
-    this->add_syscall_entry("getpeername", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getpeername));
-    this->add_syscall_entry("socketpair", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_socketpair));
-    this->add_syscall_entry("setsockopt", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_setsockopt));
-    this->add_syscall_entry("getsockopt", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getsockopt));
-    this->add_syscall_entry("clone", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_clone));
-    this->add_syscall_entry("fork", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_fork));
-    this->add_syscall_entry("execve", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_execve));
-    this->add_syscall_entry("exit", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_exit));
-    this->add_syscall_entry("wait4", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_wait4));
-    this->add_syscall_entry("kill", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_kill));
-    this->add_syscall_entry("newuname", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_newuname));
-    this->add_syscall_entry("fcntl", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_fcntl));
-    this->add_syscall_entry("truncate", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_truncate));
-    this->add_syscall_entry("ftruncate", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_ftruncate));
-    this->add_syscall_entry("faccessat", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_faccessat));
-    this->add_syscall_entry("getcwd", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getcwd));
-    this->add_syscall_entry("chdir", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_chdir));
-    this->add_syscall_entry("fchdir", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_fchdir));
-    this->add_syscall_entry("rename", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_rename));
-    this->add_syscall_entry("mkdir", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_mkdir));
-    this->add_syscall_entry("rmdir", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_rmdir));
-    this->add_syscall_entry("creat", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_creat));
-    this->add_syscall_entry("link", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_link));
-    this->add_syscall_entry("unlink", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_unlink));
-    this->add_syscall_entry("symlink", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_symlink));
-    this->add_syscall_entry("readlink", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_readlink));
-    this->add_syscall_entry("gettimeofday", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_gettimeofday));
-    this->add_syscall_entry("getrlimit", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getrlimit));
-    this->add_syscall_entry("old_getrlimit", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getrlimit));
-    this->add_syscall_entry("sysinfo", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_sysinfo));
-    this->add_syscall_entry("getuid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getuid));
-    this->add_syscall_entry("getgid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getgid));
-    this->add_syscall_entry("setuid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_setuid));
-    this->add_syscall_entry("setgid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_setgid));
-    this->add_syscall_entry("geteuid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_geteuid));
-    this->add_syscall_entry("getegid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getegid));
-    this->add_syscall_entry("setpgid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_setpgid));
-    this->add_syscall_entry("getppid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getppid));
-    this->add_syscall_entry("getpgrp", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getpgrp));
-    this->add_syscall_entry("setsid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_setsid));
-    this->add_syscall_entry("setreuid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_setreuid));
-    this->add_syscall_entry("setregid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_setregid));
-    this->add_syscall_entry("getgroups", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getgroups));
-    this->add_syscall_entry("setgroups", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_setgroups));
-    this->add_syscall_entry("setresuid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_setresuid));
-    this->add_syscall_entry("getresuid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getresuid));
-    this->add_syscall_entry("setresgid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_setresgid));
-    this->add_syscall_entry("getresgid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getresgid));
-    this->add_syscall_entry("getpgid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getpgid));
-    this->add_syscall_entry("setfsuid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_setfsuid));
-    this->add_syscall_entry("setfsgid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_setfsgid));
-    this->add_syscall_entry("getsid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getsid));
-    this->add_syscall_entry("capget", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_capget));
-    this->add_syscall_entry("capset", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_capset));
-    this->add_syscall_entry("statfs", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_statfs));
-    this->add_syscall_entry("fstatfs", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_fstatfs));
+    this->add_syscall_entry("read", this->make_sys_func(sys_read));
+    this->add_syscall_entry("write", this->make_sys_func(sys_write));
+    this->add_syscall_entry("open", this->make_sys_func(sys_open));
+    this->add_syscall_entry("close", this->make_sys_func(sys_close));
+    this->add_syscall_entry("newstat", this->make_sys_func(sys_newstat));
+    this->add_syscall_entry("newfstat", this->make_sys_func(sys_newfstat));
+    this->add_syscall_entry("newlstat", this->make_sys_func(sys_newlstat));
+    this->add_syscall_entry("poll", this->make_sys_func(sys_poll));
+    this->add_syscall_entry("lseek", this->make_sys_func(sys_lseek));
+    this->add_syscall_entry("mmap", this->make_sys_func(sys_mmap));
+    this->add_syscall_entry("mmap2", this->make_sys_func(sys_mmap2));
+    this->add_syscall_entry("mmap_pgoff", this->make_sys_func(sys_mmap2));
+    this->add_syscall_entry("mprotect", this->make_sys_func(sys_mprotect));
+    this->add_syscall_entry("munmap", this->make_sys_func(sys_munmap));
+    this->add_syscall_entry("brk", this->make_sys_func(sys_brk, ARION_INT_TYPE));
+    this->add_syscall_entry("rt_sigaction", this->make_sys_func(sys_rt_sigaction));
+    this->add_syscall_entry("rt_sigreturn", this->make_sys_func(sys_rt_sigreturn));
+    this->add_syscall_entry("sigreturn", this->make_sys_func(sys_sigreturn));
+    this->add_syscall_entry("ioctl", this->make_sys_func(sys_ioctl));
+    this->add_syscall_entry("pread64", this->make_sys_func(sys_pread64));
+    this->add_syscall_entry("pwrite64", this->make_sys_func(sys_pwrite64));
+    this->add_syscall_entry("readv", this->make_sys_func(sys_readv));
+    this->add_syscall_entry("writev", this->make_sys_func(sys_writev));
+    this->add_syscall_entry("access", this->make_sys_func(sys_access, ARION_RAW_STRING_TYPE, ARION_ACCESS_MODE_TYPE));
+    this->add_syscall_entry("pselect6", this->make_sys_func(sys_pselect6));
+    this->add_syscall_entry("dup", this->make_sys_func(sys_dup));
+    this->add_syscall_entry("dup2", this->make_sys_func(sys_dup2));
+    this->add_syscall_entry("pause", this->make_sys_func(sys_pause));
+    this->add_syscall_entry("getpid", this->make_sys_func(sys_getpid));
+    this->add_syscall_entry("socket", this->make_sys_func(sys_socket));
+    this->add_syscall_entry("socketcall", this->make_sys_func(sys_socketcall));
+    this->add_syscall_entry("connect", this->make_sys_func(sys_connect));
+    this->add_syscall_entry("accept", this->make_sys_func(sys_accept));
+    this->add_syscall_entry("sendto", this->make_sys_func(sys_sendto));
+    this->add_syscall_entry("send", this->make_sys_func(sys_send));
+    this->add_syscall_entry("recvfrom", this->make_sys_func(sys_recvfrom));
+    this->add_syscall_entry("recv", this->make_sys_func(sys_recv));
+    this->add_syscall_entry("sendmsg", this->make_sys_func(sys_sendmsg));
+    this->add_syscall_entry("recvmsg", this->make_sys_func(sys_recvmsg));
+    this->add_syscall_entry("shutdown", this->make_sys_func(sys_shutdown));
+    this->add_syscall_entry("bind", this->make_sys_func(sys_bind));
+    this->add_syscall_entry("listen", this->make_sys_func(sys_listen));
+    this->add_syscall_entry("getsockname", this->make_sys_func(sys_getsockname));
+    this->add_syscall_entry("getpeername", this->make_sys_func(sys_getpeername));
+    this->add_syscall_entry("socketpair", this->make_sys_func(sys_socketpair));
+    this->add_syscall_entry("setsockopt", this->make_sys_func(sys_setsockopt));
+    this->add_syscall_entry("getsockopt", this->make_sys_func(sys_getsockopt));
+    this->add_syscall_entry("clone", this->make_sys_func(sys_clone));
+    this->add_syscall_entry("fork", this->make_sys_func(sys_fork));
+    this->add_syscall_entry("execve", this->make_sys_func(sys_execve));
+    this->add_syscall_entry("exit", this->make_sys_func(sys_exit));
+    this->add_syscall_entry("wait4", this->make_sys_func(sys_wait4));
+    this->add_syscall_entry("kill", this->make_sys_func(sys_kill));
+    this->add_syscall_entry("newuname", this->make_sys_func(sys_newuname));
+    this->add_syscall_entry("fcntl", this->make_sys_func(sys_fcntl));
+    this->add_syscall_entry("truncate", this->make_sys_func(sys_truncate));
+    this->add_syscall_entry("ftruncate", this->make_sys_func(sys_ftruncate));
+    this->add_syscall_entry("faccessat", this->make_sys_func(sys_faccessat));
+    this->add_syscall_entry("getcwd", this->make_sys_func(sys_getcwd));
+    this->add_syscall_entry("chdir", this->make_sys_func(sys_chdir));
+    this->add_syscall_entry("fchdir", this->make_sys_func(sys_fchdir));
+    this->add_syscall_entry("rename", this->make_sys_func(sys_rename));
+    this->add_syscall_entry("mkdir", this->make_sys_func(sys_mkdir));
+    this->add_syscall_entry("rmdir", this->make_sys_func(sys_rmdir));
+    this->add_syscall_entry("creat", this->make_sys_func(sys_creat));
+    this->add_syscall_entry("link", this->make_sys_func(sys_link));
+    this->add_syscall_entry("unlink", this->make_sys_func(sys_unlink));
+    this->add_syscall_entry("symlink", this->make_sys_func(sys_symlink));
+    this->add_syscall_entry("readlink", this->make_sys_func(sys_readlink));
+    this->add_syscall_entry("gettimeofday", this->make_sys_func(sys_gettimeofday));
+    this->add_syscall_entry("getrlimit", this->make_sys_func(sys_getrlimit));
+    this->add_syscall_entry("old_getrlimit", this->make_sys_func(sys_getrlimit));
+    this->add_syscall_entry("sysinfo", this->make_sys_func(sys_sysinfo));
+    this->add_syscall_entry("getuid", this->make_sys_func(sys_getuid));
+    this->add_syscall_entry("getgid", this->make_sys_func(sys_getgid));
+    this->add_syscall_entry("setuid", this->make_sys_func(sys_setuid));
+    this->add_syscall_entry("setgid", this->make_sys_func(sys_setgid));
+    this->add_syscall_entry("geteuid", this->make_sys_func(sys_geteuid));
+    this->add_syscall_entry("getegid", this->make_sys_func(sys_getegid));
+    this->add_syscall_entry("setpgid", this->make_sys_func(sys_setpgid));
+    this->add_syscall_entry("getppid", this->make_sys_func(sys_getppid));
+    this->add_syscall_entry("getpgrp", this->make_sys_func(sys_getpgrp));
+    this->add_syscall_entry("setsid", this->make_sys_func(sys_setsid));
+    this->add_syscall_entry("setreuid", this->make_sys_func(sys_setreuid));
+    this->add_syscall_entry("setregid", this->make_sys_func(sys_setregid));
+    this->add_syscall_entry("getgroups", this->make_sys_func(sys_getgroups));
+    this->add_syscall_entry("setgroups", this->make_sys_func(sys_setgroups));
+    this->add_syscall_entry("setresuid", this->make_sys_func(sys_setresuid));
+    this->add_syscall_entry("getresuid", this->make_sys_func(sys_getresuid));
+    this->add_syscall_entry("setresgid", this->make_sys_func(sys_setresgid));
+    this->add_syscall_entry("getresgid", this->make_sys_func(sys_getresgid));
+    this->add_syscall_entry("getpgid", this->make_sys_func(sys_getpgid));
+    this->add_syscall_entry("setfsuid", this->make_sys_func(sys_setfsuid));
+    this->add_syscall_entry("setfsgid", this->make_sys_func(sys_setfsgid));
+    this->add_syscall_entry("getsid", this->make_sys_func(sys_getsid));
+    this->add_syscall_entry("capget", this->make_sys_func(sys_capget));
+    this->add_syscall_entry("capset", this->make_sys_func(sys_capset));
+    this->add_syscall_entry("statfs", this->make_sys_func(sys_statfs));
+    this->add_syscall_entry("fstatfs", this->make_sys_func(sys_fstatfs));
     this->add_syscall_entry("sched_rr_get_interval",
-                            std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_sched_rr_get_interval));
-    this->add_syscall_entry("arch_prctl", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_arch_prctl));
-    this->add_syscall_entry("gettid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_gettid));
-    this->add_syscall_entry("time", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_time));
-    this->add_syscall_entry("futex", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_futex));
-    this->add_syscall_entry("futex_time64", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_futex_time64));
-    this->add_syscall_entry("getdents64", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getdents64));
+                            this->make_sys_func(sys_sched_rr_get_interval));
+    this->add_syscall_entry("arch_prctl", this->make_sys_func(sys_arch_prctl));
+    this->add_syscall_entry("gettid", this->make_sys_func(sys_gettid));
+    this->add_syscall_entry("time", this->make_sys_func(sys_time));
+    this->add_syscall_entry("futex", this->make_sys_func(sys_futex));
+    this->add_syscall_entry("futex_time64", this->make_sys_func(sys_futex_time64));
+    this->add_syscall_entry("getdents64", this->make_sys_func(sys_getdents64));
     this->add_syscall_entry("set_tid_address",
-                            std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_set_tid_address));
+                            this->make_sys_func(sys_set_tid_address));
     this->add_syscall_entry("set_thread_area",
-                            std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_set_thread_area));
-    this->add_syscall_entry("set_tls", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_set_tls));
+                            this->make_sys_func(sys_set_thread_area));
+    this->add_syscall_entry("set_tls", this->make_sys_func(sys_set_tls));
     this->add_syscall_entry("clock_gettime",
-                            std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_clock_gettime));
-    this->add_syscall_entry("clock_getres", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_clock_getres));
+                            this->make_sys_func(sys_clock_gettime));
+    this->add_syscall_entry("clock_getres", this->make_sys_func(sys_clock_getres));
     this->add_syscall_entry("clock_nanosleep",
-                            std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_clock_nanosleep));
-    this->add_syscall_entry("exit_group", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_exit_group));
-    this->add_syscall_entry("tgkill", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_tgkill));
-    this->add_syscall_entry("waitid", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_waitid));
-    this->add_syscall_entry("openat", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_openat));
-    this->add_syscall_entry("newfstatat", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_newfstatat));
-    this->add_syscall_entry("renameat", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_renameat));
-    this->add_syscall_entry("readlinkat", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_readlinkat));
-    this->add_syscall_entry("pselect6", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_pselect6));
-    this->add_syscall_entry("ppoll", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_ppoll));
-    this->add_syscall_entry("accept4", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_accept4));
-    this->add_syscall_entry("recvmmsg", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_recvmmsg));
-    this->add_syscall_entry("prlimit64", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_prlimit64));
-    this->add_syscall_entry("sendmmsg", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_sendmmsg));
-    this->add_syscall_entry("getcpu", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getcpu));
-    this->add_syscall_entry("renameat2", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_renameat2));
-    this->add_syscall_entry("getrandom", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getrandom));
-    this->add_syscall_entry("statx", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_statx));
-    this->add_syscall_entry("clone3", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_clone3));
+                            this->make_sys_func(sys_clock_nanosleep));
+    this->add_syscall_entry("exit_group", this->make_sys_func(sys_exit_group));
+    this->add_syscall_entry("tgkill", this->make_sys_func(sys_tgkill));
+    this->add_syscall_entry("waitid", this->make_sys_func(sys_waitid));
+    this->add_syscall_entry("openat", this->make_sys_func(sys_openat, ARION_FILE_DESCRIPTOR_TYPE, ARION_RAW_STRING_TYPE, ARION_OPEN_MODE_TYPE, ARION_ACCESS_MODE_TYPE));
+    this->add_syscall_entry("newfstatat", this->make_sys_func(sys_newfstatat, ARION_FILE_DESCRIPTOR_TYPE, ARION_RAW_STRING_TYPE, ARION_STRUCT_STAT_TYPE, ARION_INT_TYPE));
+    this->add_syscall_entry("renameat", this->make_sys_func(sys_renameat));
+    this->add_syscall_entry("readlinkat", this->make_sys_func(sys_readlinkat));
+    this->add_syscall_entry("pselect6", this->make_sys_func(sys_pselect6));
+    this->add_syscall_entry("ppoll", this->make_sys_func(sys_ppoll));
+    this->add_syscall_entry("accept4", this->make_sys_func(sys_accept4));
+    this->add_syscall_entry("recvmmsg", this->make_sys_func(sys_recvmmsg));
+    this->add_syscall_entry("prlimit64", this->make_sys_func(sys_prlimit64));
+    this->add_syscall_entry("sendmmsg", this->make_sys_func(sys_sendmmsg));
+    this->add_syscall_entry("getcpu", this->make_sys_func(sys_getcpu));
+    this->add_syscall_entry("renameat2", this->make_sys_func(sys_renameat2));
+    this->add_syscall_entry("getrandom", this->make_sys_func(sys_getrandom));
+    this->add_syscall_entry("statx", this->make_sys_func(sys_statx));
+    this->add_syscall_entry("clone3", this->make_sys_func(sys_clone3));
     this->add_syscall_entry("set_robust_list",
-                            std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_set_robust_list));
-    this->add_syscall_entry("rseq", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_rseq));
-    this->add_syscall_entry("getxattr", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_getxattr));
-    this->add_syscall_entry("lgetxattr", std::make_shared<SYSCALL_FUNC>(std::vector<ArionType>{}, sys_lgetxattr));
+                            this->make_sys_func(sys_set_robust_list));
+    this->add_syscall_entry("rseq", this->make_sys_func(sys_rseq));
+    this->add_syscall_entry("getxattr", this->make_sys_func(sys_getxattr));
+    this->add_syscall_entry("lgetxattr", this->make_sys_func(sys_lgetxattr));
 }
 
 void LinuxSyscallManager::print_syscall(std::shared_ptr<Arion> arion, std::string sys_name,
-                                        std::vector<ArionType> signature, std::vector<SYS_PARAM> func_params,
+                                        std::vector<std::shared_ptr<ArionType>> signature, std::vector<SYS_PARAM> func_params,
                                         uint64_t syscall_ret)
 {
     colorstream msg;
@@ -562,13 +562,13 @@ void LinuxSyscallManager::print_syscall(std::shared_ptr<Arion> arion, std::strin
         << ARION_LOG_COLOR::WHITE << "(";
     for (size_t param_i = 0; param_i < signature.size(); param_i++)
     {
-        ArionType param_type = signature.at(param_i);
-        msg << param_type.get_color() << param_type.str(arion, func_params.at(param_i));
-        if (param_i < func_params.size() - 1)
+        std::shared_ptr<ArionType> param_type = signature.at(param_i);
+        msg << param_type->get_color() << param_type->str(arion, func_params.at(param_i));
+        if (param_i < signature.size() - 1)
             msg << ARION_LOG_COLOR::WHITE << ", ";
     }
     msg << ARION_LOG_COLOR::WHITE << ") = ";
-    msg << ARION_INT_TYPE.get_color() << ARION_INT_TYPE.str(arion, syscall_ret);
+    msg << ARION_ERR_CODE_TYPE->get_color() << ARION_ERR_CODE_TYPE->str(arion, syscall_ret);
     arion->logger->debug(msg.str());
 }
 
