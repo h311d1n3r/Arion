@@ -12,7 +12,7 @@ inline std::map<arion::ARION_LOG_LEVEL, spdlog::level::level_enum> ARION_LOG_LVL
     {arion::ARION_LOG_LEVEL::WARN, spdlog::level::level_enum::warn},
     {arion::ARION_LOG_LEVEL::ERROR, spdlog::level::level_enum::err},
     {arion::ARION_LOG_LEVEL::CRITICAL, spdlog::level::level_enum::critical},
-    {arion::ARION_LOG_LEVEL::OFF, spdlog::level::level_enum::off},
+    {arion::ARION_LOG_LEVEL::OFF, spdlog::level::level_enum::off}
 };
 
 uint64_t Logger::curr_id = 1;

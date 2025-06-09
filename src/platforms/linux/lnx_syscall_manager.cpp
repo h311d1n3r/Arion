@@ -14,6 +14,7 @@
 #include <arion/utils/type_utils.hpp>
 
 using namespace arion;
+using namespace arion_poly_struct;
 
 std::map<std::string, uint8_t> PARAMS_N_BY_SYSCALL_NAME = {{"read", 3},
                                                            {"write", 3},
@@ -411,20 +412,20 @@ void LinuxSyscallManager::add_syscall_entry(std::string name, std::shared_ptr<SY
 
 void LinuxSyscallManager::init_syscall_funcs()
 {
-    this->add_syscall_entry("read", this->make_sys_func(sys_read));
-    this->add_syscall_entry("write", this->make_sys_func(sys_write));
-    this->add_syscall_entry("open", this->make_sys_func(sys_open));
-    this->add_syscall_entry("close", this->make_sys_func(sys_close));
-    this->add_syscall_entry("newstat", this->make_sys_func(sys_newstat));
-    this->add_syscall_entry("newfstat", this->make_sys_func(sys_newfstat));
-    this->add_syscall_entry("newlstat", this->make_sys_func(sys_newlstat));
+    this->add_syscall_entry("read", this->make_sys_func(sys_read, ARION_FILE_DESCRIPTOR_TYPE, ARION_INT_TYPE, ARION_INT_TYPE));
+    this->add_syscall_entry("write", this->make_sys_func(sys_write, ARION_FILE_DESCRIPTOR_TYPE, ARION_INT_TYPE, ARION_INT_TYPE));
+    this->add_syscall_entry("open", this->make_sys_func(sys_open, ARION_RAW_STRING_TYPE, ARION_OPEN_MODE_TYPE, ARION_ACCESS_MODE_TYPE));
+    this->add_syscall_entry("close", this->make_sys_func(sys_close, ARION_FILE_DESCRIPTOR_TYPE));
+    this->add_syscall_entry("newstat", this->make_sys_func(sys_newstat, ARION_RAW_STRING_TYPE, ARION_STRUCT_STAT_TYPE));
+    this->add_syscall_entry("newfstat", this->make_sys_func(sys_newfstat, ARION_FILE_DESCRIPTOR_TYPE, ARION_STRUCT_STAT_TYPE));
+    this->add_syscall_entry("newlstat", this->make_sys_func(sys_newlstat, ARION_RAW_STRING_TYPE, ARION_STRUCT_STAT_TYPE));
     this->add_syscall_entry("poll", this->make_sys_func(sys_poll));
-    this->add_syscall_entry("lseek", this->make_sys_func(sys_lseek));
-    this->add_syscall_entry("mmap", this->make_sys_func(sys_mmap));
-    this->add_syscall_entry("mmap2", this->make_sys_func(sys_mmap2));
-    this->add_syscall_entry("mmap_pgoff", this->make_sys_func(sys_mmap2));
-    this->add_syscall_entry("mprotect", this->make_sys_func(sys_mprotect));
-    this->add_syscall_entry("munmap", this->make_sys_func(sys_munmap));
+    this->add_syscall_entry("lseek", this->make_sys_func(sys_lseek, ARION_FILE_DESCRIPTOR_TYPE, ARION_INT_TYPE, ARION_SEEK_WHENCE_TYPE));
+    this->add_syscall_entry("mmap", this->make_sys_func(sys_mmap, ARION_INT_TYPE, ARION_INT_TYPE, ARION_PROT_FLAG_TYPE, ARION_MMAP_FLAG_TYPE, ARION_FILE_DESCRIPTOR_TYPE, ARION_INT_TYPE));
+    this->add_syscall_entry("mmap2", this->make_sys_func(sys_mmap2, ARION_INT_TYPE, ARION_INT_TYPE, ARION_PROT_FLAG_TYPE, ARION_MMAP_FLAG_TYPE, ARION_FILE_DESCRIPTOR_TYPE, ARION_INT_TYPE));
+    this->add_syscall_entry("mmap_pgoff", this->make_sys_func(sys_mmap2, ARION_INT_TYPE, ARION_INT_TYPE, ARION_PROT_FLAG_TYPE, ARION_MMAP_FLAG_TYPE, ARION_FILE_DESCRIPTOR_TYPE, ARION_INT_TYPE));
+    this->add_syscall_entry("mprotect", this->make_sys_func(sys_mprotect, ARION_INT_TYPE, ARION_INT_TYPE, ARION_PROT_FLAG_TYPE));
+    this->add_syscall_entry("munmap", this->make_sys_func(sys_munmap, ARION_INT_TYPE, ARION_INT_TYPE));
     this->add_syscall_entry("brk", this->make_sys_func(sys_brk, ARION_INT_TYPE));
     this->add_syscall_entry("rt_sigaction", this->make_sys_func(sys_rt_sigaction));
     this->add_syscall_entry("rt_sigreturn", this->make_sys_func(sys_rt_sigreturn));
@@ -458,7 +459,7 @@ void LinuxSyscallManager::init_syscall_funcs()
     this->add_syscall_entry("socketpair", this->make_sys_func(sys_socketpair));
     this->add_syscall_entry("setsockopt", this->make_sys_func(sys_setsockopt));
     this->add_syscall_entry("getsockopt", this->make_sys_func(sys_getsockopt));
-    this->add_syscall_entry("clone", this->make_sys_func(sys_clone));
+    this->add_syscall_entry("clone", this->make_sys_func(sys_clone, ARION_CLONE_FLAG_TYPE, ARION_INT_TYPE, ARION_INT_TYPE, ARION_INT_TYPE, ARION_INT_TYPE));
     this->add_syscall_entry("fork", this->make_sys_func(sys_fork));
     this->add_syscall_entry("execve", this->make_sys_func(sys_execve));
     this->add_syscall_entry("exit", this->make_sys_func(sys_exit));
@@ -515,11 +516,11 @@ void LinuxSyscallManager::init_syscall_funcs()
     this->add_syscall_entry("arch_prctl", this->make_sys_func(sys_arch_prctl));
     this->add_syscall_entry("gettid", this->make_sys_func(sys_gettid));
     this->add_syscall_entry("time", this->make_sys_func(sys_time));
-    this->add_syscall_entry("futex", this->make_sys_func(sys_futex));
-    this->add_syscall_entry("futex_time64", this->make_sys_func(sys_futex_time64));
+    this->add_syscall_entry("futex", this->make_sys_func(sys_futex, ARION_INT_TYPE, ARION_FUTEX_OP_TYPE, ARION_INT_TYPE, ARION_STRUCT_TIMESPEC_TYPE, ARION_INT_TYPE, ARION_INT_TYPE));
+    this->add_syscall_entry("futex_time64", this->make_sys_func(sys_futex_time64, ARION_INT_TYPE, ARION_FUTEX_OP_TYPE, ARION_INT_TYPE, ARION_STRUCT_TIMESPEC_TYPE, ARION_INT_TYPE, ARION_INT_TYPE));
     this->add_syscall_entry("getdents64", this->make_sys_func(sys_getdents64));
     this->add_syscall_entry("set_tid_address",
-                            this->make_sys_func(sys_set_tid_address));
+                            this->make_sys_func(sys_set_tid_address, ARION_INT_TYPE));
     this->add_syscall_entry("set_thread_area",
                             this->make_sys_func(sys_set_thread_area));
     this->add_syscall_entry("set_tls", this->make_sys_func(sys_set_tls));
@@ -532,7 +533,7 @@ void LinuxSyscallManager::init_syscall_funcs()
     this->add_syscall_entry("tgkill", this->make_sys_func(sys_tgkill));
     this->add_syscall_entry("waitid", this->make_sys_func(sys_waitid));
     this->add_syscall_entry("openat", this->make_sys_func(sys_openat, ARION_FILE_DESCRIPTOR_TYPE, ARION_RAW_STRING_TYPE, ARION_OPEN_MODE_TYPE, ARION_ACCESS_MODE_TYPE));
-    this->add_syscall_entry("newfstatat", this->make_sys_func(sys_newfstatat, ARION_FILE_DESCRIPTOR_TYPE, ARION_RAW_STRING_TYPE, ARION_STRUCT_STAT_TYPE, ARION_INT_TYPE));
+    this->add_syscall_entry("newfstatat", this->make_sys_func(sys_newfstatat, ARION_FILE_DESCRIPTOR_TYPE, ARION_RAW_STRING_TYPE, ARION_STRUCT_STAT_TYPE, ARION_FILE_AT_FLAG_TYPE));
     this->add_syscall_entry("renameat", this->make_sys_func(sys_renameat));
     this->add_syscall_entry("readlinkat", this->make_sys_func(sys_readlinkat));
     this->add_syscall_entry("pselect6", this->make_sys_func(sys_pselect6));
@@ -544,8 +545,8 @@ void LinuxSyscallManager::init_syscall_funcs()
     this->add_syscall_entry("getcpu", this->make_sys_func(sys_getcpu));
     this->add_syscall_entry("renameat2", this->make_sys_func(sys_renameat2));
     this->add_syscall_entry("getrandom", this->make_sys_func(sys_getrandom));
-    this->add_syscall_entry("statx", this->make_sys_func(sys_statx));
-    this->add_syscall_entry("clone3", this->make_sys_func(sys_clone3));
+    this->add_syscall_entry("statx", this->make_sys_func(sys_statx, ARION_FILE_DESCRIPTOR_TYPE, ARION_RAW_STRING_TYPE, ARION_FILE_AT_FLAG_TYPE, ARION_STATX_MASK_TYPE, ARION_STRUCT_STATX_TYPE));
+    this->add_syscall_entry("clone3", this->make_sys_func(sys_clone3, ARION_STRUCT_CLONE_ARGS_TYPE));
     this->add_syscall_entry("set_robust_list",
                             this->make_sys_func(sys_set_robust_list));
     this->add_syscall_entry("rseq", this->make_sys_func(sys_rseq));
@@ -557,6 +558,8 @@ void LinuxSyscallManager::print_syscall(std::shared_ptr<Arion> arion, std::strin
                                         std::vector<std::shared_ptr<ArionType>> signature, std::vector<SYS_PARAM> func_params,
                                         uint64_t syscall_ret)
 {
+    if(arion->logger->get_log_level() > ARION_LOG_LEVEL::DEBUG)
+        return;
     colorstream msg;
     msg << ARION_LOG_COLOR::CYAN << "SYSCALL" << ARION_LOG_COLOR::WHITE << " -> " << ARION_LOG_COLOR::RED << sys_name
         << ARION_LOG_COLOR::WHITE << "(";

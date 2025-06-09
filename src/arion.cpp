@@ -162,6 +162,8 @@ std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program_args
                                            std::vector<std::string> program_env, std::string cwd,
                                            std::unique_ptr<Config> config)
 {
+    if(!ArionTypeRegistry::instance().is_initialized())
+        ArionTypeRegistry::instance().init_types();
     if (!program_args.size())
         throw InvalidArgumentException("Program arguments must at least contain target name.");
     std::shared_ptr<Arion> arion = std::make_shared<Arion>();

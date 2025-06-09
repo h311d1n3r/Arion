@@ -104,6 +104,7 @@ uint64_t sys_futex(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     ADDR uaddr2 = params.at(4);
     uint32_t val3 = params.at(5);
 
+    // TODO: Use 32-bit time structure
     uint64_t ret_val = 0;
     int masked_op = op & (FUTEX_PRIVATE_FLAG - 1);
     if (masked_op == FUTEX_WAIT || masked_op == FUTEX_WAIT_BITSET)

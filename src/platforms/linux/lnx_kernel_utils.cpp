@@ -1,10 +1,10 @@
 #include <arion/arion.hpp>
 #include <arion/common/global_defs.hpp>
 #include <arion/platforms/linux/lnx_kernel_utils.hpp>
-#include <errno.h>
 #include <sys/mman.h>
 
 using namespace arion;
+using namespace arion_poly_struct;
 
 std::map<uint64_t, std::string> errno_names = {
     {0, "SUCCESS"},
@@ -139,14 +139,61 @@ std::map<uint64_t, std::string> errno_names = {
     {131, "ENOTRECOVERABLE"},
 };
 
-std::shared_ptr<arion_poly_struct::StatStructFactory> arion_poly_struct::STAT_STRUCT_FACTORY = std::make_shared<arion_poly_struct::StatStructFactory>();
-std::shared_ptr<arion_poly_struct::StatxStructFactory> arion_poly_struct::STATX_STRUCT_FACTORY = std::make_shared<arion_poly_struct::StatxStructFactory>();
+// Base types declaration
+std::shared_ptr<ArionErrCodeType> ARION_ERR_CODE_TYPE;
+std::shared_ptr<ArionFileDescriptorType> ARION_FILE_DESCRIPTOR_TYPE;
+std::shared_ptr<ArionAccessModeType> ARION_ACCESS_MODE_TYPE;
+std::shared_ptr<ArionOpenModeType> ARION_OPEN_MODE_TYPE;
+std::shared_ptr<ArionFileATFlagType> ARION_FILE_AT_FLAG_TYPE;
+std::shared_ptr<ArionStatxMaskType> ARION_STATX_MASK_TYPE;
+std::shared_ptr<ArionStatxAttrsType> ARION_STATX_ATTRS_TYPE;
+std::shared_ptr<ArionProtFlagType> ARION_PROT_FLAG_TYPE;
+std::shared_ptr<ArionMmapFlagType> ARION_MMAP_FLAG_TYPE;
+std::shared_ptr<ArionSeekWhenceType> ARION_SEEK_WHENCE_TYPE;
+std::shared_ptr<ArionFutexOpType> ARION_FUTEX_OP_TYPE;
+std::shared_ptr<ArionCloneFlagType> ARION_CLONE_FLAG_TYPE;
+std::shared_ptr<ArionSignalType> ARION_SIGNAL_TYPE;
+std::shared_ptr<ArionFileModeType> ARION_FILE_MODE_TYPE;
 
-std::shared_ptr<ArionErrCodeType> ARION_ERR_CODE_TYPE = std::make_shared<ArionErrCodeType>();
-std::shared_ptr<ArionFileDescriptorType> ARION_FILE_DESCRIPTOR_TYPE = std::make_shared<ArionFileDescriptorType>();
-std::shared_ptr<ArionAccessModeType> ARION_ACCESS_MODE_TYPE = std::make_shared<ArionAccessModeType>();
-std::shared_ptr<ArionOpenModeType> ARION_OPEN_MODE_TYPE = std::make_shared<ArionOpenModeType>();
-std::shared_ptr<ArionStructStatType> ARION_STRUCT_STAT_TYPE = std::make_shared<ArionStructStatType>();
+// Struct factories declaration
+std::shared_ptr<StatStructFactory> arion_poly_struct::STAT_STRUCT_FACTORY;
+std::shared_ptr<StatxStructFactory> arion_poly_struct::STATX_STRUCT_FACTORY;
+std::shared_ptr<TimespecStructFactory> arion_poly_struct::TIMESPEC_STRUCT_FACTORY;
+std::shared_ptr<CloneArgsStructFactory> arion_poly_struct::CLONE_ARGS_STRUCT_FACTORY;
+
+// Struct types declaration
+std::shared_ptr<ArionStructStatType> arion_poly_struct::ARION_STRUCT_STAT_TYPE;
+std::shared_ptr<ArionStructStatxType> arion_poly_struct::ARION_STRUCT_STATX_TYPE;
+std::shared_ptr<ArionStructTimespecType> arion_poly_struct::ARION_STRUCT_TIMESPEC_TYPE;
+std::shared_ptr<ArionStructCloneArgsType> arion_poly_struct::ARION_STRUCT_CLONE_ARGS_TYPE;
+
+// Base types registration
+REGISTER_ARION_TYPE(ARION_ERR_CODE_TYPE, ArionErrCodeType, OS_BASE_TYPE_PRIORITY);
+REGISTER_ARION_TYPE(ARION_FILE_DESCRIPTOR_TYPE, ArionFileDescriptorType, OS_BASE_TYPE_PRIORITY);
+REGISTER_ARION_TYPE(ARION_ACCESS_MODE_TYPE, ArionAccessModeType, OS_BASE_TYPE_PRIORITY);
+REGISTER_ARION_TYPE(ARION_OPEN_MODE_TYPE, ArionOpenModeType, OS_BASE_TYPE_PRIORITY);
+REGISTER_ARION_TYPE(ARION_FILE_AT_FLAG_TYPE, ArionFileATFlagType, OS_BASE_TYPE_PRIORITY);
+REGISTER_ARION_TYPE(ARION_STATX_MASK_TYPE, ArionStatxMaskType, OS_BASE_TYPE_PRIORITY);
+REGISTER_ARION_TYPE(ARION_STATX_ATTRS_TYPE, ArionStatxAttrsType, OS_BASE_TYPE_PRIORITY);
+REGISTER_ARION_TYPE(ARION_PROT_FLAG_TYPE, ArionProtFlagType, OS_BASE_TYPE_PRIORITY);
+REGISTER_ARION_TYPE(ARION_MMAP_FLAG_TYPE, ArionMmapFlagType, OS_BASE_TYPE_PRIORITY);
+REGISTER_ARION_TYPE(ARION_SEEK_WHENCE_TYPE, ArionSeekWhenceType, OS_BASE_TYPE_PRIORITY);
+REGISTER_ARION_TYPE(ARION_FUTEX_OP_TYPE, ArionFutexOpType, OS_BASE_TYPE_PRIORITY);
+REGISTER_ARION_TYPE(ARION_CLONE_FLAG_TYPE, ArionCloneFlagType, OS_BASE_TYPE_PRIORITY);
+REGISTER_ARION_TYPE(ARION_SIGNAL_TYPE, ArionSignalType, OS_BASE_TYPE_PRIORITY);
+REGISTER_ARION_TYPE(ARION_FILE_MODE_TYPE, ArionFileModeType, OS_BASE_TYPE_PRIORITY);
+
+// Struct factories registration
+REGISTER_ARION_TYPE(STAT_STRUCT_FACTORY, StatStructFactory, OS_STRUCT_FACTORY_PRIORITY);
+REGISTER_ARION_TYPE(STATX_STRUCT_FACTORY, StatxStructFactory, OS_STRUCT_FACTORY_PRIORITY);
+REGISTER_ARION_TYPE(TIMESPEC_STRUCT_FACTORY, TimespecStructFactory, OS_STRUCT_FACTORY_PRIORITY);
+REGISTER_ARION_TYPE(CLONE_ARGS_STRUCT_FACTORY, CloneArgsStructFactory, OS_STRUCT_FACTORY_PRIORITY);
+
+// Struct types registration
+REGISTER_ARION_TYPE(ARION_STRUCT_STAT_TYPE, ArionStructStatType, OS_STRUCT_TYPE_PRIORITY);
+REGISTER_ARION_TYPE(ARION_STRUCT_STATX_TYPE, ArionStructStatxType, OS_STRUCT_TYPE_PRIORITY);
+REGISTER_ARION_TYPE(ARION_STRUCT_TIMESPEC_TYPE, ArionStructTimespecType, OS_STRUCT_TYPE_PRIORITY);
+REGISTER_ARION_TYPE(ARION_STRUCT_CLONE_ARGS_TYPE, ArionStructCloneArgsType, OS_STRUCT_TYPE_PRIORITY);
 
 std::string ArionErrCodeType::str(std::shared_ptr<Arion> arion, uint64_t val)
 {
@@ -161,6 +208,22 @@ std::string ArionFileDescriptorType::str(std::shared_ptr<Arion> arion, uint64_t 
     if(val == (uint32_t)AT_FDCWD)
         return "AT_FDCWD";
     return int_to_hex<uint64_t>(val);
+}
+
+std::string ArionProtFlagType::str(std::shared_ptr<Arion> arion, uint64_t val)
+{
+    if(!val)
+        return "PROT_NONE";
+    std::stringstream prot_ss;
+    if(val & PROT_GROWSDOWN) prot_ss << "GDOWN-";
+    if(val & PROT_GROWSUP) prot_ss << "GUP-";
+    if(val & PROT_READ) prot_ss << "R";
+    else prot_ss << "-";
+    if(val & PROT_WRITE) prot_ss << "W";
+    else prot_ss << "-";
+    if(val & PROT_EXEC) prot_ss << "X";
+    else prot_ss << "-";
+    return prot_ss.str();
 }
 
 PROT_FLAGS kernel_prot_to_arion_prot(int kflags)
