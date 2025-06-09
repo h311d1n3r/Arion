@@ -3,7 +3,7 @@ FROM ubuntu:22.04
 ARG VERSION=1.0.0
 
 ARG DEBIAN_FRONTEND="noninteractive"
-RUN apt update && apt install -y \
+RUN apt-get update -y && apt-get upgrade -y && apt-get install -y \
     git \
     gcc-multilib \
     g++-multilib \

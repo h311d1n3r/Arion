@@ -431,7 +431,7 @@ void LinuxSyscallManager::init_syscall_funcs()
     this->add_syscall_entry("rt_sigreturn", this->make_sys_func(sys_rt_sigreturn));
     this->add_syscall_entry("sigreturn", this->make_sys_func(sys_sigreturn));
     this->add_syscall_entry("ioctl", this->make_sys_func(sys_ioctl));
-    this->add_syscall_entry("pread64", this->make_sys_func(sys_pread64));
+    this->add_syscall_entry("pread64", this->make_sys_func(sys_pread64, ARION_FILE_DESCRIPTOR_TYPE, ARION_INT_TYPE, ARION_INT_TYPE, ARION_INT_TYPE));
     this->add_syscall_entry("pwrite64", this->make_sys_func(sys_pwrite64));
     this->add_syscall_entry("readv", this->make_sys_func(sys_readv));
     this->add_syscall_entry("writev", this->make_sys_func(sys_writev));
@@ -462,7 +462,7 @@ void LinuxSyscallManager::init_syscall_funcs()
     this->add_syscall_entry("clone", this->make_sys_func(sys_clone, ARION_CLONE_FLAG_TYPE, ARION_INT_TYPE, ARION_INT_TYPE, ARION_INT_TYPE, ARION_INT_TYPE));
     this->add_syscall_entry("fork", this->make_sys_func(sys_fork));
     this->add_syscall_entry("execve", this->make_sys_func(sys_execve));
-    this->add_syscall_entry("exit", this->make_sys_func(sys_exit));
+    this->add_syscall_entry("exit", this->make_sys_func(sys_exit, ARION_ERR_CODE_TYPE));
     this->add_syscall_entry("wait4", this->make_sys_func(sys_wait4));
     this->add_syscall_entry("kill", this->make_sys_func(sys_kill));
     this->add_syscall_entry("newuname", this->make_sys_func(sys_newuname));

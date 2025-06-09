@@ -35,7 +35,8 @@ std::string ArionFlagType::str(std::shared_ptr<Arion> arion, uint64_t val)
         auto flag_it = this->flag_map.find(flag_val);
         if(flag_it == this->flag_map.end())
             res += int_to_hex<uint64_t>(flag_val);
-        res += flag_it->second;
+        else
+            res += flag_it->second;
     }
     return res;
 }
