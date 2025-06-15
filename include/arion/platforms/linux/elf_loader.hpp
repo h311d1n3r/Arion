@@ -8,7 +8,7 @@
 #include <memory>
 #include <string>
 
-#define LINUX_64_LOAD_ADDR 0x555555554000
+#define LINUX_64_LOAD_ADDR 0x400000
 #define LINUX_64_VVAR_ADDR 0x7ffff7fba000
 #define LINUX_64_VVAR_SZ 0x4000
 #define LINUX_64_VDSO_ADDR 0x7ffff7fbe000
@@ -19,7 +19,7 @@
 #define LINUX_64_VSYSCALL_ADDR 0xffffffffff600000
 #define LINUX_64_VSYSCALL_ALIGN 0x1000
 
-#define LINUX_32_LOAD_ADDR 0x8048000
+#define LINUX_32_LOAD_ADDR 0x8040000
 #define LINUX_32_VVAR_ADDR 0xf7fba000
 #define LINUX_32_VVAR_SZ 0x4000
 #define LINUX_32_VDSO_ADDR 0xf7fbe000
