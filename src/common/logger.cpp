@@ -87,7 +87,7 @@ void Logger::refresh_prefix(bool force)
         if(pid && tid)
             cs << ARION_LOG_COLOR::RED << "PID=" << int_to_hex<pid_t>(pid) << ARION_LOG_COLOR::WHITE << ", " << ARION_LOG_COLOR::MAGENTA << "TID=" << int_to_hex<pid_t>(tid);
         else
-            cs << ARION_LOG_COLOR::RED << "INIT";
+            cs << ARION_LOG_COLOR::RED << "NOT RUNNING";
         cs << ARION_LOG_COLOR::WHITE << "] [%^%l%$] %v";
         this->logger->set_pattern(cs.str());
     }

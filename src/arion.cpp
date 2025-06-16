@@ -172,7 +172,9 @@ std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program_args
     arion->program_env = program_env;
     std::string program_path = program_args.at(0);
     arion->logger = Logger::initialize(arion, arion->config->get_field<ARION_LOG_LEVEL>("log_lvl"));
-    arion->logger->info(std::string("Initializing Arion instance for image \"") + program_path + std::string("\"."));
+    colorstream init_msg;
+    init_msg << ARION_LOG_COLOR::WHITE << "Initializing Arion instance for image " << ARION_LOG_COLOR::GREEN << "\"" << program_path << "\"" << ARION_LOG_COLOR::WHITE << ".";
+    arion->logger->info(init_msg.str());
     arion->fs = FileSystemManager::initialize(arion, fs_path, cwd);
     if (!std::filesystem::exists(program_path))
         throw FileNotFoundException(program_path);
@@ -194,7 +196,9 @@ std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program_args
 
 Arion::~Arion()
 {
-    this->logger->debug("Destroying Arion instance.");
+    colorstream destroy_msg;
+    destroy_msg << ARION_LOG_COLOR::WHITE << "Destroying Arion instance.";
+    this->logger->info(destroy_msg.str());
 
     std::shared_ptr<ArionGroup> group = this->group.lock();
     if (group && group->has_arion_instance(this->pid) && group->get_arion_instance(this->pid).get() == this)
