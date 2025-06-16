@@ -182,6 +182,9 @@ uint64_t sys_open(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     int32_t flags = params.at(1);
     uint16_t mode = params.at(2);
 
+    if (arion->abi->get_attrs()->arch == CPU_ARCH::ARM_ARCH)
+        flags &= ~0x20000;
+
     std::string fs_path = arion->fs->get_fs_path();
     std::string file_name = arion->mem->read_c_string(file_name_addr);
     std::string file_name_fs = arion->fs->to_fs_path(file_name);
