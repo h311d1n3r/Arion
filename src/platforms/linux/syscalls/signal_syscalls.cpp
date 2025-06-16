@@ -81,6 +81,9 @@ uint64_t sys_kill(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     pid_t pid = params.at(0);
     int sig = params.at(1);
 
+    if(!arion->get_group()->has_arion_instance(pid))
+        return -ESRCH;
+
     std::shared_ptr<Arion> target = arion->get_group()->get_arion_instance(pid);
 
     target->send_signal(arion->get_pid(), sig);

@@ -176,6 +176,15 @@ bool SignalManager::handle_sighandler(pid_t source_pid, int signo)
     return true;
 }
 
+void SignalManager::print_signal(std::shared_ptr<Arion> arion, std::string sig_name) {
+    if(arion->logger->get_log_level() > ARION_LOG_LEVEL::DEBUG)
+        return;
+
+    colorstream msg;
+    msg << ARION_LOG_COLOR::BLUE << "SIGNAL" << ARION_LOG_COLOR::WHITE << " -> " << ARION_LOG_COLOR::MAGENTA << sig_name;
+    arion->logger->debug(msg.str());
+}
+
 void SignalManager::handle_signal(pid_t source_pid, int signo)
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
@@ -186,7 +195,7 @@ void SignalManager::handle_signal(pid_t source_pid, int signo)
     if (signal_it == this->signals.end())
         throw UnknownSignalException(arion->get_pid(), arion->threads->get_running_tid(), signo);
     std::string signal_desc = signal_it->second;
-    arion->logger->debug("SIGNAL -> " + signal_desc);
+    this->print_signal(arion, signal_desc);
 
     if (this->handle_sighandler(source_pid, signo))
         return;

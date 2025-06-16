@@ -26,6 +26,7 @@ class SignalManager
   public:
     static std::unique_ptr<SignalManager> initialize(std::weak_ptr<Arion> arion);
     SignalManager(std::weak_ptr<Arion> arion);
+    void print_signal(std::shared_ptr<Arion> arion, std::string sig_name);
     void handle_signal(pid_t source_pid, int signo);
     void wait_for_sig(pid_t target_tid, pid_t source_pid, arion::ADDR wait_status_addr);
     bool has_sighandler(int signo);

@@ -71,7 +71,7 @@ uint64_t sys_getppid(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params
 
 uint64_t sys_getpgrp(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
 {
-    return getpgrp();
+    return arion->get_pgid();
 }
 
 uint64_t sys_setsid(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)

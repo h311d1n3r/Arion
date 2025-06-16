@@ -388,10 +388,15 @@ uint64_t sys_ioctl(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
         arg = (ADDR)win_sz;
         break;
     }
-    default:
-        arion->logger->warn(std::string("Unsupported IOCTL value: ") + int_to_hex<unsigned long>(cmd) +
-                            std::string("."));
+    case TIOCGPGRP: {
+        return arion->get_pgid();
+    }
+    default: {
+        colorstream warn_msg;
+        warn_msg << ARION_LOG_COLOR::ORANGE << "Unsupported IOCTL value: " << ARION_LOG_COLOR::MAGENTA << int_to_hex<uint64_t>(cmd) << ARION_LOG_COLOR::ORANGE << std::string(".");
+        arion->logger->warn(warn_msg.str());
         return 0;
+        }
     }
 
     int ioctl_ret = syscall(SYS_ioctl, arion_fd, cmd, arg);

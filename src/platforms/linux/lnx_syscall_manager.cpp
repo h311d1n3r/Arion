@@ -583,8 +583,9 @@ void LinuxSyscallManager::process_syscall(std::shared_ptr<Arion> arion)
     std::shared_ptr<SYSCALL_FUNC> func = arion->syscalls->get_syscall_func(sysno);
     if (!func)
     {
-        arion->logger->warn(std::string("No associated syscall for sysno ") + int_to_hex<uint64_t>(sysno) +
-                            std::string("."));
+        colorstream warn_msg;
+        warn_msg << ARION_LOG_COLOR::ORANGE << "No associated syscall for sysno " << ARION_LOG_COLOR::MAGENTA << int_to_hex<uint64_t>(sysno) << ARION_LOG_COLOR::ORANGE << std::string(".");
+        arion->logger->warn(warn_msg.str());
         arion->abi->write_arch_reg(syscall_ret_reg, 0);
         return;
     }
