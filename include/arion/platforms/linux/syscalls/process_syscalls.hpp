@@ -8,6 +8,7 @@ uint64_t sys_fork(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params);
 uint64_t sys_execve(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params);
 uint64_t sys_exit(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params);
 uint64_t sys_futex(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params);
+uint64_t sys_futex_time64(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params);
 uint64_t sys_set_tid_address(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params);
 uint64_t sys_set_thread_area(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params);
 uint64_t sys_set_tls(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params);

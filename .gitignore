@@ -1,9 +1,14 @@
+#cmake build file
 build/
-build.dev/
-build.release/
+build_*/
+
+#misc
 .cache/
 .idea/
-cmake-build-release/
-cmake-build-debug/
 lab/
 compile_commands.json
+*.i64
+*.dev.sh
+
+#custom build file
+*.o

@@ -1,11 +1,9 @@
+#include <arion/archs/abi_x86.hpp>
 #include <arion/arion.hpp>
 #include <arion/common/global_excepts.hpp>
 #include <arion/common/threading_manager.hpp>
-#include <arion/platforms/linux/lnx_kernel_utils.hpp>
 #include <arion/unicorn/unicorn.h>
-#include <asm/ldt.h>
 #include <memory>
-#include <sys/wait.h>
 
 using namespace arion;
 
@@ -58,7 +56,7 @@ std::vector<BYTE> serialize_arion_thread(ARION_THREAD *arion_t)
     }
     else
         srz_thread.insert(srz_thread.end(), (BYTE *)&EMPTY, (BYTE *)&EMPTY + sizeof(size_t));
-    srz_thread.insert(srz_thread.end(), (BYTE *)&arion_t->lock, (BYTE *)&arion_t->lock + sizeof(int64_t));
+    srz_thread.insert(srz_thread.end(), (BYTE *)&arion_t->tls_addr, (BYTE *)&arion_t->tls_addr + sizeof(ADDR));
 
     return srz_thread;
 }
@@ -97,20 +95,13 @@ ARION_THREAD *deserialize_arion_thread(std::vector<BYTE> srz_thread)
         }
         arion_t->regs_state = std::move(regs_state);
     }
-    memcpy(&arion_t->lock, srz_thread.data() + off, sizeof(int64_t));
+    memcpy(&arion_t->tls_addr, srz_thread.data() + off, sizeof(ADDR));
+    off += sizeof(ADDR);
 
     return arion_t;
 }
 
 std::map<pid_t, std::vector<std::unique_ptr<ARION_TGROUP_ENTRY>>> ThreadingManager::thread_groups;
-
-std::map<int, std::string> ThreadingManager::sync_signals = {{SIGFPE, "SIGFPE (Floating-point exception)"},
-                                                             {SIGILL, "SIGILL (Illegal instruction)"},
-                                                             {SIGSEGV, "SIGSEGV (Segmentation fault)"},
-                                                             {SIGBUS, "SIGBUS (Bus error)"},
-                                                             {SIGTRAP, "SIGTRAP (Trace or breakpoint trap)"},
-                                                             {SIGABRT, "SIGABRT (Abort)"},
-                                                             {SIGSYS, "SIGSYS (Bad system call)"}};
 
 std::unique_ptr<ThreadingManager> ThreadingManager::initialize(std::weak_ptr<Arion> arion)
 {
@@ -122,50 +113,11 @@ ThreadingManager::ThreadingManager(std::weak_ptr<Arion> arion) : arion(arion)
     std::shared_ptr<Arion> arion_ = arion.lock();
     if (!arion_)
         throw ExpiredWeakPtrException("Arion");
-
-    arion_->hooks->hook_intr(ThreadingManager::intr_hook);
-    arion_->hooks->hook_mem_read_unmapped(ThreadingManager::invalid_memory_hook);
-    arion_->hooks->hook_mem_write_unmapped(ThreadingManager::invalid_memory_hook);
-    arion_->hooks->hook_mem_fetch_unmapped(ThreadingManager::invalid_memory_hook);
-    arion_->hooks->hook_mem_read_prot(ThreadingManager::invalid_memory_hook);
-    arion_->hooks->hook_mem_write_prot(ThreadingManager::invalid_memory_hook);
-    arion_->hooks->hook_mem_fetch_prot(ThreadingManager::invalid_memory_hook);
-    arion_->hooks->hook_insn_invalid(ThreadingManager::invalid_insn_hook);
 }
 
 ThreadingManager::~ThreadingManager()
 {
     this->clear_threads();
-}
-
-void ThreadingManager::intr_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data)
-{
-    if (arion->abi->has_idt_entry(intno))
-    {
-        CPU_INTR intr = arion->abi->get_idt_entry(intno);
-        int signo = AbiManager::get_signal_from_intr(intr);
-        arion->send_signal(arion->get_pid(), signo);
-        arion->threads->handle_sync_signals();
-    }
-}
-
-bool ThreadingManager::invalid_memory_hook(std::shared_ptr<Arion> arion, uc_mem_type access, uint64_t addr, int size,
-                                           int64_t val, void *user_data)
-{
-    arion->send_signal(arion->get_pid(), SIGSEGV);
-    arion->threads->handle_sync_signals();
-    arion->sync_threads(); // Since Unicorn 2, returning true is not enough to gracefully recover from memory access
-                           // error
-    return true;
-}
-
-bool ThreadingManager::invalid_insn_hook(std::shared_ptr<Arion> arion, void *user_data)
-{
-    arion->send_signal(arion->get_pid(), SIGILL);
-    arion->threads->handle_sync_signals();
-    arion->sync_threads(); // Since Unicorn 2, returning true is not enough to gracefully recover from memory access
-                           // error
-    return true;
 }
 
 pid_t ThreadingManager::gen_next_id()
@@ -236,7 +188,6 @@ pid_t ThreadingManager::clone_thread(uint64_t flags, ADDR new_sp, ADDR new_tls, 
 
     REG pc_reg = arion->abi->get_attrs()->regs.pc;
     REG sp_reg = arion->abi->get_attrs()->regs.sp;
-    REG tls_reg = arion->abi->get_attrs()->regs.tls;
     REG ret_reg = arion->abi->get_attrs()->syscalling_conv.ret_reg;
     ADDR pc = arion->abi->read_arch_reg(pc_reg);
     if (!new_sp)
@@ -250,62 +201,14 @@ pid_t ThreadingManager::clone_thread(uint64_t flags, ADDR new_sp, ADDR new_tls, 
         size_t sys_instr_sz = arion->mem->read_instrs(pc, 1).at(0).size;
         next_pc = pc + sys_instr_sz;
     }
-    CPU_ARCH arch = arion->abi->get_attrs()->arch;
-    switch (arch)
-    {
-    case CPU_ARCH::X8664_ARCH: {
-        if (!new_tls || !(flags & CLONE_SETTLS))
-            new_tls = arion->abi->read_arch_reg(tls_reg);
-        break;
-    }
-    case CPU_ARCH::X86_ARCH: {
-        if (new_tls)
-        {
-            struct user_desc *u_desc = (struct user_desc *)malloc(sizeof(struct user_desc));
-            std::vector<BYTE> u_desc_data = arion->mem->read(new_tls, sizeof(struct user_desc));
-            memcpy(u_desc, u_desc_data.data(), u_desc_data.size());
-            arion->gdt_manager->insert_entry(u_desc->entry_number, u_desc->base_addr, u_desc->limit,
-                                             ARION_A_PRESENT | ARION_A_DATA | ARION_A_DATA_WRITABLE | ARION_A_PRIV_3 |
-                                                 ARION_A_DIR_CON_BIT,
-                                             ARION_F_PROT_32);
-            free(u_desc);
-        }
-        break;
-    }
-    default:
-        break;
-    }
-    std::unique_ptr<std::map<REG, RVAL>> regs = arion->abi->init_thread_regs(next_pc, new_sp, new_tls);
+    if (!new_tls || (flags & CLONE_SETTLS))
+        new_tls = arion->abi->dump_tls();
+    else if (arion->abi->get_attrs()->arch == CPU_ARCH::X86_ARCH)
+        new_tls = static_cast<AbiManagerX86 *>(arion->abi.get())->new_tls(new_tls);
+    std::unique_ptr<std::map<REG, RVAL>> regs = arion->abi->init_thread_regs(next_pc, new_sp);
     regs->operator[](ret_reg).r64 = 0;
     std::unique_ptr<ARION_THREAD> arion_t =
-        std::make_unique<ARION_THREAD>(exit_signal, flags, child_tid_addr, parent_tid_addr, std::move(regs));
-
-    switch (arch)
-    {
-    case CPU_ARCH::ARM_ARCH: {
-        if (new_tls)
-        {
-            uc_arm_cp_reg cp15 = {0};
-            cp15.cp = 15;
-            cp15.is64 = 0;
-            cp15.sec = 0;
-            cp15.crn = 13;
-            cp15.crm = 0;
-            cp15.opc1 = 0;
-            cp15.opc2 = 3;
-            cp15.val = new_tls;
-
-            uc_err uc_reg_err = uc_reg_write(arion->uc, UC_ARM_REG_CP_REG, &cp15); // TPIDRURO
-            if (uc_reg_err != UC_ERR_OK)
-                throw UnicornRegWriteException(uc_reg_err);
-
-            arion->mem->write_ptr(LINUX_32_ARM_GETTLS_ADDR + 0x10, new_tls);
-        }
-        break;
-    }
-    default:
-        break;
-    }
+        std::make_unique<ARION_THREAD>(exit_signal, flags, child_tid_addr, parent_tid_addr, std::move(regs), new_tls);
 
     pid_t parent_tid = arion->threads->get_running_tid();
     pid_t child_tid = arion->threads->add_thread_entry(std::move(arion_t));
@@ -332,7 +235,9 @@ void ThreadingManager::switch_to_thread(pid_t tid)
     std::unique_ptr<ARION_THREAD> next_thread = std::move(next_thread_it->second);
 
     curr_thread->regs_state = arion->abi->dump_regs();
+    curr_thread->tls_addr = arion->abi->dump_tls();
     arion->abi->load_regs(std::move(next_thread->regs_state));
+    arion->abi->load_tls(next_thread->tls_addr);
 
     this->threads_map[this->running_tid] = std::move(curr_thread);
     this->threads_map[tid] = std::move(next_thread);
@@ -360,7 +265,7 @@ void ThreadingManager::futex_wait(pid_t tid, ADDR futex_addr, uint32_t futex_bit
     if (this->futex_list.find(futex_addr) == this->futex_list.end())
         this->futex_list[futex_addr] = new std::vector<std::unique_ptr<ARION_FUTEX>>();
     this->futex_list[futex_addr]->push_back(std::move(futex));
-    arion_t->lock++;
+    arion_t->stopped = true;
     this->threads_map[tid] = std::move(arion_t);
 }
 
@@ -369,249 +274,29 @@ void ThreadingManager::futex_wait_curr(ADDR futex_addr, uint32_t futex_bitmask)
     this->futex_wait(running_tid, futex_addr, futex_bitmask);
 }
 
-bool ThreadingManager::signal_wait(pid_t tid, pid_t target_pid)
+bool ThreadingManager::signal_wait(pid_t target_tid, pid_t source_pid, arion::ADDR wait_status_addr)
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    if (target_pid == arion->get_pid())
-        throw WaitSameProcessException(target_pid);
-    if (this->sigwait_list.find(tid) != this->sigwait_list.end())
-        throw ThreadAlreadySigWaitingException(arion->get_pid(), tid);
-    if (target_pid > 0 && !arion->get_group()->has_arion_instance(target_pid))
+    if (source_pid == arion->get_pid())
+        throw WaitSameProcessException(source_pid);
+    if (source_pid > 0 && !arion->get_group()->has_arion_instance(source_pid))
         return false;
-    if (target_pid == 0 && !arion->get_pgid_children(arion->get_pgid()).size())
+    if (source_pid == 0 && !arion->get_pgid_children(arion->get_pgid()).size())
         return false;
-    if (target_pid == -1 && !arion->get_children().size())
+    if (source_pid == -1 && !arion->get_children().size())
         return false;
-    if (target_pid < -1 && !arion->get_pgid_children(-target_pid).size())
+    if (source_pid < -1 && !arion->get_pgid_children(-source_pid).size())
         return false;
-    this->sigwait_list[tid] = target_pid;
-    std::unique_ptr<ARION_THREAD> arion_t = std::move(this->threads_map.at(tid));
-    arion_t->lock++;
-    this->threads_map[tid] = std::move(arion_t);
+    arion->signals->wait_for_sig(target_tid, source_pid, wait_status_addr);
     return true;
 }
 
-bool ThreadingManager::signal_wait_curr(pid_t target_pid)
+bool ThreadingManager::signal_wait_curr(pid_t source_pid, arion::ADDR wait_status_addr)
 {
-    return this->signal_wait(this->running_tid, target_pid);
-}
-
-bool ThreadingManager::has_sighandler(int signo)
-{
-    return this->sighandlers.find(signo) != this->sighandlers.end();
-}
-
-std::shared_ptr<struct ksigaction> ThreadingManager::get_sighandler(int signo)
-{
-    std::shared_ptr<Arion> arion = this->arion.lock();
-    if (!arion)
-        throw ExpiredWeakPtrException("Arion");
-
-    auto sighandler_it = this->sighandlers.find(signo);
-    if (sighandler_it == this->sighandlers.end())
-        throw NoSighandlerForSignalException(arion->get_pid(), this->running_tid, signo);
-    return sighandler_it->second;
-}
-
-void ThreadingManager::set_sighandler(int signo, std::shared_ptr<struct ksigaction> sighandler)
-{
-    this->sighandlers[signo] = sighandler;
-}
-
-void ThreadingManager::handle_sync_signals()
-{
-    std::shared_ptr<Arion> arion = this->arion.lock();
-    if (!arion)
-        throw ExpiredWeakPtrException("Arion");
-
-    REG pc_reg = arion->abi->get_attrs()->regs.pc;
-    REG sp_reg = arion->abi->get_attrs()->regs.sp;
-    std::vector<std::shared_ptr<SIGNAL>> new_pending_signals;
-    for (std::shared_ptr<SIGNAL> sig : arion->pending_signals)
-    {
-        auto sync_sig_it = ThreadingManager::sync_signals.find(sig->signo);
-        if (sync_sig_it == ThreadingManager::sync_signals.end())
-        {
-            new_pending_signals.push_back(sig);
-            continue;
-        }
-        std::string sig_name = sync_sig_it->second;
-        auto sighandler_it = this->sighandlers.find(sig->signo);
-        if (sighandler_it == this->sighandlers.end())
-            throw UnhandledSyncSignalException(arion->get_pid(), this->running_tid, sig_name);
-        std::shared_ptr<struct ksigaction> handler = sighandler_it->second;
-        std::shared_ptr<ARION_CONTEXT> ctxt = arion->context->save();
-        ADDR curr_pc = arion->abi->read_arch_reg(pc_reg);
-        arion->abi->write_arch_reg(pc_reg, (ADDR)handler->handler);
-        // In both cases (with and without SA_SIGINFO), first parameter is signal number
-        std::vector<REG> param_regs = arion->abi->get_attrs()->calling_conv.param_regs;
-        arion->abi->write_arch_reg(param_regs.at(0), (uint64_t)sig->signo);
-        if (handler->flags & SA_SIGINFO)
-        {
-            std::vector<REG> param_regs = arion->abi->get_attrs()->calling_conv.param_regs;
-            arion->abi->write_arch_reg(param_regs.at(0), (uint64_t)sig->signo);
-            std::unique_ptr<siginfo_t> info = std::make_unique<siginfo_t>();
-            // TODO : Fill siginfo_t struct with missing fields
-            info->si_signo = sig->signo;
-            info->si_pid = sig->source_pid;
-            uint64_t sp = arion->abi->read_arch_reg(sp_reg);
-            sp -= sizeof(siginfo_t);
-            arion->abi->write_arch_reg(sp_reg, sp);
-            arion->mem->write(sp, (BYTE *)info.get(), sizeof(siginfo_t));
-            arion->abi->write_arch_reg(param_regs.at(1), sp);
-            arion->abi->write_arch_reg(param_regs.at(2), 0); // TODO : Provide ucontext here
-        }
-        arion->mem->stack_push(curr_pc);
-        std::unique_ptr<ARION_THREAD> arion_t = std::move(this->threads_map.at(this->running_tid));
-        arion_t->lock = 0;
-        this->threads_map[this->running_tid] = std::move(arion_t);
-
-        // Manipulating PC register directly for sighandler call disturbs current tb cache, we clear it
-        uc_err uc_rm_cache_err = uc_ctl_remove_cache(arion->uc, curr_pc, curr_pc + 1);
-        if (uc_rm_cache_err != UC_ERR_OK)
-            throw UnicornCtlException(uc_rm_cache_err);
-
-        std::shared_ptr<HOOK_ID> hook_id = std::make_shared<HOOK_ID>();
-        *hook_id = arion->hooks->hook_code(
-            [hook_id, ctxt](std::shared_ptr<Arion> arion, ADDR addr, size_t sz, void *user_data) {
-                arion->context->restore(ctxt);
-                arion->hooks->unhook(*hook_id);
-            },
-            curr_pc, curr_pc);
-    }
-    arion->pending_signals = new_pending_signals;
-}
-
-void ThreadingManager::handle_async_signals()
-{
-    std::shared_ptr<Arion> arion = this->arion.lock();
-    if (!arion)
-        throw ExpiredWeakPtrException("Arion");
-
-    std::unique_ptr<ARION_THREAD> arion_t = std::move(this->threads_map.at(this->running_tid));
-    bool locked = arion_t->lock > 0;
-    this->threads_map[this->running_tid] = std::move(arion_t);
-    if (locked)
-        return;
-    REG pc_reg = arion->abi->get_attrs()->regs.pc;
-    REG sp_reg = arion->abi->get_attrs()->regs.sp;
-    std::vector<std::shared_ptr<SIGNAL>> new_pending_signals;
-    for (std::shared_ptr<SIGNAL> sig : arion->pending_signals)
-    {
-        if (ThreadingManager::sync_signals.find(sig->signo) != ThreadingManager::sync_signals.end())
-        {
-            new_pending_signals.push_back(sig);
-            continue;
-        }
-        auto sighandler_it = this->sighandlers.find(sig->signo);
-        if (sighandler_it == this->sighandlers.end())
-        {
-            std::unique_ptr<ARION_THREAD> arion_t = std::move(this->threads_map.at(this->running_tid));
-            if (arion_t->paused)
-                arion_t->paused = false;
-            else
-                new_pending_signals.push_back(sig);
-            this->threads_map[this->running_tid] = std::move(arion_t);
-            continue;
-        }
-        std::shared_ptr<struct ksigaction> handler = sighandler_it->second;
-        std::shared_ptr<ARION_CONTEXT> ctxt = arion->context->save();
-        ADDR curr_pc = arion->abi->read_arch_reg(pc_reg);
-        arion->abi->write_arch_reg(pc_reg, (ADDR)handler->handler);
-        // In both cases (with and without SA_SIGINFO), first parameter is signal number
-        std::vector<REG> param_regs = arion->abi->get_attrs()->calling_conv.param_regs;
-        arion->abi->write_arch_reg(param_regs.at(0), (uint64_t)sig->signo);
-        if (handler->flags & SA_SIGINFO)
-        {
-            std::unique_ptr<siginfo_t> info = std::make_unique<siginfo_t>();
-            memset(info.get(), 0, sizeof(siginfo_t));
-            // TODO : Fill siginfo_t struct with missing fields
-            info->si_signo = sig->signo;
-            info->si_pid = sig->source_pid;
-            uint64_t sp = arion->abi->read_arch_reg(sp_reg);
-            sp -= sizeof(siginfo_t);
-            arion->abi->write_arch_reg(sp_reg, sp);
-            arion->mem->write(sp, (BYTE *)info.get(), sizeof(siginfo_t));
-            arion->abi->write_arch_reg(param_regs.at(1), sp);
-            arion->abi->write_arch_reg(param_regs.at(2), 0); // TODO : Provide ucontext here
-        }
-        arion->mem->stack_push(curr_pc);
-
-        // Manipulating PC register directly for sighandler call disturbs current tb cache, we clear it
-        uc_err uc_rm_cache_err = uc_ctl_remove_cache(arion->uc, curr_pc, curr_pc + 1);
-        if (uc_rm_cache_err != UC_ERR_OK)
-            throw UnicornCtlException(uc_rm_cache_err);
-
-        std::shared_ptr<HOOK_ID> hook_id = std::make_shared<HOOK_ID>();
-        *hook_id = arion->hooks->hook_code(
-            [hook_id, ctxt](std::shared_ptr<Arion> arion, ADDR addr, size_t sz, void *user_data) {
-                arion->context->restore(ctxt);
-                arion->hooks->unhook(*hook_id);
-            },
-            curr_pc, curr_pc);
-    }
-    arion->pending_signals = new_pending_signals;
-}
-
-void ThreadingManager::handle_wait_signals()
-{
-    std::shared_ptr<Arion> arion = this->arion.lock();
-    if (!arion)
-        throw ExpiredWeakPtrException("Arion");
-
-    auto wait_it = this->sigwait_list.find(this->running_tid);
-    if (wait_it == this->sigwait_list.end())
-        return;
-    pid_t target_pid = wait_it->second;
-    std::vector<std::shared_ptr<SIGNAL>> new_pending_signals;
-    bool found_sig = false;
-    REG ret_reg = arion->abi->get_attrs()->syscalling_conv.ret_reg;
-    for (std::shared_ptr<SIGNAL> sig : arion->pending_signals)
-    {
-        if (found_sig)
-        {
-            new_pending_signals.push_back(sig);
-            continue;
-        }
-        std::weak_ptr<Arion> source_instance_weak = arion->get_group()->get_arion_instance(sig->source_pid);
-        std::shared_ptr<Arion> source_instance = source_instance_weak.lock();
-        if (!arion)
-            throw ExpiredWeakPtrException("Arion");
-        if (target_pid == sig->source_pid ||
-            (target_pid == 0 && arion->has_child(sig->source_pid) &&
-             arion->get_pgid() == source_instance->get_pgid()) ||
-            (target_pid == -1 && arion->has_child(sig->source_pid)) ||
-            (target_pid < -1 && arion->has_child(sig->source_pid) && source_instance->get_pgid() == -target_pid))
-        {
-            found_sig = true;
-            std::unique_ptr<ARION_THREAD> arion_t = std::move(this->threads_map.at(running_tid));
-            arion_t->lock--;
-            if (arion_t->wait_status_addr)
-            {
-                arion->mem->write_val(arion_t->wait_status_addr, 0, sizeof(int));
-                arion_t->wait_status_addr = 0;
-            }
-            arion->abi->write_arch_reg(ret_reg, sig->source_pid);
-            this->threads_map[running_tid] = std::move(arion_t);
-            if (sig->signo == SIGCHLD)
-                arion->remove_child(sig->source_pid);
-        }
-        else
-            new_pending_signals.push_back(sig);
-    }
-    arion->pending_signals = new_pending_signals;
-    if (found_sig)
-        this->sigwait_list.erase(this->running_tid);
-}
-
-void ThreadingManager::handle_signals()
-{
-    this->handle_sync_signals();
-    this->handle_async_signals();
-    this->handle_wait_signals();
+    return this->signal_wait(this->running_tid, source_pid, wait_status_addr);
 }
 
 size_t ThreadingManager::futex_wake(ADDR futex_addr, uint32_t futex_bitmask)
@@ -627,7 +312,7 @@ size_t ThreadingManager::futex_wake(ADDR futex_addr, uint32_t futex_bitmask)
         if (futex->futex_bitmask & futex_bitmask)
         {
             std::unique_ptr<ARION_THREAD> arion_t = std::move(this->threads_map.at(futex->tid));
-            arion_t->lock--;
+            arion_t->stopped = false;
             this->threads_map[futex->tid] = std::move(arion_t);
             awaken_count++;
         }
@@ -647,10 +332,10 @@ bool ThreadingManager::is_curr_locked()
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    if (arion->is_zombie)
+    if (arion->is_stopped() || arion->is_zombie())
         return true;
     std::unique_ptr<ARION_THREAD> arion_t = std::move(this->threads_map.at(running_tid));
-    bool curr_locked = arion_t->paused || arion_t->lock > 0;
+    bool curr_locked = arion_t->stopped;
     this->threads_map[running_tid] = std::move(arion_t);
     return curr_locked;
 }

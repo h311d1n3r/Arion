@@ -5,20 +5,24 @@
 #include <arion/capstone/capstone.h>
 #include <arion/common/abi_manager.hpp>
 #include <arion/common/code_tracer.hpp>
-#include <arion/common/config.hpp>
 #include <arion/common/context_manager.hpp>
 #include <arion/common/file_system_manager.hpp>
 #include <arion/common/global_defs.hpp>
 #include <arion/common/hooks_manager.hpp>
 #include <arion/common/logger.hpp>
 #include <arion/common/memory_manager.hpp>
+#include <arion/common/signal_manager.hpp>
 #include <arion/common/socket_manager.hpp>
 #include <arion/common/threading_manager.hpp>
+#include <arion/common/config.hpp>
+#include <arion/common/baremetal.hpp>
 #include <arion/keystone/keystone.h>
 #include <arion/platforms/linux/elf_loader.hpp>
 #include <arion/platforms/linux/elf_parser.hpp>
 #include <arion/platforms/linux/lnx_syscall_manager.hpp>
 #include <arion/unicorn/unicorn.h>
+#include <vector>
+#include <variant>
 #include <exception>
 #include <memory>
 #include <optional>
@@ -69,10 +73,15 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     std::optional<arion::ADDR> start = std::nullopt, end = std::nullopt;
     bool running = false;
     bool sync = false;
+    bool stopped = false;
+    bool zombie = false;
     pid_t pid;
     pid_t pgid;
+    void new_instance_common(std::string fs_path, std::vector<std::string> program_env, 
+                             std::string cwd, std::unique_ptr<Config> config);
     void init_engines(arion::CPU_ARCH arch);
     void init_program(std::shared_ptr<ElfParser> prog_parser);
+    void init_baremetal_program();
     void init_dynamic_program(std::shared_ptr<ElfParser> prog_parser);
     void init_static_program(std::shared_ptr<ElfParser> prog_parser);
     void close_engines();
@@ -84,22 +93,27 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     std::unique_ptr<SocketManager> sock;
     std::unique_ptr<HooksManager> hooks;
     std::unique_ptr<ThreadingManager> threads;
+    std::unique_ptr<SignalManager> signals;
     std::unique_ptr<ContextManager> context;
     std::unique_ptr<LinuxSyscallManager> syscalls;
     std::unique_ptr<GdtManager> gdt_manager;
     std::unique_ptr<CodeTracer> tracer;
     std::unique_ptr<Logger> logger;
     std::unique_ptr<Config> config;
+    std::unique_ptr<Baremetal> baremetal;
     std::unique_ptr<LOADER_PARAMS> loader_params;
     std::vector<std::shared_ptr<arion::SIGNAL>> pending_signals;
     uc_engine *uc;
     std::vector<ks_engine *> ks;
     std::vector<csh *> cs;
-    bool is_zombie = false;
     static std::shared_ptr<Arion> ARION_EXPORT
-    new_instance(std::vector<std::string> program_args, std::string fs_path = "/",
+    new_instance(std::vector<std::string> program, std::string fs_path = "/",
                  std::vector<std::string> program_env = std::vector<std::string>(), std::string cwd = "",
-                 std::unique_ptr<Config> config = std::move(std::make_unique<Config>()));
+                 std::unique_ptr<Config> config = std::make_unique<Config>());
+    static std::shared_ptr<Arion> ARION_EXPORT
+    new_instance(std::unique_ptr<Baremetal> baremetal, std::string fs_path = "/",
+                  std::vector<std::string> program_env = std::vector<std::string>(), std::string cwd = "",
+                  std::unique_ptr<Config> config = std::make_unique<Config>());
     ~Arion();
     void ARION_EXPORT set_run_bounds(std::optional<arion::ADDR> start = std::nullopt,
                                      std::optional<arion::ADDR> end = std::nullopt);
@@ -135,6 +149,11 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     std::shared_ptr<ArionGroup> ARION_EXPORT get_group();
     void set_group(std::shared_ptr<ArionGroup> group);
     void reset_group();
+    bool is_stopped();
+    void set_stopped();
+    void set_resumed();
+    bool is_zombie();
+    void set_zombie();
     void ARION_EXPORT send_signal(pid_t source_pid, int signo);
     void ARION_EXPORT run_gdbserver(uint32_t port);
 };

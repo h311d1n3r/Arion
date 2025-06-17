@@ -8,14 +8,26 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 PLATFORM=$1
 VERSION=$2
 
-if [[ -z "$PLATFORM" ]]; then
-    echo "Please specify target platform as parameter."
+if [[ -z "$PLATFORM" || -z "$VERSION" ]]; then
+    echo "Usage: $0 <platform|all> <version>"
     exit 1
 fi
 
-if [[ -z "$VERSION" ]]; then
-    echo "Please specify build version as parameter."
-    exit 1
+if [[ "$PLATFORM" == "all" ]]; then
+    declare -a pids=()
+
+    for DOCKERFILE in "$PROJECT_ROOT"/docker/Dockerfile.*; do
+        BASE_NAME=$(basename "$DOCKERFILE")
+        TARGET_PLATFORM="${BASE_NAME#Dockerfile.}"
+        "$0" "$TARGET_PLATFORM" "$VERSION" &
+        pids+=($!)
+    done
+
+    for pid in "${pids[@]}"; do
+        wait $pid || echo "Build with PID $pid failed"
+    done
+
+    exit 0
 fi
 
 if [[ "$PLATFORM" =~ ^(ubuntu|debian) ]]; then

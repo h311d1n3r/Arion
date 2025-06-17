@@ -47,7 +47,6 @@ class GdtManager
   private:
     arion::ADDR gdt_addr;
     std::weak_ptr<Arion> arion;
-    uint16_t setup_selector(uint8_t idx, uint16_t flags);
     uint64_t setup_entry(uint32_t base, uint32_t limit, uint8_t access, uint8_t flags);
 
   public:
@@ -55,6 +54,8 @@ class GdtManager
     GdtManager(std::weak_ptr<Arion> arion) : arion(arion) {};
     void setup();
     uint8_t find_free_idx(uint8_t start_idx);
+    uint16_t setup_selector(uint8_t idx, uint16_t flags);
+    uint32_t get_segment_base(uint16_t selector);
     void insert_entry(uint8_t idx, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags);
 };
 

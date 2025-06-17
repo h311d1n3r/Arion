@@ -19,3 +19,6 @@
 [submodule "lib/udbserver"]
 	path = lib/udbserver
 	url = https://github.com/bet4it/udbserver.git
+[submodule "lib/googletest"]
+	path = lib/googletest
+	url = https://github.com/google/googletest.git

@@ -398,7 +398,7 @@ inline std::map<uint64_t, std::string> NAME_BY_SYSCALL_NO = {{0, "restart_syscal
                                                              {419, "mq_timedreceive"},
                                                              {420, "semtimedop"},
                                                              {421, "rt_sigtimedwait"},
-                                                             {422, "futex"},
+                                                             {422, "futex_time64"},
                                                              {423, "sched_rr_get_interval"},
                                                              {424, "pidfd_send_signal"},
                                                              {425, "io_uring_setup"},
@@ -521,7 +521,7 @@ inline std::map<uint64_t, CPU_INTR> IDT = {{0, DIVIDE_ERROR},
                                            {18, MACHINE_CHECK},
                                            {19, SIMD_FLOATING_POINT_ERROR}};
 
-inline ABI_REGISTERS ABI_REGS = ABI_REGISTERS(UC_X86_REG_EIP, UC_X86_REG_ESP, UC_X86_REG_INVALID);
+inline ABI_REGISTERS ABI_REGS = ABI_REGISTERS(UC_X86_REG_EIP, UC_X86_REG_ESP);
 
 inline ABI_CALLING_CONVENTION ABI_CALLING_CONV = ABI_CALLING_CONVENTION(UC_X86_REG_EAX, {});
 
@@ -558,9 +558,11 @@ class AbiManagerX86 : public AbiManager
         : AbiManager(std::make_shared<ABI_ATTRIBUTES>(arion_x86::ABI_ATTRS), arion_x86::ARCH_REGS,
                      arion_x86::ARCH_REGS_SZ, arion_x86::CTXT_REGS, arion_x86::IDT, true) {};
 
-    std::array<arion::BYTE, VSYSCALL_ENTRY_SZ> gen_vsyscall_entry(uint64_t syscall_no);
+    uint16_t new_tls(arion::ADDR udesc_addr);
     ks_engine *curr_ks();
     csh *curr_cs();
+    arion::ADDR dump_tls();
+    void load_tls(arion::ADDR new_tls);
 };
 
 #endif // ARION_ABI_X86_HPP

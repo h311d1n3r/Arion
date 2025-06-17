@@ -1603,6 +1603,9 @@ uint64_t sys_openat(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     int32_t flags = params.at(2);
     uint16_t mode = params.at(3);
 
+    if (arion->abi->get_attrs()->arch == CPU_ARCH::ARM_ARCH)
+        flags &= ~0x20000;
+
     std::string file_name = arion->mem->read_c_string(file_name_addr);
     std::string abs_file_path = get_path_at(arion, dfd, file_name);
     int fd = open(abs_file_path.c_str(), flags, mode);
@@ -2138,7 +2141,14 @@ uint64_t sys_statx(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     if (statx_ret == -1)
         statx_ret = -errno;
     else
-        arion->mem->write(statx_buf_addr, (BYTE *)&statx_buf, sizeof(struct stat));
+    {
+        STRUCT_ID statx_id = STATX_STRUCT_FACTORY.feed_host(&statx_buf);
+        size_t arch_statx_len;
+        BYTE *arch_statx = STATX_STRUCT_FACTORY.build(statx_id, arion->abi->get_attrs()->arch, arch_statx_len);
+        arion->mem->write(statx_buf_addr, arch_statx, arch_statx_len);
+        free(arch_statx);
+        STATX_STRUCT_FACTORY.release_struct(statx_id);
+    }
     return statx_ret;
 }
 
@@ -2156,7 +2166,8 @@ uint64_t sys_getxattr(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
 
     std::vector<BYTE> value(size);
     ssize_t ret = getxattr(path.c_str(), name.c_str(), value.data(), size);
-    if (ret == -1) {
+    if (ret == -1)
+    {
         ret = -errno;
     }
 
@@ -2182,7 +2193,8 @@ uint64_t sys_lgetxattr(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> para
 
     std::vector<BYTE> value(size);
     ssize_t ret = lgetxattr(path.c_str(), name.c_str(), value.data(), size);
-    if (ret == -1) {
+    if (ret == -1)
+    {
         ret = -errno;
     }
 

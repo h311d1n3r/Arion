@@ -20,14 +20,14 @@ void ElfParser::process()
 {
     if (!std::filesystem::exists(this->elf_path))
         throw FileNotFoundException(this->elf_path);
-    std::unique_ptr<const LIEF::ELF::Binary> elf = LIEF::ELF::Parser::parse(this->elf_path);
+    std::unique_ptr<LIEF::ELF::Binary> elf = LIEF::ELF::Parser::parse(this->elf_path);
     if (!elf)
         throw ElfParsingException(this->elf_path);
     elf = this->parse_general_data(std::move(elf));
     elf = this->parse_segments(std::move(elf));
 }
 
-std::unique_ptr<const LIEF::ELF::Binary> ElfParser::parse_general_data(std::unique_ptr<const LIEF::ELF::Binary> elf)
+std::unique_ptr<LIEF::ELF::Binary> ElfParser::parse_general_data(std::unique_ptr<LIEF::ELF::Binary> elf)
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
@@ -64,7 +64,7 @@ std::unique_ptr<const LIEF::ELF::Binary> ElfParser::parse_general_data(std::uniq
     return std::move(elf);
 }
 
-std::unique_ptr<const LIEF::ELF::Binary> ElfParser::parse_segments(std::unique_ptr<const LIEF::ELF::Binary> elf)
+std::unique_ptr<LIEF::ELF::Binary> ElfParser::parse_segments(std::unique_ptr<LIEF::ELF::Binary> elf)
 {
     for (const LIEF::ELF::Segment &lief_seg : elf->segments())
     {

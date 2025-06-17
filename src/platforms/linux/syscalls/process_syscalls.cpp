@@ -1,3 +1,4 @@
+#include <arion/archs/abi_x86.hpp>
 #include <arion/archs/x86/gdt_manager.hpp>
 #include <arion/arion.hpp>
 #include <arion/common/global_defs.hpp>
@@ -34,25 +35,6 @@ pid_t fork_process(std::shared_ptr<Arion> arion)
     forked_process->abi->write_arch_reg(pc_reg, next_pc);
     pid_t forked_pid = arion->add_child(forked_process);
     arion->hooks->trigger_arion_hook(ARION_HOOK_TYPE::FORK_HOOK, forked_process);
-
-    // Quick & dirty fix : coprocessor registers should be placed in context and better TLS management should be
-    // provided
-    if (arion->abi->get_attrs()->arch == CPU_ARCH::ARM64_ARCH)
-    {
-        uc_arm64_cp_reg tpidr = {0};
-        tpidr.crn = 13;
-        tpidr.crm = 0;
-        tpidr.op0 = 3;
-        tpidr.op1 = 3;
-        tpidr.op2 = 2;
-        uc_err uc_reg_err = uc_reg_read(arion->uc, UC_ARM64_REG_CP_REG, &tpidr); // TPIDR_EL0
-        if (uc_reg_err != UC_ERR_OK)
-            throw UnicornRegReadException(uc_reg_err);
-
-        uc_reg_err = uc_reg_write(forked_process->uc, UC_ARM64_REG_CP_REG, &tpidr); // TPIDR_EL0
-        if (uc_reg_err != UC_ERR_OK)
-            throw UnicornRegWriteException(uc_reg_err);
-    }
 
     if (!hooks_intr)
     {
@@ -128,8 +110,7 @@ uint64_t sys_exit(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
 
     REG pc_reg = arion->abi->get_attrs()->regs.pc;
     REG ret_reg = arion->abi->get_attrs()->syscalling_conv.ret_reg;
-    ADDR pc = arion->abi->read_arch_reg(pc_reg);
-    size_t sys_instr_sz = arion->mem->read_instrs(pc, 1).at(0).size;
+    ADDR exit_pc = arion->abi->read_arch_reg(pc_reg);
     pid_t curr_tid = arion->threads->get_running_tid();
     std::unique_ptr<ARION_THREAD> arion_t = std::move(arion->threads->threads_map.at(curr_tid));
     if (arion_t->flags & CLONE_CHILD_CLEARTID)
@@ -140,8 +121,12 @@ uint64_t sys_exit(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     arion->threads->threads_map[curr_tid] = std::move(arion_t);
     arion->threads->remove_thread_entry(curr_tid);
     arion->sync_threads();
-    pc = arion->abi->read_arch_reg(pc_reg);
-    arion->abi->write_reg(pc_reg, pc - sys_instr_sz);
+    if (!arion->abi->does_hook_intr())
+    {
+        size_t sys_instr_sz = arion->mem->read_instrs(exit_pc, 1).at(0).size;
+        ADDR pc = arion->abi->read_arch_reg(pc_reg);
+        arion->abi->write_reg(pc_reg, pc - sys_instr_sz);
+    }
     return arion->abi->read_arch_reg(ret_reg);
 }
 
@@ -154,6 +139,42 @@ uint64_t sys_futex(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     ADDR uaddr2 = params.at(4);
     uint32_t val3 = params.at(5);
 
+    uint64_t ret_val = 0;
+    int masked_op = op & (FUTEX_PRIVATE_FLAG - 1);
+    if (masked_op == FUTEX_WAIT || masked_op == FUTEX_WAIT_BITSET)
+    {
+        uint32_t uaddr_val = 0;
+        if (uaddr)
+            uaddr_val = arion->mem->read_val(uaddr, 4);
+        if (uaddr_val != val)
+            return EAGAIN;
+        if (masked_op == FUTEX_WAIT)
+            arion->threads->futex_wait_curr(uaddr, ARION_MAX_U32);
+        else
+            arion->threads->futex_wait_curr(uaddr, val3);
+        ret_val = 0;
+    }
+    else if (masked_op == FUTEX_WAKE || masked_op == FUTEX_WAKE_BITSET)
+    {
+        if (masked_op == FUTEX_WAKE)
+            ret_val = arion->threads->futex_wake(uaddr, ARION_MAX_U32);
+        else
+            ret_val = arion->threads->futex_wake(uaddr, val3);
+    }
+    arion->sync_threads();
+    return ret_val;
+}
+
+uint64_t sys_futex_time64(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+{
+    ADDR uaddr = params.at(0);
+    int op = params.at(1);
+    uint32_t val = params.at(2);
+    ADDR time_addr = params.at(3);
+    ADDR uaddr2 = params.at(4);
+    uint32_t val3 = params.at(5);
+
+    // TODO: Use 64-bit time structure
     uint64_t ret_val = 0;
     int masked_op = op & (FUTEX_PRIVATE_FLAG - 1);
     if (masked_op == FUTEX_WAIT || masked_op == FUTEX_WAIT_BITSET)
@@ -198,26 +219,13 @@ uint64_t sys_set_thread_area(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM
 
     if (!u_info_addr)
         return EFAULT;
-    struct user_desc *u_info = (struct user_desc *)malloc(sizeof(struct user_desc));
-    std::vector<BYTE> data = arion->mem->read(u_info_addr, sizeof(struct user_desc));
-    memcpy(u_info, data.data(), data.size());
 
+    ADDR new_tls = u_info_addr;
     if (arion->abi->get_attrs()->arch == CPU_ARCH::X86_ARCH)
-    {
-        if (u_info->entry_number == 0xFFFFFFFF)
-            u_info->entry_number = arion->gdt_manager->find_free_idx(12);
-        arion->gdt_manager->insert_entry(u_info->entry_number, u_info->base_addr, u_info->limit,
-                                         ARION_A_PRESENT | ARION_A_DATA | ARION_A_DATA_WRITABLE | ARION_A_PRIV_3 |
-                                             ARION_A_DIR_CON_BIT,
-                                         ARION_F_PROT_32);
-        if (!arion->mem->is_mapped(u_info->base_addr))
-            arion->mem->map(u_info->base_addr,
-                            u_info->limit_in_pages ? (u_info->limit * ARION_SYSTEM_PAGE_SZ) : u_info->limit, 0x6,
-                            "[TLS]");
-    }
+        new_tls = static_cast<AbiManagerX86 *>(arion->abi.get())->new_tls(u_info_addr);
 
-    arion->mem->write(u_info_addr, (BYTE *)u_info, sizeof(struct user_desc));
-    free(u_info);
+    arion->abi->load_tls(new_tls);
+
     return 0;
 }
 
@@ -225,28 +233,10 @@ uint64_t sys_set_tls(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params
 {
     ADDR tls_addr = params.at(0);
 
-    switch (arion->abi->get_attrs()->arch)
-    {
-    case CPU_ARCH::ARM_ARCH: {
-        uc_arm_cp_reg cp15 = {0};
-        cp15.cp = 15;
-        cp15.is64 = 0;
-        cp15.sec = 0;
-        cp15.crn = 13;
-        cp15.crm = 0;
-        cp15.opc1 = 0;
-        cp15.opc2 = 3;
-        cp15.val = tls_addr;
+    if (arion->abi->get_attrs()->arch == CPU_ARCH::X86_ARCH)
+        tls_addr = static_cast<AbiManagerX86 *>(arion->abi.get())->new_tls(tls_addr);
 
-        uc_err uc_reg_err = uc_reg_write(arion->uc, UC_ARM_REG_CP_REG, &cp15); // TPIDRURO
-        if (uc_reg_err != UC_ERR_OK)
-            throw UnicornRegWriteException(uc_reg_err);
-
-        arion->mem->write_ptr(LINUX_32_ARM_GETTLS_ADDR + 0x10, tls_addr);
-    }
-    default:
-        break;
-    }
+    arion->abi->load_tls(tls_addr);
 
     return tls_addr;
 }

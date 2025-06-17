@@ -39,6 +39,8 @@ uint64_t Logger::gen_next_id()
 std::unique_ptr<Logger> Logger::initialize(std::weak_ptr<Arion> arion, ARION_LOG_LEVEL lvl)
 {
     std::unique_ptr<Logger> logger = std::make_unique<Logger>(arion);
+    logger->curr_pid = 0;
+    logger->curr_tid = 0;
     logger->set_log_level(lvl);
     return std::move(logger);
 }
@@ -49,8 +51,7 @@ Logger::Logger(std::weak_ptr<Arion> arion) : arion(arion)
     std::shared_ptr<Arion> arion_ = this->arion.lock();
     if (!arion_)
         throw ExpiredWeakPtrException("Arion");
-    this->logger = spdlog::stdout_color_mt(int_to_hex<uint64_t>(this->id) + std::string(" - PID ") +
-                                           int_to_hex<pid_t>(arion_->get_pid()));
+    this->logger = spdlog::stdout_color_mt(int_to_hex<uint64_t>(this->id));
 }
 
 void Logger::set_log_level(ARION_LOG_LEVEL lvl)
@@ -67,32 +68,60 @@ ARION_LOG_LEVEL Logger::get_log_level()
     return this->log_lvl;
 }
 
+void Logger::refresh_prefix()
+{
+    std::shared_ptr<Arion> arion_ = this->arion.lock();
+    if (!arion_)
+        return;
+    if (!arion_->threads)
+        return;
+    pid_t pid = arion_->get_pid();
+    pid_t tid = arion_->threads->get_running_tid();
+    if (pid != this->curr_pid || tid != this->curr_tid)
+    {
+        this->curr_pid = pid;
+        this->curr_tid = tid;
+        this->logger->set_pattern(
+            std::string("[%Y-%m-%d %H:%M:%S.%e] [") + int_to_hex<uint64_t>(this->id) + std::string(", ") +
+            ((pid && tid)
+                 ? (std::string("PID=") + int_to_hex<pid_t>(pid) + std::string(", TID=") + int_to_hex<pid_t>(tid))
+                 : "INIT") +
+            std::string("] [%^%l%$] %v"));
+    }
+}
+
 void Logger::trace(std::string str)
 {
+    this->refresh_prefix();
     this->logger->trace(str);
 }
 
 void Logger::debug(std::string str)
 {
+    this->refresh_prefix();
     this->logger->debug(str);
 }
 
 void Logger::info(std::string str)
 {
+    this->refresh_prefix();
     this->logger->info(str);
 }
 
 void Logger::warn(std::string str)
 {
+    this->refresh_prefix();
     this->logger->warn(str);
 }
 
 void Logger::error(std::string str)
 {
+    this->refresh_prefix();
     this->logger->error(str);
 }
 
 void Logger::critical(std::string str)
 {
+    this->refresh_prefix();
     this->logger->critical(str);
 }

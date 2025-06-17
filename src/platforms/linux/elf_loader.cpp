@@ -1,15 +1,16 @@
+#include <arion/archs/abi_x86-64.hpp>
 #include <arion/arion.hpp>
 #include <arion/common/abi_manager.hpp>
 #include <arion/common/global_defs.hpp>
 #include <arion/common/global_excepts.hpp>
 #include <arion/common/memory_manager.hpp>
 #include <arion/platforms/linux/elf_loader.hpp>
+#include <arion/unicorn/unicorn.h>
 #include <arion/utils/fs_utils.hpp>
 #include <arion/utils/math_utils.hpp>
 #include <array>
 #include <cstdint>
 #include <memory>
-#include <arion/unicorn/unicorn.h>
 #include <unistd.h>
 
 using namespace arion;
@@ -64,8 +65,8 @@ ADDR ElfLoader::map_elf_segments(const std::shared_ptr<ElfParser> parser, ADDR l
     {
         ADDR seg_data_start_addr = seg->virt_addr + load_addr;
         ADDR seg_start_addr = seg_data_start_addr;
-        seg_start_addr -= (seg_start_addr % seg->align);
         ADDR seg_end_addr = seg_start_addr + seg->virt_sz;
+        seg_start_addr -= (seg_start_addr % seg->align);
         seg_end_addr += (seg->align - (seg_end_addr % seg->align));
         size_t data_seg_sz = seg_end_addr - seg_data_start_addr;
         if (seg->phy_sz > data_seg_sz)
@@ -245,6 +246,8 @@ ADDR ElfLoader::map_vsyscall()
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
+    if (arion->abi->get_attrs()->arch != CPU_ARCH::X8664_ARCH) // For now, only x86-64 implements vsyscall segment
+        return 0;
 
     std::array<std::string, 3> vsyscalls = {"gettimeofday", "time", "getcpu"};
 
@@ -257,7 +260,8 @@ ADDR ElfLoader::map_vsyscall()
     {
         std::string syscall_name = vsyscalls.at(syscall_i);
         uint64_t syscall_no = arion->abi->get_syscall_no_by_name(syscall_name);
-        std::array<BYTE, VSYSCALL_ENTRY_SZ> syscall_asm = arion->abi->gen_vsyscall_entry(syscall_no);
+        std::array<BYTE, VSYSCALL_ENTRY_SZ> syscall_asm =
+            static_cast<AbiManagerX8664 *>(arion->abi.get())->gen_vsyscall_entry(syscall_no);
         arion->mem->write(vsyscall_addr + syscall_i * VSYSCALL_ENTRY_SZ, syscall_asm.data(),
                           syscall_asm.size() * sizeof(BYTE));
     }
@@ -305,8 +309,11 @@ void ElfLoader::init_main_thread(std::shared_ptr<LOADER_PARAMS> params)
         entry_addr = this->is_pie ? this->prog_parser->entry : this->prog_parser->entry + params->load_address;
 
     ADDR sp_val = arion->abi->read_arch_reg(sp);
-    std::unique_ptr<std::map<REG, RVAL>> regs = arion->abi->init_thread_regs(entry_addr, sp_val, 0);
-    std::unique_ptr<ARION_THREAD> arion_t = std::make_unique<ARION_THREAD>(0, 0, 0, 0, std::move(regs));
+    std::unique_ptr<std::map<REG, RVAL>> regs = arion->abi->init_thread_regs(entry_addr, sp_val);
+    std::unique_ptr<ARION_THREAD> arion_t = std::make_unique<ARION_THREAD>(0, 0, 0, 0, std::move(regs), 0);
     arion->abi->load_regs(std::move(arion_t->regs_state));
+    if (arion->abi->get_attrs()->arch == CPU_ARCH::ARM_ARCH) {
+        arion->abi->set_thumb_state(entry_addr);
+    }
     arion->threads->add_thread_entry(std::move(arion_t));
 }
