@@ -2,7 +2,7 @@ FROM fedora:40
 
 ARG VERSION=1.0.0
 
-RUN dnf update -y && dnf install -y \
+RUN dnf update -y && dnf upgrade -y && dnf install -y \
     git \
     gcc \
     g++ \
