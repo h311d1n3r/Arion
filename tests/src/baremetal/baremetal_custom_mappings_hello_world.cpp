@@ -1,6 +1,6 @@
 #include <arion/arion.hpp>
 #include <arion_test/common.hpp>
-#include <arion/platforms/linux/baremetal_loader.hpp>
+#include <arion/platforms/linux/lnx_baremetal_loader.hpp>
 #include <arion_test/shellcode.hpp>
 
 TEST_P(ArionMultiarchTest, BaremetalCustomMappingsHelloWorld)

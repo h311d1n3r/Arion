@@ -1,5 +1,5 @@
-#ifndef ARION_BAREMETAL_LOADER_HPP
-#define ARION_BAREMETAL_LOADER_HPP
+#ifndef ARION_LNX_BAREMETAL_LOADER_HPP
+#define ARION_LNX_BAREMETAL_LOADER_HPP
 
 #include <arion/common/global_defs.hpp>
 #include <arion/common/memory_manager.hpp>
@@ -23,7 +23,7 @@ using namespace arion;
 #define LINUX_RWX 1 | 2 | 4
 #define LINUX_RW 2 | 4
 
-class BaremetalLoader
+class LinuxBaremetalLoader
 {
   private:
     const std::vector<std::string> program_env;
@@ -36,10 +36,10 @@ class BaremetalLoader
     void ARION_EXPORT init_main_thread(std::shared_ptr<LOADER_PARAMS> params);
     ADDR ARION_EXPORT map_stack(std::shared_ptr<LOADER_PARAMS> params);
 
-    BaremetalLoader(std::weak_ptr<Arion> arion, const std::vector<std::string> program_env)
+    LinuxBaremetalLoader(std::weak_ptr<Arion> arion, const std::vector<std::string> program_env)
         : arion(arion), program_env(program_env) {};
-    ARION_EXPORT BaremetalLoader(std::weak_ptr<Arion> arion) : arion(arion) {};
+    ARION_EXPORT LinuxBaremetalLoader(std::weak_ptr<Arion> arion) : arion(arion) {};
     std::unique_ptr<LOADER_PARAMS> process();
 };
 
-#endif // ARION_BAREMETAL_LOADER_HPP
+#endif // ARION_LNX_BAREMETAL_LOADER_HPP

@@ -5,7 +5,7 @@
 #include <arion/unicorn/x86.h>
 #include <arion/utils/convert_utils.hpp>
 #include <arion/platforms/linux/elf_loader.hpp>
-#include <arion/platforms/linux/baremetal_loader.hpp>
+#include <arion/platforms/linux/lnx_baremetal_loader.hpp>
 #include <iostream>
 #include <memory>
 #include <filesystem>

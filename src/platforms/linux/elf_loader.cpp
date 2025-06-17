@@ -22,12 +22,12 @@ std::unique_ptr<LOADER_PARAMS> ElfLoader::process()
         throw ExpiredWeakPtrException("Arion");
 
     std::shared_ptr<LOADER_PARAMS> params = std::make_shared<LOADER_PARAMS>();
-    this->is_pie = prog_parser->type == ELF_FILE_TYPE::EXEC;
-    this->is_static = !!this->interp_parser;
+    this->is_pie = prog_parser->type == ELF_FILE_TYPE::DYN;
+    this->is_static = !this->interp_parser;
     this->arch_sz = arion->abi->get_attrs()->arch_sz;
     params->load_address = this->map_elf_segments(
-        this->prog_parser, this->is_pie ? 0 : (this->arch_sz == 64 ? LINUX_64_LOAD_ADDR : LINUX_32_LOAD_ADDR));
-    if (this->is_static)
+        this->prog_parser, this->is_pie ? (this->arch_sz == 64 ? LINUX_64_LOAD_ADDR : LINUX_32_LOAD_ADDR) : 0);
+    if (!this->is_static)
         params->interp_address = this->map_elf_segments(
             this->interp_parser, this->arch_sz == 64 ? LINUX_64_INTERP_ADDR : LINUX_32_INTERP_ADDR);
 
@@ -155,9 +155,9 @@ void ElfLoader::setup_auxv(std::unique_ptr<AUXV_PTRS> auxv_ptrs, std::shared_ptr
     this->write_auxv_entry(AUXV::AT_EUID, geteuid());
     this->write_auxv_entry(AUXV::AT_UID, getuid());
     this->write_auxv_entry(AUXV::AT_ENTRY,
-                           this->is_pie ? this->prog_parser->entry : this->prog_parser->entry + params->load_address);
+                           this->is_pie ? this->prog_parser->entry + params->load_address : this->prog_parser->entry);
     this->write_auxv_entry(AUXV::AT_FLAGS, 0);
-    this->write_auxv_entry(AUXV::AT_BASE, this->is_static
+    this->write_auxv_entry(AUXV::AT_BASE, (!this->is_static)
                                               ? (this->arch_sz == 64 ? LINUX_64_INTERP_ADDR : LINUX_32_INTERP_ADDR)
                                               : params->load_address);
     this->write_auxv_entry(AUXV::AT_PHNUM, this->prog_parser->prog_headers_n);
@@ -303,17 +303,14 @@ void ElfLoader::init_main_thread(std::shared_ptr<LOADER_PARAMS> params)
     REG sp = arion->abi->get_attrs()->regs.sp;
 
     ADDR entry_addr;
-    if (this->is_static)
+    if (!this->is_static)
         entry_addr = this->interp_parser->entry + params->interp_address;
     else
-        entry_addr = this->is_pie ? this->prog_parser->entry : this->prog_parser->entry + params->load_address;
+        entry_addr = this->is_pie ? this->prog_parser->entry + params->load_address : this->prog_parser->entry;
 
     ADDR sp_val = arion->abi->read_arch_reg(sp);
     std::unique_ptr<std::map<REG, RVAL>> regs = arion->abi->init_thread_regs(entry_addr, sp_val);
-    std::unique_ptr<ARION_THREAD> arion_t = std::make_unique<ARION_THREAD>(0, 0, 0, 0, std::move(regs), 0);
+    std::unique_ptr<ARION_THREAD> arion_t = std::make_unique<ARION_THREAD>(0, 0, 0, 0, 0, std::move(regs), 0);
     arion->abi->load_regs(std::move(arion_t->regs_state));
-    if (arion->abi->get_attrs()->arch == CPU_ARCH::ARM_ARCH) {
-        arion->abi->set_thumb_state(entry_addr);
-    }
     arion->threads->add_thread_entry(std::move(arion_t));
 }

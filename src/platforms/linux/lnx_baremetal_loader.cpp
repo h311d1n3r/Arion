@@ -5,7 +5,7 @@
 #include <arion/common/memory_manager.hpp>
 #include <arion/utils/fs_utils.hpp>
 #include <arion/utils/math_utils.hpp>
-#include <arion/platforms/linux/baremetal_loader.hpp>
+#include <arion/platforms/linux/lnx_baremetal_loader.hpp>
 #include <array>
 #include <cstdint>
 #include <memory>
@@ -14,7 +14,7 @@
 
 using namespace arion;
 
-std::unique_ptr<LOADER_PARAMS> BaremetalLoader::process()
+std::unique_ptr<LOADER_PARAMS> LinuxBaremetalLoader::process()
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
@@ -29,7 +29,7 @@ std::unique_ptr<LOADER_PARAMS> BaremetalLoader::process()
     return std::make_unique<LOADER_PARAMS>(*params.get());
 }
 
-ADDR BaremetalLoader::map_default_instance(std::shared_ptr<std::vector<uint8_t>> coderaw, ADDR load_addr)
+ADDR LinuxBaremetalLoader::map_default_instance(std::shared_ptr<std::vector<uint8_t>> coderaw, ADDR load_addr)
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
@@ -47,7 +47,7 @@ ADDR BaremetalLoader::map_default_instance(std::shared_ptr<std::vector<uint8_t>>
 
 }
 
-void BaremetalLoader::setup_envp(std::vector<ADDR> envp_ptrs)
+void LinuxBaremetalLoader::setup_envp(std::vector<ADDR> envp_ptrs)
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
@@ -58,7 +58,7 @@ void BaremetalLoader::setup_envp(std::vector<ADDR> envp_ptrs)
         arion->mem->stack_push(*envp_ptr_it);
 }
 
-ADDR BaremetalLoader::map_stack(std::shared_ptr<LOADER_PARAMS> params)
+ADDR LinuxBaremetalLoader::map_stack(std::shared_ptr<LOADER_PARAMS> params)
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
@@ -84,7 +84,7 @@ ADDR BaremetalLoader::map_stack(std::shared_ptr<LOADER_PARAMS> params)
     return stack_load_addr;
 }
 
-void BaremetalLoader::init_main_thread(std::shared_ptr<LOADER_PARAMS> params)
+void LinuxBaremetalLoader::init_main_thread(std::shared_ptr<LOADER_PARAMS> params)
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
@@ -99,8 +99,5 @@ void BaremetalLoader::init_main_thread(std::shared_ptr<LOADER_PARAMS> params)
     std::unique_ptr<std::map<REG, RVAL>> regs = arion->abi->init_thread_regs(entry_addr, sp_val);
     std::unique_ptr<ARION_THREAD> arion_t = std::make_unique<ARION_THREAD>(0, 0, 0, 0, std::move(regs), 0);
     arion->abi->load_regs(std::move(arion_t->regs_state));
-    if (arion->baremetal->arch == CPU_ARCH::ARM_ARCH) {
-        arion->abi->set_thumb_state(entry_addr);
-    }
     arion->threads->add_thread_entry(std::move(arion_t));
 }
