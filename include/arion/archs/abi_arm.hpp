@@ -655,6 +655,7 @@ class AbiManagerARM : public AbiManager
     csh *curr_cs();
     arion::ADDR dump_tls();
     void load_tls(arion::ADDR new_tls);
+    void prerun_hook(arion::ADDR& start) override;
 };
 
 #endif // ARION_ABI_ARM_HPP

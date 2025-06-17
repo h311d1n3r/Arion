@@ -160,9 +160,10 @@ class ARION_EXPORT AbiManager
     std::unique_ptr<std::map<arion::REG, arion::RVAL>> init_thread_regs(arion::ADDR pc, arion::ADDR sp);
     virtual ks_engine ARION_EXPORT *curr_ks() = 0;
     virtual csh ARION_EXPORT *curr_cs() = 0;
-    virtual void ARION_EXPORT setup() = 0;
+    virtual void setup() = 0;
     virtual arion::ADDR ARION_EXPORT dump_tls() = 0;
     virtual void ARION_EXPORT load_tls(arion::ADDR new_tls) = 0;
+    virtual void prerun_hook(arion::ADDR& start) {};
 
     template <typename T> T ARION_EXPORT read_reg(arion::REG reg)
     {

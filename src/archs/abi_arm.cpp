@@ -109,3 +109,8 @@ void AbiManagerARM::load_tls(ADDR new_tls)
 
     arion->mem->write_ptr(LINUX_32_ARM_GETTLS_ADDR + 0x10, new_tls);
 }
+
+void AbiManagerARM::prerun_hook(arion::ADDR& start) {
+    if(this->is_thumb())
+        start |= 1;
+}

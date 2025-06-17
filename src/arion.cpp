@@ -337,6 +337,7 @@ bool Arion::run_current()
         if (uc_ctl_err != UC_ERR_OK)
             throw UnicornCtlException(uc_ctl_err);
     }
+    this->abi->prerun_hook(pc_addr);
     uc_err uc_run_err = uc_emu_start(this->uc, pc_addr, this->end.value_or(0), 0,
                                      (multi_process || multi_thread) ? ARION_CYCLES_PER_THREAD : 0);
     pc_addr = this->abi->read_arch_reg(pc);
