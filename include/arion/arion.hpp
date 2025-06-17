@@ -80,7 +80,8 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
                  std::vector<std::string> program_env = std::vector<std::string>(), std::string cwd = "",
                  std::unique_ptr<Config> config = std::move(std::make_unique<Config>()));
     void init_engines(arion::CPU_ARCH arch);
-    void init_program(std::shared_ptr<ElfParser> prog_parser);
+    void init_file_program(std::shared_ptr<ElfParser> prog_parser);
+    void init_baremetal_program();
     void init_dynamic_program(std::shared_ptr<ElfParser> prog_parser);
     void init_static_program(std::shared_ptr<ElfParser> prog_parser);
     void close_engines();

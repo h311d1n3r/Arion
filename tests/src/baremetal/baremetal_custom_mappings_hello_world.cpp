@@ -62,7 +62,7 @@ TEST_P(ArionMultiarchTest, BaremetalCustomMappingsHelloWorld)
         arion_group->add_arion_instance(arion);
 
         std::shared_ptr<LOADER_PARAMS> params = std::make_shared<LOADER_PARAMS>();
-        BaremetalLoader loader(arion->shared_from_this(), arion->get_program_env());
+        LinuxBaremetalLoader loader(arion->shared_from_this(), arion->get_program_env());
         loader.arch_sz = arion->baremetal->bitsize;
 
         // Map code

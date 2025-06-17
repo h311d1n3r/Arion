@@ -97,7 +97,7 @@ void LinuxBaremetalLoader::init_main_thread(std::shared_ptr<LOADER_PARAMS> param
 
     ADDR sp_val = arion->abi->read_arch_reg(sp);
     std::unique_ptr<std::map<REG, RVAL>> regs = arion->abi->init_thread_regs(entry_addr, sp_val);
-    std::unique_ptr<ARION_THREAD> arion_t = std::make_unique<ARION_THREAD>(0, 0, 0, 0, std::move(regs), 0);
+    std::unique_ptr<ARION_THREAD> arion_t = std::make_unique<ARION_THREAD>(0, 0, 0, 0, 0, std::move(regs), 0);
     arion->abi->load_regs(std::move(arion_t->regs_state));
     arion->threads->add_thread_entry(std::move(arion_t));
 }

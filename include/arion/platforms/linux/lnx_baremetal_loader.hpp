@@ -12,7 +12,7 @@ using namespace arion;
 #define LINUX_64_STACK_ADDR 0x7ffffffde000
 #define LINUX_64_STACK_SZ 0x21000
 
-#define LINUX_32_LOAD_ADDR 0x8048000
+#define LINUX_32_LOAD_ADDR 0x8040000
 
 #define LINUX_32_STACK_ADDR 0xfffcf000
 #define LINUX_32_STACK_SZ 0x21000
