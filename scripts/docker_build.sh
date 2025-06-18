@@ -76,8 +76,11 @@ docker build --build-arg VERSION=$VERSION -t $IMAGE_NAME -f $DOCKERFILE "$PROJEC
 echo "Running build inside container..."
 CONTAINER_ID=$(docker create $IMAGE_NAME)
 
+echo "Extracting package..."
 docker cp "$CONTAINER_ID:/app/docker_build/arion-$VERSION.$PACKAGE_EXT" "$PROJECT_ROOT/build/$PACKAGE_NAME"
 
+echo "Cleaning up..."
 docker rm "$CONTAINER_ID"
+docker rmi "$IMAGE_NAME"
 
 echo "Build completed: $PROJECT_ROOT/build/$PACKAGE_NAME"
