@@ -9,7 +9,7 @@ PLATFORM=$1
 VERSION=$2
 
 if [[ -z "$PLATFORM" || -z "$VERSION" ]]; then
-    echo "Usage: $0 <platform|all> <version>"
+    echo "Usage: $0 <platform|all|all-sync> <version>"
     exit 1
 fi
 
@@ -25,6 +25,23 @@ if [[ "$PLATFORM" == "all" ]]; then
 
     for pid in "${pids[@]}"; do
         wait $pid || echo "Build with PID $pid failed"
+    done
+
+    exit 0
+fi
+
+if [[ "$PLATFORM" == "all-sync" ]]; then
+    for DOCKERFILE in "$PROJECT_ROOT"/docker/Dockerfile.*; do
+        BASE_NAME=$(basename "$DOCKERFILE")
+        TARGET_PLATFORM="${BASE_NAME#Dockerfile.}"
+
+        echo "Starting build for $TARGET_PLATFORM..."
+        "$0" "$TARGET_PLATFORM" "$VERSION"
+
+        if [[ $? -ne 0 ]]; then
+            echo "Build for $TARGET_PLATFORM failed"
+            exit 1
+        fi
     done
 
     exit 0
