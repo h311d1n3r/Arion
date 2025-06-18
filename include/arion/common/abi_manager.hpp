@@ -54,7 +54,6 @@ struct ARION_EXPORT ABI_SYSCALLING_CONVENTION
 struct ARION_EXPORT ABI_ATTRIBUTES
 {
     arion::CPU_ARCH arch;
-    std::string arch_name;
     uint16_t arch_sz;
     size_t ptr_sz;
     arion::KERNEL_SEG_FLAGS seg_flags;
@@ -64,11 +63,11 @@ struct ARION_EXPORT ABI_ATTRIBUTES
     ABI_CALLING_CONVENTION calling_conv;
     ABI_SYSCALLING_CONVENTION syscalling_conv;
     std::map<uint64_t, std::string> name_by_syscall_no;
-    ABI_ATTRIBUTES(arion::CPU_ARCH arch, std::string arch_name, uint16_t arch_sz, size_t ptr_sz, uint32_t hwcap,
+    ABI_ATTRIBUTES(arion::CPU_ARCH arch, uint16_t arch_sz, size_t ptr_sz, uint32_t hwcap,
                    uint32_t hwcap2, arion::KERNEL_SEG_FLAGS seg_flags, ABI_REGISTERS regs,
                    ABI_CALLING_CONVENTION calling_conv, ABI_SYSCALLING_CONVENTION syscalling_conv,
                    std::map<uint64_t, std::string> &name_by_syscall_no)
-        : arch(arch), arch_name(arch_name), arch_sz(arch_sz), ptr_sz(ptr_sz), seg_flags(seg_flags), hwcap(hwcap),
+        : arch(arch), arch_sz(arch_sz), ptr_sz(ptr_sz), seg_flags(seg_flags), hwcap(hwcap),
           hwcap2(hwcap2), regs(regs), calling_conv(calling_conv), syscalling_conv(syscalling_conv),
           name_by_syscall_no(name_by_syscall_no) {};
 };

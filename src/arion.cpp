@@ -6,6 +6,7 @@
 #include <arion/common/hooks_manager.hpp>
 #include <arion/common/memory_manager.hpp>
 #include <arion/keystone/keystone.h>
+#include <arion/platforms/linux/lnx_baremetal_loader.hpp>
 #include <arion/platforms/linux/elf_loader.hpp>
 #include <arion/platforms/linux/elf_parser.hpp>
 #include <arion/platforms/linux/lnx_syscall_manager.hpp>
@@ -158,6 +159,23 @@ void ArionGroup::set_next_pid(pid_t pid)
     this->next_pid = pid;
 }
 
+void Arion::new_instance_common(std::shared_ptr<Arion> arion, arion::CPU_ARCH arch, std::string fs_path,
+                                           std::vector<std::string> program_env, std::string cwd,
+                                           std::unique_ptr<Config> config)
+{
+    arion->config = std::move(config);
+    arion->program_env = program_env;
+    arion->logger = Logger::initialize(arion, arion->config->get_field<ARION_LOG_LEVEL>("log_lvl"));
+    arion->init_engines(arch);
+    arion->context = ContextManager::initialize(arion);
+    arion->mem = MemoryManager::initialize(arion);
+    arion->sock = SocketManager::initialize(arion);
+    arion->hooks = HooksManager::initialize(arion);
+    arion->threads = ThreadingManager::initialize(arion);
+    arion->signals = SignalManager::initialize(arion);
+    arion->tracer = CodeTracer::initialize(arion);
+}
+
 std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program_args, std::string fs_path,
                                            std::vector<std::string> program_env, std::string cwd,
                                            std::unique_ptr<Config> config)
@@ -167,22 +185,19 @@ std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program_args
     if (!program_args.size())
         throw InvalidArgumentException("Program arguments must at least contain target name.");
     std::shared_ptr<Arion> arion = std::make_shared<Arion>();
-    arion->config = std::move(config);
+    arion->fs = FileSystemManager::initialize(arion, fs_path, cwd);
     arion->program_args = program_args;
-    arion->program_env = program_env;
     std::string program_path = program_args.at(0);
-    arion->logger = Logger::initialize(arion, arion->config->get_field<ARION_LOG_LEVEL>("log_lvl"));
+    std::shared_ptr<ElfParser> prog_parser = std::make_shared<ElfParser>(arion, program_path);
+    prog_parser->process();
+    Arion::new_instance_common(arion, prog_parser->arch, fs_path, program_env, cwd, std::move(config));
     colorstream init_msg;
     init_msg << ARION_LOG_COLOR::WHITE << "Initializing Arion instance for image " << ARION_LOG_COLOR::GREEN << "\"" << program_path << "\"" << ARION_LOG_COLOR::WHITE << ".";
     arion->logger->info(init_msg.str());
-    arion->fs = FileSystemManager::initialize(arion, fs_path, cwd);
     if (!std::filesystem::exists(program_path))
         throw FileNotFoundException(program_path);
     if (!arion->fs->is_in_fs(program_path))
         throw FileNotInFsException(fs_path, program_path);
-    std::shared_ptr<ElfParser> prog_parser = std::make_shared<ElfParser>(arion, program_path);
-    prog_parser->process();
-    arion->init_engines(prog_parser->arch);
     arion->context = ContextManager::initialize(arion);
     arion->mem = MemoryManager::initialize(arion);
     arion->sock = SocketManager::initialize(arion);
@@ -190,7 +205,31 @@ std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program_args
     arion->threads = ThreadingManager::initialize(arion);
     arion->signals = SignalManager::initialize(arion);
     arion->tracer = CodeTracer::initialize(arion);
-    arion->init_program(prog_parser);
+    arion->init_file_program(prog_parser);
+    return arion;
+}
+
+std::shared_ptr<Arion> Arion::new_instance(std::unique_ptr<BaremetalManager> baremetal, std::string fs_path,
+                                           std::vector<std::string> program_env, std::string cwd,
+                                           std::unique_ptr<Config> config)
+{
+    if(!ArionTypeRegistry::instance().is_initialized())
+        ArionTypeRegistry::instance().init_types();
+    std::shared_ptr<Arion> arion = std::make_shared<Arion>();
+    arion->fs = FileSystemManager::initialize(arion, fs_path, cwd);
+    arion->baremetal = std::move(baremetal);
+    Arion::new_instance_common(arion, arion->baremetal->get_arch(), fs_path, program_env, cwd, std::move(config));
+    colorstream init_msg;
+    init_msg << ARION_LOG_COLOR::WHITE << "Initializing Arion instance in " << ARION_LOG_COLOR::MAGENTA << "baremetal" << ARION_LOG_COLOR::WHITE << " mode.";
+    arion->logger->info(init_msg.str());
+    arion->context = ContextManager::initialize(arion);
+    arion->mem = MemoryManager::initialize(arion);
+    arion->sock = SocketManager::initialize(arion);
+    arion->hooks = HooksManager::initialize(arion);
+    arion->threads = ThreadingManager::initialize(arion);
+    arion->signals = SignalManager::initialize(arion);
+    arion->tracer = CodeTracer::initialize(arion);
+    arion->init_baremetal_program();
     return arion;
 }
 
@@ -217,6 +256,7 @@ Arion::~Arion()
     this->context.reset();
     this->fs.reset();
     this->logger.reset();
+    if(this->baremetal) this->baremetal.reset();
 
     this->close_engines();
 }
@@ -249,7 +289,7 @@ void Arion::init_engines(arion::CPU_ARCH arch)
     }
 }
 
-void Arion::init_program(std::shared_ptr<ElfParser> prog_parser)
+void Arion::init_file_program(std::shared_ptr<ElfParser> prog_parser)
 {
     std::shared_ptr<Arion> curr_instance = shared_from_this();
     const std::string program_path = this->program_args.at(0);
@@ -271,6 +311,21 @@ void Arion::init_program(std::shared_ptr<ElfParser> prog_parser)
     default:
         throw UnknownLinkageTypeException(program_path);
     }
+}
+
+void Arion::init_baremetal_program()
+{
+    std::shared_ptr<Arion> curr_instance = shared_from_this();
+    CPU_ARCH arch = this->baremetal->get_arch();
+    this->abi = AbiManager::initialize(curr_instance, arch);
+    if (arch == CPU_ARCH::X86_ARCH)
+    {
+        this->gdt_manager = GdtManager::initialize(curr_instance);
+        this->gdt_manager->setup();
+    }
+    this->syscalls = LinuxSyscallManager::initialize(curr_instance); // must initialize AbiManager first
+    LinuxBaremetalLoader loader(curr_instance, this->program_args, this->program_env);
+    this->loader_params = loader.process();
 }
 
 void Arion::init_dynamic_program(std::shared_ptr<ElfParser> prog_parser)

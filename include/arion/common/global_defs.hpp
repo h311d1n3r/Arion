@@ -2,6 +2,8 @@
 #define ARION_GLOBAL_DEFS_HPP
 
 #include <array>
+#include <string>
+#include <map>
 #include <cstdint>
 #include <cstring>
 #include <stddef.h>
@@ -86,6 +88,24 @@ enum ARION_EXPORT ARION_LOG_LEVEL
     ERROR,
     CRITICAL,
     OFF
+};
+
+inline std::map<std::string, CPU_ARCH> ARCH_FROM_NAME
+{
+    {"UNKNOWN", CPU_ARCH::UNKNOWN_ARCH},
+    {"X86", CPU_ARCH::X86_ARCH},
+    {"X86-64", CPU_ARCH::X8664_ARCH},
+    {"ARM", CPU_ARCH::ARM_ARCH},
+    {"ARM64", CPU_ARCH::ARM64_ARCH}
+};
+
+inline std::map<CPU_ARCH, std::string> NAME_FROM_ARCH
+{
+    {CPU_ARCH::UNKNOWN_ARCH, "UNKNOWN"},
+    {CPU_ARCH::X86_ARCH, "X86"},
+    {CPU_ARCH::X8664_ARCH, "X86-64"},
+    {CPU_ARCH::ARM_ARCH, "ARM"},
+    {CPU_ARCH::ARM64_ARCH, "ARM64"}
 };
 
 } // namespace arion

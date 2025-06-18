@@ -630,13 +630,17 @@ std::vector<cs_insn> MemoryManager::read_instrs(ADDR addr, size_t count)
     std::vector<cs_insn> instrs;
     off_t off = 0;
     BYTE *buf = (BYTE *)malloc(ARION_BUF_SZ);
+    size_t buf_sz = ARION_BUF_SZ;
     while (instrs.size() < count)
     {
-        std::vector<BYTE> buf_vec = this->read(addr + off, ARION_BUF_SZ);
+        std::shared_ptr<ARION_MAPPING> mapping = this->get_mapping_at(addr + off);
+        if (mapping->end_addr < addr + off + ARION_BUF_SZ)
+            buf_sz = mapping->end_addr - (addr + off);
+        std::vector<BYTE> buf_vec = this->read(addr + off, buf_sz);
         memcpy(buf, buf_vec.data(), buf_vec.size());
         cs_insn *insn;
         size_t dis_count =
-            cs_disasm(*arion->abi->curr_cs(), buf, ARION_BUF_SZ, addr + off, count - instrs.size(), &insn);
+            cs_disasm(*arion->abi->curr_cs(), buf, buf_sz, addr + off, count - instrs.size(), &insn);
         for (uint64_t instr_i = 0; instr_i < dis_count && instr_i < count; instr_i++)
             instrs.push_back(insn[instr_i]);
         cs_free(insn, dis_count);
