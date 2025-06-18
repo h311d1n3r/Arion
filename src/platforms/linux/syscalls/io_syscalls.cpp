@@ -26,27 +26,28 @@
 using namespace arion;
 using namespace arion_poly_struct;
 
-std::map<uint8_t, std::pair<std::string, SYSCALL_FUNC>> socket_sys_to_func = {
-    {SYS_SOCKET, {"socket", sys_socket}},
-    {SYS_BIND, {"bind", sys_bind}},
-    {SYS_CONNECT, {"connect", sys_connect}},
-    {SYS_LISTEN, {"listen", sys_listen}},
-    {SYS_ACCEPT, {"accept", sys_accept}},
-    {SYS_GETSOCKNAME, {"getsockname", sys_getsockname}},
-    {SYS_GETPEERNAME, {"getpeername", sys_getpeername}},
-    {SYS_SOCKETPAIR, {"socketpair", sys_socketpair}},
-    {SYS_SEND, {"send", sys_send}},
-    {SYS_RECV, {"recv", sys_recv}},
-    {SYS_SENDTO, {"sendto", sys_sendto}},
-    {SYS_RECVFROM, {"recvfrom", sys_recvfrom}},
-    {SYS_SHUTDOWN, {"shutdown", sys_shutdown}},
-    {SYS_SETSOCKOPT, {"setsockopt", sys_setsockopt}},
-    {SYS_GETSOCKOPT, {"getsockopt", sys_getsockopt}},
-    {SYS_SENDMSG, {"sendmsg", sys_sendmsg}},
-    {SYS_RECVMSG, {"recvmsg", sys_recvmsg}},
-    {SYS_ACCEPT4, {"accept4", sys_accept4}},
-    {SYS_RECVMMSG, {"recvmmsg", sys_recvmmsg}},
-    {SYS_SENDMMSG, {"sendmmsg", sys_sendmmsg}}};
+std::map<uint8_t,
+         std::pair<std::string, std::function<uint64_t(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)>>>
+    socket_sys_to_func = {{SYS_SOCKET, {"socket", sys_socket}},
+                          {SYS_BIND, {"bind", sys_bind}},
+                          {SYS_CONNECT, {"connect", sys_connect}},
+                          {SYS_LISTEN, {"listen", sys_listen}},
+                          {SYS_ACCEPT, {"accept", sys_accept}},
+                          {SYS_GETSOCKNAME, {"getsockname", sys_getsockname}},
+                          {SYS_GETPEERNAME, {"getpeername", sys_getpeername}},
+                          {SYS_SOCKETPAIR, {"socketpair", sys_socketpair}},
+                          {SYS_SEND, {"send", sys_send}},
+                          {SYS_RECV, {"recv", sys_recv}},
+                          {SYS_SENDTO, {"sendto", sys_sendto}},
+                          {SYS_RECVFROM, {"recvfrom", sys_recvfrom}},
+                          {SYS_SHUTDOWN, {"shutdown", sys_shutdown}},
+                          {SYS_SETSOCKOPT, {"setsockopt", sys_setsockopt}},
+                          {SYS_GETSOCKOPT, {"getsockopt", sys_getsockopt}},
+                          {SYS_SENDMSG, {"sendmsg", sys_sendmsg}},
+                          {SYS_RECVMSG, {"recvmsg", sys_recvmsg}},
+                          {SYS_ACCEPT4, {"accept4", sys_accept4}},
+                          {SYS_RECVMMSG, {"recvmmsg", sys_recvmmsg}},
+                          {SYS_SENDMMSG, {"sendmmsg", sys_sendmmsg}}};
 
 std::string get_path_at(std::shared_ptr<Arion> arion, int dfd, std::string file_name)
 {
@@ -181,6 +182,9 @@ uint64_t sys_open(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     int32_t flags = params.at(1);
     uint16_t mode = params.at(2);
 
+    if (arion->abi->get_attrs()->arch == CPU_ARCH::ARM_ARCH)
+        flags &= ~0x20000;
+
     std::string fs_path = arion->fs->get_fs_path();
     std::string file_name = arion->mem->read_c_string(file_name_addr);
     std::string file_name_fs = arion->fs->to_fs_path(file_name);
@@ -241,12 +245,12 @@ uint64_t sys_newstat(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params
         stat_ret = -errno;
     else
     {
-        STRUCT_ID stat_id = STAT_STRUCT_FACTORY.feed_host(&stat_buf);
+        STRUCT_ID stat_id = STAT_STRUCT_FACTORY->feed_host(&stat_buf);
         size_t arch_stat_len;
-        BYTE *arch_stat = STAT_STRUCT_FACTORY.build(stat_id, arion->abi->get_attrs()->arch, arch_stat_len);
+        BYTE *arch_stat = STAT_STRUCT_FACTORY->build(stat_id, arion->abi->get_attrs()->arch, arch_stat_len);
         arion->mem->write(stat_buf_addr, arch_stat, arch_stat_len);
         free(arch_stat);
-        STAT_STRUCT_FACTORY.release_struct(stat_id);
+        STAT_STRUCT_FACTORY->release_struct(stat_id);
     }
     return stat_ret;
 }
@@ -265,12 +269,12 @@ uint64_t sys_newfstat(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
         fstat_ret = -errno;
     else
     {
-        STRUCT_ID stat_id = STAT_STRUCT_FACTORY.feed_host(&stat_buf);
+        STRUCT_ID stat_id = STAT_STRUCT_FACTORY->feed_host(&stat_buf);
         size_t arch_stat_len;
-        BYTE *arch_stat = STAT_STRUCT_FACTORY.build(stat_id, arion->abi->get_attrs()->arch, arch_stat_len);
+        BYTE *arch_stat = STAT_STRUCT_FACTORY->build(stat_id, arion->abi->get_attrs()->arch, arch_stat_len);
         arion->mem->write(stat_buf_addr, arch_stat, arch_stat_len);
         free(arch_stat);
-        STAT_STRUCT_FACTORY.release_struct(stat_id);
+        STAT_STRUCT_FACTORY->release_struct(stat_id);
     }
     return fstat_ret;
 }
@@ -289,12 +293,12 @@ uint64_t sys_newlstat(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
         lstat_ret = -errno;
     else
     {
-        STRUCT_ID stat_id = STAT_STRUCT_FACTORY.feed_host(&stat_buf);
+        STRUCT_ID stat_id = STAT_STRUCT_FACTORY->feed_host(&stat_buf);
         size_t arch_stat_len;
-        BYTE *arch_stat = STAT_STRUCT_FACTORY.build(stat_id, arion->abi->get_attrs()->arch, arch_stat_len);
+        BYTE *arch_stat = STAT_STRUCT_FACTORY->build(stat_id, arion->abi->get_attrs()->arch, arch_stat_len);
         arion->mem->write(stat_buf_addr, arch_stat, arch_stat_len);
         free(arch_stat);
-        STAT_STRUCT_FACTORY.release_struct(stat_id);
+        STAT_STRUCT_FACTORY->release_struct(stat_id);
     }
     return lstat_ret;
 }
@@ -384,10 +388,15 @@ uint64_t sys_ioctl(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
         arg = (ADDR)win_sz;
         break;
     }
-    default:
-        arion->logger->warn(std::string("Unsupported IOCTL value: ") + int_to_hex<unsigned long>(cmd) +
-                            std::string("."));
+    case TIOCGPGRP: {
+        return arion->get_pgid();
+    }
+    default: {
+        colorstream warn_msg;
+        warn_msg << ARION_LOG_COLOR::ORANGE << "Unsupported IOCTL value: " << ARION_LOG_COLOR::MAGENTA << int_to_hex<uint64_t>(cmd) << ARION_LOG_COLOR::ORANGE << std::string(".");
+        arion->logger->warn(warn_msg.str());
         return 0;
+        }
     }
 
     int ioctl_ret = syscall(SYS_ioctl, arion_fd, cmd, arg);
@@ -786,7 +795,7 @@ uint64_t sys_socketcall(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> par
     }
     auto func_pair = func_it->second;
     std::string func_name = func_pair.first;
-    SYSCALL_FUNC func = func_pair.second;
+    auto func = func_pair.second;
     uint8_t params_n = PARAMS_N_BY_SYSCALL_NAME.at(func_name);
     std::vector<SYS_PARAM> call_params;
     for (uint8_t param_i = 0; param_i < params_n; param_i++)
@@ -1603,6 +1612,9 @@ uint64_t sys_openat(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     int32_t flags = params.at(2);
     uint16_t mode = params.at(3);
 
+    if (arion->abi->get_attrs()->arch == CPU_ARCH::ARM_ARCH)
+        flags &= ~0x20000;
+
     std::string file_name = arion->mem->read_c_string(file_name_addr);
     std::string abs_file_path = get_path_at(arion, dfd, file_name);
     int fd = open(abs_file_path.c_str(), flags, mode);
@@ -1631,12 +1643,12 @@ uint64_t sys_newfstatat(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> par
         fstatat_ret = -errno;
     else
     {
-        STRUCT_ID stat_id = STAT_STRUCT_FACTORY.feed_host(&stat_buf);
+        STRUCT_ID stat_id = STAT_STRUCT_FACTORY->feed_host(&stat_buf);
         size_t arch_stat_len;
-        BYTE *arch_stat = STAT_STRUCT_FACTORY.build(stat_id, arion->abi->get_attrs()->arch, arch_stat_len);
+        BYTE *arch_stat = STAT_STRUCT_FACTORY->build(stat_id, arion->abi->get_attrs()->arch, arch_stat_len);
         arion->mem->write(stat_buf_addr, arch_stat, arch_stat_len);
         free(arch_stat);
-        STAT_STRUCT_FACTORY.release_struct(stat_id);
+        STAT_STRUCT_FACTORY->release_struct(stat_id);
     }
     return fstatat_ret;
 }
@@ -2138,7 +2150,14 @@ uint64_t sys_statx(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     if (statx_ret == -1)
         statx_ret = -errno;
     else
-        arion->mem->write(statx_buf_addr, (BYTE *)&statx_buf, sizeof(struct stat));
+    {
+        STRUCT_ID statx_id = STATX_STRUCT_FACTORY->feed_host(&statx_buf);
+        size_t arch_statx_len;
+        BYTE *arch_statx = STATX_STRUCT_FACTORY->build(statx_id, arion->abi->get_attrs()->arch, arch_statx_len);
+        arion->mem->write(statx_buf_addr, arch_statx, arch_statx_len);
+        free(arch_statx);
+        STATX_STRUCT_FACTORY->release_struct(statx_id);
+    }
     return statx_ret;
 }
 
@@ -2156,7 +2175,8 @@ uint64_t sys_getxattr(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
 
     std::vector<BYTE> value(size);
     ssize_t ret = getxattr(path.c_str(), name.c_str(), value.data(), size);
-    if (ret == -1) {
+    if (ret == -1)
+    {
         ret = -errno;
     }
 
@@ -2182,7 +2202,8 @@ uint64_t sys_lgetxattr(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> para
 
     std::vector<BYTE> value(size);
     ssize_t ret = lgetxattr(path.c_str(), name.c_str(), value.data(), size);
-    if (ret == -1) {
+    if (ret == -1)
+    {
         ret = -errno;
     }
 

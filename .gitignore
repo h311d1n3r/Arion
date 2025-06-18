@@ -1,9 +1,20 @@
-build/
-build.dev/
-build.release/
-.cache/
-.idea/
+# CMake build files
 cmake-build-release/
 cmake-build-debug/
+build.dev/
+build.release/
+build/
+build_*/
+
+# CLion
+.idea/
+
+# Object files
+*.o
+
+# Misc
+.cache/
 lab/
 compile_commands.json
+*.i64
+*.dev.sh

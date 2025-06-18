@@ -83,7 +83,7 @@ class ARION_EXPORT CodeTraceAnalyzer
     CodeTraceReader reader;
 
   public:
-    ARION_EXPORT CodeTraceAnalyzer(std::string trace_path) : reader(trace_path) {};
+    ARION_EXPORT CodeTraceAnalyzer(std::string trace_path);
     void ARION_EXPORT reach_address(arion::ADDR addr);
     void ARION_EXPORT reach_offset(std::string name, uint32_t off);
     void ARION_EXPORT loop_on_every_hit(ANALYZER_HIT_CALLBACK callback, bool reset_cursor = true);
@@ -152,6 +152,7 @@ class ARION_EXPORT CodeTraceComparator
     void ARION_EXPORT search_uneq_hit_offset(COMPARATOR_HIT_CALLBACK callback, bool reset_cursors = true);
     void ARION_EXPORT search_uneq_hit_offset_mod(COMPARATOR_HIT_CALLBACK callback, std::string name,
                                                  bool reset_cursors = true);
+    void ARION_EXPORT search_uneq_reg(COMPARATOR_HIT_CALLBACK callback, bool reset_cursors = true);
 };
 
 #endif // ARION_CODE_TRACE_ANALYSIS_HPP

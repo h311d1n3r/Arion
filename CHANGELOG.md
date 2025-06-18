@@ -1,13 +1,21 @@
-# 1.0.2-alpha
+# 1.0.1-alpha
+- Added UnicornAFL fuzzing mode
+- Added udbserver
+- ArionGroup class (preparing IPC)
+- Improved syscall logging
+- Fixed submodules compilation issue
+- Implemented Google Test
+- Removed DEV compilation mode
+- Added architecture rootfs and static toolchains build/download
 - Added CMake package
-- Reduced compilation time
 - Fixed dependency issues when linking in DEV mode
 - Added config for Arion instance
 - Implemented some syscalls
-
-# 1.0.1-alpha
+- Run from/to address
+- Signals rework
+- Threads rework
 - Bumped CMake requirements
-- Added CHANGELOG.md/VERSION.txt
+- Added CHANGELOG.md and VERSION
 
 # 1.0.0-alpha
 - Emulating Linux ELFs for x86, x86-64, ARM, ARM64

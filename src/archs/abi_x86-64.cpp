@@ -15,10 +15,8 @@ csh *AbiManagerX8664::curr_cs()
 
 std::array<BYTE, VSYSCALL_ENTRY_SZ> AbiManagerX8664::gen_vsyscall_entry(uint64_t syscall_no)
 {
-    const char vsyscall_asm_str[] = "mov rax, 0x%" PRIx64 "; syscall; ret";
-    size_t vsyscall_asm_sz = strlen(vsyscall_asm_str) + 16;
-    char *vsyscall_asm = (char *)malloc(vsyscall_asm_sz);
-    snprintf(vsyscall_asm, vsyscall_asm_sz, vsyscall_asm_str, syscall_no);
+    char vsyscall_asm[64];
+    snprintf(vsyscall_asm, sizeof(vsyscall_asm), "mov rax, 0x%" PRIx64 "; syscall; ret", syscall_no);
     unsigned char *asm_buf;
     size_t asm_sz, asm_cnt;
     ks_err ks_asm_err = (ks_err)ks_asm(this->ks.at(0), vsyscall_asm, 0, &asm_buf, &asm_sz, &asm_cnt);
@@ -27,8 +25,7 @@ std::array<BYTE, VSYSCALL_ENTRY_SZ> AbiManagerX8664::gen_vsyscall_entry(uint64_t
     std::array<BYTE, VSYSCALL_ENTRY_SZ> vsyscall_entry;
     std::copy(asm_buf, asm_buf + asm_sz, vsyscall_entry.begin());
     std::fill(vsyscall_entry.begin() + asm_sz, vsyscall_entry.end(), 0xCC); // INT3
-    free(asm_buf);
-    free(vsyscall_asm);
+    ks_free(asm_buf);
     return vsyscall_entry;
 }
 
@@ -44,4 +41,22 @@ void AbiManagerX8664::setup()
         throw ExpiredWeakPtrException("Arion");
 
     arion->hooks->hook_insn(AbiManagerX8664::syscall_hook, UC_X86_INS_SYSCALL);
+}
+
+ADDR AbiManagerX8664::dump_tls()
+{
+    std::shared_ptr<Arion> arion = this->arion.lock();
+    if (!arion)
+        throw ExpiredWeakPtrException("Arion");
+
+    return arion->abi->read_reg<RVAL64>(UC_X86_REG_FS_BASE);
+}
+
+void AbiManagerX8664::load_tls(ADDR new_tls)
+{
+    std::shared_ptr<Arion> arion = this->arion.lock();
+    if (!arion)
+        throw ExpiredWeakPtrException("Arion");
+
+    arion->abi->write_reg<RVAL64>(UC_X86_REG_FS_BASE, new_tls);
 }

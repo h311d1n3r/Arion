@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.24)
 project(Arion)
-set(ARION_VERSION 1.0.2-alpha)
+set(ARION_VERSION 1.0.1-alpha)
 
 include(CMakePackageConfigHelpers)
 
-option(DEV "Enable development mode. Bypasses compilation of dependencies." OFF)
+option(TEST "Generate test targets" OFF)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -14,7 +14,10 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -rdynamic -O0")
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
-set(UNICORN_ARCH "x86;arm;arm64" CACHE STRING "Build only x86, ARM, and ARM64 for Unicorn")
+set(ARION_SUPPORTED_ARCHS x86 x86-64 arm arm64)
+set(ARION_SUPPORTED_GNU_TRIPLETS i686-linux-gnu x86_64-linux-gnu arm-linux-gnueabi aarch64-linux-gnu)
+
+set(UNICORN_ARCH "x86;arm;aarch64" CACHE STRING "Build only x86, ARM, and ARM64 for Unicorn")
 
 set(CAPSTONE_X86_SUPPORT ON CACHE BOOL "Enable X86 support in Capstone")
 set(CAPSTONE_ARM_SUPPORT ON CACHE BOOL "Enable ARM support in Capstone")
@@ -49,7 +52,20 @@ set(LIEF_EXAMPLES OFF CACHE BOOL "Disable LIEF examples")
 set(LIEF_TESTS OFF CACHE BOOL "Disable LIEF tests")
 set(LIEF_ARCHITECTURES "x86;arm;arm64" CACHE STRING "Build only x86, ARM, and ARM64 for LIEF")
 
-file(GLOB_RECURSE SOURCES "src/*.cpp")
+# Check for cargo installation
+find_program(CARGO_EXECUTABLE cargo)
+if (NOT CARGO_EXECUTABLE)
+    message(FATAL_ERROR "cargo could not be found. Please install it to proceed.")
+endif()
+
+if (TEST)
+    foreach(ARCH IN LISTS ARION_SUPPORTED_ARCHS)
+        set(ROOTFS_PATH "${CMAKE_SOURCE_DIR}/rootfs/${ARCH}")
+        if(NOT IS_DIRECTORY "${ROOTFS_PATH}")
+            message(FATAL_ERROR "[TEST] Missing rootfs for architecture '${ARCH}'.\nYou can either download it (faster and more stable) or build it with appropriate scripts.")
+        endif()
+    endforeach()
+endif()
 
 # Copy vdso.bin to build directory to prevent absolute path inclusion
 add_custom_command(
@@ -64,102 +80,199 @@ add_custom_command(
     DEPENDS vdso.bin
 )
 
+# UnicornAFL is added as part of source code with using add_subdirectory because its CMakeLists.txt would load embedded Unicorn
+file(GLOB_RECURSE SOURCES "src/*.cpp" "lib/unicornafl/unicornafl.cpp")
+
 add_library(arion SHARED ${SOURCES} vdso.o)
 
 target_compile_definitions(arion PRIVATE ARION_ONLY) # Useful flag to prevent using some header parts when compiling a module against Arion
 set_property(TARGET arion PROPERTY POSITION_INDEPENDENT_CODE 1)
 set_property(TARGET arion PROPERTY OUTPUT_NAME "arion")
 
-# Prefer shared libraries when linking in development mode to reduce ELF size
-if(DEV)
-    set(CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".a")
-endif()
-
 # This library should not bring version issues
 find_library(UUID_LIB uuid REQUIRED)
 
-set(ARION_LIB_LINK_MODE PRIVATE)
+# Main goal of this function is to prevent building a submodule everytime Arion is built (config.h files messing up)
+function(add_arion_dependency lib_var mod_name target_name invalidate)
+    set(mod_path "${CMAKE_SOURCE_DIR}/lib/${mod_name}")
+    if(NOT EXISTS "${mod_path}")
+        message(FATAL_ERROR "Module not found: ${mod_path}")
+    endif()
 
-if(DEV)
+    file(TIMESTAMP "${mod_path}" new_timestamp)
 
-set(ARION_LIB_LINK_MODE INTERFACE)
+    set(mod_updated ${invalidate})
 
-# Find libraries on the system
-find_library(UNICORN_LIB unicorn REQUIRED)
-find_library(KEYSTONE_LIB keystone REQUIRED)
-find_library(CAPSTONE_LIB capstone REQUIRED)
-find_library(LIEF_LIB LIEF REQUIRED)
-# Try to load debug version of spdlog first
-find_library(SPDLOG_LIB spdlogd)
-if(NOT SPDLOG_LIB)
-find_library(SPDLOG_LIB spdlog REQUIRED)
-endif()
+    set(timestamp_dir "${CMAKE_BINARY_DIR}/arion_times")
+    set(timestamp_file "${CMAKE_BINARY_DIR}/arion_times/${mod_name}.txt")
+    file(MAKE_DIRECTORY ${timestamp_dir})
+    if(EXISTS "${timestamp_file}")
+        file(READ "${timestamp_file}" old_timestamp)
+        string(STRIP "${old_timestamp}" old_timestamp)
+        if(new_timestamp GREATER old_timestamp)
+            set(mod_updated TRUE)
+        endif()
+    else()
+        set(mod_updated TRUE)
+    endif()
 
-else()
+    if(NOT mod_updated)
+        file(GLOB_RECURSE found_lib_obj "${CMAKE_BINARY_DIR}/lib/${mod_name}/*.o")
+        if(found_lib_obj)
+            add_custom_target(${target_name})
+            set(${lib_var} ${found_lib_obj} PARENT_SCOPE)
+        else()
+            set(mod_updated TRUE)
+        endif()
+    endif()
+
+    if(mod_updated)
+        add_subdirectory(${mod_path} EXCLUDE_FROM_ALL)
+        file(WRITE "${timestamp_file}" "${new_timestamp}")
+        set(${lib_var} ${target_name} PARENT_SCOPE)
+        set_target_properties(${target_name} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+    endif()
+endfunction()
 
 # Embed exact libraries with required versions
-add_subdirectory(lib/unicorn EXCLUDE_FROM_ALL)
-add_subdirectory(lib/capstone EXCLUDE_FROM_ALL)
-add_subdirectory(lib/keystone EXCLUDE_FROM_ALL)
-add_subdirectory(lib/lief EXCLUDE_FROM_ALL)
-add_subdirectory(lib/spdlog EXCLUDE_FROM_ALL)
+add_arion_dependency(UNICORN_LIB unicorn unicorn FALSE)
+add_arion_dependency(CAPSTONE_LIB capstone capstone FALSE)
+add_arion_dependency(KEYSTONE_LIB keystone keystone FALSE)
+# Due to spdlog embedding by LIEF and because they have good caching we invalidate these two libraries
+add_arion_dependency(LIEF_LIB lief LIB_LIEF TRUE)
+add_arion_dependency(SPDLOG_LIB spdlog spdlog TRUE)
 
-set(UNICORN_LIB unicorn)
-set(CAPSTONE_LIB capstone)
-set(KEYSTONE_LIB keystone)
-set(LIEF_LIB LIB_LIEF)
-set(SPDLOG_LIB spdlog)
+set(UNICORN_LIB_DIR ${CMAKE_BINARY_DIR}/lib/unicorn)
 
-set_target_properties(${UNICORN_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
-set_target_properties(${CAPSTONE_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
-set_target_properties(${KEYSTONE_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
-set_target_properties(${LIEF_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
-set_target_properties(${SPDLOG_LIB} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set(UDBSERVER_PATH "${CMAKE_SOURCE_DIR}/lib/udbserver")
+set(UDBSERVER_CARGO_PATH "${UDBSERVER_PATH}/Cargo.toml")
+set(UDBSERVER_TARGET_PATH "${CMAKE_BINARY_DIR}/lib/udbserver/target")
+set(UDBSERVER_BUILD_PATH "${CMAKE_BINARY_DIR}/lib/udbserver/build")
+set(UDBSERVER_LIB_NAME "libudbserver.a")
+set(UDBSERVER_LIB "${UDBSERVER_BUILD_PATH}/${UDBSERVER_LIB_NAME}")
 
-endif()
+add_custom_command(
+    OUTPUT ${UDBSERVER_LIB}
+    COMMENT "Building the udbserver library"
+    COMMAND mkdir -p ${UDBSERVER_BUILD_PATH}
+    COMMAND cargo install cargo-c
+    COMMAND /bin/sh -c "RUSTFLAGS='-L native=${UNICORN_LIB_DIR} -l static=unicorn' CARGO_TARGET_DIR=${UDBSERVER_TARGET_PATH} \
+        cargo cinstall --release --prefix=/usr --destdir=${UDBSERVER_BUILD_PATH}"
+    COMMAND find "${UDBSERVER_BUILD_PATH}/usr" -name ${UDBSERVER_LIB_NAME} -exec cp {} ${UDBSERVER_LIB} \;
+    WORKING_DIRECTORY ${UDBSERVER_PATH}
+    DEPENDS ${UDBSERVER_CARGO_PATH}
+    DEPENDS unicorn
+    VERBATIM
+)
 
-target_link_libraries(arion ${ARION_LIB_LINK_MODE} ${UNICORN_LIB} ${CAPSTONE_LIB} ${KEYSTONE_LIB} ${LIEF_LIB} ${SPDLOG_LIB} ${UUID_LIB})
+add_custom_target(
+    udbserver_build
+    DEPENDS ${UDBSERVER_LIB}
+)
+    
+add_dependencies(arion udbserver_build)
+
+target_link_libraries(arion PRIVATE -Wl,--allow-multiple-definition ${UNICORN_LIB} ${CAPSTONE_LIB} ${KEYSTONE_LIB} ${LIEF_LIB} ${SPDLOG_LIB} ${UUID_LIB} ${UDBSERVER_LIB})
 
 # This library should not bring version issues
 find_path(UUID_INCLUDE_DIR uuid/uuid.h)
 
-if(DEV)
-
-find_path(UNICORN_INCLUDE_DIR unicorn/unicorn.h)
-find_path(KEYSTONE_INCLUDE_DIR keystone/keystone.h)
-find_path(CAPSTONE_INCLUDE_DIR capstone/capstone.h)
-find_path(LIEF_INCLUDE_DIR LIEF/LIEF.hpp)
-find_path(SPDLOG_INCLUDE_DIR spdlog/spdlog.h)
-
-else()
-
 set(UNICORN_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/unicorn/include)
+set(UNICORNAFL_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/unicornafl/include)
 set(CAPSTONE_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/capstone/include)
 set(KEYSTONE_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/keystone/include)
 set(LIEF_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/lief/include)
 set(SPDLOG_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/spdlog/include)
 
-endif()
-
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/arion)
 
 function(add_include_lib lib_path lib_name)
-    add_custom_target(
-            ${lib_name}_symlink ALL
-            COMMAND ${CMAKE_COMMAND} -E create_symlink
-            ${lib_path}/${lib_name}
-            ${CMAKE_BINARY_DIR}/include/arion/${lib_name}
+    set(symlink_path ${CMAKE_BINARY_DIR}/include/arion/${lib_name})
+    
+    add_custom_command(
+        OUTPUT ${symlink_path}
+        COMMENT "Creating symlink for ${lib_name}"
+        COMMAND ${CMAKE_COMMAND} -E create_symlink
+        ${lib_path}/${lib_name}
+        ${symlink_path}
+        DEPENDS ${lib_path}/${lib_name}
+        VERBATIM
     )
-    add_dependencies(arion ${lib_name}_symlink)
+    
+    add_custom_target(
+        create_${lib_name}_symlink
+        DEPENDS ${symlink_path}
+    )
+    
+    add_dependencies(arion create_${lib_name}_symlink)
 endfunction()
 
 add_include_lib(${UNICORN_INCLUDE_DIR} unicorn)
+add_include_lib(${UNICORNAFL_INCLUDE_DIR} unicornafl)
 add_include_lib(${CAPSTONE_INCLUDE_DIR} capstone)
 add_include_lib(${KEYSTONE_INCLUDE_DIR} keystone)
 add_include_lib(${LIEF_INCLUDE_DIR} LIEF)
 add_include_lib(${SPDLOG_INCLUDE_DIR} spdlog)
 
-target_include_directories(arion PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include> $<INSTALL_INTERFACE:include> $<INSTALL_INTERFACE:include/arion> ${UUID_INCLUDE_DIR})
+# Needed because UnicornAFL is built with CMakeLists.txt
+set(UNICORNAFL_BUILD_INCLUDE_DIRS $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/lib/unicornafl/include> $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/lib/unicornafl/include/unicornafl>)
+# Needed to get config.h after LIEF was built a first time
+set(LIEF_POST_BUILD_INCLUDE_DIR $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/lib/lief/include>)
+
+target_include_directories(arion PUBLIC ${LIEF_POST_BUILD_INCLUDE_DIR} $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include> $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/arion> ${UNICORNAFL_BUILD_INCLUDE_DIRS} $<INSTALL_INTERFACE:include> $<INSTALL_INTERFACE:include/arion> ${UUID_INCLUDE_DIR})
+
+if(TEST)
+    # Tests with GoogleTest
+    add_subdirectory(${CMAKE_SOURCE_DIR}/lib/googletest)
+    enable_testing()
+    file(GLOB TEST_TARGETS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} tests/targets/*)
+
+    list(LENGTH ARION_SUPPORTED_ARCHS archs_len)
+    math(EXPR archs_last_i "${archs_len} - 1")
+    foreach(i RANGE 0 ${archs_last_i})
+        list(GET ARION_SUPPORTED_ARCHS ${i} arch)
+        list(GET ARION_SUPPORTED_GNU_TRIPLETS ${i} gnu_triplet)
+        set(arch_toolchains_bin ${CMAKE_CURRENT_SOURCE_DIR}/rootfs/${arch}/toolchains/bin)
+
+        foreach(target_dir ${TEST_TARGETS})
+            if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${target_dir}/CMakeLists.txt")
+                get_filename_component(target_name ${target_dir} NAME)
+                ExternalProject_Add(${target_name}_${arch}
+                    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${target_dir}
+                    BINARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${target_dir}/build_${arch}
+                    CMAKE_ARGS
+                        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                        -DCMAKE_C_COMPILER=${arch_toolchains_bin}/gcc
+                        -DCMAKE_CXX_COMPILER=${arch_toolchains_bin}/g++
+                    INSTALL_COMMAND ""
+                )
+            endif()
+        endforeach()
+    endforeach()
+
+    file(GLOB_RECURSE TEST_SOURCES "tests/src/*.cpp")
+    add_executable(
+      arion_test
+      ${TEST_SOURCES}
+    )
+    target_include_directories(
+        arion_test
+        PUBLIC
+        include
+        tests/include
+    )
+    target_link_libraries(
+      arion_test
+      arion
+      GTest::gtest_main
+    )
+    target_compile_definitions(
+        arion_test PRIVATE
+        ARION_ROOT_PATH="${CMAKE_CURRENT_SOURCE_DIR}"
+    )
+    include(GoogleTest)
+    gtest_discover_tests(arion_test)
+endif()
 
 install(TARGETS arion
         EXPORT arionTargets
@@ -202,6 +315,7 @@ install(DIRECTORY ${ARION_INCLUDE_INSTALL_DIR} DESTINATION include)
 # Deploy headers of libraries
 
 set(UNICORN_INCLUDE_INSTALL_DIR ${UNICORN_INCLUDE_DIR}/unicorn)
+set(UNICORNAFL_INCLUDE_INSTALL_DIR ${UNICORNAFL_INCLUDE_DIR}/unicornafl)
 set(CAPSTONE_INCLUDE_INSTALL_DIR ${CAPSTONE_INCLUDE_DIR}/capstone)
 set(KEYSTONE_INCLUDE_INSTALL_DIR ${KEYSTONE_INCLUDE_DIR}/keystone)
 set(LIEF_INCLUDE_INSTALL_DIR ${LIEF_INCLUDE_DIR}/LIEF)
@@ -209,14 +323,11 @@ set(LIEF_BUILD_INCLUDE_INSTALL_DIR ${CMAKE_BINARY_DIR}/lib/lief/include/LIEF)
 set(SPDLOG_INCLUDE_INSTALL_DIR ${SPDLOG_INCLUDE_DIR}/spdlog)
 
 install(DIRECTORY ${UNICORN_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
+install(DIRECTORY ${UNICORNAFL_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${CAPSTONE_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${KEYSTONE_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${LIEF_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
-
-if(NOT DEV)
 install(DIRECTORY ${LIEF_BUILD_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
-endif()
-
 install(DIRECTORY ${SPDLOG_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 
 # Build tools

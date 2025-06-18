@@ -19,10 +19,12 @@ Inspired by [**Qiling**](https://github.com/qilingframework/qiling), Arion in it
 ### Features
 Arion currently implements the following features :  
 - **Emulating Linux ELFs for x86, x86-64, ARM, ARM64**  
+- **Snapshot fuzzing with UnicornAFL**  
 - **Emulating more than 120 syscalls**  
 - **Fork handling**  
 - **Multithreading handling (unstable)**  
 - **Saving / restoring context**  
+- **GDB debugging with udbserver**
 - **Hooking the target with ~20 functions**  
 - **Memory reading / writing**  
 - **File system management**  
@@ -32,11 +34,12 @@ Arion currently implements the following features :
 [Installation](#install)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Download a release](#install_release)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Build the library with Docker](#install_build_docker)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Build the library on host machine](#install_build_host)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Enable testing](#install_build_host_testing)  
 [Performance comparison](#perfs)  
 [How to use ?](#how)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Examples](#how_examples)  
 [Contributing](#contributing)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Development Mode](#dev_mode)  
 
 <a name="install"/>
 
@@ -53,17 +56,30 @@ Check the [Releases](https://github.com/h311d1n3r/Arion/releases/) tab on the Gi
 1. Clone the repository `git clone https://github.com/h311d1n3r/Arion.git && cd Arion`  
 2. Check the available Dockerfiles under `Arion/docker`  
 3. Build the docker image of your choice `./scripts/docker_build.sh {OS}{OS_VERSION} {BUILD_VERSION}`  
-4. You can build against **Arion** library from inside the docker or extract it on your host.  
+4. You can build against **Arion** library from inside the docker or extract it on your host  
 
 <a name="install_build_host"/>
 
-### Build the tool on host  
+### Build the library on host machine  
+> Rust must be installed on host (required by [udbserver](https://github.com/bet4it/udbserver))  
 1. Clone the repository `git clone https://github.com/h311d1n3r/Arion.git && cd Arion`  
 2. Initialize git dependencies : `git submodule update --init`  
-3. Create the build directory `mkdir build && cd build`  
-4. Run CMake to configure the project `cmake ..`  
-5. Run make to compile the project `make -j4`  
-6. Run make install to deploy the project `sudo make install`  
+3. Pull LFS files : `git lfs pull`
+4. Create the build directory `mkdir build && cd build`  
+<u>With Ninja</u>
+5. Run CMake to configure the project `cmake -G Ninja ..`  
+6. Run make to compile the project `ninja -j7`  
+7. Run make install to deploy the project `sudo ninja install`  
+<u>With Make</u>
+5. Run CMake to configure the project `cmake ..`  
+6. Run make to compile the project `make -j7`  
+7. Run make install to deploy the project `sudo make install`  
+
+<a name="install_build_host_testing"/>
+
+#### Enable testing
+You can generate test targets by adding `-DTEST=ON` to the cmake command you use to configure the project.  
+Then, run the tests with `ctest` from your build directory.  
 
 <a name="perfs"/>
 
@@ -89,11 +105,3 @@ You can find examples inside the `examples` directory. These examples are by no 
 ## Contributing
 
 Feel free to contribute to the project by implementing new features on the `dev` branch.  
-
-<a name="dev_mode"/>
-
-### Development Mode
-
-Arion can be compiled with `DEV` option enabled (`-DDEV=ON`) to increase build speed.  
-This mode uses system libraries instead of building and embedding the ones of `lib/`.  
-It is highly recommended to use library versions on the exact same commits as `lib/`.

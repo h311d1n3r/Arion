@@ -23,8 +23,8 @@ class ElfParser
 {
   private:
     std::weak_ptr<Arion> arion;
-    std::unique_ptr<const LIEF::ELF::Binary> parse_general_data(std::unique_ptr<const LIEF::ELF::Binary> elf);
-    std::unique_ptr<const LIEF::ELF::Binary> parse_segments(std::unique_ptr<const LIEF::ELF::Binary> elf);
+    std::unique_ptr<LIEF::ELF::Binary> parse_general_data(std::unique_ptr<LIEF::ELF::Binary> elf);
+    std::unique_ptr<LIEF::ELF::Binary> parse_segments(std::unique_ptr<LIEF::ELF::Binary> elf);
 
   public:
     const std::string elf_path;

@@ -52,12 +52,10 @@ uint64_t sys_setpgid(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params
 
     if (!pid)
         pid = arion->get_pid();
-    if (Arion::has_arion_instance(pid))
+    std::shared_ptr<ArionGroup> group = arion->get_group();
+    if (group->has_arion_instance(pid))
     {
-        std::shared_ptr<Arion> target = Arion::get_arion_instance(pid).lock();
-        if (!target)
-            throw ExpiredWeakPtrException("Arion");
-
+        std::shared_ptr<Arion> target = group->get_arion_instance(pid);
         target->set_pgid(pgid);
     }
     // PREVENT MODIFICATION OF ARION PROCESS
@@ -73,7 +71,7 @@ uint64_t sys_getppid(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params
 
 uint64_t sys_getpgrp(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
 {
-    return getpgrp();
+    return arion->get_pgid();
 }
 
 uint64_t sys_setsid(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
@@ -188,12 +186,10 @@ uint64_t sys_getpgid(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params
 
     if (!pid)
         pid = arion->get_pid();
-    if (Arion::has_arion_instance(pid))
+    std::shared_ptr<ArionGroup> group = arion->get_group();
+    if (group->has_arion_instance(pid))
     {
-        std::shared_ptr<Arion> target = Arion::get_arion_instance(pid).lock();
-        if (!target)
-            throw ExpiredWeakPtrException("Arion");
-
+        std::shared_ptr<Arion> target = group->get_arion_instance(pid);
         return target->get_pgid();
     }
     int getpgid_ret = getpgid(pid);

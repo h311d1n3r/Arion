@@ -1,0 +1,99 @@
+name: Arion deployment workflow
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  BUILD_TYPE: Debug
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        lfs: 'true'
+
+    - name: Init submodules
+      run: git submodule update --init --recursive
+
+    - name: APT dependencies
+      run: sudo apt update && sudo apt upgrade && sudo apt -y install uuid-dev coreutils gcc-multilib g++-multilib make cmake
+
+    - name: Download rootfs
+      run: ${{github.workspace}}/scripts/rootfs_download.sh all
+
+    - name: Configure
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DTEST=ON
+
+    - name: Build
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --parallel 4
+
+    - name: Install
+      run: sudo cmake --install ${{github.workspace}}/build
+
+    - name: Run tests
+      run: ctest --test-dir ${{github.workspace}}/build --output-on-failure
+
+    - name: Install docker
+      uses: docker/setup-buildx-action@v2
+      if: github.ref_type == 'tag'
+
+    - name: Build release packages
+      if: github.ref_type == 'tag'
+      run: |
+        VERSION="${GITHUB_REF_NAME#v}"
+        ${{github.workspace}}/scripts/docker_build.sh all "$VERSION"
+      env:
+        GITHUB_REF_NAME: ${{ github.ref_name }}
+
+    - name: Determine release type
+      id: release_type
+      run: |
+        TAG="${GITHUB_REF_NAME}"
+        if [[ "$TAG" == *alpha* || "$TAG" == *beta* ]]; then
+          echo "prerelease=true" >> $GITHUB_OUTPUT
+          echo "make_latest=false" >> $GITHUB_OUTPUT
+        else
+          echo "prerelease=false" >> $GITHUB_OUTPUT
+          echo "make_latest=true" >> $GITHUB_OUTPUT
+        fi
+      env:
+        GITHUB_REF_NAME: ${{ github.ref_name }}
+
+    - name: Extract changelog for release
+      id: changelog
+      run: |
+        VERSION="${GITHUB_REF_NAME#v}"
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+        BODY="$(awk -v version="$VERSION" '
+          BEGIN { found=0 }
+          /^# / {
+            if (found) exit;
+            if ($2 == version) { found=1; next }
+          }
+          found { print }
+        ' CHANGELOG.md)"
+        echo "changelog<<EOF" >> $GITHUB_OUTPUT
+        echo "$BODY" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+      env:
+        GITHUB_REF_NAME: ${{ github.ref_name }}
+
+    - name: Publish release
+      uses: softprops/action-gh-release@v2
+      with:
+        body: ${{ steps.changelog.outputs.changelog }}
+        prerelease: ${{ steps.release_type.outputs.prerelease }}
+        make_latest: ${{ steps.release_type.outputs.make_latest }}
+        files: |
+          "${{github.workspace}}/build/*.deb"
+          "${{github.workspace}}/build/*.rpm"
+      if: github.ref_type == 'tag'
