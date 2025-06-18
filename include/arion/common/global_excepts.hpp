@@ -148,13 +148,6 @@ class PathTooLongException : public ArionException
         : ArionException(std::string("File path \"") + file_path + std::string("\" is too long.")) {};
 };
 
-class ArionCustomBaremetalConfigurationNotSet : public ArionException
-{
-  public:
-  explicit ArionCustomBaremetalConfigurationNotSet()
-      : ArionException(std::string("Custom configuration has been set but no mappings were provided.")) {};
-};
-
 class ElfParsingException : public ArionException
 {
   public:
