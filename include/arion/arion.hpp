@@ -4,7 +4,7 @@
 #include <arion/archs/x86/gdt_manager.hpp>
 #include <arion/capstone/capstone.h>
 #include <arion/common/abi_manager.hpp>
-#include <arion/common/baremetal.hpp>
+#include <arion/common/baremetal_manager.hpp>
 #include <arion/common/code_tracer.hpp>
 #include <arion/common/config.hpp>
 #include <arion/common/context_manager.hpp>
@@ -88,7 +88,7 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
 
   public:
     std::unique_ptr<AbiManager> abi;
-    std::unique_ptr<Baremetal> baremetal;
+    std::unique_ptr<BaremetalManager> baremetal;
     std::unique_ptr<MemoryManager> mem;
     std::unique_ptr<FileSystemManager> fs;
     std::unique_ptr<SocketManager> sock;
@@ -101,7 +101,7 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     std::unique_ptr<CodeTracer> tracer;
     std::unique_ptr<Logger> logger;
     std::unique_ptr<Config> config;
-    std::unique_ptr<LOADER_PARAMS> loader_params;
+    std::unique_ptr<LNX_LOADER_PARAMS> loader_params;
     std::vector<std::shared_ptr<arion::SIGNAL>> pending_signals;
     uc_engine *uc;
     std::vector<ks_engine *> ks;
@@ -111,7 +111,7 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
                  std::vector<std::string> program_env = std::vector<std::string>(), std::string cwd = "",
                  std::unique_ptr<Config> config = std::move(std::make_unique<Config>()));
     static std::shared_ptr<Arion> ARION_EXPORT
-    new_instance(std::unique_ptr<Baremetal> baremetal, std::string fs_path = "/",
+    new_instance(std::unique_ptr<BaremetalManager> baremetal, std::string fs_path = "/",
                  std::vector<std::string> program_env = std::vector<std::string>(), std::string cwd = "",
                  std::unique_ptr<Config> config = std::move(std::make_unique<Config>()));
     ~Arion();

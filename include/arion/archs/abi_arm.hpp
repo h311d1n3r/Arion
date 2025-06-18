@@ -630,11 +630,9 @@ inline const size_t PTR_SZ = 4;
 
 inline const uint16_t ARCH_SZ = 32;
 
-inline std::string ARCH_NAME = "ARM";
-
 inline arion::CPU_ARCH ARCH = arion::CPU_ARCH::ARM_ARCH;
 
-inline ABI_ATTRIBUTES ABI_ATTRS = ABI_ATTRIBUTES(ARCH, ARCH_NAME, ARCH_SZ, PTR_SZ, HWCAP, HWCAP2, SEG_FLAGS, ABI_REGS,
+inline ABI_ATTRIBUTES ABI_ATTRS = ABI_ATTRIBUTES(ARCH, ARCH_SZ, PTR_SZ, HWCAP, HWCAP2, SEG_FLAGS, ABI_REGS,
                                                  ABI_CALLING_CONV, ABI_SYSCALLING_CONV, NAME_BY_SYSCALL_NO);
 } // namespace arion_arm
 

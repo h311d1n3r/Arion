@@ -9,37 +9,22 @@
 
 using namespace arion;
 
-#define LINUX_64_STACK_ADDR 0x7ffffffde000
-#define LINUX_64_STACK_SZ 0x21000
+#define LINUX_BAREMETAL_CODE_ALIGN 0x1000
 
-#define LINUX_32_LOAD_ADDR 0x8040000
+#define LINUX_BAREMETAL_CODE_PERMS 0x5
 
-#define LINUX_32_STACK_ADDR 0xfffcf000
-#define LINUX_32_STACK_SZ 0x21000
-
-#define HEAP_SZ 0x1000
-#define DEFAULT_DATA_SIZE 0x1000 * 100
-
-#define LINUX_RWX 1 | 2 | 4
-#define LINUX_RW 2 | 4
-
-class LinuxBaremetalLoader
+class LinuxBaremetalLoader : LinuxLoader
 {
   private:
-    const std::vector<std::string> program_env;
-    std::weak_ptr<Arion> arion;
-    ADDR map_default_instance(std::shared_ptr<std::vector<uint8_t>> coderaw, ADDR load_addr);
-    void setup_envp(std::vector<ADDR> envp_ptrs);
+    arion::ADDR map_code(std::vector<uint8_t> code);
+
+  protected:
+    void setup_specific_auxv(std::shared_ptr<LNX_LOADER_PARAMS> params, uint16_t arch_sz) override;
 
   public:
-    uint16_t arch_sz;
-    void ARION_EXPORT init_main_thread(std::shared_ptr<LOADER_PARAMS> params);
-    ADDR ARION_EXPORT map_stack(std::shared_ptr<LOADER_PARAMS> params);
-
-    LinuxBaremetalLoader(std::weak_ptr<Arion> arion, const std::vector<std::string> program_env)
-        : arion(arion), program_env(program_env) {};
-    ARION_EXPORT LinuxBaremetalLoader(std::weak_ptr<Arion> arion) : arion(arion) {};
-    std::unique_ptr<LOADER_PARAMS> process();
+    LinuxBaremetalLoader(std::weak_ptr<Arion> arion, const std::vector<std::string> program_args, const std::vector<std::string> program_env)
+        : LinuxLoader(arion, program_args, program_env) {};
+    std::unique_ptr<LNX_LOADER_PARAMS> process() override;
 };
 
 #endif // ARION_LNX_BAREMETAL_LOADER_HPP

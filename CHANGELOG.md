@@ -1,19 +1,19 @@
 # 1.0.1-alpha
+- Added UnicornAFL fuzzing mode
 - Added udbserver
-- Fixed submodules compilation issue
-- Removed DEV mode
+- ArionGroup class (preparing IPC)
 - Improved syscall logging
-- Added architecture rootfs and static toolchains build/download
+- Fixed submodules compilation issue
 - Implemented Google Test
+- Removed DEV compilation mode
+- Added architecture rootfs and static toolchains build/download
 - Added CMake package
 - Fixed dependency issues when linking in DEV mode
 - Added config for Arion instance
 - Implemented some syscalls
-- Added UnicornAFL fuzzing mode
 - Run from/to address
 - Signals rework
 - Threads rework
-- ArionGroup class (preparing IPC)
 - Bumped CMake requirements
 - Added CHANGELOG.md and VERSION
 

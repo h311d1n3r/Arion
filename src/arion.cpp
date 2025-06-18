@@ -209,7 +209,7 @@ std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program_args
     return arion;
 }
 
-std::shared_ptr<Arion> Arion::new_instance(std::unique_ptr<Baremetal> baremetal, std::string fs_path,
+std::shared_ptr<Arion> Arion::new_instance(std::unique_ptr<BaremetalManager> baremetal, std::string fs_path,
                                            std::vector<std::string> program_env, std::string cwd,
                                            std::unique_ptr<Config> config)
 {
@@ -218,7 +218,7 @@ std::shared_ptr<Arion> Arion::new_instance(std::unique_ptr<Baremetal> baremetal,
     std::shared_ptr<Arion> arion = std::make_shared<Arion>();
     arion->fs = FileSystemManager::initialize(arion, fs_path, cwd);
     arion->baremetal = std::move(baremetal);
-    Arion::new_instance_common(arion, arion->baremetal->arch, fs_path, program_env, cwd, std::move(config));
+    Arion::new_instance_common(arion, arion->baremetal->get_arch(), fs_path, program_env, cwd, std::move(config));
     colorstream init_msg;
     init_msg << ARION_LOG_COLOR::WHITE << "Initializing Arion instance in " << ARION_LOG_COLOR::MAGENTA << "baremetal" << ARION_LOG_COLOR::WHITE << " mode.";
     arion->logger->info(init_msg.str());
@@ -316,7 +316,7 @@ void Arion::init_file_program(std::shared_ptr<ElfParser> prog_parser)
 void Arion::init_baremetal_program()
 {
     std::shared_ptr<Arion> curr_instance = shared_from_this();
-    CPU_ARCH arch = this->baremetal->arch;
+    CPU_ARCH arch = this->baremetal->get_arch();
     this->abi = AbiManager::initialize(curr_instance, arch);
     if (arch == CPU_ARCH::X86_ARCH)
     {
@@ -324,10 +324,8 @@ void Arion::init_baremetal_program()
         this->gdt_manager->setup();
     }
     this->syscalls = LinuxSyscallManager::initialize(curr_instance); // must initialize AbiManager first
-    if (!this->baremetal->setup_memory) {
-        LinuxBaremetalLoader loader(curr_instance,this->program_env);
-        this->loader_params = loader.process();
-    }
+    LinuxBaremetalLoader loader(curr_instance, this->program_args, this->program_env);
+    this->loader_params = loader.process();
 }
 
 void Arion::init_dynamic_program(std::shared_ptr<ElfParser> prog_parser)

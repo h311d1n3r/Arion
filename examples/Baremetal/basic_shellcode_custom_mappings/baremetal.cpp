@@ -1,6 +1,6 @@
 #include <arion/arion.hpp>
 #include <arion/common/global_defs.hpp>
-#include <arion/common/baremetal.hpp>
+#include <arion/common/baremetal_manager.hpp>
 #include <arion/components/code_trace_analysis.hpp>
 #include <arion/unicorn/x86.h>
 #include <arion/utils/convert_utils.hpp>
