@@ -75,6 +75,7 @@ void ArionGroup::add_arion_instance(std::shared_ptr<Arion> arion, std::optional<
         pid_val = this->next_pid;
         arion->set_pid(pid_val);
         arion->set_pgid(pgid.value_or(pid_val));
+        arion->threads->set_all_tgid(pid_val, true);
         this->next_pid++;
     }
     else
@@ -96,10 +97,11 @@ void ArionGroup::remove_arion_instance(pid_t pid)
 
 void ArionGroup::run()
 {
+    this->trigger_stop = false;
     std::map<pid_t, std::shared_ptr<Arion>>::iterator instance_it;
-    while ((instance_it = this->instances.begin()) != this->instances.end())
+    while ((instance_it = this->instances.begin()) != this->instances.end() && !this->trigger_stop)
     {
-        while (instance_it != this->instances.end())
+        while (instance_it != this->instances.end() && !this->trigger_stop)
         {
             auto weak_instance = *instance_it;
             std::shared_ptr<Arion> instance = weak_instance.second;
@@ -131,6 +133,11 @@ void ArionGroup::run()
             instance_it++;
         }
     }
+}
+
+void ArionGroup::stop() {
+    this->trigger_stop = true;
+    this->stop_curr();
 }
 
 void ArionGroup::stop_curr()

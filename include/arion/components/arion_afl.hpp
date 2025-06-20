@@ -9,7 +9,7 @@
 using ARION_AFL_INPUT_CALLBACK = std::function<bool(std::shared_ptr<Arion> arion, char *input, size_t input_sz,
                                                     uint32_t persistent_round, void *user_data)>;
 using ARION_AFL_CRASH_CALLBACK = std::function<bool(std::shared_ptr<Arion> arion, uc_err res, char *input,
-                                                    int input_len, int persistent_round, void *user_data)>;
+                                                    size_t input_sz, uint32_t persistent_round, void *user_data)>;
 
 struct ARION_AFL_PARAM
 {

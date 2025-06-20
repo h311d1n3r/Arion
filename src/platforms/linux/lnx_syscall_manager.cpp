@@ -599,9 +599,15 @@ void LinuxSyscallManager::process_syscall(std::shared_ptr<Arion> arion)
         uint64_t param_val = arion->abi->read_arch_reg(param_reg);
         func_params.push_back(param_val);
     }
-    uint64_t syscall_ret = func->func(arion, func_params);
+    bool syscall_handled = false;
+    arion->hooks->trigger_arion_hook(ARION_HOOK_TYPE::SYSCALL_HOOK, sysno, func_params, &syscall_handled);
+    uint64_t syscall_ret;
+    if(!syscall_handled) {
+        syscall_ret = func->func(arion, func_params);
+        arion->abi->write_arch_reg(syscall_ret_reg, syscall_ret);
+    } else
+        syscall_ret = arion->abi->read_arch_reg(syscall_ret_reg);
     this->print_syscall(arion, syscall_name, func->signature, func_params, syscall_ret);
-    arion->abi->write_arch_reg(syscall_ret_reg, syscall_ret);
 }
 
 void LinuxSyscallManager::set_syscall_func(uint64_t sysno, std::shared_ptr<SYSCALL_FUNC> func)

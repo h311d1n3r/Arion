@@ -15,6 +15,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -75,13 +78,13 @@ jobs:
     - name: Extract changelog for release
       id: changelog
       run: |
-        VERSION="${GITHUB_REF_NAME#v}"
-        echo "VERSION=$VERSION" >> $GITHUB_ENV
-        BODY="$(awk -v version="$VERSION" '
+        version="${GITHUB_REF_NAME#v}"
+        echo "version=$version" >> $GITHUB_OUTPUT
+        BODY="$(awk -v md_version="$version" '
           BEGIN { found=0 }
           /^# / {
             if (found) exit;
-            if ($2 == version) { found=1; next }
+            if ($2 == md_version) { found=1; next }
           }
           found { print }
         ' CHANGELOG.md)"
@@ -94,10 +97,13 @@ jobs:
     - name: Publish release
       uses: softprops/action-gh-release@v2
       with:
-        body: ${{ steps.changelog.outputs.changelog }}
+        body:  |
+          ## Changelog of ${{ steps.changelog.outputs.version }}:  
+          ${{ steps.changelog.outputs.changelog }}
         prerelease: ${{ steps.release_type.outputs.prerelease }}
         make_latest: ${{ steps.release_type.outputs.make_latest }}
         files: |
-          "${{github.workspace}}/build/*.deb"
-          "${{github.workspace}}/build/*.rpm"
+          ${{github.workspace}}/build/*.deb
+          ${{github.workspace}}/build/*.rpm
       if: github.ref_type == 'tag'
+
