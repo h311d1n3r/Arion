@@ -102,6 +102,7 @@ class ARION_EXPORT ThreadingManager
     pid_t ARION_EXPORT get_running_tid();
     void set_running_tid(pid_t tid);
     void set_tgid(pid_t tid, pid_t tgid, bool init = false);
+    void set_all_tgid(pid_t tgid, bool init = false);
 };
 
 #endif // ARION_THREADING_MANAGER_HPP

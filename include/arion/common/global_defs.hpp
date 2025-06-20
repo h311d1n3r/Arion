@@ -33,6 +33,7 @@ using RVAL64 = uint64_t;
 using RVAL128 = std::array<BYTE, 16>;
 using RVAL256 = std::array<BYTE, 32>;
 using RVAL512 = std::array<BYTE, 64>;
+using SYS_PARAM = uint64_t;
 
 const size_t EMPTY = 0;
 

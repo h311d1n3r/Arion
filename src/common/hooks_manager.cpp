@@ -543,12 +543,16 @@ HOOK_ID HooksManager::hook_arion(ARION_HOOK_TYPE type, HOOK_CALLBACK callback, v
 
 HOOK_ID HooksManager::hook_fork(PROCESS_HOOK_CALLBACK callback, void *user_data)
 {
-    return hook_arion(ARION_HOOK_TYPE::FORK_HOOK, callback, user_data);
+    return this->hook_arion(ARION_HOOK_TYPE::FORK_HOOK, callback, user_data);
 }
 
 HOOK_ID HooksManager::hook_execve(PROCESS_HOOK_CALLBACK callback, void *user_data)
 {
-    return hook_arion(ARION_HOOK_TYPE::EXECVE_HOOK, callback, user_data);
+    return this->hook_arion(ARION_HOOK_TYPE::EXECVE_HOOK, callback, user_data);
+}
+
+HOOK_ID HooksManager::hook_syscall(SYSCALL_HOOK_CALLBACK callback, void *user_data) {
+    return this->hook_arion(ARION_HOOK_TYPE::SYSCALL_HOOK, callback, user_data);
 }
 
 void HooksManager::unhook(HOOK_ID hook_id)

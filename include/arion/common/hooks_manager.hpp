@@ -28,9 +28,11 @@ using TLB_HOOK_CALLBACK = std::function<bool(std::shared_ptr<Arion> arion, uint6
                                              uc_tlb_entry *result, void *user_data)>;
 using PROCESS_HOOK_CALLBACK =
     std::function<void(std::shared_ptr<Arion> arion, std::shared_ptr<Arion> child, void *user_data)>;
+using SYSCALL_HOOK_CALLBACK =
+    std::function<void(std::shared_ptr<Arion> arion, uint64_t sysno, std::vector<arion::SYS_PARAM> params, bool* handled, void *user_data)>;
 using HOOK_CALLBACK =
     std::variant<NO_PARAM_HOOK_CALLBACK, NO_PARAM_BOOL_HOOK_CALLBACK, U32_HOOK_CALLBACK, ADDR_SZ_HOOK_CALLBACK,
-                 MEM_HOOK_CALLBACK, EDGE_HOOK_CALLBACK, TCG_HOOK_CALLBACK, TLB_HOOK_CALLBACK, PROCESS_HOOK_CALLBACK>;
+                 MEM_HOOK_CALLBACK, EDGE_HOOK_CALLBACK, TCG_HOOK_CALLBACK, TLB_HOOK_CALLBACK, PROCESS_HOOK_CALLBACK, SYSCALL_HOOK_CALLBACK>;
 
 enum ARION_HOOK_TYPE
 {
@@ -53,7 +55,8 @@ enum ARION_HOOK_TYPE
     TCG_OPCODE_HOOK,
     TLB_FILL_HOOK,
     FORK_HOOK,
-    EXECVE_HOOK
+    EXECVE_HOOK,
+    SYSCALL_HOOK
 };
 
 extern std::map<ARION_HOOK_TYPE, uc_hook_type> ARION_UC_HOOK_TYPES;
@@ -160,6 +163,7 @@ class ARION_EXPORT HooksManager
                                        arion::ADDR end = ARION_MAX_U64, void *user_data = nullptr);
     HOOK_ID ARION_EXPORT hook_fork(PROCESS_HOOK_CALLBACK callback, void *user_data = nullptr);
     HOOK_ID ARION_EXPORT hook_execve(PROCESS_HOOK_CALLBACK callback, void *user_data = nullptr);
+    HOOK_ID ARION_EXPORT hook_syscall(SYSCALL_HOOK_CALLBACK callback, void *user_data = nullptr);
     void ARION_EXPORT unhook(HOOK_ID hook_id);
     void ARION_EXPORT clear_hooks();
 

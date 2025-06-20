@@ -37,6 +37,7 @@ extern std::map<arion::CPU_ARCH, std::vector<std::pair<cs_arch, cs_mode>>> ARION
 class ARION_EXPORT ArionGroup : public std::enable_shared_from_this<ArionGroup>
 {
   private:
+    bool trigger_stop;
     pid_t next_pid = ARION_PROCESS_PID;
     pid_t curr_pid = ARION_PROCESS_PID;
     std::map<pid_t, std::shared_ptr<Arion>> instances;
@@ -50,6 +51,7 @@ class ARION_EXPORT ArionGroup : public std::enable_shared_from_this<ArionGroup>
                                          std::optional<pid_t> pgid = std::nullopt);
     void ARION_EXPORT remove_arion_instance(pid_t pid);
     void ARION_EXPORT run();
+    void ARION_EXPORT stop();
     void ARION_EXPORT stop_curr();
     pid_t ARION_EXPORT get_curr_pid();
     void set_curr_pid(pid_t pid);

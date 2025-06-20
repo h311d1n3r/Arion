@@ -153,7 +153,6 @@ pid_t ThreadingManager::add_thread_entry(std::unique_ptr<ARION_THREAD> thread)
     if (!this->threads_map.size())
         this->running_tid = tid;
     this->threads_map[tid] = std::move(thread);
-    this->set_tgid(tid, arion->get_pid(), true);
     return tid;
 }
 
@@ -459,4 +458,9 @@ void ThreadingManager::set_tgid(pid_t tid, pid_t tgid, bool init)
     std::unique_ptr<ARION_TGROUP_ENTRY> entry = std::make_unique<ARION_TGROUP_ENTRY>(tid, tgid, arion->get_pid());
     new_tgid_vec.push_back(std::move(entry));
     ThreadingManager::thread_groups[tgid] = std::move(new_tgid_vec);
+}
+
+void ThreadingManager::set_all_tgid(pid_t tgid, bool init) {
+    for(auto& thread_it : this->threads_map)
+        this->set_tgid(thread_it.first, tgid, init);
 }
