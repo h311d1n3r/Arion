@@ -45,7 +45,7 @@ void on_syscall_hook(std::shared_ptr<Arion> arion, uint64_t sysno, std::vector<a
     }
 }
 
-// Launch the executable with : AFL_AUTORESUME=1 afl-fuzz -i afl_inputs -o afl_outputs -U -- ./fuzzer @@
+// Launch the executable with : AFL_AUTORESUME=1 afl-fuzz -i ../corpus -o ./output -U -- ./fuzzer @@
 int main()
 {
     std::unique_ptr<Config> config = std::make_unique<Config>();
