@@ -2,7 +2,6 @@
 #include <arion/common/global_defs.hpp>
 #include <arion/components/arion_afl.hpp>
 #include <filesystem>
-#include <iostream>
 #include <memory>
 
 using namespace arion;
@@ -31,7 +30,6 @@ bool crash_callback(std::shared_ptr<Arion> arion, uc_err res, char *input, size_
 void on_syscall_hook(std::shared_ptr<Arion> arion, uint64_t sysno, std::vector<arion::SYS_PARAM> params, bool *handled,
                      void *user_data)
 {
-    std::cout << std::hex << +arion->abi->read_arch_reg(UC_X86_REG_RIP) << std::endl;
     if (sysno == 0)
     {
         uint64_t fd = params.at(0);
@@ -49,7 +47,7 @@ void on_syscall_hook(std::shared_ptr<Arion> arion, uint64_t sysno, std::vector<a
 int main()
 {
     std::unique_ptr<Config> config = std::make_unique<Config>();
-    config->set_field<ARION_LOG_LEVEL>("log_lvl", ARION_LOG_LEVEL::DEBUG);
+    config->set_field<ARION_LOG_LEVEL>("log_lvl", ARION_LOG_LEVEL::OFF);
     arion_group = std::make_shared<ArionGroup>();
     // Arion::new_instance(args, fs_root, env, cwd, log_level, config)
     std::shared_ptr<Arion> arion =
@@ -57,7 +55,6 @@ int main()
     arion_group->add_arion_instance(arion);
     HOOK_ID hook_sys_id = arion->hooks->hook_syscall(on_syscall_hook);
     arion_group->run();
-    std::cout << std::hex << +arion->abi->read_arch_reg(UC_X86_REG_RIP) << std::endl;
     arion->hooks->unhook(hook_sys_id);
     ArionAfl afl(arion);
     afl.fuzz(input_callback, crash_callback, {0});
