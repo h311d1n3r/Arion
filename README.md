@@ -39,6 +39,7 @@ Arion currently implements the following features :
 [Performance comparison](#perfs)  
 [How to use ?](#how)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Examples](#how_examples)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Fuzzing](#how_fuzzing)
 [Contributing](#contributing)  
 
 <a name="install"/>
@@ -99,6 +100,12 @@ In the first graph, the variable is the amount of syscalls executed by the targe
 
 ### Examples
 You can find examples inside the `examples` directory. These examples are by no means exhaustive, but they will teach you how to deal with **Arion**.  
+
+<a name="how_fuzzing"/>
+
+### Fuzzing
+Due to its good performance, Arion can be of great help concerning blackbox fuzzing. It implements [UnicornAFL](https://github.com/AFLplusplus/unicornafl), and you can find an example [here](https://github.com/h311d1n3r/Arion/tree/main/examples/Fuzzer).  
+Once your fuzzing program is compiled, run it with : `AFL_AUTORESUME=1 afl-fuzz -i afl_inputs -o afl_outputs -U -- ./your_program @@`
 
 <a name="contributing"/>
 

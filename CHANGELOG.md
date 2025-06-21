@@ -1,6 +1,7 @@
 # 1.0.1-alpha
 - Added UnicornAFL fuzzing mode
 - Added udbserver
+- Added baremetal support
 - ArionGroup class (preparing IPC)
 - Improved syscall logging
 - Fixed submodules compilation issue

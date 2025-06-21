@@ -2,8 +2,8 @@
 #include <arion/common/global_defs.hpp>
 #include <arion/components/arion_afl.hpp>
 #include <filesystem>
-#include <memory>
 #include <iostream>
+#include <memory>
 
 using namespace arion;
 
@@ -11,24 +11,32 @@ std::shared_ptr<ArionGroup> arion_group;
 ADDR read_buf = 0;
 size_t read_sz = 0;
 
-bool input_callback(std::shared_ptr<Arion> arion, char *input, size_t input_sz, uint32_t persistent_round, void *user_data) {
+bool input_callback(std::shared_ptr<Arion> arion, char *input, size_t input_sz, uint32_t persistent_round,
+                    void *user_data)
+{
     REG ret_reg = arion->abi->get_attrs()->syscalling_conv.ret_reg;
-    if(input_sz > read_sz)
+    if (input_sz > read_sz)
         input_sz = read_sz;
-    arion->mem->write(read_buf, (BYTE*) input, input_sz);
+    arion->mem->write(read_buf, (BYTE *)input, input_sz);
     arion->abi->write_arch_reg(ret_reg, input_sz);
     return true;
 }
 
-bool crash_callback(std::shared_ptr<Arion> arion, uc_err res, char *input, size_t input_sz, uint32_t persistent_round, void *user_data) {
+bool crash_callback(std::shared_ptr<Arion> arion, uc_err res, char *input, size_t input_sz, uint32_t persistent_round,
+                    void *user_data)
+{
     return true;
 }
 
-void on_syscall_hook(std::shared_ptr<Arion> arion, uint64_t sysno, std::vector<arion::SYS_PARAM> params, bool* handled, void *user_data) {
+void on_syscall_hook(std::shared_ptr<Arion> arion, uint64_t sysno, std::vector<arion::SYS_PARAM> params, bool *handled,
+                     void *user_data)
+{
     std::cout << std::hex << +arion->abi->read_arch_reg(UC_X86_REG_RIP) << std::endl;
-    if(sysno == 0) {
+    if (sysno == 0)
+    {
         uint64_t fd = params.at(0);
-        if(fd == 0) {
+        if (fd == 0)
+        {
             read_buf = params.at(1);
             read_sz = params.at(2);
             *handled = true;
@@ -37,6 +45,7 @@ void on_syscall_hook(std::shared_ptr<Arion> arion, uint64_t sysno, std::vector<a
     }
 }
 
+// Launch the executable with : AFL_AUTORESUME=1 afl-fuzz -i afl_inputs -o afl_outputs -U -- ./fuzzer @@
 int main()
 {
     std::unique_ptr<Config> config = std::make_unique<Config>();
