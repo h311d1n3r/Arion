@@ -39,7 +39,7 @@ Arion currently implements the following features :
 [Performance comparison](#perfs)  
 [How to use ?](#how)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Examples](#how_examples)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Fuzzing](#how_fuzzing)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Fuzzing](#how_fuzzing)  
 [Contributing](#contributing)  
 
 <a name="install"/>
