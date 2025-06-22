@@ -6,9 +6,9 @@
 #include <arion/common/hooks_manager.hpp>
 #include <arion/common/memory_manager.hpp>
 #include <arion/keystone/keystone.h>
-#include <arion/platforms/linux/lnx_baremetal_loader.hpp>
 #include <arion/platforms/linux/elf_loader.hpp>
 #include <arion/platforms/linux/elf_parser.hpp>
+#include <arion/platforms/linux/lnx_baremetal_loader.hpp>
 #include <arion/platforms/linux/lnx_syscall_manager.hpp>
 #include <arion/unicorn/unicorn.h>
 #include <exception>
@@ -135,7 +135,8 @@ void ArionGroup::run()
     }
 }
 
-void ArionGroup::stop() {
+void ArionGroup::stop()
+{
     this->trigger_stop = true;
     this->stop_curr();
 }
@@ -167,8 +168,7 @@ void ArionGroup::set_next_pid(pid_t pid)
 }
 
 void Arion::new_instance_common(std::shared_ptr<Arion> arion, arion::CPU_ARCH arch, std::string fs_path,
-                                           std::vector<std::string> program_env, std::string cwd,
-                                           std::unique_ptr<Config> config)
+                                std::vector<std::string> program_env, std::string cwd, std::unique_ptr<Config> config)
 {
     arion->config = std::move(config);
     arion->program_env = program_env;
@@ -187,7 +187,7 @@ std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program_args
                                            std::vector<std::string> program_env, std::string cwd,
                                            std::unique_ptr<Config> config)
 {
-    if(!ArionTypeRegistry::instance().is_initialized())
+    if (!ArionTypeRegistry::instance().is_initialized())
         ArionTypeRegistry::instance().init_types();
     if (!program_args.size())
         throw InvalidArgumentException("Program arguments must at least contain target name.");
@@ -199,7 +199,8 @@ std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program_args
     prog_parser->process();
     Arion::new_instance_common(arion, prog_parser->arch, fs_path, program_env, cwd, std::move(config));
     colorstream init_msg;
-    init_msg << ARION_LOG_COLOR::WHITE << "Initializing Arion instance for image " << ARION_LOG_COLOR::GREEN << "\"" << program_path << "\"" << ARION_LOG_COLOR::WHITE << ".";
+    init_msg << ARION_LOG_COLOR::WHITE << "Initializing Arion instance for image " << ARION_LOG_COLOR::GREEN << "\""
+             << program_path << "\"" << ARION_LOG_COLOR::WHITE << ".";
     arion->logger->info(init_msg.str());
     if (!std::filesystem::exists(program_path))
         throw FileNotFoundException(program_path);
@@ -220,14 +221,15 @@ std::shared_ptr<Arion> Arion::new_instance(std::unique_ptr<BaremetalManager> bar
                                            std::vector<std::string> program_env, std::string cwd,
                                            std::unique_ptr<Config> config)
 {
-    if(!ArionTypeRegistry::instance().is_initialized())
+    if (!ArionTypeRegistry::instance().is_initialized())
         ArionTypeRegistry::instance().init_types();
     std::shared_ptr<Arion> arion = std::make_shared<Arion>();
     arion->fs = FileSystemManager::initialize(arion, fs_path, cwd);
     arion->baremetal = std::move(baremetal);
     Arion::new_instance_common(arion, arion->baremetal->get_arch(), fs_path, program_env, cwd, std::move(config));
     colorstream init_msg;
-    init_msg << ARION_LOG_COLOR::WHITE << "Initializing Arion instance in " << ARION_LOG_COLOR::MAGENTA << "baremetal" << ARION_LOG_COLOR::WHITE << " mode.";
+    init_msg << ARION_LOG_COLOR::WHITE << "Initializing Arion instance in " << ARION_LOG_COLOR::MAGENTA << "baremetal"
+             << ARION_LOG_COLOR::WHITE << " mode.";
     arion->logger->info(init_msg.str());
     arion->context = ContextManager::initialize(arion);
     arion->mem = MemoryManager::initialize(arion);
@@ -263,7 +265,8 @@ Arion::~Arion()
     this->context.reset();
     this->fs.reset();
     this->logger.reset();
-    if(this->baremetal) this->baremetal.reset();
+    if (this->baremetal)
+        this->baremetal.reset();
 
     this->close_engines();
 }

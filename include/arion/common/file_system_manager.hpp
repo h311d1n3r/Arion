@@ -4,6 +4,7 @@
 #include <arion/common/global_defs.hpp>
 #include <map>
 #include <memory>
+#include <regex>
 #include <string>
 #include <vector>
 
@@ -28,12 +29,26 @@ struct ARION_EXPORT ARION_FILE
 std::vector<arion::BYTE> serialize_arion_file(ARION_FILE *arion_f);
 ARION_FILE *deserialize_arion_file(std::vector<arion::BYTE> srz_file);
 
+class ProcFSManager
+{
+  private:
+    static const inline std::regex PROCFS_REGEX = std::regex(R"(^/proc/([0-9]+|self)/([^/]+)$)");
+    std::weak_ptr<Arion> arion;
+
+  public:
+    static std::unique_ptr<ProcFSManager> initialize(std::weak_ptr<Arion> arion);
+    ProcFSManager(std::weak_ptr<Arion> arion) : arion(arion) {};
+    bool is_procfs_path(std::string path);
+    std::string convert(std::string path);
+};
+
 class ARION_EXPORT FileSystemManager
 {
   private:
     std::weak_ptr<Arion> arion;
     std::string fs_path;
     std::string cwd_path;
+    std::unique_ptr<ProcFSManager> procfs;
     bool can_access_file(std::string path);
 
   public:
