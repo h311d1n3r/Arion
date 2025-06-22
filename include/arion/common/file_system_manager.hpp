@@ -34,6 +34,7 @@ class ARION_EXPORT FileSystemManager
     std::weak_ptr<Arion> arion;
     std::string fs_path;
     std::string cwd_path;
+    bool can_access_file(std::string path);
 
   public:
     std::map<int, std::shared_ptr<ARION_FILE>> files;

@@ -152,8 +152,29 @@ std::shared_ptr<ARION_FILE> FileSystemManager::get_arion_file(int target_fd)
     return this->files.at(target_fd);
 }
 
+bool FileSystemManager::can_access_file(std::string path)
+{
+    std::filesystem::path current = path;
+    std::error_code ec;
+    while (std::filesystem::is_symlink(current, ec))
+    {
+        if (access(current.c_str(), R_OK))
+            return false;
+        std::filesystem::path target = std::filesystem::read_symlink(current, ec);
+        if (ec)
+            return false;
+        if (target.is_relative())
+            current = current.parent_path() / target;
+        else
+            current = target;
+    }
+    return true;
+}
+
 bool FileSystemManager::is_in_fs(std::string path)
 {
+    if (!this->can_access_file(path))
+        return false;
     std::filesystem::path fs_canonical = std::filesystem::weakly_canonical(this->fs_path);
     std::filesystem::path path_canonical = std::filesystem::weakly_canonical(path);
     auto fs_it = fs_canonical.begin();
@@ -184,6 +205,6 @@ std::string FileSystemManager::to_fs_path(std::string path)
     else
         fmt_path = this->cwd_path + path;
     if (!this->is_in_fs(fmt_path))
-        fmt_path = this->fs_path;
+        fmt_path = "";
     return fmt_path;
 }
