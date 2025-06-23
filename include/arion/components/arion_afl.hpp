@@ -15,12 +15,13 @@ struct ARION_AFL_PARAM
 {
     std::weak_ptr<Arion> arion;
     std::shared_ptr<ARION_CONTEXT> ctxt;
+    bool keep_mem;
     ARION_AFL_INPUT_CALLBACK input_callback;
     ARION_AFL_CRASH_CALLBACK crash_callback;
     void *user_data;
-    ARION_AFL_PARAM(std::weak_ptr<Arion> arion, std::shared_ptr<ARION_CONTEXT> ctxt,
+    ARION_AFL_PARAM(std::weak_ptr<Arion> arion, std::shared_ptr<ARION_CONTEXT> ctxt, bool keep_mem,
                     ARION_AFL_INPUT_CALLBACK input_callback, ARION_AFL_CRASH_CALLBACK crash_callback, void *user_data)
-        : arion(arion), ctxt(ctxt), input_callback(input_callback), crash_callback(crash_callback),
+        : arion(arion), ctxt(ctxt), keep_mem(keep_mem), input_callback(input_callback), crash_callback(crash_callback),
           user_data(user_data) {};
 };
 
@@ -43,8 +44,9 @@ class ARION_EXPORT ArionAfl
   public:
     ARION_EXPORT ArionAfl(std::weak_ptr<Arion> arion) : arion(arion) {};
     void ARION_EXPORT fuzz(ARION_AFL_INPUT_CALLBACK input_callback, ARION_AFL_CRASH_CALLBACK crash_callback,
-                           std::vector<arion::ADDR> exits, std::vector<int> signals = {SIGSEGV, SIGABRT},
-                           bool always_validate = false, uint32_t persistent_iters = 1000, void *user_data = nullptr);
+                           std::vector<arion::ADDR> exits, bool keep_mem = true,
+                           std::vector<int> signals = {SIGSEGV, SIGABRT}, bool always_validate = false,
+                           uint32_t persistent_iters = 1000, void *user_data = nullptr);
 };
 
 #endif // ARION_ARION_AFL_HPP
