@@ -60,7 +60,7 @@ std::shared_ptr<ARION_CONTEXT> ContextManager::save()
                                            std::move(mapping_list), std::move(file_list), std::move(socket_list));
 }
 
-void ContextManager::restore(std::shared_ptr<ARION_CONTEXT> ctx)
+void ContextManager::restore(std::shared_ptr<ARION_CONTEXT> ctx, bool restore_mem)
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
@@ -115,13 +115,16 @@ void ContextManager::restore(std::shared_ptr<ARION_CONTEXT> ctx)
         }
         arion->sock->add_socket_entry(target_fd, std::make_shared<ARION_SOCKET>(arion_s.get()));
     }
-    arion->mem->unmap_all();
-    for (std::unique_ptr<ARION_MAPPING> &arion_m : ctx->mapping_list)
+    if (restore_mem)
     {
-        size_t mapping_sz = arion_m->end_addr - arion_m->start_addr;
-        arion->mem->map(arion_m->start_addr, mapping_sz, arion_m->perms, arion_m->info);
-        if (arion_m->saved_data)
-            arion->mem->write(arion_m->start_addr, arion_m->saved_data, mapping_sz);
+        arion->mem->unmap_all();
+        for (std::unique_ptr<ARION_MAPPING> &arion_m : ctx->mapping_list)
+        {
+            size_t mapping_sz = arion_m->end_addr - arion_m->start_addr;
+            arion->mem->map(arion_m->start_addr, mapping_sz, arion_m->perms, arion_m->info);
+            if (arion_m->saved_data)
+                arion->mem->write(arion_m->start_addr, arion_m->saved_data, mapping_sz);
+        }
     }
     arion->threads->clear_threads();
     for (std::unique_ptr<ARION_THREAD> &arion_t : ctx->thread_list)

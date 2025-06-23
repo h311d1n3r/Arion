@@ -8,7 +8,7 @@ bool ArionAfl::uc_input_callback(uc_engine *uc, char *input, size_t input_sz, ui
     std::shared_ptr<Arion> arion = hook_param->arion.lock();
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
-    arion->context->restore(hook_param->ctxt);
+    arion->context->restore(hook_param->ctxt, hook_param->keep_mem);
     try
     {
         return arion_callback(arion, input, input_sz, persistent_round, hook_param->user_data);
@@ -40,7 +40,7 @@ bool ArionAfl::uc_crash_callback(uc_engine *uc, uc_err res, char *input, int inp
 }
 
 void ArionAfl::fuzz(ARION_AFL_INPUT_CALLBACK input_callback, ARION_AFL_CRASH_CALLBACK crash_callback,
-                    std::vector<arion::ADDR> exits, std::vector<int> signals, bool always_validate,
+                    std::vector<arion::ADDR> exits, bool keep_mem, std::vector<int> signals, bool always_validate,
                     uint32_t persistent_iters, void *user_data)
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
@@ -51,7 +51,8 @@ void ArionAfl::fuzz(ARION_AFL_INPUT_CALLBACK input_callback, ARION_AFL_CRASH_CAL
         throw UnicornAflNoExitsException();
     arion->init_afl_mode(signals);
     std::shared_ptr<ARION_CONTEXT> ctxt = arion->context->save();
-    struct ARION_AFL_PARAM *param = new ARION_AFL_PARAM(this->arion, ctxt, input_callback, crash_callback, user_data);
+    struct ARION_AFL_PARAM *param =
+        new ARION_AFL_PARAM(this->arion, ctxt, keep_mem, input_callback, crash_callback, user_data);
     uc_afl_ret fuzz_ret =
         uc_afl_fuzz(arion->uc, (char *)arion->get_program_args().at(0).c_str(), uc_input_callback, exits.data(),
                     exits.size(), uc_crash_callback, always_validate, persistent_iters, param);

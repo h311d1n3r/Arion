@@ -1,3 +1,7 @@
+# 1.0.2-alpha
+- Implemented module for procfs
+- Fixed unreadable symbolic link error
+
 # 1.0.1-alpha
 - Added UnicornAFL fuzzing mode
 - Added udbserver
