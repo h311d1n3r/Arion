@@ -36,6 +36,7 @@ class ARION_EXPORT ArionAfl
 {
   private:
     std::weak_ptr<Arion> arion;
+    unsigned char* input_file;
     static bool uc_input_callback(uc_engine *uc, char *input, size_t input_sz, uint32_t persistent_round,
                                   void *user_data);
     static bool uc_crash_callback(uc_engine *uc, uc_err res, char *input, int input_len, int persistent_round,
@@ -43,6 +44,8 @@ class ARION_EXPORT ArionAfl
 
   public:
     ARION_EXPORT ArionAfl(std::weak_ptr<Arion> arion) : arion(arion) {};
+    ARION_EXPORT ArionAfl(std::weak_ptr<Arion> arion, unsigned char* input_file = nullptr) 
+        : arion(arion), input_file(input_file) {}
     void ARION_EXPORT fuzz(ARION_AFL_INPUT_CALLBACK input_callback, ARION_AFL_CRASH_CALLBACK crash_callback,
                            std::vector<arion::ADDR> exits, bool keep_mem = true,
                            std::vector<int> signals = {SIGSEGV, SIGABRT}, bool always_validate = false,

@@ -17,6 +17,10 @@ class LinuxBaremetalLoader : LinuxLoader
 {
   private:
     arion::ADDR map_code(std::vector<uint8_t> code);
+    arion::ADDR map_vvar();
+    arion::ADDR map_vdso();
+    arion::ADDR map_vsyscall();
+    arion::ADDR map_arm_traps();
 
   protected:
     void setup_specific_auxv(std::shared_ptr<LNX_LOADER_PARAMS> params, uint16_t arch_sz) override;

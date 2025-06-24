@@ -53,9 +53,18 @@ void ArionAfl::fuzz(ARION_AFL_INPUT_CALLBACK input_callback, ARION_AFL_CRASH_CAL
     std::shared_ptr<ARION_CONTEXT> ctxt = arion->context->save();
     struct ARION_AFL_PARAM *param =
         new ARION_AFL_PARAM(this->arion, ctxt, keep_mem, input_callback, crash_callback, user_data);
-    uc_afl_ret fuzz_ret =
+
+    uc_afl_ret fuzz_ret;
+    if (arion->baremetal) {
+        fuzz_ret =
+        uc_afl_fuzz(arion->uc, (char*)this->input_file , uc_input_callback, exits.data(),
+                    exits.size(), uc_crash_callback, always_validate, persistent_iters, param);
+    }
+    else {
+        fuzz_ret =
         uc_afl_fuzz(arion->uc, (char *)arion->get_program_args().at(0).c_str(), uc_input_callback, exits.data(),
                     exits.size(), uc_crash_callback, always_validate, persistent_iters, param);
+    }
     if (fuzz_ret != UC_AFL_RET_OK)
     {
         auto err_it = UC_AFL_ERR_STR.find(fuzz_ret);
