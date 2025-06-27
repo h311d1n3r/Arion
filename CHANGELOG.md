@@ -1,5 +1,5 @@
 # 1.0.2-alpha
-- Keep most memory mapped when restoring context
+- Memory restoring optimizations
 - Implemented module for procfs
 - Fixed unreadable symbolic link error
 
