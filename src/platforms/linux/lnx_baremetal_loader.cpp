@@ -53,7 +53,7 @@ ADDR LinuxBaremetalLoader::map_code(std::vector<BYTE> code) {
     size_t mapping_sz = code_sz;
     if(mapping_sz % LINUX_BAREMETAL_CODE_ALIGN)
         mapping_sz += LINUX_BAREMETAL_CODE_ALIGN - (mapping_sz % LINUX_BAREMETAL_CODE_ALIGN);
-    ADDR load_addr = arion->mem->map(arion->baremetal->get_load_addr(), mapping_sz, LINUX_BAREMETAL_CODE_PERMS);
+    ADDR load_addr = arion->mem->map(arion->baremetal->get_load_addr(), mapping_sz, LINUX_BAREMETAL_CODE_PERMS, "[code]");
     arion->mem->write(load_addr, code.data(), code.size());
     return load_addr;
 }
