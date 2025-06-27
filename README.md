@@ -22,7 +22,7 @@ Arion currently implements the following features :
 - **Snapshot fuzzing with UnicornAFL**  
 - **Emulating more than 120 syscalls**  
 - **Fork handling**  
-- **Multithreading handling (unstable)**  
+- **Multithreading handling**  
 - **Saving / restoring context**  
 - **GDB debugging with udbserver**
 - **Hooking the target with ~20 functions**  

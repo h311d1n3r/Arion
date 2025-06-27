@@ -687,6 +687,20 @@ class TracerAlreadyDisabledException : public ArionException
     explicit TracerAlreadyDisabledException() : ArionException(std::string("Tracer is already disabled.")) {};
 };
 
+class MemoryRecorderAlreadyStartedException : public ArionException
+{
+  public:
+    explicit MemoryRecorderAlreadyStartedException()
+        : ArionException(std::string("MemoryRecorder is already started.")) {};
+};
+
+class MemoryRecorderAlreadyStoppedException : public ArionException
+{
+  public:
+    explicit MemoryRecorderAlreadyStoppedException()
+        : ArionException(std::string("MemoryRecorder is already stopped.")) {};
+};
+
 class WrongLogLevelException : public ArionException
 {
   public:

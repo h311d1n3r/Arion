@@ -65,15 +65,13 @@ std::unique_ptr<MemoryRecorder> MemoryRecorder::initialize(std::weak_ptr<Arion> 
 bool MemoryRecorder::write_mem_hook(std::shared_ptr<Arion> arion, uc_mem_type type, uint64_t addr, int size,
                                     int64_t val, void *user_data)
 {
-    arion->mem->recorder->add_edit(std::make_shared<ARION_MEM_EDIT>(addr, size));
-    return true;
 }
 
-void MemoryRecorder::add_edit(std::shared_ptr<ARION_MEM_EDIT> edit)
+void MemoryRecorder::add_edit(std::shared_ptr<MEM_EDIT> edit)
 {
     if (!this->started)
         return;
-    for (std::shared_ptr<ARION_MEM_EDIT> edit2 : this->edits)
+    for (std::shared_ptr<MEM_EDIT> edit2 : this->edits)
     {
         if ((edit->addr < edit2->addr + edit2->sz) && (edit2->addr < edit->addr + edit->sz))
         {
@@ -104,6 +102,7 @@ void MemoryRecorder::start()
     this->started = true;
     this->clear();
 
+    this->hook_data = std::make_shared<ARION_MEMORY_RECORDER_HOOK_DATA>(this->shared_from_this());
     this->write_mem_hook_id = arion->hooks->hook_mem_write(this->write_mem_hook);
 }
 
@@ -119,7 +118,7 @@ void MemoryRecorder::stop()
     arion->hooks->unhook(this->write_mem_hook_id);
 }
 
-std::vector<std::shared_ptr<ARION_MEM_EDIT>> MemoryRecorder::get_edits()
+std::vector<std::shared_ptr<MEM_EDIT>> MemoryRecorder::get_edits()
 {
     return this->edits;
 }

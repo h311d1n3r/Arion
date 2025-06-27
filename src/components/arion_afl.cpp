@@ -8,7 +8,11 @@ bool ArionAfl::uc_input_callback(uc_engine *uc, char *input, size_t input_sz, ui
     std::shared_ptr<Arion> arion = hook_param->arion.lock();
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
-    arion->context->restore(hook_param->ctxt, hook_param->keep_mem);
+    arion->mem->recorder->stop();
+    /*arion->context->restore(hook_param->ctxt, hook_param->keep_mem, hook_param->keep_mem);*/
+    arion->context->restore(hook_param->ctxt, arion->mem->recorder->get_edits());
+    arion->mem->recorder->clear();
+    arion->mem->recorder->start();
     try
     {
         return arion_callback(arion, input, input_sz, persistent_round, hook_param->user_data);
@@ -51,6 +55,7 @@ void ArionAfl::fuzz(ARION_AFL_INPUT_CALLBACK input_callback, ARION_AFL_CRASH_CAL
         throw UnicornAflNoExitsException();
     arion->init_afl_mode(signals);
     std::shared_ptr<ARION_CONTEXT> ctxt = arion->context->save();
+    arion->mem->recorder->start();
     struct ARION_AFL_PARAM *param =
         new ARION_AFL_PARAM(this->arion, ctxt, keep_mem, input_callback, crash_callback, user_data);
     uc_afl_ret fuzz_ret =

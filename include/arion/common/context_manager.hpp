@@ -42,7 +42,9 @@ class ARION_EXPORT ContextManager
     static std::unique_ptr<ContextManager> initialize(std::weak_ptr<Arion> arion);
     ContextManager(std::weak_ptr<Arion> arion) : arion(arion) {};
     std::shared_ptr<ARION_CONTEXT> ARION_EXPORT save();
-    void ARION_EXPORT restore(std::shared_ptr<ARION_CONTEXT> ctx, bool restore_mem = true);
+    void ARION_EXPORT restore(std::shared_ptr<ARION_CONTEXT> ctx, bool restore_mappings = true,
+                              bool restore_data = true);
+    void ARION_EXPORT restore(std::shared_ptr<ARION_CONTEXT> ctx, std::vector<std::shared_ptr<ARION_MEM_EDIT>> edits);
     void ARION_EXPORT save_to_file(std::string file_path);
     void ARION_EXPORT restore_from_file(std::string file_path);
 };

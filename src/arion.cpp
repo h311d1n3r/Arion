@@ -175,9 +175,9 @@ void Arion::new_instance_common(std::shared_ptr<Arion> arion, arion::CPU_ARCH ar
     arion->logger = Logger::initialize(arion, arion->config->get_field<ARION_LOG_LEVEL>("log_lvl"));
     arion->init_engines(arch);
     arion->context = ContextManager::initialize(arion);
+    arion->hooks = HooksManager::initialize(arion);
     arion->mem = MemoryManager::initialize(arion);
     arion->sock = SocketManager::initialize(arion);
-    arion->hooks = HooksManager::initialize(arion);
     arion->threads = ThreadingManager::initialize(arion);
     arion->signals = SignalManager::initialize(arion);
     arion->tracer = CodeTracer::initialize(arion);
@@ -206,13 +206,6 @@ std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program_args
         throw FileNotFoundException(program_path);
     if (!arion->fs->is_in_fs(program_path))
         throw FileNotInFsException(fs_path, program_path);
-    arion->context = ContextManager::initialize(arion);
-    arion->mem = MemoryManager::initialize(arion);
-    arion->sock = SocketManager::initialize(arion);
-    arion->hooks = HooksManager::initialize(arion);
-    arion->threads = ThreadingManager::initialize(arion);
-    arion->signals = SignalManager::initialize(arion);
-    arion->tracer = CodeTracer::initialize(arion);
     arion->init_file_program(prog_parser);
     return arion;
 }
@@ -231,13 +224,6 @@ std::shared_ptr<Arion> Arion::new_instance(std::unique_ptr<BaremetalManager> bar
     init_msg << ARION_LOG_COLOR::WHITE << "Initializing Arion instance in " << ARION_LOG_COLOR::MAGENTA << "baremetal"
              << ARION_LOG_COLOR::WHITE << " mode.";
     arion->logger->info(init_msg.str());
-    arion->context = ContextManager::initialize(arion);
-    arion->mem = MemoryManager::initialize(arion);
-    arion->sock = SocketManager::initialize(arion);
-    arion->hooks = HooksManager::initialize(arion);
-    arion->threads = ThreadingManager::initialize(arion);
-    arion->signals = SignalManager::initialize(arion);
-    arion->tracer = CodeTracer::initialize(arion);
     arion->init_baremetal_program();
     return arion;
 }
@@ -259,9 +245,9 @@ Arion::~Arion()
     this->tracer.reset();
     this->signals.reset();
     this->threads.reset();
-    this->hooks.reset();
     this->sock.reset();
     this->mem.reset();
+    this->hooks.reset();
     this->context.reset();
     this->fs.reset();
     this->logger.reset();

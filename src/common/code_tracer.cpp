@@ -116,6 +116,7 @@ void CodeTracer::release_file()
         break;
     }
     case TRACE_MODE::DRCOV: {
+        this->out_f.close();
         std::string tmp_f_path = gen_tmp_path();
         std::ofstream tmp_f(tmp_f_path, std::ios::binary);
         tmp_f << "DRCOV VERSION: 2" << std::endl;
@@ -144,7 +145,8 @@ void CodeTracer::release_file()
         break;
     }
 
-    this->out_f.close();
+    if (this->out_f.is_open())
+        this->out_f.close();
 }
 
 void CodeTracer::process_hit(ADDR addr, size_t sz)
