@@ -1,5 +1,5 @@
 # 1.0.2-alpha
-- Memory restoring optimizations
+- Memory restoring strategies
 - Implemented module for procfs
 - Fixed unreadable symbolic link error
 
