@@ -1,7 +1,9 @@
 #ifndef ARION_ELF_PARSER_HPP
 #define ARION_ELF_PARSER_HPP
 
+#include <arion/LIEF/ELF/NoteDetails/core/CoreFile.hpp>
 #include <arion/LIEF/LIEF.hpp>
+#include <arion/common/executable_parser.hpp>
 #include <arion/common/global_defs.hpp>
 #include <string>
 
@@ -19,25 +21,27 @@ enum ELF_FILE_TYPE
 
 extern std::map<LIEF::ELF::Header::FILE_TYPE, ELF_FILE_TYPE> lief_arion_file_types;
 
-class ElfParser
+struct ARION_ELF_PARSER_ATTRIBUTES : public ARION_EXECUTABLE_PARSER_ATTRIBUTES
 {
-  private:
-    std::weak_ptr<Arion> arion;
-    std::unique_ptr<LIEF::ELF::Binary> parse_general_data(std::unique_ptr<LIEF::ELF::Binary> elf);
-    std::unique_ptr<LIEF::ELF::Binary> parse_segments(std::unique_ptr<LIEF::ELF::Binary> elf);
-
-  public:
-    const std::string elf_path;
-    std::vector<std::unique_ptr<struct arion::SEGMENT>> segments;
-    arion::LINKAGE_TYPE linkage;
     ELF_FILE_TYPE type;
-    std::string interpreter;
-    arion::ADDR entry;
     arion::ADDR prog_headers_off;
     size_t prog_headers_entry_sz;
     size_t prog_headers_n;
-    arion::CPU_ARCH arch;
-    ElfParser(std::weak_ptr<Arion> arion, std::string elf_path) : arion(arion), elf_path(elf_path) {};
+};
+
+class ElfParser : public ExecutableParser
+{
+  private:
+    std::unique_ptr<LIEF::ELF::Binary> parse_general_data(std::unique_ptr<LIEF::ELF::Binary> elf);
+    std::unique_ptr<LIEF::ELF::Binary> parse_segments(std::unique_ptr<LIEF::ELF::Binary> elf);
+    std::unique_ptr<LIEF::ELF::Binary> parse_coredump_data(std::unique_ptr<LIEF::ELF::Binary> elf);
+
+  public:
+    ElfParser(std::weak_ptr<Arion> arion, std::string elf_path) : ExecutableParser(arion)
+    {
+        this->attrs = std::make_shared<ARION_ELF_PARSER_ATTRIBUTES>();
+        this->attrs->path = elf_path;
+    };
     void process();
 };
 

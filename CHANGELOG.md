@@ -1,4 +1,5 @@
 # 1.0.2-alpha
+- Loading coredumps
 - Memory restoring strategies
 - Implemented module for procfs
 - Fixed unreadable symbolic link error

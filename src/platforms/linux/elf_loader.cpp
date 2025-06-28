@@ -21,15 +21,16 @@ std::unique_ptr<LNX_LOADER_PARAMS> ElfLoader::process()
         throw ExpiredWeakPtrException("Arion");
 
     uint16_t arch_sz = arion->abi->get_attrs()->arch_sz;
+    auto prog_elf_attrs = std::dynamic_pointer_cast<ARION_ELF_PARSER_ATTRIBUTES>(prog_parser->get_attrs());
 
     std::shared_ptr<LNX_LOADER_PARAMS> params = std::make_shared<LNX_LOADER_PARAMS>();
-    this->is_pie = prog_parser->type == ELF_FILE_TYPE::DYN;
+    this->is_pie = prog_elf_attrs->type == ELF_FILE_TYPE::DYN;
     this->is_static = !this->interp_parser;
     params->load_address = this->map_elf_segments(
         this->prog_parser, this->is_pie ? (arch_sz == 64 ? LINUX_64_LOAD_ADDR : LINUX_32_LOAD_ADDR) : 0);
     if (!this->is_static)
-        params->interp_address = this->map_elf_segments(
-            this->interp_parser, arch_sz == 64 ? LINUX_64_INTERP_ADDR : LINUX_32_INTERP_ADDR);
+        params->interp_address =
+            this->map_elf_segments(this->interp_parser, arch_sz == 64 ? LINUX_64_INTERP_ADDR : LINUX_32_INTERP_ADDR);
 
     KERNEL_SEG_FLAGS seg_flags = arion->abi->get_attrs()->seg_flags;
     if (seg_flags & ARION_VVAR_PRESENT)
@@ -40,7 +41,7 @@ std::unique_ptr<LNX_LOADER_PARAMS> ElfLoader::process()
         params->vdso_address = this->map_vdso();
     else
         params->vdso_address = 0;
-    params->stack_address = this->map_stack(params, this->prog_parser->elf_path);
+    params->stack_address = this->map_stack(params, prog_elf_attrs->path);
     if (seg_flags & ARION_VSYSCALL_PRESENT)
         params->vsyscall_address = this->map_vsyscall();
     else
@@ -52,9 +53,12 @@ std::unique_ptr<LNX_LOADER_PARAMS> ElfLoader::process()
 
     ADDR entry_addr;
     if (!this->is_static)
-        entry_addr = this->interp_parser->entry + params->interp_address;
+    {
+        auto interp_elf_attrs = std::dynamic_pointer_cast<ARION_ELF_PARSER_ATTRIBUTES>(interp_parser->get_attrs());
+        entry_addr = interp_elf_attrs->entry + params->interp_address;
+    }
     else
-        entry_addr = this->is_pie ? this->prog_parser->entry + params->load_address : this->prog_parser->entry;
+        entry_addr = this->is_pie ? prog_elf_attrs->entry + params->load_address : prog_elf_attrs->entry;
 
     this->init_main_thread(params, entry_addr);
     return std::make_unique<LNX_LOADER_PARAMS>(*params.get());
@@ -66,15 +70,20 @@ ADDR ElfLoader::map_elf_segments(const std::shared_ptr<ElfParser> parser, ADDR l
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    const std::string program_name = parser->elf_path;
+    auto elf_attrs = std::dynamic_pointer_cast<ARION_ELF_PARSER_ATTRIBUTES>(parser->get_attrs());
+    const std::string program_name = elf_attrs->path;
+
     ADDR first_addr = ARION_MAX_U64, last_addr = 0;
-    for (const std::unique_ptr<struct SEGMENT> &seg : parser->segments)
+    for (const std::shared_ptr<struct SEGMENT> seg : parser->get_segments())
     {
         ADDR seg_data_start_addr = seg->virt_addr + load_addr;
         ADDR seg_start_addr = seg_data_start_addr;
         ADDR seg_end_addr = seg_start_addr + seg->virt_sz;
-        seg_start_addr -= (seg_start_addr % seg->align);
-        seg_end_addr += (seg->align - (seg_end_addr % seg->align));
+        if (seg->align > 1)
+        {
+            seg_start_addr -= (seg_start_addr % seg->align);
+            seg_end_addr += (seg->align - (seg_end_addr % seg->align));
+        }
         size_t data_seg_sz = seg_end_addr - seg_data_start_addr;
         if (seg->phy_sz > data_seg_sz)
             seg_end_addr += seg->align;
@@ -84,7 +93,7 @@ ADDR ElfLoader::map_elf_segments(const std::shared_ptr<ElfParser> parser, ADDR l
         if (seg_start_addr < first_addr)
             first_addr = seg_start_addr;
 
-        arion->mem->map(seg_start_addr, seg_sz, seg->flags, program_name);
+        arion->mem->map(seg_start_addr, seg_sz, seg->flags, seg->info);
 
         std::shared_ptr<Arion> arion_cpy = arion;
         RD_BIN_CALLBACK on_file_read = [arion_cpy, seg_data_start_addr](std::array<BYTE, ARION_BUF_SZ> buf, ADDR off,
@@ -112,6 +121,7 @@ ADDR ElfLoader::map_vvar()
     ADDR vvar_load_addr = arch_sz == 64 ? LINUX_64_VVAR_ADDR : LINUX_32_VVAR_ADDR;
     ADDR vvar_sz = arch_sz == 64 ? LINUX_64_VVAR_SZ : LINUX_32_VVAR_SZ;
 
+    arion->mem->unmap(vvar_load_addr, vvar_load_addr + vvar_sz);
     return arion->mem->map(vvar_load_addr, vvar_sz, LINUX_VVAR_PERMS, "[vvar]");
 }
 
@@ -126,6 +136,7 @@ ADDR ElfLoader::map_vdso()
     ADDR vdso_load_addr = arch_sz == 64 ? LINUX_64_VDSO_ADDR : LINUX_32_VDSO_ADDR;
     ADDR vdso_sz = arch_sz == 64 ? LINUX_64_VDSO_SZ : LINUX_32_VDSO_SZ;
 
+    arion->mem->unmap(vdso_load_addr, vdso_load_addr + vdso_sz);
     ADDR vdso_addr = arion->mem->map(vdso_load_addr, vdso_sz, LINUX_VDSO_PERMS, "[vdso]");
 
     if (arion->abi->get_attrs()->arch == CPU_ARCH::X86_ARCH)
@@ -150,6 +161,7 @@ ADDR ElfLoader::map_vsyscall()
     size_t vsyscall_seg_sz = vsyscalls.size() * VSYSCALL_ENTRY_SZ;
     vsyscall_seg_sz += LINUX_64_VSYSCALL_ALIGN - (vsyscall_seg_sz % LINUX_64_VSYSCALL_ALIGN);
 
+    arion->mem->unmap(LINUX_64_VSYSCALL_ADDR, LINUX_64_VSYSCALL_ADDR + vsyscall_seg_sz);
     ADDR vsyscall_addr = arion->mem->map(LINUX_64_VSYSCALL_ADDR, vsyscall_seg_sz, LINUX_VSYSCALL_PERMS, "[vsyscall]");
 
     for (size_t syscall_i = 0; syscall_i < vsyscalls.size(); syscall_i++)
@@ -189,19 +201,22 @@ ADDR ElfLoader::map_arm_traps()
     return 0;
 }
 
-void ElfLoader::setup_specific_auxv(std::shared_ptr<LNX_LOADER_PARAMS> params, uint16_t arch_sz) {
+void ElfLoader::setup_specific_auxv(std::shared_ptr<LNX_LOADER_PARAMS> params, uint16_t arch_sz)
+{
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
+    auto prog_elf_attrs = std::dynamic_pointer_cast<ARION_ELF_PARSER_ATTRIBUTES>(prog_parser->get_attrs());
+
     this->write_auxv_entry(AUXV::AT_ENTRY,
-                           this->is_pie ? this->prog_parser->entry + params->load_address : this->prog_parser->entry);
+                           this->is_pie ? prog_elf_attrs->entry + params->load_address : prog_elf_attrs->entry);
     this->write_auxv_entry(AUXV::AT_BASE, (!this->is_static)
                                               ? (arch_sz == 64 ? LINUX_64_INTERP_ADDR : LINUX_32_INTERP_ADDR)
                                               : params->load_address);
-    this->write_auxv_entry(AUXV::AT_PHNUM, this->prog_parser->prog_headers_n);
-    this->write_auxv_entry(AUXV::AT_PHENT, this->prog_parser->prog_headers_entry_sz);
-    this->write_auxv_entry(AUXV::AT_PHDR, params->load_address + this->prog_parser->prog_headers_off);
+    this->write_auxv_entry(AUXV::AT_PHNUM, prog_elf_attrs->prog_headers_n);
+    this->write_auxv_entry(AUXV::AT_PHENT, prog_elf_attrs->prog_headers_entry_sz);
+    this->write_auxv_entry(AUXV::AT_PHDR, params->load_address + prog_elf_attrs->prog_headers_off);
     if (arion->abi->get_attrs()->arch == CPU_ARCH::X86_ARCH)
         this->write_auxv_entry(AUXV::AT_SYSINFO, params->vdso_address + LINUX_VDSO_KERNEL_VSYSCALL_OFF);
     if (arion->abi->get_attrs()->seg_flags & ARION_VDSO_PRESENT)

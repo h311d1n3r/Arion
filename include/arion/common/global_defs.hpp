@@ -2,11 +2,11 @@
 #define ARION_GLOBAL_DEFS_HPP
 
 #include <array>
-#include <string>
-#include <map>
 #include <cstdint>
 #include <cstring>
+#include <map>
 #include <stddef.h>
+#include <string>
 #include <sys/types.h>
 
 #define ARION_EXPORT __attribute__((visibility("default")))
@@ -49,6 +49,7 @@ union ARION_EXPORT RVAL {
 
 struct SEGMENT
 {
+    std::string info;
     ADDR virt_addr;
     ADDR file_addr;
     size_t align;
@@ -91,23 +92,17 @@ enum ARION_EXPORT ARION_LOG_LEVEL
     OFF
 };
 
-inline std::map<std::string, CPU_ARCH> ARCH_FROM_NAME
-{
-    {"UNKNOWN", CPU_ARCH::UNKNOWN_ARCH},
-    {"X86", CPU_ARCH::X86_ARCH},
-    {"X86-64", CPU_ARCH::X8664_ARCH},
-    {"ARM", CPU_ARCH::ARM_ARCH},
-    {"ARM64", CPU_ARCH::ARM64_ARCH}
-};
+inline std::map<std::string, CPU_ARCH> ARCH_FROM_NAME{{"UNKNOWN", CPU_ARCH::UNKNOWN_ARCH},
+                                                      {"X86", CPU_ARCH::X86_ARCH},
+                                                      {"X86-64", CPU_ARCH::X8664_ARCH},
+                                                      {"ARM", CPU_ARCH::ARM_ARCH},
+                                                      {"ARM64", CPU_ARCH::ARM64_ARCH}};
 
-inline std::map<CPU_ARCH, std::string> NAME_FROM_ARCH
-{
-    {CPU_ARCH::UNKNOWN_ARCH, "UNKNOWN"},
-    {CPU_ARCH::X86_ARCH, "X86"},
-    {CPU_ARCH::X8664_ARCH, "X86-64"},
-    {CPU_ARCH::ARM_ARCH, "ARM"},
-    {CPU_ARCH::ARM64_ARCH, "ARM64"}
-};
+inline std::map<CPU_ARCH, std::string> NAME_FROM_ARCH{{CPU_ARCH::UNKNOWN_ARCH, "UNKNOWN"},
+                                                      {CPU_ARCH::X86_ARCH, "X86"},
+                                                      {CPU_ARCH::X8664_ARCH, "X86-64"},
+                                                      {CPU_ARCH::ARM_ARCH, "ARM"},
+                                                      {CPU_ARCH::ARM64_ARCH, "ARM64"}};
 
 } // namespace arion
 
