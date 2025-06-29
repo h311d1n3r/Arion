@@ -46,7 +46,7 @@ bool arion_poly_struct::AbsArionStructType::arion_is_mapped(std::shared_ptr<Ario
 }
 
 CPU_ARCH arion_poly_struct::AbsArionStructType::arion_curr_arch(std::shared_ptr<Arion> arion) {
-    return arion->abi->get_attrs()->arch;
+    return arion->arch->get_attrs()->arch;
 }
 
 std::vector<arion::BYTE> arion_poly_struct::AbsArionStructType::arion_read_mem(std::shared_ptr<Arion> arion, arion::ADDR addr, size_t sz) {

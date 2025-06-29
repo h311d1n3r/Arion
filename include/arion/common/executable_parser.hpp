@@ -12,10 +12,11 @@ struct ARION_EXECUTABLE_PARSER_ATTRIBUTES
 {
     virtual ~ARION_EXECUTABLE_PARSER_ATTRIBUTES() = default;
     std::string path;
-    arion::CPU_ARCH arch;
-    arion::LINKAGE_TYPE linkage;
+    std::vector<std::string> args;
+    arion::CPU_ARCH arch = arion::CPU_ARCH::UNKNOWN_ARCH;
+    arion::LINKAGE_TYPE linkage = arion::LINKAGE_TYPE::UNKNOWN_LINKAGE;
     std::string interpreter_path;
-    arion::ADDR entry;
+    arion::ADDR entry = 0;
 };
 
 class ExecutableParser

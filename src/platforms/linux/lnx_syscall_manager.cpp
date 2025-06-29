@@ -406,8 +406,8 @@ void LinuxSyscallManager::add_syscall_entry(std::string name, std::shared_ptr<SY
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    if (arion->abi->has_syscall_with_name(name))
-        this->syscall_funcs[arion->abi->get_syscall_no_by_name(name)] = func;
+    if (arion->arch->has_syscall_with_name(name))
+        this->syscall_funcs[arion->arch->get_syscall_no_by_name(name)] = func;
 }
 
 void LinuxSyscallManager::init_syscall_funcs()
@@ -558,7 +558,7 @@ void LinuxSyscallManager::print_syscall(std::shared_ptr<Arion> arion, std::strin
                                         std::vector<std::shared_ptr<ArionType>> signature, std::vector<SYS_PARAM> func_params,
                                         uint64_t syscall_ret)
 {
-    if(arion->logger->get_log_level() > ARION_LOG_LEVEL::DEBUG)
+    if(arion->logger->get_log_level() > LOG_LEVEL::DEBUG)
         return;
     colorstream msg;
     msg << ARION_LOG_COLOR::CYAN << "SYSCALL" << ARION_LOG_COLOR::WHITE << " -> " << ARION_LOG_COLOR::RED << sys_name
@@ -577,26 +577,26 @@ void LinuxSyscallManager::print_syscall(std::shared_ptr<Arion> arion, std::strin
 
 void LinuxSyscallManager::process_syscall(std::shared_ptr<Arion> arion)
 {
-    REG sysno_reg = arion->abi->get_attrs()->syscalling_conv.sysno_reg;
-    REG syscall_ret_reg = arion->abi->get_attrs()->syscalling_conv.ret_reg;
-    uint64_t sysno = arion->abi->read_arch_reg(sysno_reg);
+    REG sysno_reg = arion->arch->get_attrs()->syscalling_conv.sysno_reg;
+    REG syscall_ret_reg = arion->arch->get_attrs()->syscalling_conv.ret_reg;
+    uint64_t sysno = arion->arch->read_arch_reg(sysno_reg);
     std::shared_ptr<SYSCALL_FUNC> func = arion->syscalls->get_syscall_func(sysno);
     if (!func)
     {
         colorstream warn_msg;
         warn_msg << ARION_LOG_COLOR::ORANGE << "No associated syscall for sysno " << ARION_LOG_COLOR::MAGENTA << int_to_hex<uint64_t>(sysno) << ARION_LOG_COLOR::ORANGE << std::string(".");
         arion->logger->warn(warn_msg.str());
-        arion->abi->write_arch_reg(syscall_ret_reg, 0);
+        arion->arch->write_arch_reg(syscall_ret_reg, 0);
         return;
     }
-    std::string syscall_name = arion->abi->get_name_by_syscall_no(sysno);
+    std::string syscall_name = arion->arch->get_name_by_syscall_no(sysno);
     uint8_t params_n = PARAMS_N_BY_SYSCALL_NAME.at(syscall_name);
     std::vector<SYS_PARAM> func_params;
-    std::vector<REG> sys_regs = arion->abi->get_attrs()->syscalling_conv.sys_param_regs;
+    std::vector<REG> sys_regs = arion->arch->get_attrs()->syscalling_conv.sys_param_regs;
     for (uint8_t param_i = 0; param_i < params_n; param_i++)
     {
         REG param_reg = sys_regs.at(param_i);
-        uint64_t param_val = arion->abi->read_arch_reg(param_reg);
+        uint64_t param_val = arion->arch->read_arch_reg(param_reg);
         func_params.push_back(param_val);
     }
     bool syscall_handled = false;
@@ -604,9 +604,9 @@ void LinuxSyscallManager::process_syscall(std::shared_ptr<Arion> arion)
     uint64_t syscall_ret;
     if(!syscall_handled) {
         syscall_ret = func->func(arion, func_params);
-        arion->abi->write_arch_reg(syscall_ret_reg, syscall_ret);
+        arion->arch->write_arch_reg(syscall_ret_reg, syscall_ret);
     } else
-        syscall_ret = arion->abi->read_arch_reg(syscall_ret_reg);
+        syscall_ret = arion->arch->read_arch_reg(syscall_ret_reg);
     this->print_syscall(arion, syscall_name, func->signature, func_params, syscall_ret);
 }
 
@@ -621,7 +621,7 @@ void LinuxSyscallManager::set_syscall_func(std::string name, std::shared_ptr<SYS
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    uint64_t sysno = arion->abi->get_syscall_no_by_name(name);
+    uint64_t sysno = arion->arch->get_syscall_no_by_name(name);
     this->set_syscall_func(sysno, func);
 }
 
@@ -639,6 +639,6 @@ std::shared_ptr<SYSCALL_FUNC> LinuxSyscallManager::get_syscall_func(std::string 
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    uint64_t sysno = arion->abi->get_syscall_no_by_name(name);
+    uint64_t sysno = arion->arch->get_syscall_no_by_name(name);
     return this->get_syscall_func(sysno);
 }

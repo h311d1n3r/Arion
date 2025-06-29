@@ -1,5 +1,5 @@
 #include <arion/arion.hpp>
-#include <arion/common/abi_manager.hpp>
+#include <arion/common/arch_manager.hpp>
 #include <arion/common/config.hpp>
 #include <arion/common/global_defs.hpp>
 #include <arion/common/global_excepts.hpp>
@@ -69,21 +69,32 @@ std::shared_ptr<Arion> ArionGroup::get_arion_instance(pid_t pid)
 
 void ArionGroup::add_arion_instance(std::shared_ptr<Arion> arion, std::optional<pid_t> pid, std::optional<pid_t> pgid)
 {
-    pid_t pid_val;
+    pid_t pid_val = 0;
+    pid_t pgid_val = 0;
     if (!pid.has_value())
     {
-        pid_val = this->next_pid;
-        arion->set_pid(pid_val);
-        arion->set_pgid(pgid.value_or(pid_val));
+        pid_val = arion->get_pid(); // May be set by executable parser (e.g: in coredumps)
+        if (!pid_val)
+        {
+            pid_val = this->next_pid;
+            this->next_pid++;
+            arion->set_pid(pid_val);
+        }
         arion->threads->set_all_tgid(pid_val, true);
-        this->next_pid++;
     }
     else
     {
         pid_val = pid.value();
         arion->set_pid(pid_val);
-        arion->set_pgid(pgid.value_or(pid_val));
     }
+    if (!pgid.has_value())
+    {
+        pgid_val = arion->get_pgid(); // May be set by executable parser (e.g: in coredumps)
+        if (!pgid_val)
+            pgid_val = pid_val;
+    }
+    else
+        arion->set_pgid(pgid.value());
     arion->set_group(shared_from_this());
     this->instances[pid_val] = arion;
 }
@@ -167,12 +178,23 @@ void ArionGroup::set_next_pid(pid_t pid)
     this->next_pid = pid;
 }
 
-void Arion::new_instance_common(std::shared_ptr<Arion> arion, arion::CPU_ARCH arch, std::string fs_path,
-                                std::vector<std::string> program_env, std::string cwd, std::unique_ptr<Config> config)
+void Arion::new_instance_common_init(std::shared_ptr<Arion> arion, std::string fs_path,
+                                     std::vector<std::string> program_env, std::string cwd,
+                                     std::unique_ptr<Config> config)
 {
     arion->config = std::move(config);
     arion->program_env = program_env;
-    arion->logger = Logger::initialize(arion, arion->config->get_field<ARION_LOG_LEVEL>("log_lvl"));
+    arion->logger = Logger::initialize(arion, arion->config->get_field<LOG_LEVEL>("log_lvl"));
+    arion->fs = FileSystemManager::initialize(arion, fs_path, cwd);
+    arion->sid = getsid(0);
+    arion->uid = getuid();
+    arion->gid = getgid();
+    arion->euid = geteuid();
+    arion->egid = getegid();
+}
+
+void Arion::new_instance_common_finish(std::shared_ptr<Arion> arion, arion::CPU_ARCH arch)
+{
     arion->init_engines(arch);
     arion->context = ContextManager::initialize(arion);
     arion->hooks = HooksManager::initialize(arion);
@@ -192,12 +214,12 @@ std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program_args
     if (!program_args.size())
         throw InvalidArgumentException("Program arguments must at least contain target name.");
     std::shared_ptr<Arion> arion = std::make_shared<Arion>();
-    arion->fs = FileSystemManager::initialize(arion, fs_path, cwd);
+    Arion::new_instance_common_init(arion, fs_path, program_env, cwd, std::move(config));
     arion->program_args = program_args;
-    std::string program_path = program_args.at(0);
-    std::shared_ptr<ElfParser> prog_parser = std::make_shared<ElfParser>(arion, program_path);
+    std::shared_ptr<ElfParser> prog_parser = std::make_shared<ElfParser>(arion, program_args);
     prog_parser->process();
-    Arion::new_instance_common(arion, prog_parser->get_attrs()->arch, fs_path, program_env, cwd, std::move(config));
+    std::string program_path = prog_parser->get_attrs()->path;
+    Arion::new_instance_common_finish(arion, prog_parser->get_attrs()->arch);
     colorstream init_msg;
     init_msg << ARION_LOG_COLOR::WHITE << "Initializing Arion instance for image " << ARION_LOG_COLOR::GREEN << "\""
              << program_path << "\"" << ARION_LOG_COLOR::WHITE << ".";
@@ -217,9 +239,9 @@ std::shared_ptr<Arion> Arion::new_instance(std::unique_ptr<BaremetalManager> bar
     if (!ArionTypeRegistry::instance().is_initialized())
         ArionTypeRegistry::instance().init_types();
     std::shared_ptr<Arion> arion = std::make_shared<Arion>();
-    arion->fs = FileSystemManager::initialize(arion, fs_path, cwd);
+    Arion::new_instance_common_init(arion, fs_path, program_env, cwd, std::move(config));
     arion->baremetal = std::move(baremetal);
-    Arion::new_instance_common(arion, arion->baremetal->get_arch(), fs_path, program_env, cwd, std::move(config));
+    Arion::new_instance_common_finish(arion, arion->baremetal->get_arch());
     colorstream init_msg;
     init_msg << ARION_LOG_COLOR::WHITE << "Initializing Arion instance in " << ARION_LOG_COLOR::MAGENTA << "baremetal"
              << ARION_LOG_COLOR::WHITE << " mode.";
@@ -241,7 +263,7 @@ Arion::~Arion()
 
     this->parent.reset();
     this->syscalls.reset();
-    this->abi.reset();
+    this->arch.reset();
     this->tracer.reset();
     this->signals.reset();
     this->threads.reset();
@@ -290,13 +312,13 @@ void Arion::init_file_program(std::shared_ptr<ElfParser> prog_parser)
     std::shared_ptr<Arion> curr_instance = shared_from_this();
     const std::string program_path = this->program_args.at(0);
     CPU_ARCH arch = prog_parser->get_attrs()->arch;
-    this->abi = AbiManager::initialize(curr_instance, arch);
+    this->arch = ArchManager::initialize(curr_instance, arch, PLATFORM::LINUX); // TODO: Make platform generic later
     if (arch == CPU_ARCH::X86_ARCH)
     {
         this->gdt_manager = GdtManager::initialize(curr_instance);
         this->gdt_manager->setup();
     }
-    this->syscalls = LinuxSyscallManager::initialize(curr_instance); // must initialize AbiManager first
+    this->syscalls = LinuxSyscallManager::initialize(curr_instance); // must initialize ArchManager first
     switch (prog_parser->get_attrs()->linkage)
     {
     case DYNAMIC_LINKAGE:
@@ -314,13 +336,13 @@ void Arion::init_baremetal_program()
 {
     std::shared_ptr<Arion> curr_instance = shared_from_this();
     CPU_ARCH arch = this->baremetal->get_arch();
-    this->abi = AbiManager::initialize(curr_instance, arch);
+    this->arch = ArchManager::initialize(curr_instance, arch);
     if (arch == CPU_ARCH::X86_ARCH)
     {
         this->gdt_manager = GdtManager::initialize(curr_instance);
         this->gdt_manager->setup();
     }
-    this->syscalls = LinuxSyscallManager::initialize(curr_instance); // must initialize AbiManager first
+    this->syscalls = LinuxSyscallManager::initialize(curr_instance); // must initialize ArchManager first
     LinuxBaremetalLoader loader(curr_instance, this->program_args, this->program_env);
     this->loader_params = loader.process();
 }
@@ -329,7 +351,8 @@ void Arion::init_dynamic_program(std::shared_ptr<ElfParser> prog_parser)
 {
     std::shared_ptr<Arion> curr_instance = shared_from_this();
     std::string interpreter_path = prog_parser->get_attrs()->interpreter_path;
-    std::shared_ptr<ElfParser> interp_parser = std::make_shared<ElfParser>(curr_instance, interpreter_path);
+    std::shared_ptr<ElfParser> interp_parser =
+        std::make_shared<ElfParser>(curr_instance, std::vector<std::string>({interpreter_path}));
     interp_parser->process();
     if (interp_parser->get_attrs()->linkage != LINKAGE_TYPE::STATIC_LINKAGE)
         throw BadLinkageTypeException(interpreter_path);
@@ -374,15 +397,15 @@ bool Arion::run_current()
         this->threads->switch_to_next_thread();
         return true;
     }
-    REG pc = this->abi->get_attrs()->regs.pc;
+    REG pc = this->arch->get_attrs()->regs.pc;
     ADDR pc_addr;
     if (this->start.has_value())
     {
         pc_addr = this->start.value();
-        this->abi->write_arch_reg(pc, pc_addr);
+        this->arch->write_arch_reg(pc, pc_addr);
     }
     else
-        pc_addr = this->abi->read_arch_reg(pc);
+        pc_addr = this->arch->read_arch_reg(pc);
 
     if (!this->end.has_value())
     {
@@ -390,10 +413,10 @@ bool Arion::run_current()
         if (uc_ctl_err != UC_ERR_OK)
             throw UnicornCtlException(uc_ctl_err);
     }
-    this->abi->prerun_hook(pc_addr);
+    this->arch->prerun_hook(pc_addr);
     uc_err uc_run_err = uc_emu_start(this->uc, pc_addr, this->end.value_or(0), 0,
                                      (multi_process || multi_thread) ? ARION_CYCLES_PER_THREAD : 0);
-    pc_addr = this->abi->read_arch_reg(pc);
+    pc_addr = this->arch->read_arch_reg(pc);
     if (this->uc_exception)
         std::rethrow_exception(this->uc_exception);
     if (uc_run_err != UC_ERR_OK && !this->sync)
@@ -629,19 +652,69 @@ pid_t Arion::get_pid()
     return this->pid;
 }
 
-pid_t Arion::get_pgid()
-{
-    return this->pgid;
-}
-
 void Arion::set_pid(pid_t pid)
 {
     this->pid = pid;
 }
 
+pid_t Arion::get_pgid()
+{
+    return this->pgid;
+}
+
 void Arion::set_pgid(pid_t pgid)
 {
     this->pgid = pgid;
+}
+
+uint32_t Arion::get_sid()
+{
+    return this->sid;
+}
+
+void Arion::set_sid(uint32_t sid)
+{
+    this->sid = sid;
+}
+
+uint32_t Arion::get_uid()
+{
+    return this->uid;
+}
+
+void Arion::set_uid(uint32_t uid)
+{
+    this->uid = uid;
+}
+
+uint32_t Arion::get_gid()
+{
+    return this->gid;
+}
+
+void Arion::set_gid(uint32_t gid)
+{
+    this->gid = gid;
+}
+
+uint32_t Arion::get_euid()
+{
+    return this->euid;
+}
+
+void Arion::set_euid(uint32_t euid)
+{
+    this->euid = euid;
+}
+
+uint32_t Arion::get_egid()
+{
+    return this->egid;
+}
+
+void Arion::set_egid(uint32_t egid)
+{
+    this->egid = egid;
 }
 
 bool Arion::has_group()

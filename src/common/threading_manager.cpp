@@ -1,4 +1,4 @@
-#include <arion/archs/abi_x86.hpp>
+#include <arion/archs/arch_x86.hpp>
 #include <arion/arion.hpp>
 #include <arion/common/global_excepts.hpp>
 #include <arion/common/threading_manager.hpp>
@@ -190,15 +190,15 @@ pid_t ThreadingManager::clone_thread(uint64_t flags, ADDR new_sp, ADDR new_tls, 
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    REG pc_reg = arion->abi->get_attrs()->regs.pc;
-    REG sp_reg = arion->abi->get_attrs()->regs.sp;
-    REG ret_reg = arion->abi->get_attrs()->syscalling_conv.ret_reg;
-    ADDR pc = arion->abi->read_arch_reg(pc_reg);
+    REG pc_reg = arion->arch->get_attrs()->regs.pc;
+    REG sp_reg = arion->arch->get_attrs()->regs.sp;
+    REG ret_reg = arion->arch->get_attrs()->syscalling_conv.ret_reg;
+    ADDR pc = arion->arch->read_arch_reg(pc_reg);
     if (!new_sp)
-        new_sp = arion->abi->read_arch_reg(sp_reg);
+        new_sp = arion->arch->read_arch_reg(sp_reg);
     ADDR next_pc;
     // For architectures that hook with hook_intr, next_pc is already returned
-    if (arion->abi->does_hook_intr())
+    if (arion->arch->does_hook_intr())
         next_pc = pc;
     else
     {
@@ -214,10 +214,10 @@ pid_t ThreadingManager::clone_thread(uint64_t flags, ADDR new_sp, ADDR new_tls, 
         child_settid_addr = child_tid_addr;
 
     if (!new_tls || (flags & CLONE_SETTLS))
-        new_tls = arion->abi->dump_tls();
-    else if (arion->abi->get_attrs()->arch == CPU_ARCH::X86_ARCH)
-        new_tls = static_cast<AbiManagerX86 *>(arion->abi.get())->new_tls(new_tls);
-    std::unique_ptr<std::map<REG, RVAL>> regs = arion->abi->init_thread_regs(next_pc, new_sp);
+        new_tls = arion->arch->dump_tls();
+    else if (arion->arch->get_attrs()->arch == CPU_ARCH::X86_ARCH)
+        new_tls = static_cast<ArchManagerX86 *>(arion->arch.get())->new_tls(new_tls);
+    std::unique_ptr<std::map<REG, RVAL>> regs = arion->arch->init_thread_regs(next_pc, new_sp);
     regs->operator[](ret_reg).r64 = 0;
     std::unique_ptr<ARION_THREAD> arion_t = std::make_unique<ARION_THREAD>(
         exit_signal, flags, child_cleartid_addr, child_settid_addr, parent_tid_addr, std::move(regs), new_tls);
@@ -238,20 +238,20 @@ pid_t ThreadingManager::fork_process(uint64_t flags, arion::ADDR new_sp, arion::
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    CPU_ARCH arch = arion->abi->get_attrs()->arch;
+    CPU_ARCH arch = arion->arch->get_attrs()->arch;
 
-    REG pc_reg = arion->abi->get_attrs()->regs.pc;
+    REG pc_reg = arion->arch->get_attrs()->regs.pc;
     std::shared_ptr<Arion> forked_process = arion->copy();
     pid_t curr_tid = forked_process->threads->get_running_tid();
     for (auto &thread_entry : forked_process->threads->threads_map)
         if (thread_entry.first != curr_tid)
             forked_process->threads->remove_thread_entry(thread_entry.first);
-    REG ret_reg = forked_process->abi->get_attrs()->syscalling_conv.ret_reg;
-    forked_process->abi->write_arch_reg(ret_reg, 0);
-    ADDR pc = arion->abi->read_arch_reg(pc_reg);
+    REG ret_reg = forked_process->arch->get_attrs()->syscalling_conv.ret_reg;
+    forked_process->arch->write_arch_reg(ret_reg, 0);
+    ADDR pc = arion->arch->read_arch_reg(pc_reg);
     ADDR next_pc;
     size_t sys_instr_sz;
-    bool hooks_intr = arion->abi->does_hook_intr();
+    bool hooks_intr = arion->arch->does_hook_intr();
     // For architectures that hook with hook_intr, next_pc is already returned
     if (hooks_intr)
         next_pc = pc;
@@ -268,7 +268,7 @@ pid_t ThreadingManager::fork_process(uint64_t flags, arion::ADDR new_sp, arion::
     if (flags & CLONE_CHILD_SETTID)
         child_settid_addr = child_tid_addr;
 
-    forked_process->abi->write_arch_reg(pc_reg, next_pc);
+    forked_process->arch->write_arch_reg(pc_reg, next_pc);
     pid_t forked_pid = arion->add_child(forked_process);
     arion->hooks->trigger_arion_hook(ARION_HOOK_TYPE::FORK_HOOK, forked_process);
 
@@ -280,9 +280,9 @@ pid_t ThreadingManager::fork_process(uint64_t flags, arion::ADDR new_sp, arion::
     if (!hooks_intr)
     {
         // If PC register was manually edited by user during fork hook, remove syscall instruction size
-        ADDR user_edited_pc = arion->abi->read_arch_reg(pc_reg);
+        ADDR user_edited_pc = arion->arch->read_arch_reg(pc_reg);
         if (user_edited_pc != pc)
-            arion->abi->write_arch_reg(pc_reg, user_edited_pc - sys_instr_sz);
+            arion->arch->write_arch_reg(pc_reg, user_edited_pc - sys_instr_sz);
     }
 
     return forked_pid;
@@ -303,10 +303,10 @@ void ThreadingManager::switch_to_thread(pid_t tid)
     std::unique_ptr<ARION_THREAD> curr_thread = std::move(curr_thread_it->second);
     std::unique_ptr<ARION_THREAD> next_thread = std::move(next_thread_it->second);
 
-    curr_thread->regs_state = arion->abi->dump_regs();
-    curr_thread->tls_addr = arion->abi->dump_tls();
-    arion->abi->load_regs(std::move(next_thread->regs_state));
-    arion->abi->load_tls(next_thread->tls_addr);
+    curr_thread->regs_state = arion->arch->dump_regs();
+    curr_thread->tls_addr = arion->arch->dump_tls();
+    arion->arch->load_regs(std::move(next_thread->regs_state));
+    arion->arch->load_tls(next_thread->tls_addr);
 
     this->threads_map[this->running_tid] = std::move(curr_thread);
     this->threads_map[tid] = std::move(next_thread);
@@ -460,7 +460,8 @@ void ThreadingManager::set_tgid(pid_t tid, pid_t tgid, bool init)
     ThreadingManager::thread_groups[tgid] = std::move(new_tgid_vec);
 }
 
-void ThreadingManager::set_all_tgid(pid_t tgid, bool init) {
-    for(auto& thread_it : this->threads_map)
+void ThreadingManager::set_all_tgid(pid_t tgid, bool init)
+{
+    for (auto &thread_it : this->threads_map)
         this->set_tgid(thread_it.first, tgid, init);
 }

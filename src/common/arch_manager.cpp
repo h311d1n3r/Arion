@@ -1,11 +1,15 @@
-#include <arion/archs/abi_arm.hpp>
-#include <arion/archs/abi_arm64.hpp>
-#include <arion/archs/abi_x86-64.hpp>
-#include <arion/archs/abi_x86.hpp>
+#include <arion/archs/arch_arm.hpp>
+#include <arion/archs/arch_arm64.hpp>
+#include <arion/archs/arch_x86-64.hpp>
+#include <arion/archs/arch_x86.hpp>
 #include <arion/arion.hpp>
-#include <arion/common/abi_manager.hpp>
+#include <arion/common/arch_manager.hpp>
 #include <arion/common/global_defs.hpp>
 #include <arion/common/global_excepts.hpp>
+#include <arion/platforms/linux/archs/lnx_arch_arm.hpp>
+#include <arion/platforms/linux/archs/lnx_arch_arm64.hpp>
+#include <arion/platforms/linux/archs/lnx_arch_x86-64.hpp>
+#include <arion/platforms/linux/archs/lnx_arch_x86.hpp>
 #include <arion/unicorn/unicorn.h>
 #include <arion/unicorn/x86.h>
 #include <cstdint>
@@ -14,7 +18,7 @@
 
 using namespace arion;
 
-std::map<CPU_INTR, int> AbiManager::signo_by_intr = {
+std::map<CPU_INTR, int> ArchManager::signo_by_intr = {
     // x86 interrupts
     {CPU_INTR::DIVIDE_ERROR, SIGFPE},
     {CPU_INTR::DEBUG_EXCEPTION, SIGTRAP},
@@ -59,58 +63,83 @@ std::map<CPU_INTR, int> AbiManager::signo_by_intr = {
     {CPU_INTR::LSERR, SIGBUS},
     {CPU_INTR::UNALIGNED, SIGBUS}};
 
-std::unique_ptr<AbiManager> AbiManager::initialize(std::weak_ptr<Arion> arion, CPU_ARCH arch)
+std::unique_ptr<ArchManager> ArchManager::initialize(std::weak_ptr<Arion> arion, CPU_ARCH arch, PLATFORM platform)
 {
-    std::unique_ptr<AbiManager> abi;
-    switch (arch)
+    std::unique_ptr<ArchManager> manager;
+    switch (platform)
     {
-    case CPU_ARCH::X86_ARCH:
-        abi = std::make_unique<AbiManagerX86>();
+    case PLATFORM::LINUX:
+        switch (arch)
+        {
+        case CPU_ARCH::X86_ARCH:
+            manager = std::make_unique<ArchManagerLinuxX86>();
+            break;
+        case CPU_ARCH::X8664_ARCH:
+            manager = std::make_unique<ArchManagerLinuxX8664>();
+            break;
+        case CPU_ARCH::ARM_ARCH:
+            manager = std::make_unique<ArchManagerLinuxARM>();
+            break;
+        case CPU_ARCH::ARM64_ARCH:
+            manager = std::make_unique<ArchManagerLinuxARM64>();
+            break;
+        default:
+            throw UnsupportedCpuArchException();
+        }
         break;
-    case CPU_ARCH::X8664_ARCH:
-        abi = std::make_unique<AbiManagerX8664>();
-        break;
-    case CPU_ARCH::ARM_ARCH:
-        abi = std::make_unique<AbiManagerARM>();
-        break;
-    case CPU_ARCH::ARM64_ARCH:
-        abi = std::make_unique<AbiManagerARM64>();
-        break;
+    case PLATFORM::UNKNOWN_PLATFORM:
     default:
-        throw UnsupportedCpuArchException();
+        switch (arch)
+        {
+        case CPU_ARCH::X86_ARCH:
+            manager = std::make_unique<ArchManagerX86>();
+            break;
+        case CPU_ARCH::X8664_ARCH:
+            manager = std::make_unique<ArchManagerX8664>();
+            break;
+        case CPU_ARCH::ARM_ARCH:
+            manager = std::make_unique<ArchManagerARM>();
+            break;
+        case CPU_ARCH::ARM64_ARCH:
+            manager = std::make_unique<ArchManagerARM64>();
+            break;
+        default:
+            throw UnsupportedCpuArchException();
+        }
+        break;
     }
 
     std::shared_ptr<Arion> arion_ = arion.lock();
     if (!arion_)
         throw ExpiredWeakPtrException("Arion");
 
-    abi->arion = arion_;
-    abi->uc = arion_->uc;
-    abi->ks = arion_->ks;
-    abi->cs = arion_->cs;
-    abi->setup();
-    return std::move(abi);
+    manager->arion = arion;
+    manager->uc = arion_->uc;
+    manager->ks = arion_->ks;
+    manager->cs = arion_->cs;
+    manager->setup();
+    return std::move(manager);
 }
 
-int AbiManager::get_signal_from_intr(CPU_INTR intr)
+int ArchManager::get_signal_from_intr(CPU_INTR intr)
 {
-    auto signal_it = AbiManager::signo_by_intr.find(intr);
-    if (signal_it == AbiManager::signo_by_intr.end())
+    auto signal_it = ArchManager::signo_by_intr.find(intr);
+    if (signal_it == ArchManager::signo_by_intr.end())
         throw NoSignalForIntrException();
     return signal_it->second;
 }
 
-std::shared_ptr<ABI_ATTRIBUTES> AbiManager::get_attrs()
+std::shared_ptr<ARCH_ATTRIBUTES> ArchManager::get_attrs()
 {
     return this->attrs;
 }
 
-bool AbiManager::does_hook_intr()
+bool ArchManager::does_hook_intr()
 {
     return this->hooks_intr;
 }
 
-std::string AbiManager::get_name_by_syscall_no(uint64_t syscall_no)
+std::string ArchManager::get_name_by_syscall_no(uint64_t syscall_no)
 {
     std::map<uint64_t, std::string> name_by_syscall_no = this->attrs->name_by_syscall_no;
     if (name_by_syscall_no.find(syscall_no) == name_by_syscall_no.end())
@@ -118,7 +147,7 @@ std::string AbiManager::get_name_by_syscall_no(uint64_t syscall_no)
     return name_by_syscall_no.at(syscall_no);
 }
 
-bool AbiManager::has_syscall_with_name(std::string name)
+bool ArchManager::has_syscall_with_name(std::string name)
 {
     std::map<ADDR, std::string> name_by_syscall_no = this->attrs->name_by_syscall_no;
     for (const auto &entry : name_by_syscall_no)
@@ -131,7 +160,7 @@ bool AbiManager::has_syscall_with_name(std::string name)
     return false;
 }
 
-uint64_t AbiManager::get_syscall_no_by_name(std::string name)
+uint64_t ArchManager::get_syscall_no_by_name(std::string name)
 {
     std::map<ADDR, std::string> name_by_syscall_no = this->attrs->name_by_syscall_no;
     for (const auto &entry : name_by_syscall_no)
@@ -144,12 +173,12 @@ uint64_t AbiManager::get_syscall_no_by_name(std::string name)
     throw InvalidSyscallNameException(name);
 }
 
-std::vector<REG> AbiManager::get_context_regs()
+std::vector<REG> ArchManager::get_context_regs()
 {
     return this->ctxt_regs;
 }
 
-std::unique_ptr<std::map<REG, RVAL>> AbiManager::dump_regs()
+std::unique_ptr<std::map<REG, RVAL>> ArchManager::dump_regs()
 {
     std::unique_ptr<std::map<REG, RVAL>> regs = std::make_unique<std::map<REG, RVAL>>();
     for (REG reg : this->ctxt_regs)
@@ -173,7 +202,7 @@ std::unique_ptr<std::map<REG, RVAL>> AbiManager::dump_regs()
     return std::move(regs);
 }
 
-void AbiManager::load_regs(std::unique_ptr<std::map<REG, RVAL>> regs)
+void ArchManager::load_regs(std::unique_ptr<std::map<REG, RVAL>> regs)
 {
     for (auto reg_it : *regs)
     {
@@ -195,12 +224,12 @@ void AbiManager::load_regs(std::unique_ptr<std::map<REG, RVAL>> regs)
     }
 }
 
-bool AbiManager::has_idt_entry(uint64_t intno)
+bool ArchManager::has_idt_entry(uint64_t intno)
 {
     return this->cpu_idt.find(intno) != this->cpu_idt.end();
 }
 
-CPU_INTR AbiManager::get_idt_entry(uint64_t intno)
+CPU_INTR ArchManager::get_idt_entry(uint64_t intno)
 {
     auto cpu_idt_it = this->cpu_idt.find(intno);
     if (cpu_idt_it == this->cpu_idt.end())
@@ -208,7 +237,7 @@ CPU_INTR AbiManager::get_idt_entry(uint64_t intno)
     return cpu_idt_it->second;
 }
 
-std::unique_ptr<std::map<REG, RVAL>> AbiManager::init_thread_regs(ADDR pc, ADDR sp)
+std::unique_ptr<std::map<REG, RVAL>> ArchManager::init_thread_regs(ADDR pc, ADDR sp)
 {
     std::unique_ptr<std::map<REG, RVAL>> regs = this->dump_regs();
     switch (this->attrs->arch_sz)
@@ -227,7 +256,7 @@ std::unique_ptr<std::map<REG, RVAL>> AbiManager::init_thread_regs(ADDR pc, ADDR 
     return std::move(regs);
 }
 
-uint64_t AbiManager::read_arch_reg(arion::REG reg)
+uint64_t ArchManager::read_arch_reg(arion::REG reg)
 {
     switch (this->attrs->arch_sz)
     {
@@ -240,7 +269,7 @@ uint64_t AbiManager::read_arch_reg(arion::REG reg)
     }
 }
 
-void AbiManager::write_arch_reg(arion::REG reg, uint64_t val)
+void ArchManager::write_arch_reg(arion::REG reg, uint64_t val)
 {
     switch (this->attrs->arch_sz)
     {

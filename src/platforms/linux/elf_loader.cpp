@@ -1,6 +1,6 @@
-#include <arion/archs/abi_x86-64.hpp>
+#include <arion/archs/arch_x86-64.hpp>
 #include <arion/arion.hpp>
-#include <arion/common/abi_manager.hpp>
+#include <arion/common/arch_manager.hpp>
 #include <arion/common/global_defs.hpp>
 #include <arion/common/global_excepts.hpp>
 #include <arion/common/memory_manager.hpp>
@@ -20,7 +20,7 @@ std::unique_ptr<LNX_LOADER_PARAMS> ElfLoader::process()
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    uint16_t arch_sz = arion->abi->get_attrs()->arch_sz;
+    uint16_t arch_sz = arion->arch->get_attrs()->arch_sz;
     auto prog_elf_attrs = std::dynamic_pointer_cast<ARION_ELF_PARSER_ATTRIBUTES>(prog_parser->get_attrs());
 
     std::shared_ptr<LNX_LOADER_PARAMS> params = std::make_shared<LNX_LOADER_PARAMS>();
@@ -32,7 +32,7 @@ std::unique_ptr<LNX_LOADER_PARAMS> ElfLoader::process()
         params->interp_address =
             this->map_elf_segments(this->interp_parser, arch_sz == 64 ? LINUX_64_INTERP_ADDR : LINUX_32_INTERP_ADDR);
 
-    KERNEL_SEG_FLAGS seg_flags = arion->abi->get_attrs()->seg_flags;
+    KERNEL_SEG_FLAGS seg_flags = arion->arch->get_attrs()->seg_flags;
     if (seg_flags & ARION_VVAR_PRESENT)
         params->vvar_address = this->map_vvar();
     else
@@ -116,7 +116,7 @@ ADDR ElfLoader::map_vvar()
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    uint16_t arch_sz = arion->abi->get_attrs()->arch_sz;
+    uint16_t arch_sz = arion->arch->get_attrs()->arch_sz;
 
     ADDR vvar_load_addr = arch_sz == 64 ? LINUX_64_VVAR_ADDR : LINUX_32_VVAR_ADDR;
     ADDR vvar_sz = arch_sz == 64 ? LINUX_64_VVAR_SZ : LINUX_32_VVAR_SZ;
@@ -131,7 +131,7 @@ ADDR ElfLoader::map_vdso()
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    uint16_t arch_sz = arion->abi->get_attrs()->arch_sz;
+    uint16_t arch_sz = arion->arch->get_attrs()->arch_sz;
 
     ADDR vdso_load_addr = arch_sz == 64 ? LINUX_64_VDSO_ADDR : LINUX_32_VDSO_ADDR;
     ADDR vdso_sz = arch_sz == 64 ? LINUX_64_VDSO_SZ : LINUX_32_VDSO_SZ;
@@ -139,7 +139,7 @@ ADDR ElfLoader::map_vdso()
     arion->mem->unmap(vdso_load_addr, vdso_load_addr + vdso_sz);
     ADDR vdso_addr = arion->mem->map(vdso_load_addr, vdso_sz, LINUX_VDSO_PERMS, "[vdso]");
 
-    if (arion->abi->get_attrs()->arch == CPU_ARCH::X86_ARCH)
+    if (arion->arch->get_attrs()->arch == CPU_ARCH::X86_ARCH)
     {
         size_t bin_vdso_sz = _binary_vdso_bin_end - _binary_vdso_bin_start;
         arion->mem->write(vdso_addr, (BYTE *)_binary_vdso_bin_start, bin_vdso_sz);
@@ -153,7 +153,7 @@ ADDR ElfLoader::map_vsyscall()
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
-    if (arion->abi->get_attrs()->arch != CPU_ARCH::X8664_ARCH) // For now, only x86-64 implements vsyscall segment
+    if (arion->arch->get_attrs()->arch != CPU_ARCH::X8664_ARCH) // For now, only x86-64 implements vsyscall segment
         return 0;
 
     std::array<std::string, 3> vsyscalls = {"gettimeofday", "time", "getcpu"};
@@ -167,9 +167,9 @@ ADDR ElfLoader::map_vsyscall()
     for (size_t syscall_i = 0; syscall_i < vsyscalls.size(); syscall_i++)
     {
         std::string syscall_name = vsyscalls.at(syscall_i);
-        uint64_t syscall_no = arion->abi->get_syscall_no_by_name(syscall_name);
+        uint64_t syscall_no = arion->arch->get_syscall_no_by_name(syscall_name);
         std::array<BYTE, VSYSCALL_ENTRY_SZ> syscall_asm =
-            static_cast<AbiManagerX8664 *>(arion->abi.get())->gen_vsyscall_entry(syscall_no);
+            static_cast<ArchManagerX8664 *>(arion->arch.get())->gen_vsyscall_entry(syscall_no);
         arion->mem->write(vsyscall_addr + syscall_i * VSYSCALL_ENTRY_SZ, syscall_asm.data(),
                           syscall_asm.size() * sizeof(BYTE));
     }
@@ -217,8 +217,8 @@ void ElfLoader::setup_specific_auxv(std::shared_ptr<LNX_LOADER_PARAMS> params, u
     this->write_auxv_entry(AUXV::AT_PHNUM, prog_elf_attrs->prog_headers_n);
     this->write_auxv_entry(AUXV::AT_PHENT, prog_elf_attrs->prog_headers_entry_sz);
     this->write_auxv_entry(AUXV::AT_PHDR, params->load_address + prog_elf_attrs->prog_headers_off);
-    if (arion->abi->get_attrs()->arch == CPU_ARCH::X86_ARCH)
+    if (arion->arch->get_attrs()->arch == CPU_ARCH::X86_ARCH)
         this->write_auxv_entry(AUXV::AT_SYSINFO, params->vdso_address + LINUX_VDSO_KERNEL_VSYSCALL_OFF);
-    if (arion->abi->get_attrs()->seg_flags & ARION_VDSO_PRESENT)
+    if (arion->arch->get_attrs()->seg_flags & ARION_VDSO_PRESENT)
         this->write_auxv_entry(AUXV::AT_SYSINFO_EHDR, params->vdso_address);
 }

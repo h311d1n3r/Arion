@@ -2,6 +2,7 @@
 - Loading coredumps
 - Memory restoring strategies
 - Implemented module for procfs
+- Changed AbiManager to ArchManager
 - Fixed unreadable symbolic link error
 
 # 1.0.1-alpha

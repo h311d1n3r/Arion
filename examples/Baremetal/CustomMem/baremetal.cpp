@@ -23,7 +23,7 @@ void instr_hook(std::shared_ptr<Arion> arion, ADDR addr, size_t sz, void *user_d
 {
     std::vector<BYTE> read_data = arion->mem->read(addr, sz);
     cs_insn *insn;
-    size_t count = cs_disasm(*arion->abi->curr_cs(), (const uint8_t *)read_data.data(), sz, addr, 0, &insn);
+    size_t count = cs_disasm(*arion->arch->curr_cs(), (const uint8_t *)read_data.data(), sz, addr, 0, &insn);
     if (count > 0)
     {
         for (size_t i = 0; i < count; i++)
@@ -47,7 +47,7 @@ void instr_hook(std::shared_ptr<Arion> arion, ADDR addr, size_t sz, void *user_d
 int main()
 {
     std::unique_ptr<Config> config = std::make_unique<Config>();
-    config->set_field<arion::ARION_LOG_LEVEL>("log_lvl", arion::ARION_LOG_LEVEL::DEBUG);
+    config->set_field<arion::LOG_LEVEL>("log_lvl", arion::LOG_LEVEL::DEBUG);
     std::shared_ptr<ArionGroup> arion_group = std::make_shared<ArionGroup>();
     std::unique_ptr<BaremetalManager> baremetal = std::make_unique<BaremetalManager>(CPU_ARCH::X8664_ARCH, 0x400000, 0x400000);
     // Arion::new_instance(baremetal, fs_root, env, cwd, log_level, config)

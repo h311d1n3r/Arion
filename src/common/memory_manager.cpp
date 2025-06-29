@@ -622,7 +622,7 @@ ADDR MemoryManager::read_ptr(ADDR addr)
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    return this->read_val(addr, arion->abi->get_attrs()->ptr_sz);
+    return this->read_val(addr, arion->arch->get_attrs()->ptr_sz);
 }
 
 size_t MemoryManager::read_sz(ADDR addr)
@@ -719,7 +719,7 @@ std::vector<cs_insn> MemoryManager::read_instrs(ADDR addr, size_t count)
         std::vector<BYTE> buf_vec = this->read(addr + off, buf_sz);
         memcpy(buf, buf_vec.data(), buf_vec.size());
         cs_insn *insn;
-        size_t dis_count = cs_disasm(*arion->abi->curr_cs(), buf, buf_sz, addr + off, count - instrs.size(), &insn);
+        size_t dis_count = cs_disasm(*arion->arch->curr_cs(), buf, buf_sz, addr + off, count - instrs.size(), &insn);
         for (uint64_t instr_i = 0; instr_i < dis_count && instr_i < count; instr_i++)
             instrs.push_back(insn[instr_i]);
         cs_free(insn, dis_count);
@@ -756,7 +756,7 @@ void MemoryManager::write_ptr(ADDR addr, ADDR ptr)
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    return this->write_val(addr, ptr, arion->abi->get_attrs()->ptr_sz);
+    return this->write_val(addr, ptr, arion->arch->get_attrs()->ptr_sz);
 }
 
 void MemoryManager::write_sz(ADDR addr, size_t sz)
@@ -775,10 +775,10 @@ void MemoryManager::stack_push(uint64_t val)
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    size_t ptr_sz = arion->abi->get_attrs()->ptr_sz;
-    ADDR sp = arion->abi->read_arch_reg(arion->abi->get_attrs()->regs.sp);
+    size_t ptr_sz = arion->arch->get_attrs()->ptr_sz;
+    ADDR sp = arion->arch->read_arch_reg(arion->arch->get_attrs()->regs.sp);
     sp -= ptr_sz;
-    arion->abi->write_arch_reg(arion->abi->get_attrs()->regs.sp, sp);
+    arion->arch->write_arch_reg(arion->arch->get_attrs()->regs.sp, sp);
     this->write(sp, (BYTE *)&val, ptr_sz);
 }
 
@@ -788,9 +788,9 @@ void MemoryManager::stack_push_bytes(BYTE *data, size_t data_sz)
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    ADDR sp = arion->abi->read_arch_reg(arion->abi->get_attrs()->regs.sp);
+    ADDR sp = arion->arch->read_arch_reg(arion->arch->get_attrs()->regs.sp);
     sp -= data_sz;
-    arion->abi->write_arch_reg(arion->abi->get_attrs()->regs.sp, sp);
+    arion->arch->write_arch_reg(arion->arch->get_attrs()->regs.sp, sp);
     this->write(sp, data, data_sz);
 }
 
@@ -800,9 +800,9 @@ void MemoryManager::stack_push_string(std::string data)
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    ADDR sp = arion->abi->read_arch_reg(arion->abi->get_attrs()->regs.sp);
+    ADDR sp = arion->arch->read_arch_reg(arion->arch->get_attrs()->regs.sp);
     sp -= data.size() + 1;
-    arion->abi->write_arch_reg(arion->abi->get_attrs()->regs.sp, sp);
+    arion->arch->write_arch_reg(arion->arch->get_attrs()->regs.sp, sp);
     this->write_string(sp, data);
 }
 
@@ -812,10 +812,10 @@ uint64_t MemoryManager::stack_pop()
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    ADDR sp = arion->abi->read_arch_reg(arion->abi->get_attrs()->regs.sp);
+    ADDR sp = arion->arch->read_arch_reg(arion->arch->get_attrs()->regs.sp);
     ADDR val = this->read_ptr(sp);
-    sp += arion->abi->get_attrs()->ptr_sz;
-    arion->abi->write_arch_reg(arion->abi->get_attrs()->regs.sp, sp);
+    sp += arion->arch->get_attrs()->ptr_sz;
+    arion->arch->write_arch_reg(arion->arch->get_attrs()->regs.sp, sp);
     return val;
 }
 
@@ -825,9 +825,9 @@ void MemoryManager::stack_align()
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    ADDR sp = arion->abi->read_arch_reg(arion->abi->get_attrs()->regs.sp);
-    sp -= (sp % arion->abi->get_attrs()->ptr_sz);
-    arion->abi->write_arch_reg(arion->abi->get_attrs()->regs.sp, sp);
+    ADDR sp = arion->arch->read_arch_reg(arion->arch->get_attrs()->regs.sp);
+    sp -= (sp % arion->arch->get_attrs()->ptr_sz);
+    arion->arch->write_arch_reg(arion->arch->get_attrs()->regs.sp, sp);
 }
 
 void MemoryManager::set_brk(ADDR brk)

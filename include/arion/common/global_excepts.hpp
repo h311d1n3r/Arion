@@ -93,14 +93,6 @@ class FileTooSmallException : public ArionException
                          int_to_hex<size_t>(min_file_sz) + std::string(".")) {};
 };
 
-class ReadLinkFileException : public ArionException
-{
-  public:
-    explicit ReadLinkFileException(std::string file_path)
-        : ArionException(std::string("An error occurred while reading \"") + file_path +
-                         std::string("\" as a link file.")) {};
-};
-
 class FileNotInFsException : public ArionException
 {
   public:
@@ -146,13 +138,6 @@ class PathTooLongException : public ArionException
   public:
     explicit PathTooLongException(std::string file_path)
         : ArionException(std::string("File path \"") + file_path + std::string("\" is too long.")) {};
-};
-
-class ElfParsingException : public ArionException
-{
-  public:
-    explicit ElfParsingException(std::string elf_path)
-        : ArionException(std::string("An error occurred when parsing ELF \"") + elf_path + std::string("\".")) {};
 };
 
 class UnknownLinkageTypeException : public ArionException

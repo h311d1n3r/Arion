@@ -182,7 +182,7 @@ uint64_t sys_open(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     int32_t flags = params.at(1);
     uint16_t mode = params.at(2);
 
-    if (arion->abi->get_attrs()->arch == CPU_ARCH::ARM_ARCH)
+    if (arion->arch->get_attrs()->arch == CPU_ARCH::ARM_ARCH)
         flags &= ~0x20000;
 
     std::string fs_path = arion->fs->get_fs_path();
@@ -247,7 +247,7 @@ uint64_t sys_newstat(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params
     {
         STRUCT_ID stat_id = STAT_STRUCT_FACTORY->feed_host(&stat_buf);
         size_t arch_stat_len;
-        BYTE *arch_stat = STAT_STRUCT_FACTORY->build(stat_id, arion->abi->get_attrs()->arch, arch_stat_len);
+        BYTE *arch_stat = STAT_STRUCT_FACTORY->build(stat_id, arion->arch->get_attrs()->arch, arch_stat_len);
         arion->mem->write(stat_buf_addr, arch_stat, arch_stat_len);
         free(arch_stat);
         STAT_STRUCT_FACTORY->release_struct(stat_id);
@@ -271,7 +271,7 @@ uint64_t sys_newfstat(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
     {
         STRUCT_ID stat_id = STAT_STRUCT_FACTORY->feed_host(&stat_buf);
         size_t arch_stat_len;
-        BYTE *arch_stat = STAT_STRUCT_FACTORY->build(stat_id, arion->abi->get_attrs()->arch, arch_stat_len);
+        BYTE *arch_stat = STAT_STRUCT_FACTORY->build(stat_id, arion->arch->get_attrs()->arch, arch_stat_len);
         arion->mem->write(stat_buf_addr, arch_stat, arch_stat_len);
         free(arch_stat);
         STAT_STRUCT_FACTORY->release_struct(stat_id);
@@ -295,7 +295,7 @@ uint64_t sys_newlstat(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
     {
         STRUCT_ID stat_id = STAT_STRUCT_FACTORY->feed_host(&stat_buf);
         size_t arch_stat_len;
-        BYTE *arch_stat = STAT_STRUCT_FACTORY->build(stat_id, arion->abi->get_attrs()->arch, arch_stat_len);
+        BYTE *arch_stat = STAT_STRUCT_FACTORY->build(stat_id, arion->arch->get_attrs()->arch, arch_stat_len);
         arion->mem->write(stat_buf_addr, arch_stat, arch_stat_len);
         free(arch_stat);
         STAT_STRUCT_FACTORY->release_struct(stat_id);
@@ -505,7 +505,7 @@ uint64_t sys_readv(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
         arion_fd = arion_s->fd;
     }
     struct iovec *iov = (struct iovec *)calloc(iov_cnt, sizeof(struct iovec));
-    uint16_t arch_sz = arion->abi->get_attrs()->arch_sz;
+    uint16_t arch_sz = arion->arch->get_attrs()->arch_sz;
     for (size_t iov_i = 0; iov_i < iov_cnt; iov_i++)
     {
         switch (arch_sz)
@@ -576,7 +576,7 @@ uint64_t sys_writev(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     }
 
     struct iovec *iov = (struct iovec *)calloc(iov_cnt, sizeof(struct iovec));
-    switch (arion->abi->get_attrs()->arch_sz)
+    switch (arion->arch->get_attrs()->arch_sz)
     {
     case 64: {
         for (size_t iov_i = 0; iov_i < iov_cnt; iov_i++)
@@ -1612,7 +1612,7 @@ uint64_t sys_openat(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     int32_t flags = params.at(2);
     uint16_t mode = params.at(3);
 
-    if (arion->abi->get_attrs()->arch == CPU_ARCH::ARM_ARCH)
+    if (arion->arch->get_attrs()->arch == CPU_ARCH::ARM_ARCH)
         flags &= ~0x20000;
 
     std::string file_name = arion->mem->read_c_string(file_name_addr);
@@ -1645,7 +1645,7 @@ uint64_t sys_newfstatat(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> par
     {
         STRUCT_ID stat_id = STAT_STRUCT_FACTORY->feed_host(&stat_buf);
         size_t arch_stat_len;
-        BYTE *arch_stat = STAT_STRUCT_FACTORY->build(stat_id, arion->abi->get_attrs()->arch, arch_stat_len);
+        BYTE *arch_stat = STAT_STRUCT_FACTORY->build(stat_id, arion->arch->get_attrs()->arch, arch_stat_len);
         arion->mem->write(stat_buf_addr, arch_stat, arch_stat_len);
         free(arch_stat);
         STAT_STRUCT_FACTORY->release_struct(stat_id);
@@ -2153,7 +2153,7 @@ uint64_t sys_statx(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     {
         STRUCT_ID statx_id = STATX_STRUCT_FACTORY->feed_host(&statx_buf);
         size_t arch_statx_len;
-        BYTE *arch_statx = STATX_STRUCT_FACTORY->build(statx_id, arion->abi->get_attrs()->arch, arch_statx_len);
+        BYTE *arch_statx = STATX_STRUCT_FACTORY->build(statx_id, arion->arch->get_attrs()->arch, arch_statx_len);
         arion->mem->write(statx_buf_addr, arch_statx, arch_statx_len);
         free(arch_statx);
         STATX_STRUCT_FACTORY->release_struct(statx_id);
