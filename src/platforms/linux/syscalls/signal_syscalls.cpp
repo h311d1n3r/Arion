@@ -36,8 +36,8 @@ uint64_t sys_rt_sigreturn(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> p
 {
     if (arion->signals->sigreturn())
     {
-        REG ret_reg = arion->abi->get_attrs()->syscalling_conv.ret_reg;
-        RVAL64 ret = arion->abi->read_arch_reg(ret_reg);
+        REG ret_reg = arion->arch->get_attrs()->syscalling_conv.ret_reg;
+        RVAL64 ret = arion->arch->read_arch_reg(ret_reg);
         return ret;
     }
     return -1;
@@ -47,8 +47,8 @@ uint64_t sys_sigreturn(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> para
 {
     if (arion->signals->sigreturn())
     {
-        REG ret_reg = arion->abi->get_attrs()->syscalling_conv.ret_reg;
-        RVAL64 ret = arion->abi->read_arch_reg(ret_reg);
+        REG ret_reg = arion->arch->get_attrs()->syscalling_conv.ret_reg;
+        RVAL64 ret = arion->arch->read_arch_reg(ret_reg);
         return ret;
     }
     return -1;

@@ -1,7 +1,7 @@
-#ifndef ARION_ABI_X86_HPP
-#define ARION_ABI_X86_HPP
+#ifndef ARION_ARCH_X86_HPP
+#define ARION_ARCH_X86_HPP
 
-#include <arion/common/abi_manager.hpp>
+#include <arion/common/arch_manager.hpp>
 #include <arion/common/global_defs.hpp>
 #include <cstdint>
 #include <map>
@@ -541,26 +541,26 @@ inline const uint16_t ARCH_SZ = 32;
 
 inline arion::CPU_ARCH ARCH = arion::CPU_ARCH::X86_ARCH;
 
-inline ABI_ATTRIBUTES ABI_ATTRS = ABI_ATTRIBUTES(ARCH, ARCH_SZ, PTR_SZ, HWCAP, HWCAP2, SEG_FLAGS, ABI_REGS,
-                                                 ABI_CALLING_CONV, ABI_SYSCALLING_CONV, NAME_BY_SYSCALL_NO);
+inline ARCH_ATTRIBUTES ARCH_ATTRS = ARCH_ATTRIBUTES(ARCH, ARCH_SZ, PTR_SZ, HWCAP, HWCAP2, SEG_FLAGS, ABI_REGS,
+                                                    ABI_CALLING_CONV, ABI_SYSCALLING_CONV, NAME_BY_SYSCALL_NO);
 } // namespace arion_x86
 
-class AbiManagerX86 : public AbiManager
+class ArchManagerX86 : public ArchManager
 {
   private:
     static void int_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data);
-    void setup();
+    void setup() override;
 
   public:
-    AbiManagerX86()
-        : AbiManager(std::make_shared<ABI_ATTRIBUTES>(arion_x86::ABI_ATTRS), arion_x86::ARCH_REGS,
-                     arion_x86::ARCH_REGS_SZ, arion_x86::CTXT_REGS, arion_x86::IDT, true) {};
+    ArchManagerX86()
+        : ArchManager(std::make_shared<ARCH_ATTRIBUTES>(arion_x86::ARCH_ATTRS), arion_x86::ARCH_REGS,
+                      arion_x86::ARCH_REGS_SZ, arion_x86::CTXT_REGS, arion_x86::IDT, true) {};
 
     uint16_t new_tls(arion::ADDR udesc_addr);
-    ks_engine *curr_ks();
-    csh *curr_cs();
-    arion::ADDR dump_tls();
-    void load_tls(arion::ADDR new_tls);
+    ks_engine *curr_ks() override;
+    csh *curr_cs() override;
+    arion::ADDR dump_tls() override;
+    void load_tls(arion::ADDR new_tls) override;
 };
 
-#endif // ARION_ABI_X86_HPP
+#endif // ARION_ARCH_X86_HPP

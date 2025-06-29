@@ -1,5 +1,5 @@
 #include <arion/arion.hpp>
-#include <arion/common/abi_manager.hpp>
+#include <arion/common/arch_manager.hpp>
 #include <arion/common/global_defs.hpp>
 #include <arion/platforms/linux/lnx_kernel_utils.hpp>
 #include <arion/platforms/linux/syscalls/info_syscalls.hpp>
@@ -68,7 +68,7 @@ uint64_t sys_getrlimit(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> para
             getrlimit_ret = -errno;
     }
     }
-    if (arion->abi->get_attrs()->arch_sz == 32)
+    if (arion->arch->get_attrs()->arch_sz == 32)
     {
         struct rlimit32 *rlim32 = (struct rlimit32 *)malloc(sizeof(struct rlimit32));
         rlim32->rlim_cur = rlim->rlim_cur;
@@ -153,16 +153,16 @@ uint64_t sys_arch_prctl(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> par
         arion->mem->write_ptr(addr, 1);
         break;
     case ARCH_SET_FS:
-        arion->abi->write_reg(UC_X86_REG_FS_BASE, addr);
+        arion->arch->write_reg(UC_X86_REG_FS_BASE, addr);
         break;
     case ARCH_GET_FS:
-        arion->mem->write_ptr(addr, arion->abi->read_arch_reg(UC_X86_REG_FS_BASE));
+        arion->mem->write_ptr(addr, arion->arch->read_arch_reg(UC_X86_REG_FS_BASE));
         break;
     case ARCH_SET_GS:
-        arion->abi->write_reg(UC_X86_REG_GS_BASE, addr);
+        arion->arch->write_reg(UC_X86_REG_GS_BASE, addr);
         break;
     case ARCH_GET_GS:
-        arion->mem->write_ptr(addr, arion->abi->read_arch_reg(UC_X86_REG_GS_BASE));
+        arion->mem->write_ptr(addr, arion->arch->read_arch_reg(UC_X86_REG_GS_BASE));
         break;
     }
     return 0;

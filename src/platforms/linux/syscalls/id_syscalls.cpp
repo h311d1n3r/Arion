@@ -11,19 +11,19 @@ uint64_t sys_getpid(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
 
 uint64_t sys_getuid(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
 {
-    return getuid();
+    return arion->get_uid();
 }
 
 uint64_t sys_getgid(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
 {
-    return getgid();
+    return arion->get_gid();
 }
 
 uint64_t sys_setuid(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
 {
     uid_t uid = params.at(0);
 
-    // PREVENT MODIFICATION OF ARION PROCESS
+    arion->set_uid(uid);
     return 0;
 }
 
@@ -31,18 +31,18 @@ uint64_t sys_setgid(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
 {
     gid_t gid = params.at(0);
 
-    // PREVENT MODIFICATION OF ARION PROCESS
+    arion->set_gid(gid);
     return 0;
 }
 
 uint64_t sys_geteuid(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
 {
-    return geteuid();
+    return arion->get_euid();
 }
 
 uint64_t sys_getegid(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
 {
-    return getegid();
+    return arion->get_egid();
 }
 
 uint64_t sys_setpgid(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
@@ -76,7 +76,7 @@ uint64_t sys_getpgrp(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params
 
 uint64_t sys_setsid(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
 {
-    // PREVENT MODIFICATION OF ARION PROCESS
+    arion->set_sid(arion->get_pid());
     return 0;
 }
 

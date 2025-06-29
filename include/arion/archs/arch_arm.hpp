@@ -1,8 +1,9 @@
-#ifndef ARION_ABI_ARM_HPP
-#define ARION_ABI_ARM_HPP
+#ifndef ARION_ARCH_ARM_HPP
+#define ARION_ARCH_ARM_HPP
 
-#include <arion/common/abi_manager.hpp>
+#include <arion/common/arch_manager.hpp>
 #include <arion/common/global_defs.hpp>
+#include <arion/platforms/linux/lnx_kernel_utils.hpp>
 #include <cstdint>
 #include <map>
 #include <string>
@@ -14,6 +15,7 @@
 
 namespace arion_arm
 {
+
 inline std::map<uint64_t, std::string> NAME_BY_SYSCALL_NO = {{0, "restart_syscall"},
                                                              {1, "exit"},
                                                              {2, "fork"},
@@ -632,28 +634,28 @@ inline const uint16_t ARCH_SZ = 32;
 
 inline arion::CPU_ARCH ARCH = arion::CPU_ARCH::ARM_ARCH;
 
-inline ABI_ATTRIBUTES ABI_ATTRS = ABI_ATTRIBUTES(ARCH, ARCH_SZ, PTR_SZ, HWCAP, HWCAP2, SEG_FLAGS, ABI_REGS,
-                                                 ABI_CALLING_CONV, ABI_SYSCALLING_CONV, NAME_BY_SYSCALL_NO);
+inline ARCH_ATTRIBUTES ARCH_ATTRS = ARCH_ATTRIBUTES(ARCH, ARCH_SZ, PTR_SZ, HWCAP, HWCAP2, SEG_FLAGS, ABI_REGS,
+                                                    ABI_CALLING_CONV, ABI_SYSCALLING_CONV, NAME_BY_SYSCALL_NO);
 } // namespace arion_arm
 
-class AbiManagerARM : public AbiManager
+class ArchManagerARM : public ArchManager
 {
   private:
     static void int_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data);
     bool is_thumb();
     void enable_vfp();
-    void setup();
+    void setup() override;
 
   public:
-    AbiManagerARM()
-        : AbiManager(std::make_shared<ABI_ATTRIBUTES>(arion_arm::ABI_ATTRS), arion_arm::ARCH_REGS,
-                     arion_arm::ARCH_REGS_SZ, arion_arm::CTXT_REGS, arion_arm::IDT, true) {};
+    ArchManagerARM()
+        : ArchManager(std::make_shared<ARCH_ATTRIBUTES>(arion_arm::ARCH_ATTRS), arion_arm::ARCH_REGS,
+                      arion_arm::ARCH_REGS_SZ, arion_arm::CTXT_REGS, arion_arm::IDT, true) {};
 
-    ks_engine *curr_ks();
-    csh *curr_cs();
-    arion::ADDR dump_tls();
-    void load_tls(arion::ADDR new_tls);
-    void prerun_hook(arion::ADDR& start) override;
+    ks_engine *curr_ks() override;
+    csh *curr_cs() override;
+    arion::ADDR dump_tls() override;
+    void load_tls(arion::ADDR new_tls) override;
+    void prerun_hook(arion::ADDR &start) override;
 };
 
-#endif // ARION_ABI_ARM_HPP
+#endif // ARION_ARCH_ARM_HPP

@@ -13,7 +13,7 @@ void instr_hook(std::shared_ptr<Arion> arion, ADDR addr, size_t sz, void *user_d
 {
     std::vector<BYTE> read_data = arion->mem->read(addr, sz);
     cs_insn *insn;
-    size_t count = cs_disasm(*arion->abi->curr_cs(), (const uint8_t *)read_data.data(), sz, addr, 0, &insn);
+    size_t count = cs_disasm(*arion->arch->curr_cs(), (const uint8_t *)read_data.data(), sz, addr, 0, &insn);
     if (count > 0)
     {
         for (size_t i = 0; i < count; i++)
@@ -33,7 +33,7 @@ void instr_hook(std::shared_ptr<Arion> arion, ADDR addr, size_t sz, void *user_d
 
 void block_hook(std::shared_ptr<Arion> arion, ADDR addr, size_t sz, void *user_data)
 {
-    ADDR rsp = arion->abi->read_reg<RVAL64>("RSP");
+    ADDR rsp = arion->arch->read_reg<RVAL64>("RSP");
     uint64_t curr_stack_val = arion->mem->read_val(rsp, sizeof(uint64_t));
     std::cout << "New basic block at 0x" << std::hex << +addr << " RSP : 0x" << std::hex << +rsp << " [RSP] : 0x"
               << std::hex << +curr_stack_val << std::endl;
@@ -42,7 +42,7 @@ void block_hook(std::shared_ptr<Arion> arion, ADDR addr, size_t sz, void *user_d
 int main()
 {
     std::unique_ptr<Config> config = std::make_unique<Config>();
-    config->set_field<ARION_LOG_LEVEL>("log_lvl", ARION_LOG_LEVEL::OFF);
+    config->set_field<LOG_LEVEL>("log_lvl", LOG_LEVEL::OFF);
     std::shared_ptr<ArionGroup> arion_group = std::make_shared<ArionGroup>();
     // Arion::new_instance(args, fs_root, env, cwd, log_level, config)
     std::shared_ptr<Arion> arion =

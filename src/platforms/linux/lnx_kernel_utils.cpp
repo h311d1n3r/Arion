@@ -198,31 +198,39 @@ REGISTER_ARION_TYPE(ARION_STRUCT_CLONE_ARGS_TYPE, ArionStructCloneArgsType, OS_S
 std::string ArionErrCodeType::str(std::shared_ptr<Arion> arion, uint64_t val)
 {
     auto flag_it = errno_names.find(-((int64_t)val));
-    if(flag_it == errno_names.end())
+    if (flag_it == errno_names.end())
         return int_to_hex<uint64_t>(val);
     return flag_it->second;
 }
 
 std::string ArionFileDescriptorType::str(std::shared_ptr<Arion> arion, uint64_t val)
 {
-    if(val == (uint32_t)AT_FDCWD)
+    if (val == (uint32_t)AT_FDCWD)
         return "AT_FDCWD";
     return int_to_hex<uint64_t>(val);
 }
 
 std::string ArionProtFlagType::str(std::shared_ptr<Arion> arion, uint64_t val)
 {
-    if(!val)
+    if (!val)
         return "PROT_NONE";
     std::stringstream prot_ss;
-    if(val & PROT_GROWSDOWN) prot_ss << "GDOWN-";
-    if(val & PROT_GROWSUP) prot_ss << "GUP-";
-    if(val & PROT_READ) prot_ss << "R";
-    else prot_ss << "-";
-    if(val & PROT_WRITE) prot_ss << "W";
-    else prot_ss << "-";
-    if(val & PROT_EXEC) prot_ss << "X";
-    else prot_ss << "-";
+    if (val & PROT_GROWSDOWN)
+        prot_ss << "GDOWN-";
+    if (val & PROT_GROWSUP)
+        prot_ss << "GUP-";
+    if (val & PROT_READ)
+        prot_ss << "R";
+    else
+        prot_ss << "-";
+    if (val & PROT_WRITE)
+        prot_ss << "W";
+    else
+        prot_ss << "-";
+    if (val & PROT_EXEC)
+        prot_ss << "X";
+    else
+        prot_ss << "-";
     return prot_ss.str();
 }
 

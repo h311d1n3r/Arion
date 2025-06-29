@@ -1,5 +1,5 @@
-#ifndef ARION_ABI_MANAGER_HPP
-#define ARION_ABI_MANAGER_HPP
+#ifndef ARION_ARCH_MANAGER_HPP
+#define ARION_ARCH_MANAGER_HPP
 
 #include <arion/capstone/capstone.h>
 #include <arion/common/global_defs.hpp>
@@ -51,7 +51,7 @@ struct ARION_EXPORT ABI_SYSCALLING_CONVENTION
         : sysno_reg(sysno_reg), ret_reg(ret_reg), sys_param_regs(std::move(sys_param_regs)) {};
 };
 
-struct ARION_EXPORT ABI_ATTRIBUTES
+struct ARION_EXPORT ARCH_ATTRIBUTES
 {
     arion::CPU_ARCH arch;
     uint16_t arch_sz;
@@ -63,13 +63,11 @@ struct ARION_EXPORT ABI_ATTRIBUTES
     ABI_CALLING_CONVENTION calling_conv;
     ABI_SYSCALLING_CONVENTION syscalling_conv;
     std::map<uint64_t, std::string> name_by_syscall_no;
-    ABI_ATTRIBUTES(arion::CPU_ARCH arch, uint16_t arch_sz, size_t ptr_sz, uint32_t hwcap,
-                   uint32_t hwcap2, arion::KERNEL_SEG_FLAGS seg_flags, ABI_REGISTERS regs,
-                   ABI_CALLING_CONVENTION calling_conv, ABI_SYSCALLING_CONVENTION syscalling_conv,
-                   std::map<uint64_t, std::string> &name_by_syscall_no)
-        : arch(arch), arch_sz(arch_sz), ptr_sz(ptr_sz), seg_flags(seg_flags), hwcap(hwcap),
-          hwcap2(hwcap2), regs(regs), calling_conv(calling_conv), syscalling_conv(syscalling_conv),
-          name_by_syscall_no(name_by_syscall_no) {};
+    ARCH_ATTRIBUTES(arion::CPU_ARCH arch, uint16_t arch_sz, size_t ptr_sz, uint32_t hwcap, uint32_t hwcap2,
+                    arion::KERNEL_SEG_FLAGS seg_flags, ABI_REGISTERS regs, ABI_CALLING_CONVENTION calling_conv,
+                    ABI_SYSCALLING_CONVENTION syscalling_conv, std::map<uint64_t, std::string> &name_by_syscall_no)
+        : arch(arch), arch_sz(arch_sz), ptr_sz(ptr_sz), seg_flags(seg_flags), hwcap(hwcap), hwcap2(hwcap2), regs(regs),
+          calling_conv(calling_conv), syscalling_conv(syscalling_conv), name_by_syscall_no(name_by_syscall_no) {};
 };
 
 enum ARION_EXPORT CPU_INTR
@@ -120,7 +118,7 @@ enum ARION_EXPORT CPU_INTR
     UNALIGNED
 };
 
-class ARION_EXPORT AbiManager
+class ARION_EXPORT ArchManager
 {
   private:
     static std::map<CPU_INTR, int> signo_by_intr;
@@ -130,23 +128,24 @@ class ARION_EXPORT AbiManager
     uc_engine *uc;
     std::vector<ks_engine *> ks;
     std::vector<csh *> cs;
-    std::shared_ptr<ABI_ATTRIBUTES> attrs;
+    std::shared_ptr<ARCH_ATTRIBUTES> attrs;
     std::map<std::string, arion::REG> arch_regs;
     std::map<arion::REG, uint8_t> arch_regs_sz;
     std::vector<arion::REG> ctxt_regs;
     std::map<uint64_t, CPU_INTR> cpu_idt;
     bool hooks_intr;
-    AbiManager(std::shared_ptr<ABI_ATTRIBUTES> attrs, std::map<std::string, arion::REG> arch_regs,
-               std::map<arion::REG, uint8_t> arch_regs_sz, std::vector<arion::REG> ctxt_regs,
-               std::map<uint64_t, CPU_INTR> cpu_idt, bool hooks_intr)
+    ArchManager(std::shared_ptr<ARCH_ATTRIBUTES> attrs, std::map<std::string, arion::REG> arch_regs,
+                std::map<arion::REG, uint8_t> arch_regs_sz, std::vector<arion::REG> ctxt_regs,
+                std::map<uint64_t, CPU_INTR> cpu_idt, bool hooks_intr)
         : attrs(attrs), arch_regs(arch_regs), arch_regs_sz(arch_regs_sz), ctxt_regs(ctxt_regs), cpu_idt(cpu_idt),
           hooks_intr(hooks_intr) {};
 
   public:
-    virtual ~AbiManager() = default;
-    static std::unique_ptr<AbiManager> initialize(std::weak_ptr<Arion> arion, arion::CPU_ARCH arch);
+    virtual ~ArchManager() = default;
+    static std::unique_ptr<ArchManager> initialize(std::weak_ptr<Arion> arion, arion::CPU_ARCH arch,
+                                                   arion::PLATFORM platform = arion::PLATFORM::UNKNOWN_PLATFORM);
     static int get_signal_from_intr(CPU_INTR intr);
-    std::shared_ptr<ABI_ATTRIBUTES> ARION_EXPORT get_attrs();
+    std::shared_ptr<ARCH_ATTRIBUTES> ARION_EXPORT get_attrs();
     bool does_hook_intr();
     std::string ARION_EXPORT get_name_by_syscall_no(uint64_t syscall_no);
     bool ARION_EXPORT has_syscall_with_name(std::string name);
@@ -162,7 +161,7 @@ class ARION_EXPORT AbiManager
     virtual void setup() = 0;
     virtual arion::ADDR ARION_EXPORT dump_tls() = 0;
     virtual void ARION_EXPORT load_tls(arion::ADDR new_tls) = 0;
-    virtual void prerun_hook(arion::ADDR& start) {};
+    virtual void prerun_hook(arion::ADDR &start) {};
 
     template <typename T> T ARION_EXPORT read_reg(arion::REG reg)
     {
@@ -213,4 +212,4 @@ class ARION_EXPORT AbiManager
     void write_arch_reg(arion::REG reg, uint64_t val);
 };
 
-#endif // ARION_ABI_MANAGER_HPP
+#endif // ARION_ARCH_MANAGER_HPP

@@ -1,27 +1,27 @@
-#include <arion/archs/abi_arm64.hpp>
+#include <arion/archs/arch_arm64.hpp>
 #include <arion/arion.hpp>
 #include <arion/common/global_excepts.hpp>
 #include <arion/unicorn/arm.h>
 
 using namespace arion;
 
-void AbiManagerARM64::int_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data)
+void ArchManagerARM64::int_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data)
 {
     if (intno == 0x2)
         arion->syscalls->process_syscall(arion);
 }
 
-ks_engine *AbiManagerARM64::curr_ks()
+ks_engine *ArchManagerARM64::curr_ks()
 {
     return this->ks.at(0);
 }
 
-csh *AbiManagerARM64::curr_cs()
+csh *ArchManagerARM64::curr_cs()
 {
     return this->cs.at(0);
 }
 
-void AbiManagerARM64::enable_lse()
+void ArchManagerARM64::enable_lse()
 {
     uc_arm64_cp_reg isar0 = {0};
     isar0.crn = 0;
@@ -40,7 +40,7 @@ void AbiManagerARM64::enable_lse()
         throw UnicornRegWriteException(uc_reg_err);
 }
 
-void AbiManagerARM64::enable_vfp()
+void ArchManagerARM64::enable_vfp()
 {
     uint32_t cpacr = 0;
     uc_err uc_reg_err = uc_reg_read(this->uc, UC_ARM64_REG_CPACR_EL1, &cpacr); // CPACR
@@ -54,18 +54,18 @@ void AbiManagerARM64::enable_vfp()
         throw UnicornRegWriteException(uc_reg_err);
 }
 
-void AbiManagerARM64::setup()
+void ArchManagerARM64::setup()
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    arion->hooks->hook_intr(AbiManagerARM64::int_hook);
+    arion->hooks->hook_intr(ArchManagerARM64::int_hook);
     this->enable_lse();
     this->enable_vfp();
 }
 
-ADDR AbiManagerARM64::dump_tls()
+ADDR ArchManagerARM64::dump_tls()
 {
     uc_arm64_cp_reg tpidr_el0 = {0};
     tpidr_el0.crn = 13;
@@ -81,7 +81,7 @@ ADDR AbiManagerARM64::dump_tls()
     return tpidr_el0.val;
 }
 
-void AbiManagerARM64::load_tls(ADDR new_tls)
+void ArchManagerARM64::load_tls(ADDR new_tls)
 {
     uc_arm64_cp_reg tpidr_el0 = {0};
     tpidr_el0.crn = 13;

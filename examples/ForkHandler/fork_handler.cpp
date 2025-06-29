@@ -29,7 +29,7 @@ void fork_hook(std::shared_ptr<Arion> arion, std::shared_ptr<Arion> child, void 
 int main()
 {
     std::unique_ptr<Config> config = std::make_unique<Config>();
-    config->set_field<ARION_LOG_LEVEL>("log_lvl", ARION_LOG_LEVEL::DEBUG);
+    config->set_field<LOG_LEVEL>("log_lvl", LOG_LEVEL::DEBUG);
     std::shared_ptr<ArionGroup> arion_group = std::make_shared<ArionGroup>();
     // Arion::new_instance(args, fs_root, env, cwd, log_level, config)
     std::shared_ptr<Arion> arion =

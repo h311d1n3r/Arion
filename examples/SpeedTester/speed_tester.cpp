@@ -13,7 +13,7 @@ using namespace arion;
 int main()
 {
     std::unique_ptr<Config> config = std::make_unique<Config>();
-    config->set_field<ARION_LOG_LEVEL>("log_lvl", ARION_LOG_LEVEL::OFF);
+    config->set_field<LOG_LEVEL>("log_lvl", LOG_LEVEL::OFF);
     std::shared_ptr<ArionGroup> arion_group = std::make_shared<ArionGroup>();
     // Arion::new_instance(args, fs_root, env, cwd, log_level, config)
     std::shared_ptr<Arion> arion =

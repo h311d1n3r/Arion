@@ -3,7 +3,7 @@
 
 #include <arion/archs/x86/gdt_manager.hpp>
 #include <arion/capstone/capstone.h>
-#include <arion/common/abi_manager.hpp>
+#include <arion/common/arch_manager.hpp>
 #include <arion/common/baremetal_manager.hpp>
 #include <arion/common/code_tracer.hpp>
 #include <arion/common/config.hpp>
@@ -75,12 +75,18 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     bool sync = false;
     bool stopped = false;
     bool zombie = false;
-    pid_t pid;
-    pid_t pgid;
-    static void
-    new_instance_common(std::shared_ptr<Arion> arion, arion::CPU_ARCH arch, std::string fs_path = "/",
-                 std::vector<std::string> program_env = std::vector<std::string>(), std::string cwd = "",
-                 std::unique_ptr<Config> config = std::move(std::make_unique<Config>()));
+    pid_t pid = 0;
+    pid_t pgid = 0;
+    uint32_t sid = 0;
+    uint32_t uid = 0;
+    uint32_t gid = 0;
+    uint32_t euid = 0;
+    uint32_t egid = 0;
+    static void new_instance_common_init(std::shared_ptr<Arion> arion, std::string fs_path = "/",
+                                         std::vector<std::string> program_env = std::vector<std::string>(),
+                                         std::string cwd = "",
+                                         std::unique_ptr<Config> config = std::move(std::make_unique<Config>()));
+    static void new_instance_common_finish(std::shared_ptr<Arion> arion, arion::CPU_ARCH arch);
     void init_engines(arion::CPU_ARCH arch);
     void init_file_program(std::shared_ptr<ElfParser> prog_parser);
     void init_baremetal_program();
@@ -89,7 +95,7 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     void close_engines();
 
   public:
-    std::unique_ptr<AbiManager> abi;
+    std::unique_ptr<ArchManager> arch;
     std::unique_ptr<BaremetalManager> baremetal;
     std::unique_ptr<MemoryManager> mem;
     std::unique_ptr<FileSystemManager> fs;
@@ -144,9 +150,19 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     std::vector<std::string> ARION_EXPORT get_program_args();
     std::vector<std::string> ARION_EXPORT get_program_env();
     pid_t ARION_EXPORT get_pid();
-    void set_pid(pid_t pid);
+    void ARION_EXPORT set_pid(pid_t pid);
     pid_t ARION_EXPORT get_pgid();
-    void set_pgid(pid_t pgid);
+    void ARION_EXPORT set_pgid(pid_t pgid);
+    uint32_t ARION_EXPORT get_sid();
+    void ARION_EXPORT set_sid(uint32_t sid);
+    uint32_t ARION_EXPORT get_uid();
+    void ARION_EXPORT set_uid(uint32_t uid);
+    uint32_t ARION_EXPORT get_gid();
+    void ARION_EXPORT set_gid(uint32_t gid);
+    uint32_t ARION_EXPORT get_euid();
+    void ARION_EXPORT set_euid(uint32_t euid);
+    uint32_t ARION_EXPORT get_egid();
+    void ARION_EXPORT set_egid(uint32_t egid);
     bool ARION_EXPORT has_group();
     std::shared_ptr<ArionGroup> ARION_EXPORT get_group();
     void set_group(std::shared_ptr<ArionGroup> group);

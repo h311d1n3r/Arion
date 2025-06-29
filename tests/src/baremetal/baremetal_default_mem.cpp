@@ -8,7 +8,7 @@ TEST_P(ArionMultiarchTest, BaremetalDefaultMem)
     try
     {
         std::unique_ptr<Config> config = std::make_unique<Config>();
-        config->set_field<arion::ARION_LOG_LEVEL>("log_lvl", arion::ARION_LOG_LEVEL::OFF);
+        config->set_field<arion::LOG_LEVEL>("log_lvl", arion::LOG_LEVEL::OFF);
         std::shared_ptr<ArionGroup> arion_group = std::make_shared<ArionGroup>();
         std::string rootfs_path = this->arion_root_path + "/rootfs/" + this->arch + "/rootfs";
         auto arch_it = arion::ARCH_FROM_NAME.find(str_to_uppercase(this->arch));

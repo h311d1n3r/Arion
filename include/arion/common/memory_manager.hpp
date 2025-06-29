@@ -1,12 +1,13 @@
 #ifndef ARION_MEMORY_MANAGER_HPP
 #define ARION_MEMORY_MANAGER_HPP
 
-#include <arion/common/global_defs.hpp>
 #include <arion/capstone/capstone.h>
+#include <arion/common/global_defs.hpp>
+#include <arion/common/hooks_manager.hpp>
+#include <arion/unicorn/unicorn.h>
 #include <cstdint>
 #include <memory>
 #include <string>
-#include <arion/unicorn/unicorn.h>
 #include <vector>
 
 class Arion;
@@ -34,12 +35,41 @@ struct ARION_EXPORT ARION_MAPPING
 std::vector<arion::BYTE> serialize_arion_mapping(ARION_MAPPING *arion_m);
 ARION_MAPPING *deserialize_arion_mapping(std::vector<arion::BYTE> srz_mapping);
 
+struct ARION_MEM_EDIT
+{
+    arion::ADDR addr;
+    size_t sz;
+
+    ARION_MEM_EDIT(arion::ADDR addr, size_t sz) : addr(addr), sz(sz) {};
+};
+
+class MemoryRecorder
+{
+  private:
+    std::weak_ptr<Arion> arion;
+    std::vector<std::shared_ptr<ARION_MEM_EDIT>> edits;
+    HOOK_ID write_mem_hook_id;
+    bool started = false;
+    static bool write_mem_hook(std::shared_ptr<Arion> arion, uc_mem_type type, uint64_t addr, int size, int64_t val,
+                               void *user_data);
+    void add_edit(std::shared_ptr<ARION_MEM_EDIT> edit);
+
+  public:
+    MemoryRecorder(std::weak_ptr<Arion> arion) : arion(arion), started(false) {};
+    static std::unique_ptr<MemoryRecorder> initialize(std::weak_ptr<Arion> arion);
+    void clear();
+    void start();
+    void stop();
+    std::vector<std::shared_ptr<ARION_MEM_EDIT>> get_edits();
+};
+
 class ARION_EXPORT MemoryManager
 {
   private:
     std::weak_ptr<Arion> arion;
     size_t page_sz;
     arion::ADDR brk = 0;
+    std::vector<std::shared_ptr<ARION_MAPPING>> mappings;
     uint32_t to_uc_perms(arion::PROT_FLAGS perms);
     void insert_mapping(std::shared_ptr<ARION_MAPPING> mapping);
     void remove_mapping(std::shared_ptr<ARION_MAPPING> mapping);
@@ -47,11 +77,12 @@ class ARION_EXPORT MemoryManager
     void merge_contiguous_uc_mappings();
 
   public:
-    std::vector<std::shared_ptr<ARION_MAPPING>> mappings;
+    std::unique_ptr<MemoryRecorder> recorder;
     MemoryManager(std::weak_ptr<Arion> arion, size_t page_sz) : arion(arion), page_sz(page_sz) {};
     static std::unique_ptr<MemoryManager> initialize(std::weak_ptr<Arion> arion);
     arion::ADDR align_up(arion::ADDR addr);
     bool ARION_EXPORT is_mapped(arion::ADDR addr);
+    bool ARION_EXPORT has_mapping(std::shared_ptr<ARION_MAPPING> mapping);
     bool ARION_EXPORT can_map(arion::ADDR addr, size_t sz);
     bool ARION_EXPORT has_mapping_with_info(std::string info);
     std::shared_ptr<ARION_MAPPING> ARION_EXPORT get_mapping_by_info(std::string info);

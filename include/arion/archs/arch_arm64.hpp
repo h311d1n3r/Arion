@@ -1,11 +1,13 @@
-#ifndef ARION_ABI_ARM64_HPP
-#define ARION_ABI_ARM64_HPP
+#ifndef ARION_ARCH_ARM64_HPP
+#define ARION_ARCH_ARM64_HPP
 
-#include <arion/common/abi_manager.hpp>
+#include <arion/common/arch_manager.hpp>
 #include <arion/common/global_defs.hpp>
+#include <arion/platforms/linux/lnx_kernel_utils.hpp>
 
 namespace arion_arm64
 {
+
 inline std::map<uint64_t, std::string> NAME_BY_SYSCALL_NO = {{0, "io_setup"},
                                                              {1, "io_destroy"},
                                                              {2, "io_submit"},
@@ -588,27 +590,27 @@ inline const uint16_t ARCH_SZ = 64;
 
 inline arion::CPU_ARCH ARCH = arion::CPU_ARCH::ARM64_ARCH;
 
-inline ABI_ATTRIBUTES ABI_ATTRS = ABI_ATTRIBUTES(ARCH, ARCH_SZ, PTR_SZ, HWCAP, HWCAP2, SEG_FLAGS, ABI_REGS,
-                                                 ABI_CALLING_CONV, ABI_SYSCALLING_CONV, NAME_BY_SYSCALL_NO);
+inline ARCH_ATTRIBUTES ARCH_ATTRS = ARCH_ATTRIBUTES(ARCH, ARCH_SZ, PTR_SZ, HWCAP, HWCAP2, SEG_FLAGS, ABI_REGS,
+                                                    ABI_CALLING_CONV, ABI_SYSCALLING_CONV, NAME_BY_SYSCALL_NO);
 }; // namespace arion_arm64
 
-class AbiManagerARM64 : public AbiManager
+class ArchManagerARM64 : public ArchManager
 {
   private:
     static void int_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data);
     void enable_lse();
     void enable_vfp();
-    void setup();
+    void setup() override;
 
   public:
-    AbiManagerARM64()
-        : AbiManager(std::make_shared<ABI_ATTRIBUTES>(arion_arm64::ABI_ATTRS), arion_arm64::ARCH_REGS,
-                     arion_arm64::ARCH_REGS_SZ, arion_arm64::CTXT_REGS, arion_arm64::IDT, true) {};
+    ArchManagerARM64()
+        : ArchManager(std::make_shared<ARCH_ATTRIBUTES>(arion_arm64::ARCH_ATTRS), arion_arm64::ARCH_REGS,
+                      arion_arm64::ARCH_REGS_SZ, arion_arm64::CTXT_REGS, arion_arm64::IDT, true) {};
 
-    ks_engine *curr_ks();
-    csh *curr_cs();
-    arion::ADDR dump_tls();
-    void load_tls(arion::ADDR new_tls);
+    ks_engine *curr_ks() override;
+    csh *curr_cs() override;
+    arion::ADDR dump_tls() override;
+    void load_tls(arion::ADDR new_tls) override;
 };
 
-#endif // ARION_ABI_ARM64_HPP
+#endif // ARION_ARCH_ARM64_HPP

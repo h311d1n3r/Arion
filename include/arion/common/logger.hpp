@@ -75,7 +75,7 @@ class ARION_EXPORT Logger
     uint64_t id;
     pid_t curr_pid;
     pid_t curr_tid;
-    arion::ARION_LOG_LEVEL log_lvl;
+    arion::LOG_LEVEL log_lvl;
     std::weak_ptr<Arion> arion;
 #ifdef ARION_ONLY
     // spdlog should only be considered when compiling libarion.so as it is header-only
@@ -87,10 +87,10 @@ class ARION_EXPORT Logger
 
   public:
     static std::unique_ptr<Logger> initialize(std::weak_ptr<Arion> arion,
-                                              arion::ARION_LOG_LEVEL lvl = arion::ARION_LOG_LEVEL::INFO);
+                                              arion::LOG_LEVEL lvl = arion::LOG_LEVEL::INFO);
     Logger(std::weak_ptr<Arion> arion);
-    void ARION_EXPORT set_log_level(arion::ARION_LOG_LEVEL lvl);
-    arion::ARION_LOG_LEVEL ARION_EXPORT get_log_level();
+    void ARION_EXPORT set_log_level(arion::LOG_LEVEL lvl);
+    arion::LOG_LEVEL ARION_EXPORT get_log_level();
     void trace(std::string str);
     void debug(std::string str);
     void info(std::string str);
