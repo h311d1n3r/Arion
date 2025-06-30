@@ -11,18 +11,26 @@ using ARION_AFL_INPUT_CALLBACK = std::function<bool(std::shared_ptr<Arion> arion
 using ARION_AFL_CRASH_CALLBACK = std::function<bool(std::shared_ptr<Arion> arion, uc_err res, char *input,
                                                     size_t input_sz, uint32_t persistent_round, void *user_data)>;
 
+enum ARION_MEM_STRATEGY
+{
+    RECORD_EDITS,
+    RESTORE_MAPPINGS,
+    RAW_RESTORE,
+    MANUAL_MANAGEMENT
+};
+
 struct ARION_AFL_PARAM
 {
     std::weak_ptr<Arion> arion;
     std::shared_ptr<ARION_CONTEXT> ctxt;
-    bool keep_mem;
+    ARION_MEM_STRATEGY mem_strategy;
     ARION_AFL_INPUT_CALLBACK input_callback;
     ARION_AFL_CRASH_CALLBACK crash_callback;
     void *user_data;
-    ARION_AFL_PARAM(std::weak_ptr<Arion> arion, std::shared_ptr<ARION_CONTEXT> ctxt, bool keep_mem,
+    ARION_AFL_PARAM(std::weak_ptr<Arion> arion, std::shared_ptr<ARION_CONTEXT> ctxt, ARION_MEM_STRATEGY mem_strategy,
                     ARION_AFL_INPUT_CALLBACK input_callback, ARION_AFL_CRASH_CALLBACK crash_callback, void *user_data)
-        : arion(arion), ctxt(ctxt), keep_mem(keep_mem), input_callback(input_callback), crash_callback(crash_callback),
-          user_data(user_data) {};
+        : arion(arion), ctxt(ctxt), mem_strategy(mem_strategy), input_callback(input_callback),
+          crash_callback(crash_callback), user_data(user_data) {};
 };
 
 inline std::map<uc_afl_ret, std::string> UC_AFL_ERR_STR = {
@@ -45,8 +53,9 @@ class ARION_EXPORT ArionAfl
   public:
     ARION_EXPORT ArionAfl(std::weak_ptr<Arion> arion, unsigned char* input_file = nullptr) : arion(arion), input_file(input_file) {}
     void ARION_EXPORT fuzz(ARION_AFL_INPUT_CALLBACK input_callback, ARION_AFL_CRASH_CALLBACK crash_callback,
-                           std::vector<arion::ADDR> exits, bool keep_mem = true,
-                           std::vector<int> signals = {SIGSEGV, SIGABRT}, bool always_validate = true,
+                           std::vector<arion::ADDR> exits,
+                           ARION_MEM_STRATEGY mem_strategy = ARION_MEM_STRATEGY::RECORD_EDITS,
+                           std::vector<int> signals = {SIGSEGV, SIGABRT}, bool always_validate = false,
                            uint32_t persistent_iters = 1000, void *user_data = nullptr);
 };
 

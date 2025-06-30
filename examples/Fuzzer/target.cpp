@@ -6,6 +6,7 @@ int main()
 {
     char buf[8];
     printf("Input: ");
+    fflush(stdout);
     syscall(__NR_read, fileno(stdin), buf, 32);
     printf("Your message: %s\n", buf);
     return 0;

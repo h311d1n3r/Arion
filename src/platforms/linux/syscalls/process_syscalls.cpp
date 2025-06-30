@@ -1,4 +1,4 @@
-#include <arion/archs/abi_x86.hpp>
+#include <arion/archs/arch_x86.hpp>
 #include <arion/archs/x86/gdt_manager.hpp>
 #include <arion/arion.hpp>
 #include <arion/common/global_defs.hpp>
@@ -20,7 +20,7 @@ uint64_t sys_clone(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     ADDR child_tidptr = params.at(3);
     ADDR new_tls = params.at(4);
 
-    if (arion->abi->get_attrs()->arch != CPU_ARCH::X8664_ARCH)
+    if (arion->arch->get_attrs()->arch != CPU_ARCH::X8664_ARCH)
     {
         ADDR tmp_child_tidptr = child_tidptr;
         child_tidptr = new_tls;
@@ -73,9 +73,9 @@ uint64_t sys_exit(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
 {
     int error_code = params.at(0);
 
-    REG pc_reg = arion->abi->get_attrs()->regs.pc;
-    REG ret_reg = arion->abi->get_attrs()->syscalling_conv.ret_reg;
-    ADDR exit_pc = arion->abi->read_arch_reg(pc_reg);
+    REG pc_reg = arion->arch->get_attrs()->regs.pc;
+    REG ret_reg = arion->arch->get_attrs()->syscalling_conv.ret_reg;
+    ADDR exit_pc = arion->arch->read_arch_reg(pc_reg);
     pid_t curr_tid = arion->threads->get_running_tid();
     std::unique_ptr<ARION_THREAD> arion_t = std::move(arion->threads->threads_map.at(curr_tid));
     if (arion_t->child_cleartid_addr)
@@ -86,13 +86,13 @@ uint64_t sys_exit(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     arion->threads->threads_map[curr_tid] = std::move(arion_t);
     arion->threads->remove_thread_entry(curr_tid);
     arion->sync_threads();
-    if (!arion->abi->does_hook_intr())
+    if (!arion->arch->does_hook_intr())
     {
         size_t sys_instr_sz = arion->mem->read_instrs(exit_pc, 1).at(0).size;
-        ADDR pc = arion->abi->read_arch_reg(pc_reg);
-        arion->abi->write_reg(pc_reg, pc - sys_instr_sz);
+        ADDR pc = arion->arch->read_arch_reg(pc_reg);
+        arion->arch->write_reg(pc_reg, pc - sys_instr_sz);
     }
-    return arion->abi->read_arch_reg(ret_reg);
+    return arion->arch->read_arch_reg(ret_reg);
 }
 
 uint64_t sys_futex(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
@@ -187,10 +187,10 @@ uint64_t sys_set_thread_area(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM
         return EFAULT;
 
     ADDR new_tls = u_info_addr;
-    if (arion->abi->get_attrs()->arch == CPU_ARCH::X86_ARCH)
-        new_tls = static_cast<AbiManagerX86 *>(arion->abi.get())->new_tls(u_info_addr);
+    if (arion->arch->get_attrs()->arch == CPU_ARCH::X86_ARCH)
+        new_tls = static_cast<ArchManagerX86 *>(arion->arch.get())->new_tls(u_info_addr);
 
-    arion->abi->load_tls(new_tls);
+    arion->arch->load_tls(new_tls);
 
     return 0;
 }
@@ -199,10 +199,10 @@ uint64_t sys_set_tls(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params
 {
     ADDR tls_addr = params.at(0);
 
-    if (arion->abi->get_attrs()->arch == CPU_ARCH::X86_ARCH)
-        tls_addr = static_cast<AbiManagerX86 *>(arion->abi.get())->new_tls(tls_addr);
+    if (arion->arch->get_attrs()->arch == CPU_ARCH::X86_ARCH)
+        tls_addr = static_cast<ArchManagerX86 *>(arion->arch.get())->new_tls(tls_addr);
 
-    arion->abi->load_tls(tls_addr);
+    arion->arch->load_tls(tls_addr);
 
     return tls_addr;
 }
@@ -211,9 +211,9 @@ uint64_t sys_exit_group(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> par
 {
     int error_code = params.at(0);
 
-    REG pc_reg = arion->abi->get_attrs()->regs.pc;
-    REG ret_reg = arion->abi->get_attrs()->syscalling_conv.ret_reg;
-    ADDR pc = arion->abi->read_arch_reg(pc_reg);
+    REG pc_reg = arion->arch->get_attrs()->regs.pc;
+    REG ret_reg = arion->arch->get_attrs()->syscalling_conv.ret_reg;
+    ADDR pc = arion->arch->read_arch_reg(pc_reg);
     size_t sys_instr_sz = arion->mem->read_instrs(pc, 1).at(0).size;
     std::vector<pid_t> tids;
     for (auto &arion_t_entry : arion->threads->threads_map)
@@ -231,9 +231,9 @@ uint64_t sys_exit_group(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> par
     for (pid_t tid : tids)
         arion->threads->remove_thread_entry(tid);
     arion->sync_threads();
-    pc = arion->abi->read_arch_reg(pc_reg);
-    arion->abi->write_reg(pc_reg, pc - sys_instr_sz);
-    return arion->abi->read_arch_reg(ret_reg);
+    pc = arion->arch->read_arch_reg(pc_reg);
+    arion->arch->write_reg(pc_reg, pc - sys_instr_sz);
+    return arion->arch->read_arch_reg(ret_reg);
 }
 
 uint64_t sys_clone3(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)

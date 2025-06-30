@@ -60,7 +60,7 @@ ADDR do_mmap(std::shared_ptr<Arion> arion, ADDR addr, size_t len, int prot, int 
             addr = arion->mem->get_mapping_by_info("[vvar]")->start_addr;
         else
         {
-            switch (arion->abi->get_attrs()->arch_sz)
+            switch (arion->arch->get_attrs()->arch_sz)
             {
             case 32: {
                 addr = LINUX_32_INTERP_ADDR;

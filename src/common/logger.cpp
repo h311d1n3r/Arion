@@ -5,14 +5,14 @@
 
 using namespace arion;
 
-inline std::map<arion::ARION_LOG_LEVEL, spdlog::level::level_enum> ARION_LOG_LVL_TO_SPDLOG = {
-    {arion::ARION_LOG_LEVEL::TRACE, spdlog::level::level_enum::trace},
-    {arion::ARION_LOG_LEVEL::DEBUG, spdlog::level::level_enum::debug},
-    {arion::ARION_LOG_LEVEL::INFO, spdlog::level::level_enum::info},
-    {arion::ARION_LOG_LEVEL::WARN, spdlog::level::level_enum::warn},
-    {arion::ARION_LOG_LEVEL::ERROR, spdlog::level::level_enum::err},
-    {arion::ARION_LOG_LEVEL::CRITICAL, spdlog::level::level_enum::critical},
-    {arion::ARION_LOG_LEVEL::OFF, spdlog::level::level_enum::off}
+inline std::map<arion::LOG_LEVEL, spdlog::level::level_enum> ARION_LOG_LVL_TO_SPDLOG = {
+    {arion::LOG_LEVEL::TRACE, spdlog::level::level_enum::trace},
+    {arion::LOG_LEVEL::DEBUG, spdlog::level::level_enum::debug},
+    {arion::LOG_LEVEL::INFO, spdlog::level::level_enum::info},
+    {arion::LOG_LEVEL::WARN, spdlog::level::level_enum::warn},
+    {arion::LOG_LEVEL::ERROR, spdlog::level::level_enum::err},
+    {arion::LOG_LEVEL::CRITICAL, spdlog::level::level_enum::critical},
+    {arion::LOG_LEVEL::OFF, spdlog::level::level_enum::off}
 };
 
 uint64_t Logger::curr_id = 1;
@@ -36,7 +36,7 @@ uint64_t Logger::gen_next_id()
     return logger_id;
 }
 
-std::unique_ptr<Logger> Logger::initialize(std::weak_ptr<Arion> arion, ARION_LOG_LEVEL lvl)
+std::unique_ptr<Logger> Logger::initialize(std::weak_ptr<Arion> arion, LOG_LEVEL lvl)
 {
     std::unique_ptr<Logger> logger = std::make_unique<Logger>(arion);
     logger->curr_pid = 0;
@@ -55,7 +55,7 @@ Logger::Logger(std::weak_ptr<Arion> arion) : arion(arion)
     this->refresh_prefix(true);
 }
 
-void Logger::set_log_level(ARION_LOG_LEVEL lvl)
+void Logger::set_log_level(LOG_LEVEL lvl)
 {
     auto lvl_it = ARION_LOG_LVL_TO_SPDLOG.find(lvl);
     if (lvl_it == ARION_LOG_LVL_TO_SPDLOG.end())
@@ -64,7 +64,7 @@ void Logger::set_log_level(ARION_LOG_LEVEL lvl)
     this->log_lvl = lvl;
 }
 
-ARION_LOG_LEVEL Logger::get_log_level()
+LOG_LEVEL Logger::get_log_level()
 {
     return this->log_lvl;
 }

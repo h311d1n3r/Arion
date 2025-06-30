@@ -3,6 +3,7 @@
 #include <arion/common/global_excepts.hpp>
 #include <fcntl.h>
 #include <fstream>
+#include <memory>
 
 using namespace arion;
 
@@ -24,8 +25,8 @@ std::shared_ptr<ARION_CONTEXT> ContextManager::save()
         std::unique_ptr<ARION_THREAD> arion_t_cpy = std::make_unique<ARION_THREAD>(arion_t.second.get());
         if (arion_t_cpy->tid == running_tid)
         {
-            arion_t_cpy->regs_state = arion->abi->dump_regs();
-            arion_t_cpy->tls_addr = arion->abi->dump_tls();
+            arion_t_cpy->regs_state = arion->arch->dump_regs();
+            arion_t_cpy->tls_addr = arion->arch->dump_tls();
         }
         thread_list.push_back(std::move(arion_t_cpy));
     }
@@ -34,7 +35,7 @@ std::shared_ptr<ARION_CONTEXT> ContextManager::save()
         for (std::unique_ptr<ARION_FUTEX> &arion_f : *arion_futex_vec.second)
             futex_list.push_back(std::make_unique<ARION_FUTEX>(arion_f.get()));
     std::vector<std::unique_ptr<ARION_MAPPING>> mapping_list;
-    for (auto &arion_m : arion->mem->mappings)
+    for (auto &arion_m : arion->mem->get_mappings())
     {
         std::unique_ptr<ARION_MAPPING> arion_m_cpy = std::make_unique<ARION_MAPPING>(arion_m.get());
         size_t mapping_sz = arion_m_cpy->end_addr - arion_m_cpy->start_addr;
@@ -60,7 +61,7 @@ std::shared_ptr<ARION_CONTEXT> ContextManager::save()
                                            std::move(mapping_list), std::move(file_list), std::move(socket_list));
 }
 
-void ContextManager::restore(std::shared_ptr<ARION_CONTEXT> ctx, bool restore_mem)
+void ContextManager::restore(std::shared_ptr<ARION_CONTEXT> ctx, bool restore_mappings, bool restore_data)
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
@@ -115,15 +116,36 @@ void ContextManager::restore(std::shared_ptr<ARION_CONTEXT> ctx, bool restore_me
         }
         arion->sock->add_socket_entry(target_fd, std::make_shared<ARION_SOCKET>(arion_s.get()));
     }
-    if (restore_mem)
+    if (restore_mappings)
     {
-        arion->mem->unmap_all();
         for (std::unique_ptr<ARION_MAPPING> &arion_m : ctx->mapping_list)
         {
             size_t mapping_sz = arion_m->end_addr - arion_m->start_addr;
-            arion->mem->map(arion_m->start_addr, mapping_sz, arion_m->perms, arion_m->info);
-            if (arion_m->saved_data)
+            std::shared_ptr<ARION_MAPPING> shared_arion_m = std::move(arion_m);
+            bool has_mapping = arion->mem->has_mapping(shared_arion_m);
+            arion_m = std::make_unique<ARION_MAPPING>(*shared_arion_m);
+            shared_arion_m->saved_data = nullptr;
+            if (!has_mapping)
+            {
+                arion->mem->unmap(arion_m->start_addr, arion_m->end_addr);
+                arion->mem->map(arion_m->start_addr, mapping_sz, arion_m->perms, arion_m->info);
+            }
+            if (restore_data && arion_m->saved_data)
                 arion->mem->write(arion_m->start_addr, arion_m->saved_data, mapping_sz);
+        }
+        for (std::shared_ptr<ARION_MAPPING> arion_m : arion->mem->get_mappings())
+        {
+            bool found = false;
+            for (std::unique_ptr<ARION_MAPPING> &arion_m2 : ctx->mapping_list)
+            {
+                if (arion_m->start_addr == arion_m2->start_addr)
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+                arion->mem->unmap(arion_m);
         }
     }
     arion->threads->clear_threads();
@@ -132,12 +154,36 @@ void ContextManager::restore(std::shared_ptr<ARION_CONTEXT> ctx, bool restore_me
     for (std::unique_ptr<ARION_FUTEX> &arion_f : ctx->futex_list)
         arion->threads->futex_wait(arion_f->tid, arion_f->futex_addr, arion_f->futex_bitmask);
     arion->threads->set_running_tid(ctx->running_tid);
-    arion->abi->load_regs(std::move(arion->threads->threads_map[ctx->running_tid]->regs_state));
+    arion->arch->load_regs(std::move(arion->threads->threads_map[ctx->running_tid]->regs_state));
     //never restore tls if arm_traps isn't loaded
     if (arion->baremetal) {
         if (!arion->baremetal->additional_mapped_segments.ARM_TRAPS) {return;}
     }
-    arion->abi->load_tls(std::move(arion->threads->threads_map[ctx->running_tid]->tls_addr));
+    arion->arch->load_tls(std::move(arion->threads->threads_map[ctx->running_tid]->tls_addr));
+}
+
+void ContextManager::restore(std::shared_ptr<ARION_CONTEXT> ctx, std::vector<std::shared_ptr<ARION_MEM_EDIT>> edits)
+{
+    std::shared_ptr<Arion> arion = this->arion.lock();
+    if (!arion)
+        throw ExpiredWeakPtrException("Arion");
+
+    this->restore(ctx, true, false);
+
+    for (std::shared_ptr<ARION_MEM_EDIT> edit : edits)
+    {
+        for (std::unique_ptr<ARION_MAPPING> &mapping : ctx->mapping_list)
+        {
+            if ((edit->addr < mapping->end_addr) && (mapping->start_addr < edit->addr + edit->sz))
+            {
+                ADDR start_addr = std::max(edit->addr, mapping->start_addr);
+                ADDR end_addr = std::min(edit->addr + edit->sz, mapping->end_addr);
+                arion->mem->write(start_addr, mapping->saved_data + start_addr - mapping->start_addr,
+                                  end_addr - start_addr);
+                break;
+            }
+        }
+    }
 }
 
 void ContextManager::save_to_file(std::string file_path)

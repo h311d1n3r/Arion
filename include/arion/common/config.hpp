@@ -7,7 +7,7 @@
 class ARION_EXPORT Config {
 private:
     std::map<std::string, std::any> config_map = {
-        {"log_lvl", arion::ARION_LOG_LEVEL::INFO},
+        {"log_lvl", arion::LOG_LEVEL::INFO},
         {"enable_sleep_syscalls", false}
     };
 public:

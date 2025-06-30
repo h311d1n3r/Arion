@@ -1,6 +1,7 @@
 #include <arion/arion.hpp>
 #include <arion/common/file_system_manager.hpp>
 #include <arion/common/global_excepts.hpp>
+#include <arion/platforms/linux/lnx_excepts.hpp>
 #include <fcntl.h>
 #include <filesystem>
 #include <linux/limits.h>

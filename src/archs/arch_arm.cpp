@@ -1,33 +1,33 @@
-#include <arion/archs/abi_arm.hpp>
+#include <arion/archs/arch_arm.hpp>
 #include <arion/arion.hpp>
 #include <arion/common/global_excepts.hpp>
 #include <arion/unicorn/arm.h>
 
 using namespace arion;
 
-void AbiManagerARM::int_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data)
+void ArchManagerARM::int_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data)
 {
     if (intno == 0x2)
         arion->syscalls->process_syscall(arion);
 }
 
-bool AbiManagerARM::is_thumb()
+bool ArchManagerARM::is_thumb()
 {
     RVAL32 cpsr = this->read_reg<RVAL32>(UC_ARM_REG_CPSR);
     return cpsr & ARION_ARM_CPSR_THUMB_BIT;
 }
 
-ks_engine *AbiManagerARM::curr_ks()
+ks_engine *ArchManagerARM::curr_ks()
 {
     return this->ks.at(this->is_thumb() ? ARION_THUMB_MODE : ARION_ARM_MODE);
 }
 
-csh *AbiManagerARM::curr_cs()
+csh *ArchManagerARM::curr_cs()
 {
     return this->cs.at(this->is_thumb() ? ARION_THUMB_MODE : ARION_ARM_MODE);
 }
 
-void AbiManagerARM::enable_vfp()
+void ArchManagerARM::enable_vfp()
 {
     uc_arm_cp_reg cpacr = {0};
     cpacr.cp = 15;
@@ -59,17 +59,17 @@ void AbiManagerARM::enable_vfp()
         throw UnicornRegWriteException(uc_reg_err);
 }
 
-void AbiManagerARM::setup()
+void ArchManagerARM::setup()
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    arion->hooks->hook_intr(AbiManagerARM::int_hook);
+    arion->hooks->hook_intr(ArchManagerARM::int_hook);
     this->enable_vfp();
 }
 
-ADDR AbiManagerARM::dump_tls()
+ADDR ArchManagerARM::dump_tls()
 {
     uc_arm_cp_reg cp15 = {0};
     cp15.cp = 15;
@@ -87,7 +87,7 @@ ADDR AbiManagerARM::dump_tls()
     return cp15.val;
 }
 
-void AbiManagerARM::load_tls(ADDR new_tls)
+void ArchManagerARM::load_tls(ADDR new_tls)
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
@@ -110,7 +110,8 @@ void AbiManagerARM::load_tls(ADDR new_tls)
     arion->mem->write_ptr(LINUX_32_ARM_GETTLS_ADDR + 0x10, new_tls);
 }
 
-void AbiManagerARM::prerun_hook(arion::ADDR& start) {
-    if(this->is_thumb())
+void ArchManagerARM::prerun_hook(arion::ADDR &start)
+{
+    if (this->is_thumb())
         start |= 1;
 }
