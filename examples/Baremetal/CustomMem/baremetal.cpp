@@ -50,6 +50,7 @@ int main()
     config->set_field<arion::LOG_LEVEL>("log_lvl", arion::LOG_LEVEL::DEBUG);
     std::shared_ptr<ArionGroup> arion_group = std::make_shared<ArionGroup>();
     std::unique_ptr<BaremetalManager> baremetal = std::make_unique<BaremetalManager>(CPU_ARCH::X8664_ARCH, 0x400000, 0x400000);
+    baremetal->additional_mapped_segments.VSYSCALL = false; // do not map a default vsyscall segment
     // Arion::new_instance(baremetal, fs_root, env, cwd, log_level, config)
     std::shared_ptr<Arion> arion = Arion::new_instance(std::move(baremetal), "/", {}, std::filesystem::current_path(), std::move(config));
     size_t code_sz = BASIC_SHELLCODE_X86_64.size();
