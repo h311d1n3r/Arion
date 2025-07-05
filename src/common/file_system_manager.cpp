@@ -241,6 +241,7 @@ std::string FileSystemManager::to_fs_path(std::string path)
         fmt_path = this->fs_path;
     else if (path.at(0) == '/')
     {
+
         if (this->is_in_fs(path))
             fmt_path = path;
         else

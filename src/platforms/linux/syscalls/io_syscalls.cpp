@@ -75,15 +75,16 @@ std::string get_path_at(std::shared_ptr<Arion> arion, int dfd, std::string file_
     return abs_file_path;
 }
 
-std::string manage_pre_socket_conn(std::shared_ptr<Arion> arion, struct sockaddr *sockaddr_)
+std::string manage_pre_socket_conn(std::shared_ptr<Arion> arion, struct sockaddr *sockaddr_, socklen_t &addr_len)
 {
     std::string unix_sock_path;
     if (sockaddr_->sa_family == AF_UNIX)
     {
         struct sockaddr_un *unix_sock = (struct sockaddr_un *)sockaddr_;
-        unix_sock_path = std::string(unix_sock->sun_path);
+        unix_sock_path = std::string(unix_sock->sun_path + 1, addr_len - 3);
         unix_sock_path = arion->fs->to_fs_path(unix_sock_path);
-        size_t unix_sock_path_sz = unix_sock_path.size() + 1;
+        size_t unix_sock_path_sz = unix_sock_path.size();
+        addr_len = 2 + unix_sock_path_sz;
         if (unix_sock_path_sz > ARION_UNIX_PATH_MAX)
             throw PathTooLongException(unix_sock_path);
         memcpy(unix_sock->sun_path, unix_sock_path.c_str(), unix_sock_path_sz);
@@ -393,10 +394,11 @@ uint64_t sys_ioctl(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     }
     default: {
         colorstream warn_msg;
-        warn_msg << ARION_LOG_COLOR::ORANGE << "Unsupported IOCTL value: " << ARION_LOG_COLOR::MAGENTA << int_to_hex<uint64_t>(cmd) << ARION_LOG_COLOR::ORANGE << std::string(".");
+        warn_msg << ARION_LOG_COLOR::ORANGE << "Unsupported IOCTL value: " << ARION_LOG_COLOR::MAGENTA
+                 << int_to_hex<uint64_t>(cmd) << ARION_LOG_COLOR::ORANGE << std::string(".");
         arion->logger->warn(warn_msg.str());
         return 0;
-        }
+    }
     }
 
     int ioctl_ret = syscall(SYS_ioctl, arion_fd, cmd, arg);
@@ -817,13 +819,15 @@ uint64_t sys_connect(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params
         return EBADF;
     std::shared_ptr<ARION_SOCKET> arion_s = arion->sock->get_arion_socket(sock_fd);
     std::vector<BYTE> sock_addr = arion->mem->read(sock_addr_addr, addr_len);
-    struct sockaddr *sockaddr_ = (struct sockaddr *)sock_addr.data();
-    std::string unix_sock_path = manage_pre_socket_conn(arion, sockaddr_);
+    struct sockaddr *sockaddr_ = (struct sockaddr *)malloc(addr_len);
+    memcpy(sockaddr_, sock_addr.data(), addr_len);
+    std::string unix_sock_path = manage_pre_socket_conn(arion, sockaddr_, addr_len);
     int connect_ret = connect(arion_s->fd, sockaddr_, addr_len);
     if (connect_ret == -1)
         connect_ret = -errno;
     else if (!connect_ret)
         manage_post_socket_conn(arion_s, sockaddr_, addr_len, unix_sock_path);
+    free(sockaddr_);
     return connect_ret;
 }
 
@@ -890,7 +894,7 @@ uint64_t sys_sendto(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
         std::vector<BYTE> sock_addr = arion->mem->read(sock_addr_addr, addr_len);
         sockaddr_ = (struct sockaddr *)malloc(sock_addr.size());
         memcpy(sockaddr_, sock_addr.data(), sock_addr.size());
-        unix_sock_path = manage_pre_socket_conn(arion, sockaddr_);
+        unix_sock_path = manage_pre_socket_conn(arion, sockaddr_, addr_len);
     }
     int sendto_ret = sendto(arion_s->fd, buf.data(), len, flags, sockaddr_, addr_len);
     if (sendto_ret == -1)
@@ -935,7 +939,7 @@ uint64_t sys_recvfrom(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
             std::vector<BYTE> sock_addr = arion->mem->read(sock_addr_addr, addr_len);
             sockaddr_ = (struct sockaddr *)malloc(sock_addr.size());
             memcpy(sockaddr_, sock_addr.data(), sock_addr.size());
-            unix_sock_path = manage_pre_socket_conn(arion, sockaddr_);
+            unix_sock_path = manage_pre_socket_conn(arion, sockaddr_, addr_len);
         }
     }
 
@@ -985,7 +989,7 @@ uint64_t sys_sendmsg(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params
         msg_name_addr = (ADDR)msg->msg_name;
         msg->msg_name = malloc(msg->msg_namelen);
         memcpy(msg->msg_name, arion->mem->read(msg_name_addr, msg->msg_namelen).data(), msg->msg_namelen);
-        manage_pre_socket_conn(arion, (struct sockaddr *)msg->msg_name);
+        manage_pre_socket_conn(arion, (struct sockaddr *)msg->msg_name, msg->msg_namelen);
     }
     bool has_iov = msg->msg_iov && msg->msg_iovlen;
     if (has_iov)
@@ -1052,7 +1056,7 @@ uint64_t sys_recvmsg(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params
         msg_name_addr = (ADDR)msg->msg_name;
         msg->msg_name = malloc(msg->msg_namelen);
         memcpy(msg->msg_name, arion->mem->read((ADDR)msg_name_addr, msg->msg_namelen).data(), msg->msg_namelen);
-        manage_pre_socket_conn(arion, (struct sockaddr *)msg->msg_name);
+        manage_pre_socket_conn(arion, (struct sockaddr *)msg->msg_name, msg->msg_namelen);
     }
     bool has_iov = msg->msg_iov && msg->msg_iovlen;
     std::map<ADDR, ADDR> buf_addresses;
@@ -1146,7 +1150,7 @@ uint64_t sys_bind(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
         std::vector<BYTE> sock_addr_vec = arion->mem->read(sock_addr_addr, addr_len);
         sock_addr = (struct sockaddr *)malloc(addr_len);
         memcpy(sock_addr, sock_addr_vec.data(), addr_len);
-        unix_sock_path = manage_pre_socket_conn(arion, sock_addr);
+        unix_sock_path = manage_pre_socket_conn(arion, sock_addr, addr_len);
     }
     int bind_ret = bind(arion_s->fd, sock_addr, addr_len);
     if (bind_ret == -1)
@@ -1231,7 +1235,7 @@ uint64_t sys_getpeername(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> pa
         getpeername_ret = -errno;
     else if (!getpeername_ret)
     {
-        arion->mem->write_sz(addr_len_addr, addr_len);
+        arion->mem->write_val(addr_len_addr, addr_len, sizeof(socklen_t));
         arion->mem->write(sock_addr_addr, (BYTE *)sock_addr, std::min(addr_len_cpy, addr_len));
     }
     if (sock_addr)
@@ -1317,7 +1321,7 @@ uint64_t sys_fcntl(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
 {
     int fd = params.at(0);
     int cmd = params.at(1);
-    uint64_t arg;
+    uint64_t arg = params.at(2);
 
     bool is_file = arion->fs->has_file_entry(fd);
     if (!is_file && !arion->sock->has_socket_entry(fd))
@@ -1913,7 +1917,7 @@ uint64_t sys_recvmmsg(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
             msg->msg_name = malloc(msg->msg_namelen);
             std::vector<BYTE> msg_name_data = arion->mem->read(msg_name_addr, msg->msg_namelen);
             memcpy(msg->msg_name, msg_name_data.data(), msg_name_data.size());
-            manage_pre_socket_conn(arion, (struct sockaddr *)msg->msg_name);
+            manage_pre_socket_conn(arion, (struct sockaddr *)msg->msg_name, msg->msg_namelen);
             buf_addresses[(ADDR)msg->msg_name] = msg_name_addr;
         }
 
