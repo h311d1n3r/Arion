@@ -16,14 +16,15 @@ struct ARION_EXPORT ARION_FILE
     std::string path;
     int flags;
     mode_t mode;
+    bool blocking = true;
     off_t saved_off = 0;
     ARION_FILE() {};
     ARION_FILE(int fd, std::string path, int flags, mode_t mode) : fd(fd), path(path), flags(flags), mode(mode) {};
     ARION_FILE(std::shared_ptr<ARION_FILE> arion_f)
-        : fd(arion_f->fd), path(arion_f->path), flags(arion_f->flags), mode(arion_f->mode),
+        : fd(arion_f->fd), path(arion_f->path), flags(arion_f->flags), mode(arion_f->mode), blocking(arion_f->blocking),
           saved_off(arion_f->saved_off) {};
     ARION_FILE(ARION_FILE *arion_f)
-        : fd(arion_f->fd), path(arion_f->path), flags(arion_f->flags), mode(arion_f->mode),
+        : fd(arion_f->fd), path(arion_f->path), flags(arion_f->flags), mode(arion_f->mode), blocking(arion_f->blocking),
           saved_off(arion_f->saved_off) {};
 };
 std::vector<arion::BYTE> serialize_arion_file(ARION_FILE *arion_f);

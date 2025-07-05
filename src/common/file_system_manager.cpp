@@ -20,6 +20,7 @@ std::vector<BYTE> serialize_arion_file(ARION_FILE *arion_f)
     srz_file.insert(srz_file.end(), (BYTE *)arion_f->path.c_str(), (BYTE *)arion_f->path.c_str() + path_sz);
     srz_file.insert(srz_file.end(), (BYTE *)&arion_f->flags, (BYTE *)&arion_f->flags + sizeof(int));
     srz_file.insert(srz_file.end(), (BYTE *)&arion_f->mode, (BYTE *)&arion_f->mode + sizeof(mode_t));
+    srz_file.insert(srz_file.end(), (BYTE *)&arion_f->blocking, (BYTE *)&arion_f->blocking + sizeof(bool));
     srz_file.insert(srz_file.end(), (BYTE *)&arion_f->saved_off, (BYTE *)&arion_f->saved_off + sizeof(off_t));
 
     return srz_file;
@@ -44,6 +45,8 @@ ARION_FILE *deserialize_arion_file(std::vector<BYTE> srz_file)
     off += sizeof(int);
     memcpy(&arion_f->mode, srz_file.data() + off, sizeof(mode_t));
     off += sizeof(mode_t);
+    memcpy(&arion_f->blocking, srz_file.data() + off, sizeof(bool));
+    off += sizeof(bool);
     memcpy(&arion_f->saved_off, srz_file.data() + off, sizeof(off_t));
 
     return arion_f;

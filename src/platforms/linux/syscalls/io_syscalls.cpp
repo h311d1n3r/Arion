@@ -89,7 +89,7 @@ std::string manage_pre_socket_conn(std::shared_ptr<Arion> arion, struct sockaddr
         addr_len = 2 + is_domain_socket + unix_sock_path_sz;
         if (unix_sock_path_sz > ARION_UNIX_PATH_MAX)
             throw PathTooLongException(unix_sock_path);
-        memcpy(unix_sock->sun_path, unix_sock_path.c_str(), unix_sock_path_sz);
+        memcpy(unix_sock->sun_path + is_domain_socket, unix_sock_path.c_str(), unix_sock_path_sz);
     }
     return unix_sock_path;
 }
@@ -133,19 +133,22 @@ uint64_t sys_read(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, b
         return EBADF;
     void *buf = malloc(count);
     int arion_fd;
+    bool blocking;
     if (is_file)
     {
         std::shared_ptr<ARION_FILE> arion_f = arion->fs->get_arion_file(fd);
         arion_fd = arion_f->fd;
+        blocking = arion_f->blocking;
     }
     else
     {
         std::shared_ptr<ARION_SOCKET> arion_s = arion->sock->get_arion_socket(fd);
         arion_fd = arion_s->fd;
+        blocking = arion_s->blocking;
     }
 
     bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
-    if (!thread_blocking_io)
+    if (!thread_blocking_io && blocking)
     {
         short revents = 0;
         if (!check_fd_status(arion_fd, revents) || !((revents & POLLIN) | (revents & POLLPRI)))
@@ -175,19 +178,22 @@ uint64_t sys_write(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, 
         return EBADF;
     std::vector<BYTE> buf = arion->mem->read(buf_addr, count);
     int arion_fd;
+    bool blocking;
     if (is_file)
     {
         std::shared_ptr<ARION_FILE> arion_f = arion->fs->get_arion_file(fd);
         arion_fd = arion_f->fd;
+        blocking = arion_f->blocking;
     }
     else
     {
         std::shared_ptr<ARION_SOCKET> arion_s = arion->sock->get_arion_socket(fd);
         arion_fd = arion_s->fd;
+        blocking = arion_s->blocking;
     }
 
     bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
-    if (!thread_blocking_io)
+    if (!thread_blocking_io && blocking)
     {
         short revents = 0;
         if (!check_fd_status(arion_fd, revents) || !(revents & POLLOUT))
@@ -363,12 +369,14 @@ uint64_t sys_poll(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, b
     int poll_ret = poll(fds, nfds, timeout);
     if (poll_ret == -1)
         poll_ret = -errno;
-    else
+    else if (poll_ret > 0)
     {
         for (size_t fd_i = 0; fd_i < nfds; fd_i++)
             arion->mem->write_val(fds_addr + offsetof(struct pollfd, revents) + sizeof(struct pollfd) * fd_i,
                                   fds[fd_i].revents, sizeof(short));
     }
+    else if (!poll_ret)
+        cancel = true;
     return poll_ret;
 }
 
@@ -527,15 +535,18 @@ uint64_t sys_readv(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, 
     if (!is_file && !arion->sock->has_socket_entry(fd))
         return EBADF;
     int arion_fd;
+    bool blocking = false;
     if (is_file)
     {
         std::shared_ptr<ARION_FILE> arion_f = arion->fs->get_arion_file(fd);
         arion_fd = arion_f->fd;
+        blocking = arion_f->blocking;
     }
     else
     {
         std::shared_ptr<ARION_SOCKET> arion_s = arion->sock->get_arion_socket(fd);
         arion_fd = arion_s->fd;
+        blocking = arion_s->blocking;
     }
     struct iovec *iov = (struct iovec *)calloc(iov_cnt, sizeof(struct iovec));
     uint16_t arch_sz = arion->arch->get_attrs()->arch_sz;
@@ -559,7 +570,7 @@ uint64_t sys_readv(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, 
         iov[iov_i].iov_base = malloc(iov[iov_i].iov_len);
     }
     bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
-    if (!thread_blocking_io)
+    if (!thread_blocking_io && blocking)
     {
         short revents = 0;
         if (!check_fd_status(arion_fd, revents) || !((revents & POLLIN) | (revents & POLLPRI)))
@@ -607,15 +618,18 @@ uint64_t sys_writev(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params,
     if (!is_file && !arion->sock->has_socket_entry(fd))
         return EBADF;
     int arion_fd;
+    bool blocking;
     if (is_file)
     {
         std::shared_ptr<ARION_FILE> arion_f = arion->fs->get_arion_file(fd);
         arion_fd = arion_f->fd;
+        blocking = arion_f->blocking;
     }
     else
     {
         std::shared_ptr<ARION_SOCKET> arion_s = arion->sock->get_arion_socket(fd);
         arion_fd = arion_s->fd;
+        blocking = arion_s->blocking;
     }
 
     struct iovec *iov = (struct iovec *)calloc(iov_cnt, sizeof(struct iovec));
@@ -649,7 +663,7 @@ uint64_t sys_writev(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params,
         break;
     }
     bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
-    if (!thread_blocking_io)
+    if (!thread_blocking_io && blocking)
     {
         short revents = 0;
         if (!check_fd_status(arion_fd, revents) || !(revents & POLLOUT))
@@ -949,7 +963,7 @@ uint64_t sys_sendto(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params,
     }
 
     bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
-    if (!thread_blocking_io)
+    if (!thread_blocking_io && arion_s->blocking)
     {
         short revents = 0;
         if (!check_fd_status(arion_s->fd, revents) || !(revents & POLLOUT))
@@ -1007,7 +1021,7 @@ uint64_t sys_recvfrom(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
     }
 
     bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
-    if (!thread_blocking_io)
+    if (!thread_blocking_io && arion_s->blocking)
     {
         short revents = 0;
         if (!check_fd_status(arion_s->fd, revents) || !((revents & POLLIN) | (revents & POLLPRI)))
@@ -1092,7 +1106,7 @@ uint64_t sys_sendmsg(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params
     }
 
     bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
-    if (!thread_blocking_io)
+    if (!thread_blocking_io && arion_s->blocking)
     {
         short revents = 0;
         if (!check_fd_status(arion_s->fd, revents) || !(revents & POLLOUT))
@@ -1173,7 +1187,7 @@ uint64_t sys_recvmsg(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params
     }
 
     bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
-    if (!thread_blocking_io)
+    if (!thread_blocking_io && arion_s->blocking)
     {
         short revents = 0;
         if (!check_fd_status(arion_s->fd, revents) || !((revents & POLLIN) | (revents & POLLPRI)))
@@ -1429,11 +1443,18 @@ uint64_t sys_fcntl(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, 
     {
         std::shared_ptr<ARION_FILE> arion_f = arion->fs->get_arion_file(fd);
         fcntl_ret = fcntl(arion_f->fd, cmd, arg);
-        if ((cmd == F_DUPFD || cmd == F_DUPFD_CLOEXEC) && fcntl_ret >= 0)
+        if (fcntl_ret == -1)
+            fcntl_ret = -errno;
+        else
         {
-            std::shared_ptr<ARION_FILE> arion_f_cpy = std::make_shared<ARION_FILE>(arion_f);
-            arion_f_cpy->fd = fcntl_ret;
-            arion->fs->add_file_entry(fcntl_ret, arion_f_cpy);
+            if ((cmd == F_DUPFD || cmd == F_DUPFD_CLOEXEC))
+            {
+                std::shared_ptr<ARION_FILE> arion_f_cpy = std::make_shared<ARION_FILE>(arion_f);
+                arion_f_cpy->fd = fcntl_ret;
+                arion->fs->add_file_entry(fcntl_ret, arion_f_cpy);
+            }
+            if (cmd == O_NONBLOCK)
+                arion_f->blocking = false;
         }
     }
     else
@@ -1442,11 +1463,16 @@ uint64_t sys_fcntl(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, 
         fcntl_ret = fcntl(arion_s->fd, cmd, arg);
         if (fcntl_ret == -1)
             fcntl_ret = -errno;
-        else if ((cmd == F_DUPFD || cmd == F_DUPFD_CLOEXEC))
+        else
         {
-            std::shared_ptr<ARION_SOCKET> arion_s_cpy = std::make_shared<ARION_SOCKET>(arion_s);
-            arion_s_cpy->fd = fcntl_ret;
-            arion->sock->add_socket_entry(fcntl_ret, arion_s_cpy);
+            if ((cmd == F_DUPFD || cmd == F_DUPFD_CLOEXEC))
+            {
+                std::shared_ptr<ARION_SOCKET> arion_s_cpy = std::make_shared<ARION_SOCKET>(arion_s);
+                arion_s_cpy->fd = fcntl_ret;
+                arion->sock->add_socket_entry(fcntl_ret, arion_s_cpy);
+            }
+            if (cmd == O_NONBLOCK)
+                arion_s->blocking = false;
         }
     }
     return fcntl_ret;
@@ -1928,7 +1954,7 @@ uint64_t sys_ppoll(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, 
     int ppoll_ret = ppoll(fds, nfds, timeout_ptr, sigmask_ptr);
     if (ppoll_ret == -1)
         ppoll_ret = -errno;
-    else
+    else if (ppoll_ret > 0)
     {
         for (size_t fd_i = 0; fd_i < nfds; fd_i++)
         {
@@ -1936,6 +1962,8 @@ uint64_t sys_ppoll(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, 
                                   fds[fd_i].revents, sizeof(short));
         }
     }
+    else if (!ppoll_ret)
+        cancel = true;
     free(fds);
     return ppoll_ret;
 }
@@ -2056,7 +2084,7 @@ uint64_t sys_recvmmsg(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
     }
 
     bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
-    if (!thread_blocking_io)
+    if (!thread_blocking_io && arion_s->blocking)
     {
         short revents = 0;
         if (!check_fd_status(arion_s->fd, revents) || !((revents & POLLIN) | (revents & POLLPRI)))
@@ -2182,7 +2210,7 @@ uint64_t sys_sendmmsg(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
     }
 
     bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
-    if (!thread_blocking_io)
+    if (!thread_blocking_io && arion_s->blocking)
     {
         short revents = 0;
         if (!check_fd_status(arion_s->fd, revents) || !(revents & POLLOUT))
