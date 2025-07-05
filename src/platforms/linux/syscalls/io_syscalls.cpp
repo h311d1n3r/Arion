@@ -1,3 +1,4 @@
+#include "arion/utils/fs_utils.hpp"
 #include <arion/arion.hpp>
 #include <arion/common/file_system_manager.hpp>
 #include <arion/common/global_excepts.hpp>
@@ -142,6 +143,16 @@ uint64_t sys_read(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, b
         std::shared_ptr<ARION_SOCKET> arion_s = arion->sock->get_arion_socket(fd);
         arion_fd = arion_s->fd;
     }
+    bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
+    if (!thread_blocking_io)
+    {
+        short revents = 0;
+        if (!check_fd_status(arion_fd, revents) || !((revents & POLLIN) | (revents & POLLPRI)))
+        {
+            cancel = true;
+            return 0;
+        }
+    }
     ssize_t read_ret = read(arion_fd, buf, count);
     if (read_ret == -1)
         read_ret = -errno;
@@ -171,6 +182,16 @@ uint64_t sys_write(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, 
     {
         std::shared_ptr<ARION_SOCKET> arion_s = arion->sock->get_arion_socket(fd);
         arion_fd = arion_s->fd;
+    }
+    bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
+    if (!thread_blocking_io)
+    {
+        short revents = 0;
+        if (!check_fd_status(arion_fd, revents) || !(revents & POLLOUT))
+        {
+            cancel = true;
+            return 0;
+        }
     }
     ssize_t write_ret = write(arion_fd, buf.data(), buf.size());
     if (write_ret == -1)
@@ -332,7 +353,7 @@ uint64_t sys_poll(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, b
     }
     bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
     if (!thread_blocking_io)
-        timeout = 1;
+        timeout = 0;
     int poll_ret = poll(fds, nfds, timeout);
     if (poll_ret == -1)
         poll_ret = -errno;
@@ -343,9 +364,7 @@ uint64_t sys_poll(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, b
                                   fds[fd_i].revents, sizeof(short));
     }
     if (!poll_ret && !thread_blocking_io)
-    {
         cancel = true;
-    }
     return poll_ret;
 }
 
@@ -535,6 +554,16 @@ uint64_t sys_readv(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, 
         }
         iov[iov_i].iov_base = malloc(iov[iov_i].iov_len);
     }
+    bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
+    if (!thread_blocking_io)
+    {
+        short revents = 0;
+        if (!check_fd_status(arion_fd, revents) || !((revents & POLLIN) | (revents & POLLPRI)))
+        {
+            cancel = true;
+            return 0;
+        }
+    }
     ssize_t readv_ret = readv(arion_fd, iov, iov_cnt);
     if (readv_ret == -1)
         readv_ret = -errno;
@@ -614,6 +643,16 @@ uint64_t sys_writev(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params,
     }
     default:
         break;
+    }
+    bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
+    if (!thread_blocking_io)
+    {
+        short revents = 0;
+        if (!check_fd_status(arion_fd, revents) || !(revents & POLLOUT))
+        {
+            cancel = true;
+            return 0;
+        }
     }
     ssize_t writev_ret = writev(arion_fd, iov, iov_cnt);
     if (writev_ret == -1)
@@ -1809,6 +1848,7 @@ uint64_t sys_ppoll(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, 
         }
     }
 
+    bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
     struct timespec *timeout_ptr = nullptr;
     if (timeout_addr)
     {
@@ -1816,6 +1856,12 @@ uint64_t sys_ppoll(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, 
         std::vector<BYTE> timeout_data = arion->mem->read(timeout_addr, sizeof(struct timespec));
         memcpy(&timeout, timeout_data.data(), sizeof(struct timespec));
         timeout_ptr = &timeout;
+
+        if (!thread_blocking_io)
+        {
+            timeout_ptr->tv_sec = 0;
+            timeout_ptr->tv_nsec = 0;
+        }
     }
 
     sigset_t *sigmask_ptr = nullptr;
@@ -1832,12 +1878,15 @@ uint64_t sys_ppoll(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, 
         ppoll_ret = -errno;
     else
     {
-        for (size_t fd_i = 0; fd_i < nfds; fd_i++)
+        for (size_t fd_i = 0; fd_i < ppoll_ret; fd_i++)
         {
             arion->mem->write_val(fds_addr + offsetof(struct pollfd, revents) + sizeof(struct pollfd) * fd_i,
                                   fds[fd_i].revents, sizeof(short));
         }
     }
+
+    if (!ppoll_ret && !thread_blocking_io)
+        cancel = true;
 
     free(fds);
     return ppoll_ret;
