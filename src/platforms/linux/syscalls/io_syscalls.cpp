@@ -143,6 +143,7 @@ uint64_t sys_read(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, b
         std::shared_ptr<ARION_SOCKET> arion_s = arion->sock->get_arion_socket(fd);
         arion_fd = arion_s->fd;
     }
+
     bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
     if (!thread_blocking_io)
     {
@@ -153,6 +154,7 @@ uint64_t sys_read(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, b
             return 0;
         }
     }
+
     ssize_t read_ret = read(arion_fd, buf, count);
     if (read_ret == -1)
         read_ret = -errno;
@@ -183,6 +185,7 @@ uint64_t sys_write(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, 
         std::shared_ptr<ARION_SOCKET> arion_s = arion->sock->get_arion_socket(fd);
         arion_fd = arion_s->fd;
     }
+
     bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
     if (!thread_blocking_io)
     {
@@ -193,6 +196,7 @@ uint64_t sys_write(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, 
             return 0;
         }
     }
+
     ssize_t write_ret = write(arion_fd, buf.data(), buf.size());
     if (write_ret == -1)
         write_ret = -errno;
@@ -351,20 +355,20 @@ uint64_t sys_poll(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, b
             fds[fd_i].fd = arion_s->fd;
         }
     }
+
     bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
     if (!thread_blocking_io)
         timeout = 0;
+
     int poll_ret = poll(fds, nfds, timeout);
     if (poll_ret == -1)
         poll_ret = -errno;
     else
     {
-        for (size_t fd_i = 0; fd_i < poll_ret; fd_i++)
+        for (size_t fd_i = 0; fd_i < nfds; fd_i++)
             arion->mem->write_val(fds_addr + offsetof(struct pollfd, revents) + sizeof(struct pollfd) * fd_i,
                                   fds[fd_i].revents, sizeof(short));
     }
-    if (!poll_ret && !thread_blocking_io)
-        cancel = true;
     return poll_ret;
 }
 
@@ -943,6 +947,18 @@ uint64_t sys_sendto(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params,
         memcpy(sockaddr_, sock_addr.data(), sock_addr.size());
         unix_sock_path = manage_pre_socket_conn(arion, sockaddr_, addr_len);
     }
+
+    bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
+    if (!thread_blocking_io)
+    {
+        short revents = 0;
+        if (!check_fd_status(arion_s->fd, revents) || !(revents & POLLOUT))
+        {
+            cancel = true;
+            return 0;
+        }
+    }
+
     int sendto_ret = sendto(arion_s->fd, buf.data(), len, flags, sockaddr_, addr_len);
     if (sendto_ret == -1)
         sendto_ret = -errno;
@@ -987,6 +1003,17 @@ uint64_t sys_recvfrom(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
             sockaddr_ = (struct sockaddr *)malloc(sock_addr.size());
             memcpy(sockaddr_, sock_addr.data(), sock_addr.size());
             unix_sock_path = manage_pre_socket_conn(arion, sockaddr_, addr_len);
+        }
+    }
+
+    bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
+    if (!thread_blocking_io)
+    {
+        short revents = 0;
+        if (!check_fd_status(arion_s->fd, revents) || !((revents & POLLIN) | (revents & POLLPRI)))
+        {
+            cancel = true;
+            return 0;
         }
     }
 
@@ -1063,6 +1090,18 @@ uint64_t sys_sendmsg(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params
         msg->msg_control = malloc(msg->msg_controllen);
         memcpy(msg->msg_control, arion->mem->read(msg_control_addr, msg->msg_controllen).data(), msg->msg_controllen);
     }
+
+    bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
+    if (!thread_blocking_io)
+    {
+        short revents = 0;
+        if (!check_fd_status(arion_s->fd, revents) || !(revents & POLLOUT))
+        {
+            cancel = true;
+            return 0;
+        }
+    }
+
     ssize_t sendmsg_ret = sendmsg(arion_s->fd, msg, flags);
     if (sendmsg_ret == -1)
         sendmsg_ret = -errno;
@@ -1132,7 +1171,19 @@ uint64_t sys_recvmsg(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params
         msg->msg_control = malloc(msg->msg_controllen);
         memcpy(msg->msg_control, arion->mem->read(msg_control_addr, msg->msg_controllen).data(), msg->msg_controllen);
     }
-    ssize_t recvmsg_ret = recvmsg(fd, msg, flags);
+
+    bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
+    if (!thread_blocking_io)
+    {
+        short revents = 0;
+        if (!check_fd_status(arion_s->fd, revents) || !((revents & POLLIN) | (revents & POLLPRI)))
+        {
+            cancel = true;
+            return 0;
+        }
+    }
+
+    ssize_t recvmsg_ret = recvmsg(arion_s->fd, msg, flags);
     if (recvmsg_ret == -1)
         recvmsg_ret = -errno;
     if (has_addr)
@@ -1849,6 +1900,7 @@ uint64_t sys_ppoll(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, 
     }
 
     bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
+
     struct timespec *timeout_ptr = nullptr;
     if (timeout_addr)
     {
@@ -1878,16 +1930,12 @@ uint64_t sys_ppoll(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, 
         ppoll_ret = -errno;
     else
     {
-        for (size_t fd_i = 0; fd_i < ppoll_ret; fd_i++)
+        for (size_t fd_i = 0; fd_i < nfds; fd_i++)
         {
             arion->mem->write_val(fds_addr + offsetof(struct pollfd, revents) + sizeof(struct pollfd) * fd_i,
                                   fds[fd_i].revents, sizeof(short));
         }
     }
-
-    if (!ppoll_ret && !thread_blocking_io)
-        cancel = true;
-
     free(fds);
     return ppoll_ret;
 }
@@ -2007,6 +2055,17 @@ uint64_t sys_recvmmsg(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
         }
     }
 
+    bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
+    if (!thread_blocking_io)
+    {
+        short revents = 0;
+        if (!check_fd_status(arion_s->fd, revents) || !((revents & POLLIN) | (revents & POLLPRI)))
+        {
+            cancel = true;
+            return 0;
+        }
+    }
+
     int recvmmsg_ret = recvmmsg(arion_s->fd, msgs, vlen, flags, timeout);
 
     if (recvmmsg_ret == -1)
@@ -2119,6 +2178,17 @@ uint64_t sys_sendmmsg(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
             msg->msg_control = malloc(msg->msg_controllen);
             std::vector<BYTE> msg_control_data = arion->mem->read(msg_control_addr, msg->msg_controllen);
             memcpy(msg->msg_control, msg_control_data.data(), msg_control_data.size());
+        }
+    }
+
+    bool thread_blocking_io = arion->config->get_field<bool>("thread_blocking_io");
+    if (!thread_blocking_io)
+    {
+        short revents = 0;
+        if (!check_fd_status(arion_s->fd, revents) || !(revents & POLLOUT))
+        {
+            cancel = true;
+            return 0;
         }
     }
 
