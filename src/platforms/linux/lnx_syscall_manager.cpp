@@ -599,6 +599,8 @@ void LinuxSyscallManager::process_syscall(std::shared_ptr<Arion> arion)
     REG sysno_reg = arion->arch->get_attrs()->syscalling_conv.sysno_reg;
     REG syscall_ret_reg = arion->arch->get_attrs()->syscalling_conv.ret_reg;
     uint64_t sysno = arion->arch->read_arch_reg(sysno_reg);
+    REG pc_reg = arion->arch->get_attrs()->regs.pc;
+    ADDR pc = arion->arch->read_arch_reg(pc_reg);
     std::shared_ptr<SYSCALL_FUNC> func = arion->syscalls->get_syscall_func(sysno);
     if (!func)
     {
@@ -622,14 +624,23 @@ void LinuxSyscallManager::process_syscall(std::shared_ptr<Arion> arion)
     bool syscall_handled = false;
     arion->hooks->trigger_arion_hook(ARION_HOOK_TYPE::SYSCALL_HOOK, sysno, func_params, &syscall_handled);
     uint64_t syscall_ret;
+    bool cancel = false;
     if (!syscall_handled)
     {
-        syscall_ret = func->func(arion, func_params);
-        arion->arch->write_arch_reg(syscall_ret_reg, syscall_ret);
+        syscall_ret = func->func(arion, func_params, cancel);
+        if (!cancel)
+            arion->arch->write_arch_reg(syscall_ret_reg, syscall_ret);
     }
     else
         syscall_ret = arion->arch->read_arch_reg(syscall_ret_reg);
-    this->print_syscall(arion, syscall_name, func->signature, func_params, syscall_ret);
+    if (cancel)
+    {
+        size_t sys_instr_sz = arion->mem->read_instrs(pc, 1).at(0).size;
+        arion->arch->write_reg(pc_reg, pc - sys_instr_sz);
+        arion->sync_threads();
+    }
+    else
+        this->print_syscall(arion, syscall_name, func->signature, func_params, syscall_ret);
 }
 
 void LinuxSyscallManager::set_syscall_func(uint64_t sysno, std::shared_ptr<SYSCALL_FUNC> func)

@@ -301,9 +301,9 @@ std::string ArionStructSockaddrUnType::str(std::shared_ptr<Arion> arion, uint64_
 {
     arion::CPU_ARCH arch = this->arion_curr_arch(arion);
     std::string struct_str = ArionStructType::str(arion, val);
-    if (!arion->mem->is_mapped(val + 3))
+    if (!arion->mem->is_mapped(val + 2))
         return int_to_hex<uint64_t>(val);
-    std::string sun_path = arion->mem->read_c_string(val + 3);
+    std::string sun_path = arion->mem->read_c_string(val + 2);
     struct_str = struct_str.substr(0, struct_str.length() - 1) + ", sun_path=\"" + sun_path + "\"}";
     return struct_str;
 }
