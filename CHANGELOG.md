@@ -1,5 +1,6 @@
 # 1.0.2-alpha
 - Coredumps support
+- X11 support
 - Memory restoring strategies
 - Implemented module for procfs
 - Changed AbiManager to ArchManager
