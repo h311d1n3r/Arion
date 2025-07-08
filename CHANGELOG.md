@@ -1,9 +1,12 @@
 # 1.0.2-alpha
-- Loading coredumps
+- Coredumps support
+- X11 support
 - Memory restoring strategies
 - Implemented module for procfs
 - Changed AbiManager to ArchManager
-- Fixed unreadable symbolic link error
+- Fixed unreadable symbolic link erro
+- Better handling of file descriptors availability
+- Syscalls types added to logging
 
 # 1.0.1-alpha
 - Added UnicornAFL fuzzing mode

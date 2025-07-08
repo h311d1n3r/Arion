@@ -8,9 +8,9 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <sstream>
 #include <stack>
 #include <string>
-#include <sstream>
 #include <vector>
 
 namespace arion_poly_struct
@@ -70,15 +70,17 @@ struct POLYMORPHIC_STRUCT_FIELD
     std::string name;
     size_t sz;
 
-    POLYMORPHIC_STRUCT_FIELD(POLYMORPHIC_STRUCT_CONSTRAINT constraint, POLYMORPHIC_STRUCT_FIELD_TYPE type, std::shared_ptr<ArionType> arion_type,
-                             std::string name, size_t sz)
+    POLYMORPHIC_STRUCT_FIELD(POLYMORPHIC_STRUCT_CONSTRAINT constraint, POLYMORPHIC_STRUCT_FIELD_TYPE type,
+                             std::shared_ptr<ArionType> arion_type, std::string name, size_t sz)
         : constraint(constraint), type(type), arion_type(arion_type), name(name), sz(sz) {};
-    POLYMORPHIC_STRUCT_FIELD(POLYMORPHIC_STRUCT_CONSTRAINT constraint, POLYMORPHIC_STRUCT_FIELD_TYPE type, std::shared_ptr<ArionType> arion_type,
-                             std::string name)
+    POLYMORPHIC_STRUCT_FIELD(POLYMORPHIC_STRUCT_CONSTRAINT constraint, POLYMORPHIC_STRUCT_FIELD_TYPE type,
+                             std::shared_ptr<ArionType> arion_type, std::string name)
         : POLYMORPHIC_STRUCT_FIELD(constraint, type, arion_type, name, 0) {};
-    POLYMORPHIC_STRUCT_FIELD(POLYMORPHIC_STRUCT_FIELD_TYPE type, std::shared_ptr<ArionType> arion_type, std::string name, size_t sz)
+    POLYMORPHIC_STRUCT_FIELD(POLYMORPHIC_STRUCT_FIELD_TYPE type, std::shared_ptr<ArionType> arion_type,
+                             std::string name, size_t sz)
         : POLYMORPHIC_STRUCT_FIELD({}, type, arion_type, name, sz) {};
-    POLYMORPHIC_STRUCT_FIELD(POLYMORPHIC_STRUCT_FIELD_TYPE type, std::shared_ptr<ArionType> arion_type, std::string name)
+    POLYMORPHIC_STRUCT_FIELD(POLYMORPHIC_STRUCT_FIELD_TYPE type, std::shared_ptr<ArionType> arion_type,
+                             std::string name)
         : POLYMORPHIC_STRUCT_FIELD({}, type, arion_type, name, 0) {};
 };
 
@@ -194,13 +196,15 @@ template <typename T> class PolymorphicStructFactory
         this->clear_structs();
     }
 
-public:
-    size_t get_struct_sz(arion::CPU_ARCH arch) {
+  public:
+    size_t get_struct_sz(arion::CPU_ARCH arch)
+    {
         size_t struct_sz = 0;
         uint8_t align = this->get_align(arch);
         uint8_t ptr_sz = this->get_ptr_sz(arch);
         uint16_t arch_sz = this->get_arch_sz(arch);
-        for (POLYMORPHIC_STRUCT_FIELD field : this->fields) {
+        for (POLYMORPHIC_STRUCT_FIELD field : this->fields)
+        {
             if (field.constraint.arch != arion::CPU_ARCH::UNKNOWN_ARCH && arch != field.constraint.arch)
                 continue;
             if (field.constraint.arch_sz != 0 && arch_sz != field.constraint.arch_sz)
@@ -282,7 +286,8 @@ public:
         return struct_sz;
     }
 
-    size_t get_host_struct_sz() {
+    size_t get_host_struct_sz()
+    {
         return this->get_struct_sz(get_host_cpu_arch());
     }
 
@@ -600,7 +605,8 @@ public:
         return struct_inst;
     }
 
-    std::string to_string(STRUCT_ID id, std::shared_ptr<Arion> arion, arion::CPU_ARCH arch) {
+    std::string to_string(STRUCT_ID id, std::shared_ptr<Arion> arion, arion::CPU_ARCH arch)
+    {
         auto struct_it = this->curr_structs.find(id);
         if (struct_it == this->curr_structs.end())
             throw WrongStructIdException();
@@ -613,92 +619,109 @@ public:
         std::stringstream ss;
         ss << "{";
 
-        for (POLYMORPHIC_STRUCT_FIELD field : this->fields) {
+        for (POLYMORPHIC_STRUCT_FIELD field : this->fields)
+        {
             if (field.constraint.arch != arion::CPU_ARCH::UNKNOWN_ARCH && arch != field.constraint.arch)
                 continue;
             if (field.constraint.arch_sz != 0 && arch_sz != field.constraint.arch_sz)
                 continue;
 
-            if(ss.str().size() > 1) ss << ", ";
+            if (ss.str().size() > 1)
+                ss << ", ";
             ss << field.name << "=";
             switch (field.type)
             {
-                case V8:
-                case V16:
-                case V32:
-                case V64:
-                case PTR_SZ: {
-                    uint64_t val = 0;
-                    if (curr_struct->has_int_field(field.name))
-                        val = curr_struct->get_int_field(field.name);
-                    ss << field.arion_type->str(arion, val);
-                    break;
-                }
-                case A8: {
-                    ss << "{";
-                    if (curr_struct->has_arr_field(field.name)) {
-                        uint8_t* arr = (uint8_t*) curr_struct->get_arr_field(field.name);
-                        for(size_t arr_i = 0; arr_i < field.sz; arr_i++) {
-                            ss << field.arion_type->str(arion, arr[arr_i]);
-                            if(arr_i < field.sz - 1) ss << ", ";
-                        }
+            case V8:
+            case V16:
+            case V32:
+            case V64:
+            case PTR_SZ: {
+                uint64_t val = 0;
+                if (curr_struct->has_int_field(field.name))
+                    val = curr_struct->get_int_field(field.name);
+                ss << field.arion_type->str(arion, val);
+                break;
+            }
+            case A8: {
+                ss << "{";
+                if (curr_struct->has_arr_field(field.name))
+                {
+                    uint8_t *arr = (uint8_t *)curr_struct->get_arr_field(field.name);
+                    for (size_t arr_i = 0; arr_i < field.sz; arr_i++)
+                    {
+                        ss << field.arion_type->str(arion, arr[arr_i]);
+                        if (arr_i < field.sz - 1)
+                            ss << ", ";
                     }
-                    ss << "}";
-                    break;
                 }
-                case A16: {
-                    ss << "{";
-                    if (curr_struct->has_arr_field(field.name)) {
-                        uint16_t* arr = (uint16_t*) curr_struct->get_arr_field(field.name);
-                        for(size_t arr_i = 0; arr_i < field.sz; arr_i++) {
-                            ss << field.arion_type->str(arion, arr[arr_i]);
-                            if(arr_i < field.sz - 1) ss << ", ";
-                        }
+                ss << "}";
+                break;
+            }
+            case A16: {
+                ss << "{";
+                if (curr_struct->has_arr_field(field.name))
+                {
+                    uint16_t *arr = (uint16_t *)curr_struct->get_arr_field(field.name);
+                    for (size_t arr_i = 0; arr_i < field.sz; arr_i++)
+                    {
+                        ss << field.arion_type->str(arion, arr[arr_i]);
+                        if (arr_i < field.sz - 1)
+                            ss << ", ";
                     }
-                    ss << "}";
-                    break;
                 }
-                case A32: {
-                    ss << "{";
-                    if (curr_struct->has_arr_field(field.name)) {
-                        uint32_t* arr = (uint32_t*) curr_struct->get_arr_field(field.name);
-                        for(size_t arr_i = 0; arr_i < field.sz; arr_i++) {
-                            ss << field.arion_type->str(arion, arr[arr_i]);
-                            if(arr_i < field.sz - 1) ss << ", ";
-                        }
+                ss << "}";
+                break;
+            }
+            case A32: {
+                ss << "{";
+                if (curr_struct->has_arr_field(field.name))
+                {
+                    uint32_t *arr = (uint32_t *)curr_struct->get_arr_field(field.name);
+                    for (size_t arr_i = 0; arr_i < field.sz; arr_i++)
+                    {
+                        ss << field.arion_type->str(arion, arr[arr_i]);
+                        if (arr_i < field.sz - 1)
+                            ss << ", ";
                     }
-                    ss << "}";
-                    break;
                 }
-                case A64: {
-                    ss << "{";
-                    if (curr_struct->has_arr_field(field.name)) {
-                        uint64_t* arr = (uint64_t*) curr_struct->get_arr_field(field.name);
-                        for(size_t arr_i = 0; arr_i < field.sz; arr_i++) {
-                            ss << field.arion_type->str(arion, arr[arr_i]);
-                            if(arr_i < field.sz - 1) ss << ", ";
-                        }
+                ss << "}";
+                break;
+            }
+            case A64: {
+                ss << "{";
+                if (curr_struct->has_arr_field(field.name))
+                {
+                    uint64_t *arr = (uint64_t *)curr_struct->get_arr_field(field.name);
+                    for (size_t arr_i = 0; arr_i < field.sz; arr_i++)
+                    {
+                        ss << field.arion_type->str(arion, arr[arr_i]);
+                        if (arr_i < field.sz - 1)
+                            ss << ", ";
                     }
-                    ss << "}";
-                    break;
                 }
-                case PTR_ARR: {
-                    ss << "{";
-                    if (curr_struct->has_arr_field(field.name)) {
-                        void* arr = curr_struct->get_arr_field(field.name);
-                        for(size_t arr_i = 0; arr_i < field.sz; arr_i++) {
-                            uint64_t val = 0;
-                            memcpy(&val, (void*)((uint64_t)arr + arr_i * arch_sz), arch_sz);
-                            ss << field.arion_type->str(arion, val);
-                            if(arr_i < field.sz - 1) ss << ", ";
-                        }
+                ss << "}";
+                break;
+            }
+            case PTR_ARR: {
+                ss << "{";
+                if (curr_struct->has_arr_field(field.name))
+                {
+                    void *arr = curr_struct->get_arr_field(field.name);
+                    for (size_t arr_i = 0; arr_i < field.sz; arr_i++)
+                    {
+                        uint64_t val = 0;
+                        memcpy(&val, (void *)((uint64_t)arr + arr_i * arch_sz), arch_sz);
+                        ss << field.arion_type->str(arion, val);
+                        if (arr_i < field.sz - 1)
+                            ss << ", ";
                     }
-                    ss << "}";
-                    break;
                 }
-                default:
-                    ss << "UNK_FIELD";
-                    break;
+                ss << "}";
+                break;
+            }
+            default:
+                ss << "UNK_FIELD";
+                break;
             }
         }
 
@@ -733,28 +756,32 @@ public:
     }
 };
 
-class AbsArionStructType {
-protected:
+class AbsArionStructType
+{
+  protected:
+    virtual ~AbsArionStructType() = default;
     bool arion_is_mapped(std::shared_ptr<Arion> arion, arion::ADDR addr);
     arion::CPU_ARCH arion_curr_arch(std::shared_ptr<Arion> arion);
     std::vector<arion::BYTE> arion_read_mem(std::shared_ptr<Arion> arion, arion::ADDR addr, size_t sz);
 };
 
-template <typename T>
-class ArionStructType : public ArionType, AbsArionStructType {
-private:
+template <typename T> class ArionStructType : public ArionType, public AbsArionStructType
+{
+  private:
     std::shared_ptr<arion_poly_struct::PolymorphicStructFactory<T>> factory;
 
-protected:
-    ArionStructType(std::string name, std::shared_ptr<arion_poly_struct::PolymorphicStructFactory<T>> factory) : ArionType(name, ARION_LOG_COLOR::BLUE), factory(factory) {};
+  protected:
+    ArionStructType(std::string name, std::shared_ptr<arion_poly_struct::PolymorphicStructFactory<T>> factory)
+        : ArionType(name, ARION_LOG_COLOR::BLUE), factory(factory) {};
 
-public:
-    std::string str(std::shared_ptr<Arion> arion, uint64_t val) override {
-        if(!val || !this->arion_is_mapped(arion, val))
+  public:
+    std::string str(std::shared_ptr<Arion> arion, uint64_t val) override
+    {
+        if (!val || !this->arion_is_mapped(arion, val))
             return int_to_hex<uint64_t>(val);
         arion::CPU_ARCH arch = this->arion_curr_arch(arion);
         size_t struct_sz = this->factory->get_struct_sz(arch);
-        arion::BYTE* struct_buf = (arion::BYTE*) malloc(struct_sz);
+        arion::BYTE *struct_buf = (arion::BYTE *)malloc(struct_sz);
         std::vector<arion::BYTE> struct_data = this->arion_read_mem(arion, val, struct_sz);
         memcpy(struct_buf, struct_data.data(), struct_sz);
         arion_poly_struct::STRUCT_ID struct_id = this->factory->feed(arch, struct_buf);
@@ -762,6 +789,28 @@ public:
         free(struct_buf);
         this->factory->release_struct(struct_id);
         return struct_str;
+    }
+};
+
+class ArionVariableStructType : public ArionType
+{
+  private:
+    virtual std::shared_ptr<arion_poly_struct::AbsArionStructType> process(std::shared_ptr<Arion> arion,
+                                                                           uint64_t val) = 0;
+
+  protected:
+    ArionVariableStructType(std::string name) : ArionType(name, ARION_LOG_COLOR::BLUE) {};
+
+  public:
+    std::string str(std::shared_ptr<Arion> arion, uint64_t val) override
+    {
+        std::shared_ptr<AbsArionStructType> struct_type = this->process(arion, val);
+        if (!struct_type)
+            return ARION_INT_TYPE->str(arion, val);
+        std::shared_ptr<ArionType> type = std::dynamic_pointer_cast<ArionType>(struct_type);
+        if (!type)
+            return ARION_INT_TYPE->str(arion, val);
+        return type->str(arion, val);
     }
 };
 

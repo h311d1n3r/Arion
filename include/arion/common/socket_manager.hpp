@@ -23,6 +23,7 @@ struct ARION_EXPORT ARION_SOCKET
     bool server = false;
     bool server_listen = false;
     int server_backlog = 0;
+    bool blocking = false;
     socklen_t s_addr_sz = 0;
     sockaddr *s_addr = nullptr;
     ARION_SOCKET() {};
@@ -30,7 +31,8 @@ struct ARION_EXPORT ARION_SOCKET
         : fd(fd), family(family), type(type), protocol(protocol) {};
     ARION_SOCKET(std::shared_ptr<ARION_SOCKET> s)
         : fd(s->fd), family(s->family), type(s->type), protocol(s->protocol), ip(s->ip), port(s->port), path(s->path),
-          server(s->server), server_listen(s->server_listen), server_backlog(s->server_backlog), s_addr_sz(s->s_addr_sz)
+          server(s->server), server_listen(s->server_listen), server_backlog(s->server_backlog), blocking(s->blocking),
+          s_addr_sz(s->s_addr_sz)
     {
         if (s->s_addr && s->s_addr_sz)
         {
@@ -40,7 +42,8 @@ struct ARION_EXPORT ARION_SOCKET
     };
     ARION_SOCKET(ARION_SOCKET *s)
         : fd(s->fd), family(s->family), type(s->type), protocol(s->protocol), ip(s->ip), port(s->port), path(s->path),
-          server(s->server), server_listen(s->server_listen), server_backlog(s->server_backlog), s_addr_sz(s->s_addr_sz)
+          server(s->server), server_listen(s->server_listen), server_backlog(s->server_backlog), blocking(s->blocking),
+          s_addr_sz(s->s_addr_sz)
     {
         if (s->s_addr && s->s_addr_sz)
         {

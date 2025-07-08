@@ -416,6 +416,7 @@ bool Arion::run_current()
     this->arch->prerun_hook(pc_addr);
     uc_err uc_run_err = uc_emu_start(this->uc, pc_addr, this->end.value_or(0), 0,
                                      (multi_process || multi_thread) ? ARION_CYCLES_PER_THREAD : 0);
+    this->running = false;
     pc_addr = this->arch->read_arch_reg(pc);
     if (this->uc_exception)
         std::rethrow_exception(this->uc_exception);
@@ -426,16 +427,15 @@ bool Arion::run_current()
         this->end = 0;
         return false;
     }
+    threads_count = this->threads->get_threads_count();
+    if (!threads_count)
+        return false;
+    this->threads->switch_to_next_thread();
     if (this->sync)
     {
         this->sync = false;
         return true;
     }
-    threads_count = this->threads->get_threads_count();
-    if (!threads_count)
-        return false;
-    this->threads->switch_to_next_thread();
-    this->running = false;
     return true;
 }
 

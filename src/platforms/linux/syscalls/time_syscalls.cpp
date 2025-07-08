@@ -3,7 +3,7 @@
 
 using namespace arion;
 
-uint64_t sys_sched_rr_get_interval(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t sys_sched_rr_get_interval(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     pid_t pid = params.at(0);
     ADDR tp_addr = params.at(1);
@@ -17,7 +17,7 @@ uint64_t sys_sched_rr_get_interval(std::shared_ptr<Arion> arion, std::vector<SYS
     return sys_sched_rr_get_interval_ret;
 }
 
-uint64_t sys_time(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t sys_time(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR time_addr = params.at(0);
 
@@ -30,7 +30,7 @@ uint64_t sys_time(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     return time_ret;
 }
 
-uint64_t sys_clock_gettime(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t sys_clock_gettime(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     clockid_t clock_id = params.at(0);
     ADDR tp_addr = params.at(1);
@@ -44,7 +44,7 @@ uint64_t sys_clock_gettime(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> 
     return gettime_ret;
 }
 
-uint64_t sys_clock_getres(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t sys_clock_getres(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     clockid_t clock_id = params.at(0);
     ADDR res_addr = params.at(1);
@@ -66,21 +66,21 @@ uint64_t sys_clock_getres(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> p
     return getres_ret;
 }
 
-uint64_t sys_clock_nanosleep(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t sys_clock_nanosleep(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     clockid_t clock_id = params.at(0);
     int flags = params.at(1);
     ADDR t_addr = params.at(2);
     ADDR remain_addr = params.at(3);
 
-    if (!arion->config || !arion->config->get_field<bool>("enable_sleep_syscall")) {
+    if (!arion->config || !arion->config->get_field<bool>("enable_sleep_syscalls"))
         return 0;
-    }
-    
+
     struct timespec t;
     std::vector<BYTE> value(sizeof(t));
     value = arion->mem->read(t_addr, sizeof(t));
-    if (value.size() != sizeof(t)) {
+    if (value.size() != sizeof(t))
+    {
         return -EFAULT;
     }
     std::memcpy(&t, value.data(), sizeof(t));

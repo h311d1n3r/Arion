@@ -4,6 +4,7 @@
 #include <arion/utils/fs_utils.hpp>
 #include <filesystem>
 #include <fstream>
+#include <poll.h>
 #include <sstream>
 #include <stdio.h>
 #include <uuid/uuid.h>
@@ -72,4 +73,22 @@ std::string md5_hash_file(std::string file_path)
     fclose(in_f);
 
     return hash_ss.str();
+}
+
+bool check_fd_status(int fd, short int &revents)
+{
+    struct pollfd pfd;
+    pfd.fd = fd;
+    pfd.events = POLLIN | POLLPRI | POLLOUT;
+
+    int ret = poll(&pfd, 1, 0);
+
+    if (ret <= 0)
+    {
+        revents = 0;
+        return false;
+    }
+
+    revents = pfd.revents;
+    return true;
 }
