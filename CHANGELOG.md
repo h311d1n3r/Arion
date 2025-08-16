@@ -3,6 +3,7 @@
 - X11 support
 - Memory restoring strategies
 - Implemented module for procfs
+- GCC 15 compatibility
 - Changed AbiManager to ArchManager
 - Fixed unreadable symbolic link erro
 - Better handling of file descriptors availability

@@ -3,8 +3,8 @@
 
 #include <arion/common/global_defs.hpp>
 #include <arion/common/memory_manager.hpp>
-#include <arion/platforms/linux/lnx_loader.hpp>
 #include <arion/platforms/linux/elf_parser.hpp>
+#include <arion/platforms/linux/lnx_loader.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -60,6 +60,7 @@ class ElfLoader : LinuxLoader
     arion::ADDR map_vdso();
     arion::ADDR map_vsyscall();
     arion::ADDR map_arm_traps();
+    void init_coredump_threads();
 
   protected:
     void setup_specific_auxv(std::shared_ptr<LNX_LOADER_PARAMS> params, uint16_t arch_sz) override;

@@ -5,6 +5,7 @@
 #include <arion/common/global_excepts.hpp>
 #include <arion/common/memory_manager.hpp>
 #include <arion/platforms/linux/elf_loader.hpp>
+#include <arion/platforms/linux/lnx_arch_manager.hpp>
 #include <arion/utils/fs_utils.hpp>
 #include <arion/utils/math_utils.hpp>
 #include <array>
@@ -60,7 +61,11 @@ std::unique_ptr<LNX_LOADER_PARAMS> ElfLoader::process()
     else
         entry_addr = this->is_pie ? prog_elf_attrs->entry + params->load_address : prog_elf_attrs->entry;
 
-    this->init_main_thread(params, entry_addr);
+    if (prog_elf_attrs->coredump)
+        this->init_coredump_threads();
+    else
+        this->init_main_thread(params, entry_addr);
+
     return std::make_unique<LNX_LOADER_PARAMS>(*params.get());
 }
 
@@ -221,4 +226,29 @@ void ElfLoader::setup_specific_auxv(std::shared_ptr<LNX_LOADER_PARAMS> params, u
         this->write_auxv_entry(AUXV::AT_SYSINFO, params->vdso_address + LINUX_VDSO_KERNEL_VSYSCALL_OFF);
     if (arion->arch->get_attrs()->seg_flags & ARION_VDSO_PRESENT)
         this->write_auxv_entry(AUXV::AT_SYSINFO_EHDR, params->vdso_address);
+}
+
+void ElfLoader::init_coredump_threads()
+{
+    std::shared_ptr<Arion> arion = this->arion.lock();
+    if (!arion)
+        throw ExpiredWeakPtrException("Arion");
+
+    auto prog_elf_attrs = std::dynamic_pointer_cast<ARION_ELF_PARSER_ATTRIBUTES>(prog_parser->get_attrs());
+    auto *lnx_arch = dynamic_cast<LinuxArchManager *>(arion->arch.get());
+
+    bool first_thread = true;
+    for (std::unique_ptr<ARION_ELF_COREDUMP_THREAD> &thread : prog_elf_attrs->coredump->threads)
+    {
+        std::map<arion::REG, arion::RVAL> gp_regs = lnx_arch->prstatus_to_regs(thread->raw_prstatus);
+        std::unique_ptr<ARION_THREAD> arion_t = std::make_unique<ARION_THREAD>(
+            0, 0, 0, 0, 0, std::make_unique<std::map<arion::REG, arion::RVAL>>(gp_regs), 0);
+        if (first_thread)
+        {
+            first_thread = false;
+            arion->arch->load_regs(std::move(arion_t->regs_state));
+            arion->threads->set_running_tid(arion_t->tid);
+        }
+        arion->threads->add_thread_entry(std::move(arion_t));
+    }
 }

@@ -7,6 +7,7 @@
 
 namespace arion_lnx_arm64
 {
+
 struct user_pt_regs
 {
     __u64 regs[31];
@@ -14,6 +15,14 @@ struct user_pt_regs
     __u64 pc;
     __u64 pstate;
 };
+
+inline std::vector<arion::REG> uc_user_pt_regs = {
+    UC_ARM64_REG_X0,  UC_ARM64_REG_X1,  UC_ARM64_REG_X2,  UC_ARM64_REG_X3,    UC_ARM64_REG_X4,  UC_ARM64_REG_X5,
+    UC_ARM64_REG_X6,  UC_ARM64_REG_X7,  UC_ARM64_REG_X8,  UC_ARM64_REG_X9,    UC_ARM64_REG_X10, UC_ARM64_REG_X11,
+    UC_ARM64_REG_X12, UC_ARM64_REG_X13, UC_ARM64_REG_X14, UC_ARM64_REG_X15,   UC_ARM64_REG_X16, UC_ARM64_REG_X17,
+    UC_ARM64_REG_X18, UC_ARM64_REG_X19, UC_ARM64_REG_X20, UC_ARM64_REG_X21,   UC_ARM64_REG_X22, UC_ARM64_REG_X23,
+    UC_ARM64_REG_X24, UC_ARM64_REG_X25, UC_ARM64_REG_X26, UC_ARM64_REG_X27,   UC_ARM64_REG_X28, UC_ARM64_REG_X29,
+    UC_ARM64_REG_X30, UC_ARM64_REG_SP,  UC_ARM64_REG_PC,  UC_ARM64_REG_PSTATE};
 
 struct frame_record
 {
@@ -59,12 +68,13 @@ struct elf_prstatus
     elf_gregset_t pr_reg;
     int pr_fpvalid;
 };
+
 } // namespace arion_lnx_arm64
 
 class ArchManagerLinuxARM64 : public ArchManagerARM64, public LinuxArchManager
 {
   public:
-    std::unique_ptr<std::map<arion::REG, arion::RVAL>> prstatus_to_regs(std::vector<arion::BYTE> prstatus) override;
+    std::map<arion::REG, arion::RVAL> prstatus_to_regs(std::vector<arion::BYTE> prstatus) override;
 };
 
 #endif // ARION_LNX_ARCH_ARM64_HPP

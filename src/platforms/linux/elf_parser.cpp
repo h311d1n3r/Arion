@@ -45,6 +45,9 @@ void ElfCoredumpParser::parse_prstatus_note(const LIEF::ELF::Note &note,
         return;
 
     const auto &nt_core_prstatus = static_cast<const LIEF::ELF::CorePrStatus &>(note);
+    LIEF::span<const uint8_t> prstatus_desc = nt_core_prstatus.description();
+    std::vector<BYTE> prstatus_content(prstatus_desc.begin(), prstatus_desc.end());
+    attrs->coredump->threads.push_back(std::make_unique<ARION_ELF_COREDUMP_THREAD>(prstatus_content));
 }
 
 void ElfCoredumpParser::parse_prpsinfo_note(const LIEF::ELF::Note &note,
@@ -86,6 +89,7 @@ std::unique_ptr<LIEF::ELF::Binary> ElfCoredumpParser::parse_coredump_data(
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
+    attrs->coredump = std::make_unique<ARION_ELF_COREDUMP_ATTRS>();
     for (const LIEF::ELF::Note &note : elf->notes())
     {
         switch (note.type())
@@ -98,6 +102,9 @@ std::unique_ptr<LIEF::ELF::Binary> ElfCoredumpParser::parse_coredump_data(
             break;
         case LIEF::ELF::Note::TYPE::CORE_PRPSINFO:
             this->parse_prpsinfo_note(note, attrs);
+            break;
+        case LIEF::ELF::Note::TYPE::CORE_FPREGSET:
+            this->parse_fpregset_note(note);
             break;
         default: {
             colorstream cs;
