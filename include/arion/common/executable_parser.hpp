@@ -11,6 +11,7 @@ class Arion;
 struct ARION_EXECUTABLE_PARSER_ATTRIBUTES
 {
     virtual ~ARION_EXECUTABLE_PARSER_ATTRIBUTES() = default;
+    std::string usr_path;
     std::string path;
     std::vector<std::string> args;
     arion::CPU_ARCH arch = arion::CPU_ARCH::UNKNOWN_ARCH;

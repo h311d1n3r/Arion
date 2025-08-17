@@ -133,6 +133,8 @@ void ElfParser::process()
 {
     if (!std::filesystem::exists(this->attrs->path))
         throw FileNotFoundException(this->attrs->path);
+    this->attrs->usr_path = this->attrs->path; // "usr_path" is the path passed by the user to Arion whereas "path" can
+                                               // be resolved to another path (e.g in core dumps)
 
     auto elf_attrs = std::dynamic_pointer_cast<ARION_ELF_PARSER_ATTRIBUTES>(this->attrs);
 

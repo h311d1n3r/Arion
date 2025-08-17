@@ -77,7 +77,7 @@ ADDR ElfLoader::map_elf_segments(const std::shared_ptr<ElfParser> parser, ADDR l
         throw ExpiredWeakPtrException("Arion");
 
     auto elf_attrs = std::dynamic_pointer_cast<ARION_ELF_PARSER_ATTRIBUTES>(parser->get_attrs());
-    const std::string program_name = elf_attrs->path;
+    const std::string program_name = elf_attrs->usr_path;
 
     ADDR first_addr = ARION_MAX_U64, last_addr = 0;
     for (const std::shared_ptr<struct SEGMENT> seg : parser->get_segments())
