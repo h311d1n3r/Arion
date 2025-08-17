@@ -26,6 +26,7 @@ extern std::map<LIEF::ELF::Header::FILE_TYPE, ELF_FILE_TYPE> lief_arion_file_typ
 struct ARION_ELF_COREDUMP_THREAD
 {
     std::vector<arion::BYTE> raw_prstatus;
+    std::vector<arion::BYTE> raw_fpregset;
 
     ARION_ELF_COREDUMP_THREAD(std::vector<arion::BYTE> raw_prstatus) : raw_prstatus(raw_prstatus) {};
 };
@@ -53,7 +54,7 @@ class ElfCoredumpParser
     void parse_file_note(const LIEF::ELF::Note &note, std::vector<std::shared_ptr<struct arion::SEGMENT>> segments);
     void parse_prstatus_note(const LIEF::ELF::Note &note, std::shared_ptr<ARION_ELF_PARSER_ATTRIBUTES> attrs);
     void parse_prpsinfo_note(const LIEF::ELF::Note &note, std::shared_ptr<ARION_ELF_PARSER_ATTRIBUTES> attrs);
-    void parse_fpregset_note(const LIEF::ELF::Note &note);
+    void parse_fpregset_note(const LIEF::ELF::Note &note, std::shared_ptr<ARION_ELF_PARSER_ATTRIBUTES> attrs);
 
   public:
     ElfCoredumpParser(std::weak_ptr<Arion> arion) : arion(arion) {};

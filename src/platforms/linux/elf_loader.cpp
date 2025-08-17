@@ -240,9 +240,12 @@ void ElfLoader::init_coredump_threads()
     bool first_thread = true;
     for (std::unique_ptr<ARION_ELF_COREDUMP_THREAD> &thread : prog_elf_attrs->coredump->threads)
     {
-        std::map<arion::REG, arion::RVAL> gp_regs = lnx_arch->prstatus_to_regs(thread->raw_prstatus);
+        std::unique_ptr<ARION_PARSED_COREDUMP_THREAD> parsed_thread =
+            lnx_arch->parse_coredump_thread(arion, std::move(thread), prog_parser);
+        thread = std::move(parsed_thread->thread);
+
         std::unique_ptr<ARION_THREAD> arion_t = std::make_unique<ARION_THREAD>(
-            0, 0, 0, 0, 0, std::make_unique<std::map<arion::REG, arion::RVAL>>(gp_regs), 0);
+            0, 0, 0, 0, 0, std::make_unique<std::map<arion::REG, arion::RVAL>>(parsed_thread->regs), 0);
         if (first_thread)
         {
             first_thread = false;
