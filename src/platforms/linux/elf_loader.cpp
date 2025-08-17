@@ -42,7 +42,8 @@ std::unique_ptr<LNX_LOADER_PARAMS> ElfLoader::process()
         params->vdso_address = this->map_vdso();
     else
         params->vdso_address = 0;
-    params->stack_address = this->map_stack(params, prog_elf_attrs->path);
+    if (!prog_elf_attrs->coredump)
+        params->stack_address = this->map_stack(params, prog_elf_attrs->path);
     if (seg_flags & ARION_VSYSCALL_PRESENT)
         params->vsyscall_address = this->map_vsyscall();
     else
