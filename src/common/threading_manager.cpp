@@ -161,7 +161,7 @@ void ThreadingManager::remove_thread_entry_internal(pid_t tid, bool clearing)
     if (this->threads_map.find(tid) == this->threads_map.end())
         throw WrongThreadIdException();
 
-    if (this->threads_map.size() > 1 && !clearing)
+    if (tid == this->running_tid && this->threads_map.size() > 1 && !clearing)
         this->switch_to_next_thread();
     this->threads_map.erase(tid);
     if (this->threads_map.size())
