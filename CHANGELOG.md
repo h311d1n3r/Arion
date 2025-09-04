@@ -1,8 +1,10 @@
 # 1.0.2-alpha
-- Coredumps support
+- Core dumps support
 - X11 support
 - Memory restoring strategies
 - Implemented module for procfs
+- GCC 15 compatibility
+- PIN tool for AVX/SSE bypass via CPUID
 - Changed AbiManager to ArchManager
 - Fixed unreadable symbolic link erro
 - Better handling of file descriptors availability

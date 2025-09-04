@@ -8,3 +8,4 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -rdynamic -O0")
 
 add_subdirectory(pin_tracer)
+add_subdirectory(pin_cpuid_bypass)

@@ -23,12 +23,26 @@ enum ELF_FILE_TYPE
 
 extern std::map<LIEF::ELF::Header::FILE_TYPE, ELF_FILE_TYPE> lief_arion_file_types;
 
+struct ARION_ELF_COREDUMP_THREAD
+{
+    std::vector<arion::BYTE> raw_prstatus;
+    std::vector<arion::BYTE> raw_fpregset;
+
+    ARION_ELF_COREDUMP_THREAD(std::vector<arion::BYTE> raw_prstatus) : raw_prstatus(raw_prstatus) {};
+};
+
+struct ARION_ELF_COREDUMP_ATTRS
+{
+    std::vector<std::unique_ptr<ARION_ELF_COREDUMP_THREAD>> threads;
+};
+
 struct ARION_ELF_PARSER_ATTRIBUTES : public ARION_EXECUTABLE_PARSER_ATTRIBUTES
 {
     ELF_FILE_TYPE type = ELF_FILE_TYPE::UNKNOWN_FILE;
     arion::ADDR prog_headers_off = 0;
     size_t prog_headers_entry_sz = 0;
     size_t prog_headers_n = 0;
+    std::unique_ptr<ARION_ELF_COREDUMP_ATTRS> coredump = 0;
 };
 
 class ElfCoredumpParser
@@ -40,7 +54,7 @@ class ElfCoredumpParser
     void parse_file_note(const LIEF::ELF::Note &note, std::vector<std::shared_ptr<struct arion::SEGMENT>> segments);
     void parse_prstatus_note(const LIEF::ELF::Note &note, std::shared_ptr<ARION_ELF_PARSER_ATTRIBUTES> attrs);
     void parse_prpsinfo_note(const LIEF::ELF::Note &note, std::shared_ptr<ARION_ELF_PARSER_ATTRIBUTES> attrs);
-    void parse_fpregset_note(const LIEF::ELF::Note &note);
+    void parse_fpregset_note(const LIEF::ELF::Note &note, std::shared_ptr<ARION_ELF_PARSER_ATTRIBUTES> attrs);
 
   public:
     ElfCoredumpParser(std::weak_ptr<Arion> arion) : arion(arion) {};

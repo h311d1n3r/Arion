@@ -168,6 +168,13 @@ class BadLinkageTypeException : public ArionException
         : ArionException(std::string("Wrong linkage type for \"") + exe_path + std::string("\".")) {};
 };
 
+class NoCoredumpCurrentThreadException : public ArionException
+{
+  public:
+    explicit NoCoredumpCurrentThreadException()
+        : ArionException(std::string("Can't analyze coredump note because it does not refer to a thread.")) {};
+};
+
 class NoSegmentAtAddrException : public ArionException
 {
   public:

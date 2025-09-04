@@ -218,7 +218,7 @@ std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program_args
     arion->program_args = program_args;
     std::shared_ptr<ElfParser> prog_parser = std::make_shared<ElfParser>(arion, program_args);
     prog_parser->process();
-    std::string program_path = prog_parser->get_attrs()->path;
+    std::string program_path = prog_parser->get_attrs()->usr_path;
     Arion::new_instance_common_finish(arion, prog_parser->get_attrs()->arch);
     colorstream init_msg;
     init_msg << ARION_LOG_COLOR::WHITE << "Initializing Arion instance for image " << ARION_LOG_COLOR::GREEN << "\""

@@ -156,12 +156,12 @@ pid_t ThreadingManager::add_thread_entry(std::unique_ptr<ARION_THREAD> thread)
     return tid;
 }
 
-void ThreadingManager::remove_thread_entry(pid_t tid)
+void ThreadingManager::remove_thread_entry_internal(pid_t tid, bool clearing)
 {
     if (this->threads_map.find(tid) == this->threads_map.end())
         throw WrongThreadIdException();
 
-    if (this->threads_map.size() > 1)
+    if (tid == this->running_tid && this->threads_map.size() > 1 && !clearing)
         this->switch_to_next_thread();
     this->threads_map.erase(tid);
     if (this->threads_map.size())
@@ -173,13 +173,18 @@ void ThreadingManager::remove_thread_entry(pid_t tid)
     }
 }
 
+void ThreadingManager::remove_thread_entry(pid_t tid)
+{
+    this->remove_thread_entry_internal(tid);
+}
+
 void ThreadingManager::clear_threads()
 {
     std::vector<pid_t> thread_ids; // need to clone keys to prevent concurrency editing
     for (const auto &thread_pair : this->threads_map)
         thread_ids.push_back(thread_pair.first);
     for (HOOK_ID hook_id : thread_ids)
-        this->remove_thread_entry(hook_id);
+        this->remove_thread_entry_internal(hook_id, true);
     this->futex_list.clear();
 }
 

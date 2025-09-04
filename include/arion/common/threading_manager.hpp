@@ -75,6 +75,7 @@ class ARION_EXPORT ThreadingManager
     pid_t running_tid = 1;
     std::stack<pid_t> free_thread_ids;
     pid_t gen_next_id();
+    void ARION_EXPORT remove_thread_entry_internal(pid_t tid, bool clearing = false);
 
   public:
     static std::map<pid_t, std::vector<std::unique_ptr<ARION_TGROUP_ENTRY>>> thread_groups;
