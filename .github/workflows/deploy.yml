@@ -27,8 +27,14 @@ jobs:
     - name: Init submodules
       run: git submodule update --init --recursive
 
-    - name: APT dependencies
+    - name: Install APT dependencies
       run: sudo apt update && sudo apt upgrade && sudo apt -y install uuid-dev coreutils gcc-multilib g++-multilib make cmake
+
+    - name: Install Rust
+      uses: actions-rust-lang/setup-rust-toolchain@v1
+      with:
+        toolchain: stable
+        components: clippy, rustfmt
 
     - name: Download rootfs
       run: ${{github.workspace}}/scripts/rootfs_download.sh all
