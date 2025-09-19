@@ -158,7 +158,9 @@ add_custom_command(
     COMMENT "Building the udbserver library"
     COMMAND mkdir -p ${UDBSERVER_BUILD_PATH}
     COMMAND cargo install cargo-c
+    # Force unicorn-engine v2.1.3 crate
     COMMAND /bin/sh -c "RUSTFLAGS='-L native=${UNICORN_LIB_DIR} -l static=unicorn' CARGO_TARGET_DIR=${UDBSERVER_TARGET_PATH} \
+        cargo update -p unicorn-engine --precise 2.1.3 && \
         cargo cinstall --release --prefix=/usr --destdir=${UDBSERVER_BUILD_PATH}"
     COMMAND find "${UDBSERVER_BUILD_PATH}/usr" -name ${UDBSERVER_LIB_NAME} -exec cp {} ${UDBSERVER_LIB} \;
     WORKING_DIRECTORY ${UDBSERVER_PATH}

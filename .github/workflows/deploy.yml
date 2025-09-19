@@ -34,7 +34,6 @@ jobs:
       uses: actions-rust-lang/setup-rust-toolchain@v1
       with:
         toolchain: stable
-        components: unicorn-engine==2.1.3
 
     - name: Download rootfs
       run: ${{github.workspace}}/scripts/rootfs_download.sh all
