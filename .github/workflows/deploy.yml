@@ -28,13 +28,13 @@ jobs:
       run: git submodule update --init --recursive
 
     - name: Install APT dependencies
-      run: sudo apt update && sudo apt upgrade && sudo apt -y install uuid-dev coreutils gcc-multilib g++-multilib make cmake curl
+      run: sudo apt update && sudo apt upgrade && sudo apt -y install uuid-dev coreutils gcc-multilib g++-multilib make cmake
 
     - name: Install Rust
-      run: |
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-        rustup default stable
+      uses: actions-rust-lang/setup-rust-toolchain@v1
+      with:
+        toolchain: stable
+        components: unicorn-engine==2.1.3
 
     - name: Download rootfs
       run: ${{github.workspace}}/scripts/rootfs_download.sh all
