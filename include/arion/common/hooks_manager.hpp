@@ -3,12 +3,15 @@
 
 #include <arion/common/global_defs.hpp>
 #include <arion/common/global_excepts.hpp>
+#include <arion/unicorn/unicorn.h>
 #include <functional>
 #include <map>
 #include <memory>
 #include <stack>
-#include <arion/unicorn/unicorn.h>
 #include <variant>
+
+namespace arion
+{
 
 class Arion; // forward declaration to prevent circular dependencies
 
@@ -17,8 +20,7 @@ using HOOK_ID = uint64_t;
 using NO_PARAM_HOOK_CALLBACK = std::function<void(std::shared_ptr<Arion> arion, void *user_data)>;
 using NO_PARAM_BOOL_HOOK_CALLBACK = std::function<bool(std::shared_ptr<Arion> arion, void *user_data)>;
 using U32_HOOK_CALLBACK = std::function<void(std::shared_ptr<Arion> arion, uint32_t val, void *user_data)>;
-using ADDR_SZ_HOOK_CALLBACK =
-    std::function<void(std::shared_ptr<Arion> arion, arion::ADDR addr, size_t sz, void *user_data)>;
+using ADDR_SZ_HOOK_CALLBACK = std::function<void(std::shared_ptr<Arion> arion, ADDR addr, size_t sz, void *user_data)>;
 using MEM_HOOK_CALLBACK = std::function<bool(std::shared_ptr<Arion> arion, uc_mem_type type, uint64_t addr, int size,
                                              int64_t val, void *user_data)>;
 using EDGE_HOOK_CALLBACK = std::function<void(std::shared_ptr<Arion> arion, uc_tb *cur, uc_tb *prev, void *user_data)>;
@@ -28,11 +30,11 @@ using TLB_HOOK_CALLBACK = std::function<bool(std::shared_ptr<Arion> arion, uint6
                                              uc_tlb_entry *result, void *user_data)>;
 using PROCESS_HOOK_CALLBACK =
     std::function<void(std::shared_ptr<Arion> arion, std::shared_ptr<Arion> child, void *user_data)>;
-using SYSCALL_HOOK_CALLBACK =
-    std::function<void(std::shared_ptr<Arion> arion, uint64_t sysno, std::vector<arion::SYS_PARAM> params, bool* handled, void *user_data)>;
-using HOOK_CALLBACK =
-    std::variant<NO_PARAM_HOOK_CALLBACK, NO_PARAM_BOOL_HOOK_CALLBACK, U32_HOOK_CALLBACK, ADDR_SZ_HOOK_CALLBACK,
-                 MEM_HOOK_CALLBACK, EDGE_HOOK_CALLBACK, TCG_HOOK_CALLBACK, TLB_HOOK_CALLBACK, PROCESS_HOOK_CALLBACK, SYSCALL_HOOK_CALLBACK>;
+using SYSCALL_HOOK_CALLBACK = std::function<void(std::shared_ptr<Arion> arion, uint64_t sysno,
+                                                 std::vector<SYS_PARAM> params, bool *handled, void *user_data)>;
+using HOOK_CALLBACK = std::variant<NO_PARAM_HOOK_CALLBACK, NO_PARAM_BOOL_HOOK_CALLBACK, U32_HOOK_CALLBACK,
+                                   ADDR_SZ_HOOK_CALLBACK, MEM_HOOK_CALLBACK, EDGE_HOOK_CALLBACK, TCG_HOOK_CALLBACK,
+                                   TLB_HOOK_CALLBACK, PROCESS_HOOK_CALLBACK, SYSCALL_HOOK_CALLBACK>;
 
 enum ARION_HOOK_TYPE
 {
@@ -115,52 +117,51 @@ class ARION_EXPORT HooksManager
     std::stack<HOOK_ID> free_hook_ids;
     HOOK_ID gen_next_id();
     template <typename... UcParams>
-    HOOK_ID hook_uc(ARION_HOOK_TYPE type, HOOK_CALLBACK callback, void *user_data, arion::ADDR start = 0,
-                    arion::ADDR end = ARION_MAX_U64, UcParams... uc_params);
+    HOOK_ID hook_uc(ARION_HOOK_TYPE type, HOOK_CALLBACK callback, void *user_data, ADDR start = 0,
+                    ADDR end = ARION_MAX_U64, UcParams... uc_params);
     HOOK_ID hook_arion(ARION_HOOK_TYPE type, HOOK_CALLBACK callback, void *user_data);
 
   public:
     HooksManager(std::weak_ptr<Arion> arion);
     ~HooksManager();
     static std::unique_ptr<HooksManager> initialize(std::weak_ptr<Arion> arion);
-    HOOK_ID ARION_EXPORT hook_intr(U32_HOOK_CALLBACK callback, arion::ADDR start = 0, arion::ADDR end = ARION_MAX_U64,
+    HOOK_ID ARION_EXPORT hook_intr(U32_HOOK_CALLBACK callback, ADDR start = 0, ADDR end = ARION_MAX_U64,
                                    void *user_data = nullptr);
-    HOOK_ID ARION_EXPORT hook_insn(NO_PARAM_HOOK_CALLBACK callback, uint64_t insn, arion::ADDR start = 0,
-                                   arion::ADDR end = ARION_MAX_U64, void *user_data = nullptr);
-    HOOK_ID ARION_EXPORT hook_code(ADDR_SZ_HOOK_CALLBACK callback, arion::ADDR start = 0,
-                                   arion::ADDR end = ARION_MAX_U64, void *user_data = nullptr);
-    HOOK_ID ARION_EXPORT hook_addr(ADDR_SZ_HOOK_CALLBACK callback, arion::ADDR addr, void *user_data = nullptr);
-    HOOK_ID ARION_EXPORT hook_block(ADDR_SZ_HOOK_CALLBACK callback, arion::ADDR start = 0,
-                                    arion::ADDR end = ARION_MAX_U64, void *user_data = nullptr);
-    HOOK_ID ARION_EXPORT hook_mem_read_unmapped(MEM_HOOK_CALLBACK callback, arion::ADDR start = 0,
-                                                arion::ADDR end = ARION_MAX_U64, void *user_data = nullptr);
-    HOOK_ID ARION_EXPORT hook_mem_write_unmapped(MEM_HOOK_CALLBACK callback, arion::ADDR start = 0,
-                                                 arion::ADDR end = ARION_MAX_U64, void *user_data = nullptr);
-    HOOK_ID ARION_EXPORT hook_mem_fetch_unmapped(MEM_HOOK_CALLBACK callback, arion::ADDR start = 0,
-                                                 arion::ADDR end = ARION_MAX_U64, void *user_data = nullptr);
-    HOOK_ID ARION_EXPORT hook_mem_read_prot(MEM_HOOK_CALLBACK callback, arion::ADDR start = 0,
-                                            arion::ADDR end = ARION_MAX_U64, void *user_data = nullptr);
-    HOOK_ID ARION_EXPORT hook_mem_write_prot(MEM_HOOK_CALLBACK callback, arion::ADDR start = 0,
-                                             arion::ADDR end = ARION_MAX_U64, void *user_data = nullptr);
-    HOOK_ID ARION_EXPORT hook_mem_fetch_prot(MEM_HOOK_CALLBACK callback, arion::ADDR start = 0,
-                                             arion::ADDR end = ARION_MAX_U64, void *user_data = nullptr);
-    HOOK_ID ARION_EXPORT hook_mem_read(MEM_HOOK_CALLBACK callback, arion::ADDR start = 0,
-                                       arion::ADDR end = ARION_MAX_U64, void *user_data = nullptr);
-    HOOK_ID ARION_EXPORT hook_mem_write(MEM_HOOK_CALLBACK callback, arion::ADDR start = 0,
-                                        arion::ADDR end = ARION_MAX_U64, void *user_data = nullptr);
-    HOOK_ID ARION_EXPORT hook_mem_fetch(MEM_HOOK_CALLBACK callback, arion::ADDR start = 0,
-                                        arion::ADDR end = ARION_MAX_U64, void *user_data = nullptr);
-    HOOK_ID ARION_EXPORT hook_mem_read_after(MEM_HOOK_CALLBACK callback, arion::ADDR start = 0,
-                                             arion::ADDR end = ARION_MAX_U64, void *user_data = nullptr);
-    HOOK_ID ARION_EXPORT hook_insn_invalid(NO_PARAM_BOOL_HOOK_CALLBACK callback, arion::ADDR start = 0,
-                                           arion::ADDR end = ARION_MAX_U64, void *user_data = nullptr);
-    HOOK_ID ARION_EXPORT hook_edge_generated(EDGE_HOOK_CALLBACK callback, arion::ADDR start = 0,
-                                             arion::ADDR end = ARION_MAX_U64, void *user_data = nullptr);
-    HOOK_ID ARION_EXPORT hook_tcg_opcode(TCG_HOOK_CALLBACK callback, uint64_t aux1, uint64_t aux2,
-                                         arion::ADDR start = 0, arion::ADDR end = ARION_MAX_U64,
-                                         void *user_data = nullptr);
-    HOOK_ID ARION_EXPORT hook_tlb_fill(TLB_HOOK_CALLBACK callback, arion::ADDR start = 0,
-                                       arion::ADDR end = ARION_MAX_U64, void *user_data = nullptr);
+    HOOK_ID ARION_EXPORT hook_insn(NO_PARAM_HOOK_CALLBACK callback, uint64_t insn, ADDR start = 0,
+                                   ADDR end = ARION_MAX_U64, void *user_data = nullptr);
+    HOOK_ID ARION_EXPORT hook_code(ADDR_SZ_HOOK_CALLBACK callback, ADDR start = 0, ADDR end = ARION_MAX_U64,
+                                   void *user_data = nullptr);
+    HOOK_ID ARION_EXPORT hook_addr(ADDR_SZ_HOOK_CALLBACK callback, ADDR addr, void *user_data = nullptr);
+    HOOK_ID ARION_EXPORT hook_block(ADDR_SZ_HOOK_CALLBACK callback, ADDR start = 0, ADDR end = ARION_MAX_U64,
+                                    void *user_data = nullptr);
+    HOOK_ID ARION_EXPORT hook_mem_read_unmapped(MEM_HOOK_CALLBACK callback, ADDR start = 0, ADDR end = ARION_MAX_U64,
+                                                void *user_data = nullptr);
+    HOOK_ID ARION_EXPORT hook_mem_write_unmapped(MEM_HOOK_CALLBACK callback, ADDR start = 0, ADDR end = ARION_MAX_U64,
+                                                 void *user_data = nullptr);
+    HOOK_ID ARION_EXPORT hook_mem_fetch_unmapped(MEM_HOOK_CALLBACK callback, ADDR start = 0, ADDR end = ARION_MAX_U64,
+                                                 void *user_data = nullptr);
+    HOOK_ID ARION_EXPORT hook_mem_read_prot(MEM_HOOK_CALLBACK callback, ADDR start = 0, ADDR end = ARION_MAX_U64,
+                                            void *user_data = nullptr);
+    HOOK_ID ARION_EXPORT hook_mem_write_prot(MEM_HOOK_CALLBACK callback, ADDR start = 0, ADDR end = ARION_MAX_U64,
+                                             void *user_data = nullptr);
+    HOOK_ID ARION_EXPORT hook_mem_fetch_prot(MEM_HOOK_CALLBACK callback, ADDR start = 0, ADDR end = ARION_MAX_U64,
+                                             void *user_data = nullptr);
+    HOOK_ID ARION_EXPORT hook_mem_read(MEM_HOOK_CALLBACK callback, ADDR start = 0, ADDR end = ARION_MAX_U64,
+                                       void *user_data = nullptr);
+    HOOK_ID ARION_EXPORT hook_mem_write(MEM_HOOK_CALLBACK callback, ADDR start = 0, ADDR end = ARION_MAX_U64,
+                                        void *user_data = nullptr);
+    HOOK_ID ARION_EXPORT hook_mem_fetch(MEM_HOOK_CALLBACK callback, ADDR start = 0, ADDR end = ARION_MAX_U64,
+                                        void *user_data = nullptr);
+    HOOK_ID ARION_EXPORT hook_mem_read_after(MEM_HOOK_CALLBACK callback, ADDR start = 0, ADDR end = ARION_MAX_U64,
+                                             void *user_data = nullptr);
+    HOOK_ID ARION_EXPORT hook_insn_invalid(NO_PARAM_BOOL_HOOK_CALLBACK callback, ADDR start = 0,
+                                           ADDR end = ARION_MAX_U64, void *user_data = nullptr);
+    HOOK_ID ARION_EXPORT hook_edge_generated(EDGE_HOOK_CALLBACK callback, ADDR start = 0, ADDR end = ARION_MAX_U64,
+                                             void *user_data = nullptr);
+    HOOK_ID ARION_EXPORT hook_tcg_opcode(TCG_HOOK_CALLBACK callback, uint64_t aux1, uint64_t aux2, ADDR start = 0,
+                                         ADDR end = ARION_MAX_U64, void *user_data = nullptr);
+    HOOK_ID ARION_EXPORT hook_tlb_fill(TLB_HOOK_CALLBACK callback, ADDR start = 0, ADDR end = ARION_MAX_U64,
+                                       void *user_data = nullptr);
     HOOK_ID ARION_EXPORT hook_fork(PROCESS_HOOK_CALLBACK callback, void *user_data = nullptr);
     HOOK_ID ARION_EXPORT hook_execve(PROCESS_HOOK_CALLBACK callback, void *user_data = nullptr);
     HOOK_ID ARION_EXPORT hook_syscall(SYSCALL_HOOK_CALLBACK callback, void *user_data = nullptr);
@@ -192,5 +193,7 @@ class ARION_EXPORT HooksManager
         }
     }
 };
+
+}; // namespace arion
 
 #endif // ARION_HOOKS_MANAGER_HPP

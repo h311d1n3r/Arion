@@ -6,6 +6,9 @@
 #include <memory>
 #include <string>
 
+namespace arion
+{
+
 class Arion;
 
 struct ARION_EXECUTABLE_PARSER_ATTRIBUTES
@@ -14,10 +17,10 @@ struct ARION_EXECUTABLE_PARSER_ATTRIBUTES
     std::string usr_path;
     std::string path;
     std::vector<std::string> args;
-    arion::CPU_ARCH arch = arion::CPU_ARCH::UNKNOWN_ARCH;
-    arion::LINKAGE_TYPE linkage = arion::LINKAGE_TYPE::UNKNOWN_LINKAGE;
+    CPU_ARCH arch = CPU_ARCH::UNKNOWN_ARCH;
+    LINKAGE_TYPE linkage = LINKAGE_TYPE::UNKNOWN_LINKAGE;
     std::string interpreter_path;
-    arion::ADDR entry = 0;
+    ADDR entry = 0;
 };
 
 class ExecutableParser
@@ -25,13 +28,15 @@ class ExecutableParser
   protected:
     std::weak_ptr<Arion> arion;
     std::shared_ptr<ARION_EXECUTABLE_PARSER_ATTRIBUTES> attrs;
-    std::vector<std::shared_ptr<struct arion::SEGMENT>> segments;
+    std::vector<std::shared_ptr<struct SEGMENT>> segments;
 
   public:
     ExecutableParser(std::weak_ptr<Arion> arion) : arion(arion) {};
     virtual void process() = 0;
     std::shared_ptr<ARION_EXECUTABLE_PARSER_ATTRIBUTES> get_attrs();
-    std::vector<std::shared_ptr<struct arion::SEGMENT>> get_segments();
+    std::vector<std::shared_ptr<struct SEGMENT>> get_segments();
 };
+
+}; // namespace arion
 
 #endif // ARION_EXECUTABLE_PARSER_HPP

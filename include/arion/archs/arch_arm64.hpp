@@ -546,7 +546,7 @@ inline std::vector<arion::REG> CTXT_REGS = {
     UC_ARM64_REG_V24, UC_ARM64_REG_V25, UC_ARM64_REG_V26, UC_ARM64_REG_V27,  UC_ARM64_REG_V28,  UC_ARM64_REG_V29,
     UC_ARM64_REG_V30, UC_ARM64_REG_V31};
 
-inline std::map<uint64_t, CPU_INTR> IDT = {/*{1, UDEF},
+inline std::map<uint64_t, arion::CPU_INTR> IDT = {/*{1, UDEF},
                                            {2, SWI},
                                            {3, PREFETCH_ABORT},
                                            {4, DATA_ABORT},
@@ -568,13 +568,13 @@ inline std::map<uint64_t, CPU_INTR> IDT = {/*{1, UDEF},
                                            {21, LSERR},
                                            {22, UNALIGNED}*/};
 
-inline ABI_REGISTERS ABI_REGS = ABI_REGISTERS(UC_ARM64_REG_PC, UC_ARM64_REG_SP);
+inline arion::ABI_REGISTERS ABI_REGS = arion::ABI_REGISTERS(UC_ARM64_REG_PC, UC_ARM64_REG_SP);
 
-inline ABI_CALLING_CONVENTION ABI_CALLING_CONV =
-    ABI_CALLING_CONVENTION(UC_ARM64_REG_X0, {UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X2, UC_ARM64_REG_X3,
-                                             UC_ARM64_REG_X4, UC_ARM64_REG_X5, UC_ARM64_REG_X6, UC_ARM64_REG_X7});
+inline arion::ABI_CALLING_CONVENTION ABI_CALLING_CONV = arion::ABI_CALLING_CONVENTION(
+    UC_ARM64_REG_X0, {UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X2, UC_ARM64_REG_X3, UC_ARM64_REG_X4,
+                      UC_ARM64_REG_X5, UC_ARM64_REG_X6, UC_ARM64_REG_X7});
 
-inline ABI_SYSCALLING_CONVENTION ABI_SYSCALLING_CONV = ABI_SYSCALLING_CONVENTION(
+inline arion::ABI_SYSCALLING_CONVENTION ABI_SYSCALLING_CONV = arion::ABI_SYSCALLING_CONVENTION(
     UC_ARM64_REG_X8, UC_ARM64_REG_X0,
     {UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X2, UC_ARM64_REG_X3, UC_ARM64_REG_X4, UC_ARM64_REG_X5});
 
@@ -590,21 +590,21 @@ inline const uint16_t ARCH_SZ = 64;
 
 inline arion::CPU_ARCH ARCH = arion::CPU_ARCH::ARM64_ARCH;
 
-inline ARCH_ATTRIBUTES ARCH_ATTRS = ARCH_ATTRIBUTES(ARCH, ARCH_SZ, PTR_SZ, HWCAP, HWCAP2, SEG_FLAGS, ABI_REGS,
-                                                    ABI_CALLING_CONV, ABI_SYSCALLING_CONV, NAME_BY_SYSCALL_NO);
-}; // namespace arion_arm64
+inline arion::ARCH_ATTRIBUTES ARCH_ATTRS =
+    arion::ARCH_ATTRIBUTES(ARCH, ARCH_SZ, PTR_SZ, HWCAP, HWCAP2, SEG_FLAGS, ABI_REGS, ABI_CALLING_CONV,
+                           ABI_SYSCALLING_CONV, NAME_BY_SYSCALL_NO);
 
-class ArchManagerARM64 : public ArchManager
+class ArchManagerARM64 : public arion::ArchManager
 {
   private:
-    static void int_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data);
+    static void int_hook(std::shared_ptr<arion::Arion> arion, uint32_t intno, void *user_data);
     void enable_lse();
     void enable_vfp();
     void setup() override;
 
   public:
     ArchManagerARM64()
-        : ArchManager(std::make_shared<ARCH_ATTRIBUTES>(arion_arm64::ARCH_ATTRS), arion_arm64::ARCH_REGS,
+        : ArchManager(std::make_shared<arion::ARCH_ATTRIBUTES>(arion_arm64::ARCH_ATTRS), arion_arm64::ARCH_REGS,
                       arion_arm64::ARCH_REGS_SZ, arion_arm64::CTXT_REGS, arion_arm64::IDT, true) {};
 
     ks_engine *curr_ks() override;
@@ -612,5 +612,7 @@ class ArchManagerARM64 : public ArchManager
     arion::ADDR dump_tls() override;
     void load_tls(arion::ADDR new_tls) override;
 };
+
+}; // namespace arion_arm64
 
 #endif // ARION_ARCH_ARM64_HPP

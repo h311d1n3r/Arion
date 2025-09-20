@@ -16,7 +16,6 @@
 namespace arion
 {
 using KERNEL_SEG_FLAGS = uint8_t;
-};
 
 #define ARION_VVAR_PRESENT (1 << 0)
 #define ARION_VDSO_PRESENT (1 << 1)
@@ -29,42 +28,42 @@ class Arion;
 
 struct ARION_EXPORT ABI_REGISTERS
 {
-    arion::REG pc;
-    arion::REG sp;
-    ABI_REGISTERS(arion::REG pc, arion::REG sp) : pc(pc), sp(sp) {};
+    REG pc;
+    REG sp;
+    ABI_REGISTERS(REG pc, REG sp) : pc(pc), sp(sp) {};
 };
 
 struct ARION_EXPORT ABI_CALLING_CONVENTION
 {
-    arion::REG ret_reg;
-    std::vector<arion::REG> param_regs;
-    ABI_CALLING_CONVENTION(arion::REG ret_reg, std::vector<arion::REG> param_regs)
+    REG ret_reg;
+    std::vector<REG> param_regs;
+    ABI_CALLING_CONVENTION(REG ret_reg, std::vector<REG> param_regs)
         : ret_reg(ret_reg), param_regs(std::move(param_regs)) {};
 };
 
 struct ARION_EXPORT ABI_SYSCALLING_CONVENTION
 {
-    arion::REG sysno_reg;
-    arion::REG ret_reg;
-    std::vector<arion::REG> sys_param_regs;
-    ABI_SYSCALLING_CONVENTION(arion::REG sysno_reg, arion::REG ret_reg, std::vector<arion::REG> sys_param_regs)
+    REG sysno_reg;
+    REG ret_reg;
+    std::vector<REG> sys_param_regs;
+    ABI_SYSCALLING_CONVENTION(REG sysno_reg, REG ret_reg, std::vector<REG> sys_param_regs)
         : sysno_reg(sysno_reg), ret_reg(ret_reg), sys_param_regs(std::move(sys_param_regs)) {};
 };
 
 struct ARION_EXPORT ARCH_ATTRIBUTES
 {
-    arion::CPU_ARCH arch;
+    CPU_ARCH arch;
     uint16_t arch_sz;
     size_t ptr_sz;
-    arion::KERNEL_SEG_FLAGS seg_flags;
+    KERNEL_SEG_FLAGS seg_flags;
     uint32_t hwcap;
     uint32_t hwcap2;
     ABI_REGISTERS regs;
     ABI_CALLING_CONVENTION calling_conv;
     ABI_SYSCALLING_CONVENTION syscalling_conv;
     std::map<uint64_t, std::string> name_by_syscall_no;
-    ARCH_ATTRIBUTES(arion::CPU_ARCH arch, uint16_t arch_sz, size_t ptr_sz, uint32_t hwcap, uint32_t hwcap2,
-                    arion::KERNEL_SEG_FLAGS seg_flags, ABI_REGISTERS regs, ABI_CALLING_CONVENTION calling_conv,
+    ARCH_ATTRIBUTES(CPU_ARCH arch, uint16_t arch_sz, size_t ptr_sz, uint32_t hwcap, uint32_t hwcap2,
+                    KERNEL_SEG_FLAGS seg_flags, ABI_REGISTERS regs, ABI_CALLING_CONVENTION calling_conv,
                     ABI_SYSCALLING_CONVENTION syscalling_conv, std::map<uint64_t, std::string> &name_by_syscall_no)
         : arch(arch), arch_sz(arch_sz), ptr_sz(ptr_sz), seg_flags(seg_flags), hwcap(hwcap), hwcap2(hwcap2), regs(regs),
           calling_conv(calling_conv), syscalling_conv(syscalling_conv), name_by_syscall_no(name_by_syscall_no) {};
@@ -129,41 +128,41 @@ class ARION_EXPORT ArchManager
     std::vector<ks_engine *> ks;
     std::vector<csh *> cs;
     std::shared_ptr<ARCH_ATTRIBUTES> attrs;
-    std::map<std::string, arion::REG> arch_regs;
-    std::map<arion::REG, uint8_t> arch_regs_sz;
-    std::vector<arion::REG> ctxt_regs;
+    std::map<std::string, REG> arch_regs;
+    std::map<REG, uint8_t> arch_regs_sz;
+    std::vector<REG> ctxt_regs;
     std::map<uint64_t, CPU_INTR> cpu_idt;
     bool hooks_intr;
-    ArchManager(std::shared_ptr<ARCH_ATTRIBUTES> attrs, std::map<std::string, arion::REG> arch_regs,
-                std::map<arion::REG, uint8_t> arch_regs_sz, std::vector<arion::REG> ctxt_regs,
-                std::map<uint64_t, CPU_INTR> cpu_idt, bool hooks_intr)
+    ArchManager(std::shared_ptr<ARCH_ATTRIBUTES> attrs, std::map<std::string, REG> arch_regs,
+                std::map<REG, uint8_t> arch_regs_sz, std::vector<REG> ctxt_regs, std::map<uint64_t, CPU_INTR> cpu_idt,
+                bool hooks_intr)
         : attrs(attrs), arch_regs(arch_regs), arch_regs_sz(arch_regs_sz), ctxt_regs(ctxt_regs), cpu_idt(cpu_idt),
           hooks_intr(hooks_intr) {};
 
   public:
     virtual ~ArchManager() = default;
-    static std::unique_ptr<ArchManager> initialize(std::weak_ptr<Arion> arion, arion::CPU_ARCH arch,
-                                                   arion::PLATFORM platform = arion::PLATFORM::UNKNOWN_PLATFORM);
+    static std::unique_ptr<ArchManager> initialize(std::weak_ptr<Arion> arion, CPU_ARCH arch,
+                                                   PLATFORM platform = PLATFORM::UNKNOWN_PLATFORM);
     static int get_signal_from_intr(CPU_INTR intr);
     std::shared_ptr<ARCH_ATTRIBUTES> ARION_EXPORT get_attrs();
     bool does_hook_intr();
     std::string ARION_EXPORT get_name_by_syscall_no(uint64_t syscall_no);
     bool ARION_EXPORT has_syscall_with_name(std::string name);
     uint64_t ARION_EXPORT get_syscall_no_by_name(std::string name);
-    std::vector<arion::REG> ARION_EXPORT get_context_regs();
-    std::unique_ptr<std::map<arion::REG, arion::RVAL>> ARION_EXPORT dump_regs();
-    void ARION_EXPORT load_regs(std::unique_ptr<std::map<arion::REG, arion::RVAL>> regs);
+    std::vector<REG> ARION_EXPORT get_context_regs();
+    std::unique_ptr<std::map<REG, RVAL>> ARION_EXPORT dump_regs();
+    void ARION_EXPORT load_regs(std::unique_ptr<std::map<REG, RVAL>> regs);
     bool ARION_EXPORT has_idt_entry(uint64_t intno);
     CPU_INTR ARION_EXPORT get_idt_entry(uint64_t intno);
-    std::unique_ptr<std::map<arion::REG, arion::RVAL>> init_thread_regs(arion::ADDR pc, arion::ADDR sp);
+    std::unique_ptr<std::map<REG, RVAL>> init_thread_regs(ADDR pc, ADDR sp);
     virtual ks_engine ARION_EXPORT *curr_ks() = 0;
     virtual csh ARION_EXPORT *curr_cs() = 0;
     virtual void setup() = 0;
-    virtual arion::ADDR ARION_EXPORT dump_tls() = 0;
-    virtual void ARION_EXPORT load_tls(arion::ADDR new_tls) = 0;
-    virtual void prerun_hook(arion::ADDR &start) {};
+    virtual ADDR ARION_EXPORT dump_tls() = 0;
+    virtual void ARION_EXPORT load_tls(ADDR new_tls) = 0;
+    virtual void prerun_hook(ADDR &start) {};
 
-    template <typename T> T ARION_EXPORT read_reg(arion::REG reg)
+    template <typename T> T ARION_EXPORT read_reg(REG reg)
     {
         auto reg_sz_it = this->arch_regs_sz.find(reg);
         if (reg_sz_it == this->arch_regs_sz.end())
@@ -186,9 +185,9 @@ class ARION_EXPORT ArchManager
         return this->read_reg<T>(reg_it->second);
     }
 
-    uint64_t read_arch_reg(arion::REG reg);
+    uint64_t read_arch_reg(REG reg);
 
-    template <typename T> void ARION_EXPORT write_reg(arion::REG reg, T val)
+    template <typename T> void ARION_EXPORT write_reg(REG reg, T val)
     {
         auto reg_sz_it = this->arch_regs_sz.find(reg);
         if (reg_sz_it == this->arch_regs_sz.end())
@@ -209,7 +208,9 @@ class ARION_EXPORT ArchManager
         this->write_reg(reg_it->second, val);
     }
 
-    void write_arch_reg(arion::REG reg, uint64_t val);
+    void write_arch_reg(REG reg, uint64_t val);
 };
+
+}; // namespace arion
 
 #endif // ARION_ARCH_MANAGER_HPP

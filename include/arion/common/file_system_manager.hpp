@@ -8,6 +8,9 @@
 #include <string>
 #include <vector>
 
+namespace arion
+{
+
 class Arion;
 
 struct ARION_EXPORT ARION_FILE
@@ -27,8 +30,8 @@ struct ARION_EXPORT ARION_FILE
         : fd(arion_f->fd), path(arion_f->path), flags(arion_f->flags), mode(arion_f->mode), blocking(arion_f->blocking),
           saved_off(arion_f->saved_off) {};
 };
-std::vector<arion::BYTE> serialize_arion_file(ARION_FILE *arion_f);
-ARION_FILE *deserialize_arion_file(std::vector<arion::BYTE> srz_file);
+std::vector<BYTE> serialize_arion_file(ARION_FILE *arion_f);
+ARION_FILE *deserialize_arion_file(std::vector<BYTE> srz_file);
 
 class ProcFSManager
 {
@@ -68,5 +71,7 @@ class ARION_EXPORT FileSystemManager
     bool ARION_EXPORT is_in_fs(std::string path);
     std::string ARION_EXPORT to_fs_path(std::string path);
 };
+
+}; // namespace arion
 
 #endif // ARION_FS_MANAGER_HPP

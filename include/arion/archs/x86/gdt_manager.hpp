@@ -2,6 +2,8 @@
 #define ARION_GDT_MANAGER_HPP
 
 #include <arion/common/global_defs.hpp>
+#include <cstdint>
+#include <memory>
 
 #define ARION_GDT_ADDR 0xC0000000
 #define ARION_GDT_LIMIT 0x1000
@@ -37,15 +39,15 @@
 #define ARION_S_PRIV_1 0x1
 #define ARION_S_PRIV_0 0x0
 
-#include <cstdint>
-#include <memory>
+namespace arion
+{
 
 class Arion;
 
 class GdtManager
 {
   private:
-    arion::ADDR gdt_addr;
+    ADDR gdt_addr;
     std::weak_ptr<Arion> arion;
     uint64_t setup_entry(uint32_t base, uint32_t limit, uint8_t access, uint8_t flags);
 
@@ -58,5 +60,7 @@ class GdtManager
     uint32_t get_segment_base(uint16_t selector);
     void insert_entry(uint8_t idx, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags);
 };
+
+}; // namespace arion
 
 #endif // ARION_GDT_MANAGER_HPP

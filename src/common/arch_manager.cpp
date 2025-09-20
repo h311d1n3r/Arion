@@ -72,16 +72,16 @@ std::unique_ptr<ArchManager> ArchManager::initialize(std::weak_ptr<Arion> arion,
         switch (arch)
         {
         case CPU_ARCH::X86_ARCH:
-            manager = std::make_unique<ArchManagerLinuxX86>();
+            manager = std::make_unique<arion_lnx_x86::ArchManagerLinuxX86>();
             break;
         case CPU_ARCH::X8664_ARCH:
-            manager = std::make_unique<ArchManagerLinuxX8664>();
+            manager = std::make_unique<arion_lnx_x86_64::ArchManagerLinuxX8664>();
             break;
         case CPU_ARCH::ARM_ARCH:
-            manager = std::make_unique<ArchManagerLinuxARM>();
+            manager = std::make_unique<arion_lnx_arm::ArchManagerLinuxARM>();
             break;
         case CPU_ARCH::ARM64_ARCH:
-            manager = std::make_unique<ArchManagerLinuxARM64>();
+            manager = std::make_unique<arion_lnx_arm64::ArchManagerLinuxARM64>();
             break;
         default:
             throw UnsupportedCpuArchException();
@@ -92,16 +92,16 @@ std::unique_ptr<ArchManager> ArchManager::initialize(std::weak_ptr<Arion> arion,
         switch (arch)
         {
         case CPU_ARCH::X86_ARCH:
-            manager = std::make_unique<ArchManagerX86>();
+            manager = std::make_unique<arion_x86::ArchManagerX86>();
             break;
         case CPU_ARCH::X8664_ARCH:
-            manager = std::make_unique<ArchManagerX8664>();
+            manager = std::make_unique<arion_x86_64::ArchManagerX8664>();
             break;
         case CPU_ARCH::ARM_ARCH:
-            manager = std::make_unique<ArchManagerARM>();
+            manager = std::make_unique<arion_arm::ArchManagerARM>();
             break;
         case CPU_ARCH::ARM64_ARCH:
-            manager = std::make_unique<ArchManagerARM64>();
+            manager = std::make_unique<arion_arm64::ArchManagerARM64>();
             break;
         default:
             throw UnsupportedCpuArchException();

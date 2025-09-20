@@ -5,13 +5,15 @@
 #include <arion/common/global_excepts.hpp>
 #include <arion/utils/struct_utils.hpp>
 #include <arion/utils/type_utils.hpp>
-#include <csignal>
 #include <fcntl.h>
 #include <linux/futex.h>
 #include <linux/sched.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/un.h>
+
+namespace arion
+{
 
 // Defined in https://elixir.bootlin.com/linux/v6.12.6/source/arch/x86/include/uapi/asm/signal.h#L93
 struct ksigaction
@@ -66,7 +68,7 @@ struct elf_prstatus_common
 typedef unsigned long elf_greg_t;
 typedef unsigned long elf_freg_t[3];
 
-arion::PROT_FLAGS kernel_prot_to_arion_prot(int kflags);
+PROT_FLAGS kernel_prot_to_arion_prot(int kflags);
 
 class ArionErrCodeType : public ArionType
 {
@@ -371,45 +373,47 @@ class ArionSocketTypeType : public ArionFlagType
 };
 extern std::shared_ptr<ArionSocketTypeType> ARION_SOCKET_TYPE_TYPE;
 
+}; // namespace arion
+
 namespace arion_poly_struct
 {
 class StatStructFactory : public PolymorphicStructFactory<struct stat>
 {
   public:
     StatStructFactory()
-        : PolymorphicStructFactory({{PTR_SZ, ARION_INT_TYPE, "st_dev"},
-                                    {PTR_SZ, ARION_INT_TYPE, "st_ino"},
-                                    {{32}, V16, ARION_FILE_MODE_TYPE, "st_mode"},
-                                    {{arion::CPU_ARCH::ARM64_ARCH}, V32, ARION_FILE_MODE_TYPE, "st_mode"},
-                                    {{32}, V16, ARION_INT_TYPE, "st_nlink"},
-                                    {{arion::CPU_ARCH::X8664_ARCH}, V64, ARION_INT_TYPE, "st_nlink"},
-                                    {{arion::CPU_ARCH::ARM64_ARCH}, V32, ARION_INT_TYPE, "st_nlink"},
-                                    {{arion::CPU_ARCH::X8664_ARCH}, V32, ARION_FILE_MODE_TYPE, "st_mode"},
-                                    {{32}, V16, ARION_INT_TYPE, "st_uid"},
-                                    {{64}, V32, ARION_INT_TYPE, "st_uid"},
-                                    {{32}, V16, ARION_INT_TYPE, "st_gid"},
-                                    {{64}, V32, ARION_INT_TYPE, "st_gid"},
-                                    {PTR_SZ, ARION_INT_TYPE, "st_rdev"},
-                                    {{arion::CPU_ARCH::ARM64_ARCH}, PTR_SZ, ARION_INT_TYPE, "__pad1"},
-                                    {PTR_SZ, ARION_INT_TYPE, "st_size"},
-                                    {{32}, PTR_SZ, ARION_INT_TYPE, "st_blksize"},
-                                    {{arion::CPU_ARCH::X8664_ARCH}, PTR_SZ, ARION_INT_TYPE, "st_blksize"},
-                                    {{arion::CPU_ARCH::ARM64_ARCH}, V32, ARION_INT_TYPE, "st_blksize"},
-                                    {{arion::CPU_ARCH::ARM64_ARCH}, V32, ARION_INT_TYPE, "__pad2"},
-                                    {PTR_SZ, ARION_INT_TYPE, "st_blocks"},
-                                    {PTR_SZ, ARION_INT_TYPE, "st_atime"},
-                                    {PTR_SZ, ARION_INT_TYPE, "st_atime_ns"},
-                                    {PTR_SZ, ARION_INT_TYPE, "st_mtime"},
-                                    {PTR_SZ, ARION_INT_TYPE, "st_mtime_ns"},
-                                    {PTR_SZ, ARION_INT_TYPE, "st_ctime"},
-                                    {PTR_SZ, ARION_INT_TYPE, "st_ctime_ns"},
-                                    {{32}, PTR_SZ, ARION_INT_TYPE, "__unused1"},
-                                    {{arion::CPU_ARCH::X8664_ARCH}, PTR_SZ, ARION_INT_TYPE, "__unused1"},
-                                    {{arion::CPU_ARCH::ARM64_ARCH}, V32, ARION_INT_TYPE, "__unused1"},
-                                    {{32}, PTR_SZ, ARION_INT_TYPE, "__unused2"},
-                                    {{arion::CPU_ARCH::X8664_ARCH}, PTR_SZ, ARION_INT_TYPE, "__unused2"},
-                                    {{arion::CPU_ARCH::ARM64_ARCH}, V32, ARION_INT_TYPE, "__unused2"},
-                                    {{arion::CPU_ARCH::X8664_ARCH}, PTR_SZ, ARION_INT_TYPE, "__unused3"}}) {};
+        : PolymorphicStructFactory({{PTR_SZ, arion::ARION_INT_TYPE, "st_dev"},
+                                    {PTR_SZ, arion::ARION_INT_TYPE, "st_ino"},
+                                    {{32}, V16, arion::ARION_FILE_MODE_TYPE, "st_mode"},
+                                    {{arion::CPU_ARCH::ARM64_ARCH}, V32, arion::ARION_FILE_MODE_TYPE, "st_mode"},
+                                    {{32}, V16, arion::ARION_INT_TYPE, "st_nlink"},
+                                    {{arion::CPU_ARCH::X8664_ARCH}, V64, arion::ARION_INT_TYPE, "st_nlink"},
+                                    {{arion::CPU_ARCH::ARM64_ARCH}, V32, arion::ARION_INT_TYPE, "st_nlink"},
+                                    {{arion::CPU_ARCH::X8664_ARCH}, V32, arion::ARION_FILE_MODE_TYPE, "st_mode"},
+                                    {{32}, V16, arion::ARION_INT_TYPE, "st_uid"},
+                                    {{64}, V32, arion::ARION_INT_TYPE, "st_uid"},
+                                    {{32}, V16, arion::ARION_INT_TYPE, "st_gid"},
+                                    {{64}, V32, arion::ARION_INT_TYPE, "st_gid"},
+                                    {PTR_SZ, arion::ARION_INT_TYPE, "st_rdev"},
+                                    {{arion::CPU_ARCH::ARM64_ARCH}, PTR_SZ, arion::ARION_INT_TYPE, "__pad1"},
+                                    {PTR_SZ, arion::ARION_INT_TYPE, "st_size"},
+                                    {{32}, PTR_SZ, arion::ARION_INT_TYPE, "st_blksize"},
+                                    {{arion::CPU_ARCH::X8664_ARCH}, PTR_SZ, arion::ARION_INT_TYPE, "st_blksize"},
+                                    {{arion::CPU_ARCH::ARM64_ARCH}, V32, arion::ARION_INT_TYPE, "st_blksize"},
+                                    {{arion::CPU_ARCH::ARM64_ARCH}, V32, arion::ARION_INT_TYPE, "__pad2"},
+                                    {PTR_SZ, arion::ARION_INT_TYPE, "st_blocks"},
+                                    {PTR_SZ, arion::ARION_INT_TYPE, "st_atime"},
+                                    {PTR_SZ, arion::ARION_INT_TYPE, "st_atime_ns"},
+                                    {PTR_SZ, arion::ARION_INT_TYPE, "st_mtime"},
+                                    {PTR_SZ, arion::ARION_INT_TYPE, "st_mtime_ns"},
+                                    {PTR_SZ, arion::ARION_INT_TYPE, "st_ctime"},
+                                    {PTR_SZ, arion::ARION_INT_TYPE, "st_ctime_ns"},
+                                    {{32}, PTR_SZ, arion::ARION_INT_TYPE, "__unused1"},
+                                    {{arion::CPU_ARCH::X8664_ARCH}, PTR_SZ, arion::ARION_INT_TYPE, "__unused1"},
+                                    {{arion::CPU_ARCH::ARM64_ARCH}, V32, arion::ARION_INT_TYPE, "__unused1"},
+                                    {{32}, PTR_SZ, arion::ARION_INT_TYPE, "__unused2"},
+                                    {{arion::CPU_ARCH::X8664_ARCH}, PTR_SZ, arion::ARION_INT_TYPE, "__unused2"},
+                                    {{arion::CPU_ARCH::ARM64_ARCH}, V32, arion::ARION_INT_TYPE, "__unused2"},
+                                    {{arion::CPU_ARCH::X8664_ARCH}, PTR_SZ, arion::ARION_INT_TYPE, "__unused3"}}) {};
 };
 extern std::shared_ptr<StatStructFactory> STAT_STRUCT_FACTORY;
 
@@ -425,35 +429,35 @@ class StatxStructFactory : public PolymorphicStructFactory<struct statx>
   public:
     StatxStructFactory()
         : PolymorphicStructFactory({
-              {V32, ARION_STATX_MASK_TYPE, "stx_mask"},
-              {V32, ARION_INT_TYPE, "stx_blksize"},
-              {V64, ARION_STATX_ATTRS_TYPE, "stx_attributes"},
-              {V32, ARION_INT_TYPE, "stx_nlink"},
-              {V32, ARION_INT_TYPE, "stx_uid"},
-              {V32, ARION_INT_TYPE, "stx_gid"},
-              {V16, ARION_FILE_MODE_TYPE, "stx_mode"},
-              {V16, ARION_INT_TYPE, "__unused1"},
-              {V64, ARION_INT_TYPE, "stx_ino"},
-              {V64, ARION_INT_TYPE, "stx_size"},
-              {V64, ARION_INT_TYPE, "stx_blocks"},
-              {V64, ARION_STATX_ATTRS_TYPE, "stx_attributes_mask"},
-              {V64, ARION_INT_TYPE, "stx_atime_tv_sec"},
-              {V32, ARION_INT_TYPE, "stx_atime_tv_nsec"},
-              {V32, ARION_INT_TYPE, "stx_atime_unused1"},
-              {V64, ARION_INT_TYPE, "stx_btime_tv_sec"},
-              {V32, ARION_INT_TYPE, "stx_btime_tv_nsec"},
-              {V32, ARION_INT_TYPE, "stx_btime_unused1"},
-              {V64, ARION_INT_TYPE, "stx_ctime_tv_sec"},
-              {V32, ARION_INT_TYPE, "stx_ctime_tv_nsec"},
-              {V32, ARION_INT_TYPE, "stx_ctime_unused1"},
-              {V64, ARION_INT_TYPE, "stx_mtime_tv_sec"},
-              {V32, ARION_INT_TYPE, "stx_mtime_tv_nsec"},
-              {V32, ARION_INT_TYPE, "stx_mtime_unused1"},
-              {V32, ARION_INT_TYPE, "stx_rdev_major"},
-              {V32, ARION_INT_TYPE, "stx_rdev_minor"},
-              {V32, ARION_INT_TYPE, "stx_dev_major"},
-              {V32, ARION_INT_TYPE, "stx_dev_minor"},
-              {A64, ARION_INT_TYPE, "unused2", 14},
+              {V32, arion::ARION_STATX_MASK_TYPE, "stx_mask"},
+              {V32, arion::ARION_INT_TYPE, "stx_blksize"},
+              {V64, arion::ARION_STATX_ATTRS_TYPE, "stx_attributes"},
+              {V32, arion::ARION_INT_TYPE, "stx_nlink"},
+              {V32, arion::ARION_INT_TYPE, "stx_uid"},
+              {V32, arion::ARION_INT_TYPE, "stx_gid"},
+              {V16, arion::ARION_FILE_MODE_TYPE, "stx_mode"},
+              {V16, arion::ARION_INT_TYPE, "__unused1"},
+              {V64, arion::ARION_INT_TYPE, "stx_ino"},
+              {V64, arion::ARION_INT_TYPE, "stx_size"},
+              {V64, arion::ARION_INT_TYPE, "stx_blocks"},
+              {V64, arion::ARION_STATX_ATTRS_TYPE, "stx_attributes_mask"},
+              {V64, arion::ARION_INT_TYPE, "stx_atime_tv_sec"},
+              {V32, arion::ARION_INT_TYPE, "stx_atime_tv_nsec"},
+              {V32, arion::ARION_INT_TYPE, "stx_atime_unused1"},
+              {V64, arion::ARION_INT_TYPE, "stx_btime_tv_sec"},
+              {V32, arion::ARION_INT_TYPE, "stx_btime_tv_nsec"},
+              {V32, arion::ARION_INT_TYPE, "stx_btime_unused1"},
+              {V64, arion::ARION_INT_TYPE, "stx_ctime_tv_sec"},
+              {V32, arion::ARION_INT_TYPE, "stx_ctime_tv_nsec"},
+              {V32, arion::ARION_INT_TYPE, "stx_ctime_unused1"},
+              {V64, arion::ARION_INT_TYPE, "stx_mtime_tv_sec"},
+              {V32, arion::ARION_INT_TYPE, "stx_mtime_tv_nsec"},
+              {V32, arion::ARION_INT_TYPE, "stx_mtime_unused1"},
+              {V32, arion::ARION_INT_TYPE, "stx_rdev_major"},
+              {V32, arion::ARION_INT_TYPE, "stx_rdev_minor"},
+              {V32, arion::ARION_INT_TYPE, "stx_dev_major"},
+              {V32, arion::ARION_INT_TYPE, "stx_dev_minor"},
+              {A64, arion::ARION_INT_TYPE, "unused2", 14},
           }) {};
 };
 extern std::shared_ptr<StatxStructFactory> STATX_STRUCT_FACTORY;
@@ -469,7 +473,8 @@ class TimespecStructFactory : public PolymorphicStructFactory<struct timespec>
 {
   public:
     TimespecStructFactory()
-        : PolymorphicStructFactory({{V64, ARION_INT_TYPE, "tv_sec"}, {V64, ARION_INT_TYPE, "tv_nsec"}}) {};
+        : PolymorphicStructFactory({{V64, arion::ARION_INT_TYPE, "tv_sec"}, {V64, arion::ARION_INT_TYPE, "tv_nsec"}}) {
+          };
 };
 extern std::shared_ptr<TimespecStructFactory> TIMESPEC_STRUCT_FACTORY;
 
@@ -484,17 +489,17 @@ class CloneArgsStructFactory : public PolymorphicStructFactory<struct clone_args
 {
   public:
     CloneArgsStructFactory()
-        : PolymorphicStructFactory({{V64, ARION_CLONE_FLAG_TYPE, "flags"},
-                                    {V64, ARION_INT_TYPE, "pidfd"},
-                                    {V64, ARION_INT_TYPE, "child_tid"},
-                                    {V64, ARION_INT_TYPE, "parent_tid"},
-                                    {V64, ARION_SIGNAL_TYPE, "exit_signal"},
-                                    {V64, ARION_INT_TYPE, "stack"},
-                                    {V64, ARION_INT_TYPE, "stack_size"},
-                                    {V64, ARION_INT_TYPE, "tls"},
-                                    {V64, ARION_INT_TYPE, "set_tid"},
-                                    {V64, ARION_INT_TYPE, "set_tid_size"},
-                                    {V64, ARION_FILE_DESCRIPTOR_TYPE, "cgroup"}}) {};
+        : PolymorphicStructFactory({{V64, arion::ARION_CLONE_FLAG_TYPE, "flags"},
+                                    {V64, arion::ARION_INT_TYPE, "pidfd"},
+                                    {V64, arion::ARION_INT_TYPE, "child_tid"},
+                                    {V64, arion::ARION_INT_TYPE, "parent_tid"},
+                                    {V64, arion::ARION_SIGNAL_TYPE, "exit_signal"},
+                                    {V64, arion::ARION_INT_TYPE, "stack"},
+                                    {V64, arion::ARION_INT_TYPE, "stack_size"},
+                                    {V64, arion::ARION_INT_TYPE, "tls"},
+                                    {V64, arion::ARION_INT_TYPE, "set_tid"},
+                                    {V64, arion::ARION_INT_TYPE, "set_tid_size"},
+                                    {V64, arion::ARION_FILE_DESCRIPTOR_TYPE, "cgroup"}}) {};
 };
 extern std::shared_ptr<CloneArgsStructFactory> CLONE_ARGS_STRUCT_FACTORY;
 
@@ -509,9 +514,9 @@ class SockaddrInStructFactory : public PolymorphicStructFactory<struct sockaddr_
 {
   public:
     SockaddrInStructFactory()
-        : PolymorphicStructFactory({{V16, ARION_SOCKET_DOMAIN_TYPE, "sin_family"},
-                                    {V16, ARION_INT_TYPE, "sin_port"},
-                                    {V32, ARION_IN_ADDR_T_TYPE, "sin_addr"}}) {};
+        : PolymorphicStructFactory({{V16, arion::ARION_SOCKET_DOMAIN_TYPE, "sin_family"},
+                                    {V16, arion::ARION_INT_TYPE, "sin_port"},
+                                    {V32, arion::ARION_IN_ADDR_T_TYPE, "sin_addr"}}) {};
 };
 extern std::shared_ptr<SockaddrInStructFactory> SOCKADDR_IN_STRUCT_FACTORY;
 
@@ -528,11 +533,11 @@ class SockaddrIn6StructFactory : public PolymorphicStructFactory<struct sockaddr
   public:
     SockaddrIn6StructFactory()
         : PolymorphicStructFactory({
-              {V16, ARION_SOCKET_DOMAIN_TYPE, "sin6_family"},
-              {V16, ARION_INT_TYPE, "sin6_port"},
-              {V32, ARION_INT_TYPE, "sin6_flowinfo"},
-              {A8, ARION_IN6_ADDR_T_TYPE, "sin6_addr", 16},
-              {V32, ARION_INT_TYPE, "sin6_scope_id"},
+              {V16, arion::ARION_SOCKET_DOMAIN_TYPE, "sin6_family"},
+              {V16, arion::ARION_INT_TYPE, "sin6_port"},
+              {V32, arion::ARION_INT_TYPE, "sin6_flowinfo"},
+              {A8, arion::ARION_IN6_ADDR_T_TYPE, "sin6_addr", 16},
+              {V32, arion::ARION_INT_TYPE, "sin6_scope_id"},
           }) {};
 };
 extern std::shared_ptr<SockaddrIn6StructFactory> SOCKADDR_IN6_STRUCT_FACTORY;
@@ -548,7 +553,7 @@ extern std::shared_ptr<ArionStructSockaddrIn6Type> ARION_STRUCT_SOCKADDR_IN6_TYP
 class SockaddrUnStructFactory : public PolymorphicStructFactory<struct sockaddr_un>
 {
   public:
-    SockaddrUnStructFactory() : PolymorphicStructFactory({{V16, ARION_SOCKET_DOMAIN_TYPE, "sun_family"}}) {};
+    SockaddrUnStructFactory() : PolymorphicStructFactory({{V16, arion::ARION_SOCKET_DOMAIN_TYPE, "sun_family"}}) {};
 };
 extern std::shared_ptr<SockaddrUnStructFactory> SOCKADDR_UN_STRUCT_FACTORY;
 
@@ -557,14 +562,15 @@ class ArionStructSockaddrUnType : public ArionStructType<struct sockaddr_un>
   public:
     ArionStructSockaddrUnType()
         : ArionStructType("Struct sockaddr_un", arion_poly_struct::SOCKADDR_UN_STRUCT_FACTORY) {};
-    std::string str(std::shared_ptr<Arion> arion, uint64_t val) override;
+    std::string str(std::shared_ptr<arion::Arion> arion, uint64_t val) override;
 };
 extern std::shared_ptr<ArionStructSockaddrUnType> ARION_STRUCT_SOCKADDR_UN_TYPE;
 
 class ArionStructSockaddrType : public ArionVariableStructType
 {
   private:
-    std::shared_ptr<arion_poly_struct::AbsArionStructType> process(std::shared_ptr<Arion> arion, uint64_t val) override;
+    std::shared_ptr<arion_poly_struct::AbsArionStructType> process(std::shared_ptr<arion::Arion> arion,
+                                                                   uint64_t val) override;
 
   public:
     ArionStructSockaddrType() : ArionVariableStructType("Struct sockaddr") {};

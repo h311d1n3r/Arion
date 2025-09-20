@@ -2,13 +2,13 @@
 #include <arion/common/global_defs.hpp>
 #include <arion/common/global_excepts.hpp>
 #include <arion/common/hooks_manager.hpp>
+#include <arion/unicorn/unicorn.h>
 #include <exception>
 #include <memory>
-#include <arion/unicorn/unicorn.h>
 
 using namespace arion;
 
-std::map<ARION_HOOK_TYPE, uc_hook_type> ARION_UC_HOOK_TYPES{
+std::map<ARION_HOOK_TYPE, uc_hook_type> arion::ARION_UC_HOOK_TYPES{
     {ARION_HOOK_TYPE::INTR_HOOK, uc_hook_type::UC_HOOK_INTR},
     {ARION_HOOK_TYPE::INSN_HOOK, uc_hook_type::UC_HOOK_INSN},
     {ARION_HOOK_TYPE::CODE_HOOK, uc_hook_type::UC_HOOK_CODE},
@@ -28,7 +28,7 @@ std::map<ARION_HOOK_TYPE, uc_hook_type> ARION_UC_HOOK_TYPES{
     {ARION_HOOK_TYPE::TCG_OPCODE_HOOK, uc_hook_type::UC_HOOK_TCG_OPCODE},
     {ARION_HOOK_TYPE::TLB_FILL_HOOK, uc_hook_type::UC_HOOK_TLB_FILL}};
 
-std::map<ARION_HOOK_TYPE, void *> ARION_UC_HOOK_FUNCS{
+std::map<ARION_HOOK_TYPE, void *> arion::ARION_UC_HOOK_FUNCS{
     {ARION_HOOK_TYPE::INTR_HOOK, (void *)arion_intr_hook},
     {ARION_HOOK_TYPE::INSN_HOOK, (void *)arion_insn_hook},
     {ARION_HOOK_TYPE::CODE_HOOK, (void *)arion_code_hook},
@@ -48,7 +48,7 @@ std::map<ARION_HOOK_TYPE, void *> ARION_UC_HOOK_FUNCS{
     {ARION_HOOK_TYPE::TCG_OPCODE_HOOK, (void *)arion_tcg_opcode_hook},
     {ARION_HOOK_TYPE::TLB_FILL_HOOK, (void *)arion_tlb_fill_hook}};
 
-void arion_intr_hook(uc_engine *uc, uint32_t intno, void *user_data)
+void arion::arion_intr_hook(uc_engine *uc, uint32_t intno, void *user_data)
 {
     ARION_HOOK_PARAM *hook_param = static_cast<ARION_HOOK_PARAM *>(user_data);
     U32_HOOK_CALLBACK arion_callback = std::get<U32_HOOK_CALLBACK>(hook_param->callback);
@@ -66,7 +66,7 @@ void arion_intr_hook(uc_engine *uc, uint32_t intno, void *user_data)
     }
 }
 
-void arion_insn_hook(uc_engine *uc, void *user_data)
+void arion::arion_insn_hook(uc_engine *uc, void *user_data)
 {
     ARION_HOOK_PARAM *hook_param = static_cast<ARION_HOOK_PARAM *>(user_data);
     NO_PARAM_HOOK_CALLBACK arion_callback = std::get<NO_PARAM_HOOK_CALLBACK>(hook_param->callback);
@@ -84,7 +84,7 @@ void arion_insn_hook(uc_engine *uc, void *user_data)
     }
 }
 
-void arion_code_hook(uc_engine *uc, uint64_t address, uint32_t size, void *user_data)
+void arion::arion_code_hook(uc_engine *uc, uint64_t address, uint32_t size, void *user_data)
 {
     ARION_HOOK_PARAM *hook_param = static_cast<ARION_HOOK_PARAM *>(user_data);
     ADDR_SZ_HOOK_CALLBACK arion_callback = std::get<ADDR_SZ_HOOK_CALLBACK>(hook_param->callback);
@@ -102,7 +102,7 @@ void arion_code_hook(uc_engine *uc, uint64_t address, uint32_t size, void *user_
     }
 }
 
-void arion_block_hook(uc_engine *uc, uint64_t address, uint32_t size, void *user_data)
+void arion::arion_block_hook(uc_engine *uc, uint64_t address, uint32_t size, void *user_data)
 {
     ARION_HOOK_PARAM *hook_param = static_cast<ARION_HOOK_PARAM *>(user_data);
     ADDR_SZ_HOOK_CALLBACK arion_callback = std::get<ADDR_SZ_HOOK_CALLBACK>(hook_param->callback);
@@ -120,8 +120,8 @@ void arion_block_hook(uc_engine *uc, uint64_t address, uint32_t size, void *user
     }
 }
 
-bool arion_mem_read_unmapped_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int size, int64_t val,
-                                  void *user_data)
+bool arion::arion_mem_read_unmapped_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int size, int64_t val,
+                                         void *user_data)
 {
     ARION_HOOK_PARAM *hook_param = static_cast<ARION_HOOK_PARAM *>(user_data);
     MEM_HOOK_CALLBACK arion_callback = std::get<MEM_HOOK_CALLBACK>(hook_param->callback);
@@ -140,8 +140,8 @@ bool arion_mem_read_unmapped_hook(uc_engine *uc, uc_mem_type access, uint64_t ad
     return false;
 }
 
-bool arion_mem_write_unmapped_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int size, int64_t val,
-                                   void *user_data)
+bool arion::arion_mem_write_unmapped_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int size, int64_t val,
+                                          void *user_data)
 {
     ARION_HOOK_PARAM *hook_param = static_cast<ARION_HOOK_PARAM *>(user_data);
     MEM_HOOK_CALLBACK arion_callback = std::get<MEM_HOOK_CALLBACK>(hook_param->callback);
@@ -160,8 +160,8 @@ bool arion_mem_write_unmapped_hook(uc_engine *uc, uc_mem_type access, uint64_t a
     return false;
 }
 
-bool arion_mem_fetch_unmapped_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int size, int64_t val,
-                                   void *user_data)
+bool arion::arion_mem_fetch_unmapped_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int size, int64_t val,
+                                          void *user_data)
 {
     ARION_HOOK_PARAM *hook_param = static_cast<ARION_HOOK_PARAM *>(user_data);
     MEM_HOOK_CALLBACK arion_callback = std::get<MEM_HOOK_CALLBACK>(hook_param->callback);
@@ -180,7 +180,8 @@ bool arion_mem_fetch_unmapped_hook(uc_engine *uc, uc_mem_type access, uint64_t a
     return false;
 }
 
-bool arion_mem_read_prot_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int size, int64_t val, void *user_data)
+bool arion::arion_mem_read_prot_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int size, int64_t val,
+                                     void *user_data)
 {
     ARION_HOOK_PARAM *hook_param = static_cast<ARION_HOOK_PARAM *>(user_data);
     MEM_HOOK_CALLBACK arion_callback = std::get<MEM_HOOK_CALLBACK>(hook_param->callback);
@@ -199,7 +200,8 @@ bool arion_mem_read_prot_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, 
     return false;
 }
 
-bool arion_mem_write_prot_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int size, int64_t val, void *user_data)
+bool arion::arion_mem_write_prot_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int size, int64_t val,
+                                      void *user_data)
 {
     ARION_HOOK_PARAM *hook_param = static_cast<ARION_HOOK_PARAM *>(user_data);
     MEM_HOOK_CALLBACK arion_callback = std::get<MEM_HOOK_CALLBACK>(hook_param->callback);
@@ -218,7 +220,8 @@ bool arion_mem_write_prot_hook(uc_engine *uc, uc_mem_type access, uint64_t addr,
     return false;
 }
 
-bool arion_mem_fetch_prot_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int size, int64_t val, void *user_data)
+bool arion::arion_mem_fetch_prot_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int size, int64_t val,
+                                      void *user_data)
 {
     ARION_HOOK_PARAM *hook_param = static_cast<ARION_HOOK_PARAM *>(user_data);
     MEM_HOOK_CALLBACK arion_callback = std::get<MEM_HOOK_CALLBACK>(hook_param->callback);
@@ -237,7 +240,8 @@ bool arion_mem_fetch_prot_hook(uc_engine *uc, uc_mem_type access, uint64_t addr,
     return false;
 }
 
-bool arion_mem_read_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int size, int64_t val, void *user_data)
+bool arion::arion_mem_read_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int size, int64_t val,
+                                void *user_data)
 {
     ARION_HOOK_PARAM *hook_param = static_cast<ARION_HOOK_PARAM *>(user_data);
     MEM_HOOK_CALLBACK arion_callback = std::get<MEM_HOOK_CALLBACK>(hook_param->callback);
@@ -256,7 +260,8 @@ bool arion_mem_read_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int s
     return false;
 }
 
-bool arion_mem_write_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int size, int64_t val, void *user_data)
+bool arion::arion_mem_write_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int size, int64_t val,
+                                 void *user_data)
 {
     ARION_HOOK_PARAM *hook_param = static_cast<ARION_HOOK_PARAM *>(user_data);
     MEM_HOOK_CALLBACK arion_callback = std::get<MEM_HOOK_CALLBACK>(hook_param->callback);
@@ -275,7 +280,8 @@ bool arion_mem_write_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int 
     return false;
 }
 
-bool arion_mem_fetch_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int size, int64_t val, void *user_data)
+bool arion::arion_mem_fetch_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int size, int64_t val,
+                                 void *user_data)
 {
     ARION_HOOK_PARAM *hook_param = static_cast<ARION_HOOK_PARAM *>(user_data);
     MEM_HOOK_CALLBACK arion_callback = std::get<MEM_HOOK_CALLBACK>(hook_param->callback);
@@ -294,7 +300,8 @@ bool arion_mem_fetch_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int 
     return false;
 }
 
-bool arion_mem_read_after_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int size, int64_t val, void *user_data)
+bool arion::arion_mem_read_after_hook(uc_engine *uc, uc_mem_type access, uint64_t addr, int size, int64_t val,
+                                      void *user_data)
 {
     ARION_HOOK_PARAM *hook_param = static_cast<ARION_HOOK_PARAM *>(user_data);
     MEM_HOOK_CALLBACK arion_callback = std::get<MEM_HOOK_CALLBACK>(hook_param->callback);
@@ -313,7 +320,7 @@ bool arion_mem_read_after_hook(uc_engine *uc, uc_mem_type access, uint64_t addr,
     return false;
 }
 
-bool arion_insn_invalid_hook(uc_engine *uc, void *user_data)
+bool arion::arion_insn_invalid_hook(uc_engine *uc, void *user_data)
 {
     ARION_HOOK_PARAM *hook_param = static_cast<ARION_HOOK_PARAM *>(user_data);
     NO_PARAM_BOOL_HOOK_CALLBACK arion_callback = std::get<NO_PARAM_BOOL_HOOK_CALLBACK>(hook_param->callback);
@@ -332,7 +339,7 @@ bool arion_insn_invalid_hook(uc_engine *uc, void *user_data)
     return false;
 }
 
-void arion_edge_generated_hook(uc_engine *uc, uc_tb *cur, uc_tb *prev, void *user_data)
+void arion::arion_edge_generated_hook(uc_engine *uc, uc_tb *cur, uc_tb *prev, void *user_data)
 {
     ARION_HOOK_PARAM *hook_param = static_cast<ARION_HOOK_PARAM *>(user_data);
     EDGE_HOOK_CALLBACK arion_callback = std::get<EDGE_HOOK_CALLBACK>(hook_param->callback);
@@ -343,7 +350,7 @@ void arion_edge_generated_hook(uc_engine *uc, uc_tb *cur, uc_tb *prev, void *use
     arion_callback(arion, cur, prev, hook_param->user_data);
 }
 
-void arion_tcg_opcode_hook(uc_engine *uc, uint64_t addr, uint64_t arg1, uint64_t arg2, int size, void *user_data)
+void arion::arion_tcg_opcode_hook(uc_engine *uc, uint64_t addr, uint64_t arg1, uint64_t arg2, int size, void *user_data)
 {
     ARION_HOOK_PARAM *hook_param = static_cast<ARION_HOOK_PARAM *>(user_data);
     TCG_HOOK_CALLBACK arion_callback = std::get<TCG_HOOK_CALLBACK>(hook_param->callback);
@@ -361,7 +368,7 @@ void arion_tcg_opcode_hook(uc_engine *uc, uint64_t addr, uint64_t arg1, uint64_t
     }
 }
 
-bool arion_tlb_fill_hook(uc_engine *uc, uint64_t addr, uc_mem_type type, uc_tlb_entry *result, void *user_data)
+bool arion::arion_tlb_fill_hook(uc_engine *uc, uint64_t addr, uc_mem_type type, uc_tlb_entry *result, void *user_data)
 {
     ARION_HOOK_PARAM *hook_param = static_cast<ARION_HOOK_PARAM *>(user_data);
     TLB_HOOK_CALLBACK arion_callback = std::get<TLB_HOOK_CALLBACK>(hook_param->callback);
@@ -551,7 +558,8 @@ HOOK_ID HooksManager::hook_execve(PROCESS_HOOK_CALLBACK callback, void *user_dat
     return this->hook_arion(ARION_HOOK_TYPE::EXECVE_HOOK, callback, user_data);
 }
 
-HOOK_ID HooksManager::hook_syscall(SYSCALL_HOOK_CALLBACK callback, void *user_data) {
+HOOK_ID HooksManager::hook_syscall(SYSCALL_HOOK_CALLBACK callback, void *user_data)
+{
     return this->hook_arion(ARION_HOOK_TYPE::SYSCALL_HOOK, callback, user_data);
 }
 

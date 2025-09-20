@@ -29,10 +29,9 @@
 
 namespace arion
 {
-extern std::map<arion::CPU_ARCH, std::pair<uc_arch, uc_mode>> ARION_TO_UC_ARCH;
-extern std::map<arion::CPU_ARCH, std::vector<std::pair<ks_arch, ks_mode>>> ARION_TO_KS_ARCH;
-extern std::map<arion::CPU_ARCH, std::vector<std::pair<cs_arch, cs_mode>>> ARION_TO_CS_ARCH;
-}; // namespace arion
+extern std::map<CPU_ARCH, std::pair<uc_arch, uc_mode>> ARION_TO_UC_ARCH;
+extern std::map<CPU_ARCH, std::vector<std::pair<ks_arch, ks_mode>>> ARION_TO_KS_ARCH;
+extern std::map<CPU_ARCH, std::vector<std::pair<cs_arch, cs_mode>>> ARION_TO_CS_ARCH;
 
 class ARION_EXPORT ArionGroup : public std::enable_shared_from_this<ArionGroup>
 {
@@ -70,7 +69,7 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     std::exception_ptr uc_exception = nullptr;
     bool afl_mode = false;
     std::vector<int> afl_signals;
-    std::optional<arion::ADDR> start = std::nullopt, end = std::nullopt;
+    std::optional<ADDR> start = std::nullopt, end = std::nullopt;
     bool running = false;
     bool sync = false;
     bool stopped = false;
@@ -86,8 +85,8 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
                                          std::vector<std::string> program_env = std::vector<std::string>(),
                                          std::string cwd = "",
                                          std::unique_ptr<Config> config = std::move(std::make_unique<Config>()));
-    static void new_instance_common_finish(std::shared_ptr<Arion> arion, arion::CPU_ARCH arch);
-    void init_engines(arion::CPU_ARCH arch);
+    static void new_instance_common_finish(std::shared_ptr<Arion> arion, CPU_ARCH arch);
+    void init_engines(CPU_ARCH arch);
     void init_file_program(std::shared_ptr<ElfParser> prog_parser);
     void init_baremetal_program();
     void init_dynamic_program(std::shared_ptr<ElfParser> prog_parser);
@@ -110,7 +109,7 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     std::unique_ptr<Logger> logger;
     std::unique_ptr<Config> config;
     std::unique_ptr<LNX_LOADER_PARAMS> loader_params;
-    std::vector<std::shared_ptr<arion::SIGNAL>> pending_signals;
+    std::vector<std::shared_ptr<SIGNAL>> pending_signals;
     uc_engine *uc;
     std::vector<ks_engine *> ks;
     std::vector<csh *> cs;
@@ -123,10 +122,9 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
                  std::vector<std::string> program_env = std::vector<std::string>(), std::string cwd = "",
                  std::unique_ptr<Config> config = std::move(std::make_unique<Config>()));
     ~Arion();
-    void ARION_EXPORT set_run_bounds(std::optional<arion::ADDR> start = std::nullopt,
-                                     std::optional<arion::ADDR> end = std::nullopt);
-    void ARION_EXPORT set_run_start(std::optional<arion::ADDR> start);
-    void ARION_EXPORT set_run_end(std::optional<arion::ADDR> end);
+    void ARION_EXPORT set_run_bounds(std::optional<ADDR> start = std::nullopt, std::optional<ADDR> end = std::nullopt);
+    void ARION_EXPORT set_run_start(std::optional<ADDR> start);
+    void ARION_EXPORT set_run_end(std::optional<ADDR> end);
     bool run_current();
     void ARION_EXPORT stop();
     void crash(std::exception_ptr exception);
@@ -175,5 +173,7 @@ class ARION_EXPORT Arion : public std::enable_shared_from_this<Arion>
     void ARION_EXPORT send_signal(pid_t source_pid, int signo);
     void ARION_EXPORT run_gdbserver(uint32_t port);
 };
+
+}; // namespace arion
 
 #endif // ARION_ARION_HPP

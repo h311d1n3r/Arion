@@ -14,6 +14,9 @@
 
 #define EXCEPTION_MAX_FRAMES 64
 
+namespace arion
+{
+
 class ArionException : public std::exception
 {
   private:
@@ -178,7 +181,7 @@ class NoCoredumpCurrentThreadException : public ArionException
 class NoSegmentAtAddrException : public ArionException
 {
   public:
-    explicit NoSegmentAtAddrException(arion::ADDR addr)
+    explicit NoSegmentAtAddrException(ADDR addr)
         : ArionException(std::string("No memory segment is mapped at address ") + int_to_hex(addr) + std::string(".")) {
           };
 };
@@ -193,7 +196,7 @@ class NoSegmentWithInfoException : public ArionException
 class SegmentNotMappedException : public ArionException
 {
   public:
-    explicit SegmentNotMappedException(arion::ADDR start_addr, arion::ADDR end_addr)
+    explicit SegmentNotMappedException(ADDR start_addr, ADDR end_addr)
         : ArionException(std::string("Segment [") + int_to_hex(start_addr) + std::string(":") + int_to_hex(end_addr) +
                          std::string("] is not mapped in memory.")) {};
 };
@@ -201,17 +204,16 @@ class SegmentNotMappedException : public ArionException
 class MemAlreadyMappedException : public ArionException
 {
   public:
-    explicit MemAlreadyMappedException(arion::ADDR start_addr, size_t sz)
+    explicit MemAlreadyMappedException(ADDR start_addr, size_t sz)
         : ArionException(std::string("An error occurred while attempting to map memory at address ") +
-                         int_to_hex<arion::ADDR>(start_addr) + std::string(" with size ") + int_to_hex<ssize_t>(sz) +
+                         int_to_hex<ADDR>(start_addr) + std::string(" with size ") + int_to_hex<ssize_t>(sz) +
                          std::string(".")) {};
 };
 
 class CantUnmapOutsideSegmentException : public ArionException
 {
   public:
-    explicit CantUnmapOutsideSegmentException(arion::ADDR seg_start, arion::ADDR seg_end, arion::ADDR unmap_start,
-                                              arion::ADDR unmap_end)
+    explicit CantUnmapOutsideSegmentException(ADDR seg_start, ADDR seg_end, ADDR unmap_start, ADDR unmap_end)
         : ArionException(std::string("Segment [") + int_to_hex(seg_start) + std::string(":") + int_to_hex(seg_end) +
                          std::string("] is not between unmapping bounds [") + int_to_hex(unmap_start) +
                          std::string(":") + int_to_hex(unmap_end) + std::string("].")) {};
@@ -332,7 +334,7 @@ class HeavierRegException : public ArionException
 class NoRegWithValueException : public ArionException
 {
   public:
-    explicit NoRegWithValueException(arion::REG reg)
+    explicit NoRegWithValueException(REG reg)
         : ArionException(std::string("Register with value \"") + int_to_hex<uint64_t>(reg) +
                          std::string("\" does not exist in current architecture.")) {};
 };
@@ -620,9 +622,9 @@ class WrongTraceModeException : public ArionException
 class UnknownTraceRegException : public ArionException
 {
   public:
-    explicit UnknownTraceRegException(arion::REG reg)
+    explicit UnknownTraceRegException(REG reg)
         : ArionException(
-              std::string("Register ") + int_to_hex<arion::REG>(reg) +
+              std::string("Register ") + int_to_hex<REG>(reg) +
               std::string(" is not part of trace file. Only the largest registers are written to trace files.")) {};
 };
 
@@ -654,8 +656,8 @@ class UnknownTraceModuleHashException : public ArionException
 class CantReachTraceAddrException : public ArionException
 {
   public:
-    explicit CantReachTraceAddrException(arion::ADDR addr)
-        : ArionException(std::string("Can't reach address ") + int_to_hex<arion::ADDR>(addr) +
+    explicit CantReachTraceAddrException(ADDR addr)
+        : ArionException(std::string("Can't reach address ") + int_to_hex<ADDR>(addr) +
                          std::string(" while reading trace file.")) {};
 };
 
@@ -704,5 +706,7 @@ class TooManyLoggersException : public ArionException
   public:
     explicit TooManyLoggersException() : ArionException("Too many loggers are already active.") {};
 };
+
+}; // namespace arion
 
 #endif // ARION_GLOBAL_EXCEPTS_HPP

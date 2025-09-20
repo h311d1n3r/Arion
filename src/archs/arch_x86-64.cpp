@@ -2,6 +2,7 @@
 #include <arion/arion.hpp>
 
 using namespace arion;
+using namespace arion_x86_64;
 
 ks_engine *ArchManagerX8664::curr_ks()
 {

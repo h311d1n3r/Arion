@@ -1,5 +1,7 @@
 #include <arion/platforms/linux/lnx_arch_manager.hpp>
 
+using namespace arion;
+
 std::unique_ptr<ARION_PARSED_COREDUMP_THREAD> LinuxArchManager::parse_coredump_thread(
     std::shared_ptr<Arion> arion, std::unique_ptr<ARION_ELF_COREDUMP_THREAD> thread,
     std::shared_ptr<ElfParser> prog_parser)

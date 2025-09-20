@@ -1,5 +1,7 @@
 #include <arion/components/arion_afl.hpp>
 
+using namespace arion;
+
 bool ArionAfl::uc_input_callback(uc_engine *uc, char *input, size_t input_sz, uint32_t persistent_round,
                                  void *user_data)
 {

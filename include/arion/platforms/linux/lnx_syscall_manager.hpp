@@ -8,15 +8,18 @@
 #include <memory>
 #include <string>
 
+namespace arion
+{
+
 class Arion;
 
 struct SYSCALL_FUNC
 {
-    std::function<uint64_t(std::shared_ptr<Arion> arion, std::vector<arion::SYS_PARAM> params, bool &cancel)> func;
+    std::function<uint64_t(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)> func;
     std::vector<std::shared_ptr<ArionType>> signature;
 
     SYSCALL_FUNC(
-        std::function<uint64_t(std::shared_ptr<Arion> arion, std::vector<arion::SYS_PARAM> params, bool &cancel)> func,
+        std::function<uint64_t(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)> func,
         std::vector<std::shared_ptr<ArionType>> signature)
         : func(func), signature(signature) {};
 };
@@ -31,7 +34,7 @@ class ARION_EXPORT LinuxSyscallManager
     void add_syscall_entry(std::string name, std::shared_ptr<SYSCALL_FUNC> func);
     template <typename... SignatureArgs>
     std::shared_ptr<SYSCALL_FUNC> make_sys_func(
-        std::function<uint64_t(std::shared_ptr<Arion> arion, std::vector<arion::SYS_PARAM> params, bool &cancel)> func,
+        std::function<uint64_t(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)> func,
         SignatureArgs &&...signature)
     {
         std::vector<std::shared_ptr<ArionType>> sig_vec = {std::forward<SignatureArgs>(signature)...};
@@ -39,7 +42,7 @@ class ARION_EXPORT LinuxSyscallManager
     }
     void init_syscall_funcs();
     void print_syscall(std::shared_ptr<Arion> arion, std::string sys_name,
-                       std::vector<std::shared_ptr<ArionType>> signature, std::vector<arion::SYS_PARAM> func_params,
+                       std::vector<std::shared_ptr<ArionType>> signature, std::vector<SYS_PARAM> func_params,
                        uint64_t syscall_ret);
 
   public:
@@ -51,5 +54,7 @@ class ARION_EXPORT LinuxSyscallManager
     std::shared_ptr<SYSCALL_FUNC> ARION_EXPORT get_syscall_func(uint64_t sysno);
     std::shared_ptr<SYSCALL_FUNC> ARION_EXPORT get_syscall_func(std::string name);
 };
+
+}; // namespace arion
 
 #endif // ARION_LNX_SYSCALL_MANAGER_HPP

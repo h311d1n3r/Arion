@@ -141,24 +141,24 @@ std::map<uint64_t, std::string> errno_names = {
 };
 
 // Base types declaration
-std::shared_ptr<ArionErrCodeType> ARION_ERR_CODE_TYPE;
-std::shared_ptr<ArionFileDescriptorType> ARION_FILE_DESCRIPTOR_TYPE;
-std::shared_ptr<ArionAccessModeType> ARION_ACCESS_MODE_TYPE;
-std::shared_ptr<ArionOpenModeType> ARION_OPEN_MODE_TYPE;
-std::shared_ptr<ArionFileATFlagType> ARION_FILE_AT_FLAG_TYPE;
-std::shared_ptr<ArionStatxMaskType> ARION_STATX_MASK_TYPE;
-std::shared_ptr<ArionStatxAttrsType> ARION_STATX_ATTRS_TYPE;
-std::shared_ptr<ArionProtFlagType> ARION_PROT_FLAG_TYPE;
-std::shared_ptr<ArionMmapFlagType> ARION_MMAP_FLAG_TYPE;
-std::shared_ptr<ArionSeekWhenceType> ARION_SEEK_WHENCE_TYPE;
-std::shared_ptr<ArionFutexOpType> ARION_FUTEX_OP_TYPE;
-std::shared_ptr<ArionCloneFlagType> ARION_CLONE_FLAG_TYPE;
-std::shared_ptr<ArionSignalType> ARION_SIGNAL_TYPE;
-std::shared_ptr<ArionFileModeType> ARION_FILE_MODE_TYPE;
-std::shared_ptr<ArionSocketDomainType> ARION_SOCKET_DOMAIN_TYPE;
-std::shared_ptr<ArionSocketTypeType> ARION_SOCKET_TYPE_TYPE;
-std::shared_ptr<ArionInAddrTType> ARION_IN_ADDR_T_TYPE;
-std::shared_ptr<ArionIn6AddrTType> ARION_IN6_ADDR_T_TYPE;
+std::shared_ptr<ArionErrCodeType> arion::ARION_ERR_CODE_TYPE;
+std::shared_ptr<ArionFileDescriptorType> arion::ARION_FILE_DESCRIPTOR_TYPE;
+std::shared_ptr<ArionAccessModeType> arion::ARION_ACCESS_MODE_TYPE;
+std::shared_ptr<ArionOpenModeType> arion::ARION_OPEN_MODE_TYPE;
+std::shared_ptr<ArionFileATFlagType> arion::ARION_FILE_AT_FLAG_TYPE;
+std::shared_ptr<ArionStatxMaskType> arion::ARION_STATX_MASK_TYPE;
+std::shared_ptr<ArionStatxAttrsType> arion::ARION_STATX_ATTRS_TYPE;
+std::shared_ptr<ArionProtFlagType> arion::ARION_PROT_FLAG_TYPE;
+std::shared_ptr<ArionMmapFlagType> arion::ARION_MMAP_FLAG_TYPE;
+std::shared_ptr<ArionSeekWhenceType> arion::ARION_SEEK_WHENCE_TYPE;
+std::shared_ptr<ArionFutexOpType> arion::ARION_FUTEX_OP_TYPE;
+std::shared_ptr<ArionCloneFlagType> arion::ARION_CLONE_FLAG_TYPE;
+std::shared_ptr<ArionSignalType> arion::ARION_SIGNAL_TYPE;
+std::shared_ptr<ArionFileModeType> arion::ARION_FILE_MODE_TYPE;
+std::shared_ptr<ArionSocketDomainType> arion::ARION_SOCKET_DOMAIN_TYPE;
+std::shared_ptr<ArionSocketTypeType> arion::ARION_SOCKET_TYPE_TYPE;
+std::shared_ptr<ArionInAddrTType> arion::ARION_IN_ADDR_T_TYPE;
+std::shared_ptr<ArionIn6AddrTType> arion::ARION_IN6_ADDR_T_TYPE;
 
 // Struct factories declaration
 std::shared_ptr<StatStructFactory> arion_poly_struct::STAT_STRUCT_FACTORY;
@@ -310,7 +310,7 @@ std::string ArionStructSockaddrUnType::str(std::shared_ptr<Arion> arion, uint64_
     return struct_str;
 }
 
-PROT_FLAGS kernel_prot_to_arion_prot(int kflags)
+PROT_FLAGS arion::kernel_prot_to_arion_prot(int kflags)
 {
     PROT_FLAGS flags = 0;
     if (kflags & PROT_EXEC)

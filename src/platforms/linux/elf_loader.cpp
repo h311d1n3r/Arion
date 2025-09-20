@@ -176,7 +176,7 @@ ADDR ElfLoader::map_vsyscall()
         std::string syscall_name = vsyscalls.at(syscall_i);
         uint64_t syscall_no = arion->arch->get_syscall_no_by_name(syscall_name);
         std::array<BYTE, VSYSCALL_ENTRY_SZ> syscall_asm =
-            static_cast<ArchManagerX8664 *>(arion->arch.get())->gen_vsyscall_entry(syscall_no);
+            static_cast<arion_x86_64::ArchManagerX8664 *>(arion->arch.get())->gen_vsyscall_entry(syscall_no);
         arion->mem->write(vsyscall_addr + syscall_i * VSYSCALL_ENTRY_SZ, syscall_asm.data(),
                           syscall_asm.size() * sizeof(BYTE));
     }

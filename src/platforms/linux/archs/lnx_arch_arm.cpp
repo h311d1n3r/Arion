@@ -2,6 +2,7 @@
 #include <arion/platforms/linux/archs/lnx_arch_arm.hpp>
 
 using namespace arion;
+using namespace arion_lnx_arm;
 
 uint64_t ArchManagerLinuxARM::pack_fp_reg(const struct arion_lnx_arm::fp_reg *r)
 {

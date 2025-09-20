@@ -7,7 +7,12 @@
 #include <map>
 #include <string>
 
+namespace arion
+{
+
 class Arion;
+
+};
 
 namespace arion_x86_64
 {
@@ -520,33 +525,33 @@ inline std::vector<arion::REG> CTXT_REGS = {
     UC_X86_REG_RFLAGS,
 };
 
-inline std::map<uint64_t, CPU_INTR> IDT = {{0, DIVIDE_ERROR},
-                                           {1, DEBUG_EXCEPTION},
-                                           {2, NON_MASKABLE_INTR},
-                                           {3, BREAKPOINT},
-                                           {4, OVERFLOW},
-                                           {5, BOUND_RANGE_EXCEEDED},
-                                           {6, INVALID_OPCODE},
-                                           {7, DEVICE_NOT_AVAILABLE},
-                                           {8, DOUBLE_FAULT},
-                                           {9, COPROCESSOR_SEGMENT_OVERRUN},
-                                           {10, INVALID_TSS},
-                                           {11, SEGMENT_NOT_PRESENT},
-                                           {12, STACK_SEGMENT_FAULT},
-                                           {13, GENERAL_PROTECTION_FAULT},
-                                           {14, PAGE_FAULT},
-                                           {15, RESERVED},
-                                           {16, X87_FLOATING_POINT_EXCEPTION},
-                                           {17, ALIGNMENT_CHECK},
-                                           {18, MACHINE_CHECK},
-                                           {19, SIMD_FLOATING_POINT_ERROR}};
+inline std::map<uint64_t, arion::CPU_INTR> IDT = {{0, arion::DIVIDE_ERROR},
+                                                  {1, arion::DEBUG_EXCEPTION},
+                                                  {2, arion::NON_MASKABLE_INTR},
+                                                  {3, arion::BREAKPOINT},
+                                                  {4, arion::OVERFLOW},
+                                                  {5, arion::BOUND_RANGE_EXCEEDED},
+                                                  {6, arion::INVALID_OPCODE},
+                                                  {7, arion::DEVICE_NOT_AVAILABLE},
+                                                  {8, arion::DOUBLE_FAULT},
+                                                  {9, arion::COPROCESSOR_SEGMENT_OVERRUN},
+                                                  {10, arion::INVALID_TSS},
+                                                  {11, arion::SEGMENT_NOT_PRESENT},
+                                                  {12, arion::STACK_SEGMENT_FAULT},
+                                                  {13, arion::GENERAL_PROTECTION_FAULT},
+                                                  {14, arion::PAGE_FAULT},
+                                                  {15, arion::RESERVED},
+                                                  {16, arion::X87_FLOATING_POINT_EXCEPTION},
+                                                  {17, arion::ALIGNMENT_CHECK},
+                                                  {18, arion::MACHINE_CHECK},
+                                                  {19, arion::SIMD_FLOATING_POINT_ERROR}};
 
-inline ABI_REGISTERS ABI_REGS = ABI_REGISTERS(UC_X86_REG_RIP, UC_X86_REG_RSP);
+inline arion::ABI_REGISTERS ABI_REGS = arion::ABI_REGISTERS(UC_X86_REG_RIP, UC_X86_REG_RSP);
 
-inline ABI_CALLING_CONVENTION ABI_CALLING_CONV = ABI_CALLING_CONVENTION(
+inline arion::ABI_CALLING_CONVENTION ABI_CALLING_CONV = arion::ABI_CALLING_CONVENTION(
     UC_X86_REG_RAX, {UC_X86_REG_RDI, UC_X86_REG_RSI, UC_X86_REG_RDX, UC_X86_REG_RCX, UC_X86_REG_R8, UC_X86_REG_R9});
 
-inline ABI_SYSCALLING_CONVENTION ABI_SYSCALLING_CONV = ABI_SYSCALLING_CONVENTION(
+inline arion::ABI_SYSCALLING_CONVENTION ABI_SYSCALLING_CONV = arion::ABI_SYSCALLING_CONVENTION(
     UC_X86_REG_RAX, UC_X86_REG_RAX,
     {UC_X86_REG_RDI, UC_X86_REG_RSI, UC_X86_REG_RDX, UC_X86_REG_R10, UC_X86_REG_R8, UC_X86_REG_R9});
 
@@ -562,19 +567,19 @@ inline const uint16_t ARCH_SZ = 64;
 
 inline arion::CPU_ARCH ARCH = arion::CPU_ARCH::X8664_ARCH;
 
-inline ARCH_ATTRIBUTES ARCH_ATTRS = ARCH_ATTRIBUTES(ARCH, ARCH_SZ, PTR_SZ, HWCAP, HWCAP2, SEG_FLAGS, ABI_REGS,
-                                                    ABI_CALLING_CONV, ABI_SYSCALLING_CONV, NAME_BY_SYSCALL_NO);
-} // namespace arion_x86_64
+inline arion::ARCH_ATTRIBUTES ARCH_ATTRS =
+    arion::ARCH_ATTRIBUTES(ARCH, ARCH_SZ, PTR_SZ, HWCAP, HWCAP2, SEG_FLAGS, ABI_REGS, ABI_CALLING_CONV,
+                           ABI_SYSCALLING_CONV, NAME_BY_SYSCALL_NO);
 
-class ArchManagerX8664 : public ArchManager
+class ArchManagerX8664 : public arion::ArchManager
 {
   private:
-    static void syscall_hook(std::shared_ptr<Arion> arion, void *user_data);
+    static void syscall_hook(std::shared_ptr<arion::Arion> arion, void *user_data);
     void setup() override;
 
   public:
     ArchManagerX8664()
-        : ArchManager(std::make_shared<ARCH_ATTRIBUTES>(arion_x86_64::ARCH_ATTRS), arion_x86_64::ARCH_REGS,
+        : ArchManager(std::make_shared<arion::ARCH_ATTRIBUTES>(arion_x86_64::ARCH_ATTRS), arion_x86_64::ARCH_REGS,
                       arion_x86_64::ARCH_REGS_SZ, arion_x86_64::CTXT_REGS, arion_x86_64::IDT, false) {};
 
     std::array<arion::BYTE, VSYSCALL_ENTRY_SZ> gen_vsyscall_entry(uint64_t syscall_no);
@@ -583,5 +588,7 @@ class ArchManagerX8664 : public ArchManager
     arion::ADDR dump_tls() override;
     void load_tls(arion::ADDR new_tls) override;
 };
+
+}; // namespace arion_x86_64
 
 #endif // ARION_ARCH_X8664_HPP

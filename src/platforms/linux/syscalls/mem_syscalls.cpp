@@ -81,7 +81,7 @@ ADDR do_mmap(std::shared_ptr<Arion> arion, ADDR addr, size_t len, int prot, int 
     return map_addr;
 }
 
-uint64_t sys_mmap(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
+uint64_t arion::sys_mmap(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR addr = params.at(0);
     size_t len = params.at(1);
@@ -95,7 +95,7 @@ uint64_t sys_mmap(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, b
     return map_addr;
 }
 
-uint64_t sys_mmap2(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
+uint64_t arion::sys_mmap2(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR addr = params.at(0);
     size_t len = params.at(1);
@@ -109,7 +109,7 @@ uint64_t sys_mmap2(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, 
     return map_addr;
 }
 
-uint64_t sys_mprotect(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
+uint64_t arion::sys_mprotect(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR addr = params.at(0);
     size_t len = params.at(1);
@@ -120,7 +120,7 @@ uint64_t sys_mprotect(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
     return 0;
 }
 
-uint64_t sys_munmap(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
+uint64_t arion::sys_munmap(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR addr = params.at(0);
     size_t len = params.at(1);
@@ -129,7 +129,7 @@ uint64_t sys_munmap(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params,
     return 0;
 }
 
-uint64_t sys_brk(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
+uint64_t arion::sys_brk(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR addr = params.at(0);
 

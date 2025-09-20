@@ -3,7 +3,7 @@
 
 using namespace arion;
 
-std::vector<BYTE> gen_random_bytes(size_t n)
+std::vector<BYTE> arion::gen_random_bytes(size_t n)
 {
     std::vector<BYTE> ran_bytes(n);
     std::random_device rd;

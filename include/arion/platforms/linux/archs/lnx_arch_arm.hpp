@@ -18,12 +18,12 @@ inline std::vector<arion::REG> uc_pt_regs = {
     UC_ARM_REG_R6, UC_ARM_REG_R7, UC_ARM_REG_R8, UC_ARM_REG_R9, UC_ARM_REG_R10,  UC_ARM_REG_FP,
     UC_ARM_REG_IP, UC_ARM_REG_SP, UC_ARM_REG_LR, UC_ARM_REG_PC, UC_ARM_REG_CPSR, UC_ARM_REG_INVALID};
 
-const size_t ELF_NGREG = (sizeof(struct pt_regs) / sizeof(elf_greg_t));
-typedef elf_greg_t elf_gregset_t[ELF_NGREG];
+const size_t ELF_NGREG = (sizeof(struct pt_regs) / sizeof(arion::elf_greg_t));
+typedef arion::elf_greg_t elf_gregset_t[ELF_NGREG];
 
 struct elf_prstatus
 {
-    struct elf_prstatus_common common;
+    struct arion::elf_prstatus_common common;
     elf_gregset_t pr_reg;
     int pr_fpvalid;
 };
@@ -53,14 +53,14 @@ inline std::vector<arion::REG> uc_fp_regs = {UC_ARM_REG_D0, UC_ARM_REG_D1, UC_AR
 
 typedef struct user_fp elf_fpregset_t;
 
-} // namespace arion_lnx_arm
-
-class ArchManagerLinuxARM : public ArchManagerARM, public LinuxArchManager
+class ArchManagerLinuxARM : public arion_arm::ArchManagerARM, public arion::LinuxArchManager
 {
   private:
     uint64_t pack_fp_reg(const struct arion_lnx_arm::fp_reg *r);
     std::map<arion::REG, arion::RVAL> prstatus_to_regs(std::vector<arion::BYTE> prstatus) override;
     std::map<arion::REG, arion::RVAL> fpregset_to_regs(std::vector<arion::BYTE> fpregset) override;
 };
+
+}; // namespace arion_lnx_arm
 
 #endif // ARION_LNX_ARCH_ARM_HPP

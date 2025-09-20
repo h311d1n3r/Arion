@@ -10,7 +10,7 @@
 
 using namespace arion;
 
-std::vector<BYTE> serialize_arion_file(ARION_FILE *arion_f)
+std::vector<BYTE> arion::serialize_arion_file(ARION_FILE *arion_f)
 {
     std::vector<BYTE> srz_file;
 
@@ -26,7 +26,7 @@ std::vector<BYTE> serialize_arion_file(ARION_FILE *arion_f)
     return srz_file;
 }
 
-ARION_FILE *deserialize_arion_file(std::vector<BYTE> srz_file)
+ARION_FILE *arion::deserialize_arion_file(std::vector<BYTE> srz_file)
 {
     ARION_FILE *arion_f = new ARION_FILE;
 

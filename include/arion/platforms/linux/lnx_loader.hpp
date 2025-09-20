@@ -18,6 +18,9 @@
 
 #define LINUX_STACK_PERMS 6
 
+namespace arion
+{
+
 enum AUXV
 {
     AT_NULL = 0,
@@ -54,28 +57,28 @@ enum AUXV
 
 struct AUXV_PTRS
 {
-    arion::ADDR random_addr;
-    arion::ADDR prog_name_addr;
-    arion::ADDR platform_name_addr;
+    ADDR random_addr;
+    ADDR prog_name_addr;
+    ADDR platform_name_addr;
 };
 
 struct ARION_EXPORT LNX_LOADER_PARAMS
 {
-    arion::ADDR load_address;
-    arion::ADDR interp_address;
-    arion::ADDR vvar_address;
-    arion::ADDR vdso_address;
-    arion::ADDR stack_address;
-    arion::ADDR vsyscall_address;
-    arion::ADDR arm_traps_address;
+    ADDR load_address;
+    ADDR interp_address;
+    ADDR vvar_address;
+    ADDR vdso_address;
+    ADDR stack_address;
+    ADDR vsyscall_address;
+    ADDR arm_traps_address;
 };
 
 class LinuxLoader
 {
   private:
     void setup_auxv(std::unique_ptr<AUXV_PTRS> auxv_ptrs, std::shared_ptr<LNX_LOADER_PARAMS> params);
-    void setup_envp(std::vector<arion::ADDR> envp_ptrs);
-    void setup_argv(std::vector<arion::ADDR> argv_ptrs);
+    void setup_envp(std::vector<ADDR> envp_ptrs);
+    void setup_argv(std::vector<ADDR> argv_ptrs);
 
   protected:
     std::weak_ptr<Arion> arion;
@@ -86,11 +89,13 @@ class LinuxLoader
         : arion(arion), program_args(program_args), program_env(program_env) {};
     void write_auxv_entry(AUXV auxv, uint64_t val);
     virtual void setup_specific_auxv(std::shared_ptr<LNX_LOADER_PARAMS> params, uint16_t arch_sz) = 0;
-    arion::ADDR map_stack(std::shared_ptr<LNX_LOADER_PARAMS> params, std::string path);
-    void init_main_thread(std::shared_ptr<LNX_LOADER_PARAMS> params, arion::ADDR entry_addr);
+    ADDR map_stack(std::shared_ptr<LNX_LOADER_PARAMS> params, std::string path);
+    void init_main_thread(std::shared_ptr<LNX_LOADER_PARAMS> params, ADDR entry_addr);
 
   public:
     virtual std::unique_ptr<LNX_LOADER_PARAMS> process() = 0;
 };
+
+}; // namespace arion
 
 #endif // ARION_LNX_LOADER_HPP

@@ -1,6 +1,8 @@
 #include <arion/arion.hpp>
 #include <arion_test/common.hpp>
 
+using namespace arion;
+
 TEST_P(ArionMultiarchTest, SimpleThreads)
 {
     testing::internal::CaptureStdout();

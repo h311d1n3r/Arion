@@ -9,6 +9,9 @@
 #include <sys/socket.h>
 #include <vector>
 
+namespace arion
+{
+
 class Arion;
 
 struct ARION_EXPORT ARION_SOCKET
@@ -58,8 +61,8 @@ struct ARION_EXPORT ARION_SOCKET
         s_addr = nullptr;
     }
 };
-std::vector<arion::BYTE> serialize_arion_socket(ARION_SOCKET *arion_s);
-ARION_SOCKET *deserialize_arion_socket(std::vector<arion::BYTE> srz_socket);
+std::vector<BYTE> serialize_arion_socket(ARION_SOCKET *arion_s);
+ARION_SOCKET *deserialize_arion_socket(std::vector<BYTE> srz_socket);
 
 class ARION_EXPORT SocketManager
 {
@@ -75,5 +78,7 @@ class ARION_EXPORT SocketManager
     void ARION_EXPORT rm_socket_entry(int target_fd);
     std::shared_ptr<ARION_SOCKET> ARION_EXPORT get_arion_socket(int target_fd);
 };
+
+}; // namespace arion
 
 #endif // ARION_SOCKET_MANAGER_HPP

@@ -5,11 +5,14 @@
 #include <arion/common/global_defs.hpp>
 #include <arion/common/global_excepts.hpp>
 
+namespace arion
+{
+
 class ARION_EXPORT Config
 {
   private:
     std::map<std::string, std::any> config_map = {
-        {"log_lvl", arion::LOG_LEVEL::INFO}, {"enable_sleep_syscalls", false}, {"thread_blocking_io", false}};
+        {"log_lvl", LOG_LEVEL::INFO}, {"enable_sleep_syscalls", false}, {"thread_blocking_io", false}};
 
   public:
     template <typename T> void ARION_EXPORT set_field(const std::string &key, T value)
@@ -42,5 +45,7 @@ class ARION_EXPORT Config
         return newConfig;
     }
 };
+
+}; // namespace arion
 
 #endif // ARION_CONFIG_HPP

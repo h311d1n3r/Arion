@@ -8,7 +8,7 @@
 
 using namespace arion;
 
-std::vector<BYTE> serialize_arion_futex(ARION_FUTEX *arion_f)
+std::vector<BYTE> arion::serialize_arion_futex(ARION_FUTEX *arion_f)
 {
     std::vector<BYTE> srz_futex;
 
@@ -20,7 +20,7 @@ std::vector<BYTE> serialize_arion_futex(ARION_FUTEX *arion_f)
     return srz_futex;
 }
 
-ARION_FUTEX *deserialize_arion_futex(std::vector<BYTE> srz_thread)
+ARION_FUTEX *arion::deserialize_arion_futex(std::vector<BYTE> srz_thread)
 {
     ARION_FUTEX *arion_f = new ARION_FUTEX;
 
@@ -34,7 +34,7 @@ ARION_FUTEX *deserialize_arion_futex(std::vector<BYTE> srz_thread)
     return arion_f;
 }
 
-std::vector<BYTE> serialize_arion_thread(ARION_THREAD *arion_t)
+std::vector<BYTE> arion::serialize_arion_thread(ARION_THREAD *arion_t)
 {
     std::vector<BYTE> srz_thread;
 
@@ -64,7 +64,7 @@ std::vector<BYTE> serialize_arion_thread(ARION_THREAD *arion_t)
     return srz_thread;
 }
 
-ARION_THREAD *deserialize_arion_thread(std::vector<BYTE> srz_thread)
+ARION_THREAD *arion::deserialize_arion_thread(std::vector<BYTE> srz_thread)
 {
     ARION_THREAD *arion_t = new ARION_THREAD;
 
@@ -221,7 +221,7 @@ pid_t ThreadingManager::clone_thread(uint64_t flags, ADDR new_sp, ADDR new_tls, 
     if (!new_tls || (flags & CLONE_SETTLS))
         new_tls = arion->arch->dump_tls();
     else if (arion->arch->get_attrs()->arch == CPU_ARCH::X86_ARCH)
-        new_tls = static_cast<ArchManagerX86 *>(arion->arch.get())->new_tls(new_tls);
+        new_tls = static_cast<arion_x86::ArchManagerX86 *>(arion->arch.get())->new_tls(new_tls);
     std::unique_ptr<std::map<REG, RVAL>> regs = arion->arch->init_thread_regs(next_pc, new_sp);
     regs->operator[](ret_reg).r64 = 0;
     std::unique_ptr<ARION_THREAD> arion_t = std::make_unique<ARION_THREAD>(

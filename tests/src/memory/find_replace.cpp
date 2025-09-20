@@ -1,6 +1,8 @@
 #include <arion/arion.hpp>
 #include <arion_test/common.hpp>
 
+using namespace arion;
+
 char find_replace_flag[] = "A simple print";
 char find_replace_flag2[] = "REPLACED";
 

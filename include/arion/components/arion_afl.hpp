@@ -6,6 +6,9 @@
 #include <memory>
 #include <sys/signal.h>
 
+namespace arion
+{
+
 using ARION_AFL_INPUT_CALLBACK = std::function<bool(std::shared_ptr<Arion> arion, char *input, size_t input_sz,
                                                     uint32_t persistent_round, void *user_data)>;
 using ARION_AFL_CRASH_CALLBACK = std::function<bool(std::shared_ptr<Arion> arion, uc_err res, char *input,
@@ -52,10 +55,11 @@ class ARION_EXPORT ArionAfl
   public:
     ARION_EXPORT ArionAfl(std::weak_ptr<Arion> arion) : arion(arion) {};
     void ARION_EXPORT fuzz(ARION_AFL_INPUT_CALLBACK input_callback, ARION_AFL_CRASH_CALLBACK crash_callback,
-                           std::vector<arion::ADDR> exits,
-                           ARION_MEM_STRATEGY mem_strategy = ARION_MEM_STRATEGY::RECORD_EDITS,
+                           std::vector<ADDR> exits, ARION_MEM_STRATEGY mem_strategy = ARION_MEM_STRATEGY::RECORD_EDITS,
                            std::vector<int> signals = {SIGSEGV, SIGABRT}, bool always_validate = false,
                            uint32_t persistent_iters = 1000, void *user_data = nullptr);
 };
+
+}; // namespace arion
 
 #endif // ARION_ARION_AFL_HPP

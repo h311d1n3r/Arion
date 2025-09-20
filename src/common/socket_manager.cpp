@@ -4,7 +4,7 @@
 
 using namespace arion;
 
-std::vector<BYTE> serialize_arion_socket(ARION_SOCKET *arion_s)
+std::vector<BYTE> arion::serialize_arion_socket(ARION_SOCKET *arion_s)
 {
     std::vector<BYTE> srz_socket;
 
@@ -32,7 +32,7 @@ std::vector<BYTE> serialize_arion_socket(ARION_SOCKET *arion_s)
     return srz_socket;
 }
 
-ARION_SOCKET *deserialize_arion_socket(std::vector<BYTE> srz_socket)
+ARION_SOCKET *arion::deserialize_arion_socket(std::vector<BYTE> srz_socket)
 {
     ARION_SOCKET *arion_s = new ARION_SOCKET;
 

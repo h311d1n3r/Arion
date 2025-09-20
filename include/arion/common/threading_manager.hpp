@@ -8,21 +8,24 @@
 #include <stack>
 #include <vector>
 
+namespace arion
+{
+
 class Arion;
 
 struct ARION_FUTEX
 {
-    arion::ADDR futex_addr = 0;
+    ADDR futex_addr = 0;
     uint32_t futex_bitmask = 0;
     pid_t tid;
     ARION_FUTEX() {};
-    ARION_FUTEX(arion::ADDR futex_addr, uint32_t futex_bitmask, pid_t tid)
+    ARION_FUTEX(ADDR futex_addr, uint32_t futex_bitmask, pid_t tid)
         : futex_addr(futex_addr), futex_bitmask(futex_bitmask), tid(tid) {};
     ARION_FUTEX(ARION_FUTEX *arion_f)
         : futex_addr(arion_f->futex_addr), futex_bitmask(arion_f->futex_bitmask), tid(arion_f->tid) {};
 };
-std::vector<arion::BYTE> serialize_arion_futex(ARION_FUTEX *arion_f);
-ARION_FUTEX *deserialize_arion_futex(std::vector<arion::BYTE> srz_thread);
+std::vector<BYTE> serialize_arion_futex(ARION_FUTEX *arion_f);
+ARION_FUTEX *deserialize_arion_futex(std::vector<BYTE> srz_thread);
 
 struct ARION_EXPORT ARION_THREAD
 {
@@ -30,21 +33,20 @@ struct ARION_EXPORT ARION_THREAD
     pid_t tgid;
     int exit_signal;
     uint64_t flags;
-    arion::ADDR child_cleartid_addr;
-    arion::ADDR child_settid_addr;
-    arion::ADDR parent_tid_addr;
-    std::unique_ptr<std::map<arion::REG, arion::RVAL>> regs_state = nullptr;
-    arion::ADDR tls_addr;
-    arion::ADDR wait_status_addr = 0;
+    ADDR child_cleartid_addr;
+    ADDR child_settid_addr;
+    ADDR parent_tid_addr;
+    std::unique_ptr<std::map<REG, RVAL>> regs_state = nullptr;
+    ADDR tls_addr;
+    ADDR wait_status_addr = 0;
     bool stopped = false;
-    arion::ADDR robust_list_head = 0;
-    arion::ADDR rseq_addr = 0;
+    ADDR robust_list_head = 0;
+    ADDR rseq_addr = 0;
     uint32_t rseq_len = 0;
     uint32_t rseq_sig = 0;
     ARION_THREAD() {};
-    ARION_THREAD(int exit_signal, uint64_t flags, arion::ADDR child_cleartid_addr, arion::ADDR child_settid_addr,
-                 arion::ADDR parent_tid_addr, std::unique_ptr<std::map<arion::REG, arion::RVAL>> regs_state,
-                 arion::ADDR tls_addr)
+    ARION_THREAD(int exit_signal, uint64_t flags, ADDR child_cleartid_addr, ADDR child_settid_addr,
+                 ADDR parent_tid_addr, std::unique_ptr<std::map<REG, RVAL>> regs_state, ADDR tls_addr)
         : exit_signal(exit_signal), flags(flags), child_cleartid_addr(child_cleartid_addr),
           child_settid_addr(child_settid_addr), parent_tid_addr(parent_tid_addr), regs_state(std::move(regs_state)),
           tls_addr(tls_addr) {};
@@ -52,12 +54,11 @@ struct ARION_EXPORT ARION_THREAD
         : tid(arion_t->tid), tgid(arion_t->tgid), exit_signal(arion_t->exit_signal), flags(arion_t->flags),
           child_cleartid_addr(arion_t->child_cleartid_addr), child_settid_addr(arion_t->child_settid_addr),
           parent_tid_addr(arion_t->parent_tid_addr),
-          regs_state(arion_t->regs_state ? std::make_unique<std::map<arion::REG, arion::RVAL>>(*arion_t->regs_state)
-                                         : nullptr),
+          regs_state(arion_t->regs_state ? std::make_unique<std::map<REG, RVAL>>(*arion_t->regs_state) : nullptr),
           tls_addr(arion_t->tls_addr), wait_status_addr(arion_t->wait_status_addr), stopped(arion_t->stopped) {};
 };
-std::vector<arion::BYTE> serialize_arion_thread(ARION_THREAD *arion_t);
-ARION_THREAD *deserialize_arion_thread(std::vector<arion::BYTE> srz_thread);
+std::vector<BYTE> serialize_arion_thread(ARION_THREAD *arion_t);
+ARION_THREAD *deserialize_arion_thread(std::vector<BYTE> srz_thread);
 
 struct ARION_EXPORT ARION_TGROUP_ENTRY
 {
@@ -80,24 +81,24 @@ class ARION_EXPORT ThreadingManager
   public:
     static std::map<pid_t, std::vector<std::unique_ptr<ARION_TGROUP_ENTRY>>> thread_groups;
     std::map<pid_t, std::unique_ptr<ARION_THREAD>> threads_map;
-    std::map<arion::ADDR, std::vector<std::unique_ptr<ARION_FUTEX>> *> futex_list;
+    std::map<ADDR, std::vector<std::unique_ptr<ARION_FUTEX>> *> futex_list;
     static std::unique_ptr<ThreadingManager> initialize(std::weak_ptr<Arion> arion);
     ThreadingManager(std::weak_ptr<Arion> arion);
     ~ThreadingManager();
     pid_t ARION_EXPORT add_thread_entry(std::unique_ptr<ARION_THREAD> thread);
     void ARION_EXPORT remove_thread_entry(pid_t tid);
     void ARION_EXPORT clear_threads();
-    pid_t clone_thread(uint64_t flags, arion::ADDR new_sp, arion::ADDR new_tls, arion::ADDR child_tid_addr,
-                       arion::ADDR parent_tid_addr, int exit_signal);
-    pid_t fork_process(uint64_t flags, arion::ADDR new_sp, arion::ADDR new_tls, arion::ADDR child_tid_addr,
-                       arion::ADDR parent_tid_addr, int exit_signal);
+    pid_t clone_thread(uint64_t flags, ADDR new_sp, ADDR new_tls, ADDR child_tid_addr, ADDR parent_tid_addr,
+                       int exit_signal);
+    pid_t fork_process(uint64_t flags, ADDR new_sp, ADDR new_tls, ADDR child_tid_addr, ADDR parent_tid_addr,
+                       int exit_signal);
     void switch_to_thread(pid_t tid);
     void switch_to_next_thread();
-    void futex_wait(pid_t tid, arion::ADDR futex_addr, uint32_t futex_bitmask);
-    void futex_wait_curr(arion::ADDR futex_addr, uint32_t futex_bitmask);
-    bool signal_wait(pid_t target_tid, pid_t source_pid, arion::ADDR wait_status_addr);
-    bool signal_wait_curr(pid_t source_pid, arion::ADDR wait_status_addr);
-    size_t futex_wake(arion::ADDR futex_addr, uint32_t futex_bitmask);
+    void futex_wait(pid_t tid, ADDR futex_addr, uint32_t futex_bitmask);
+    void futex_wait_curr(ADDR futex_addr, uint32_t futex_bitmask);
+    bool signal_wait(pid_t target_tid, pid_t source_pid, ADDR wait_status_addr);
+    bool signal_wait_curr(pid_t source_pid, ADDR wait_status_addr);
+    size_t futex_wake(ADDR futex_addr, uint32_t futex_bitmask);
     bool ARION_EXPORT is_curr_locked();
     size_t ARION_EXPORT get_threads_count();
     pid_t ARION_EXPORT get_running_tid();
@@ -105,5 +106,7 @@ class ARION_EXPORT ThreadingManager
     void set_tgid(pid_t tid, pid_t tgid, bool init = false);
     void set_all_tgid(pid_t tgid, bool init = false);
 };
+
+}; // namespace arion
 
 #endif // ARION_THREADING_MANAGER_HPP

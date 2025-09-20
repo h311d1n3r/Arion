@@ -15,6 +15,9 @@
 #define C 0x98badcfe
 #define D 0x10325476
 
+namespace arion
+{
+
 struct MD5_CTXT
 {
     uint64_t size;
@@ -188,5 +191,7 @@ inline void md5_file(FILE *file, uint8_t *result)
 
     memcpy(result, ctx.digest, 16);
 }
+
+}; // namespace arion
 
 #endif // ARION_MD5_HPP

@@ -12,6 +12,9 @@
 #define MAX_LIGHT_HITS 1024
 #define MAX_HEAVY_HITS 64
 
+namespace arion
+{
+
 class Arion;
 
 const char TRACER_FILE_MAGIC[] = "ARIONTRC";
@@ -37,7 +40,7 @@ struct ARION_EXPORT CODE_HIT
     uint32_t off;
     uint16_t sz;
     uint16_t mod_id;
-    std::unique_ptr<std::map<arion::REG, arion::RVAL>> regs;
+    std::unique_ptr<std::map<REG, RVAL>> regs;
 
     CODE_HIT() {};
     CODE_HIT(uint32_t off, size_t sz, uint16_t mod_id) : off(off), sz(sz), mod_id(mod_id) {};
@@ -45,11 +48,11 @@ struct ARION_EXPORT CODE_HIT
 
 struct TRACER_MAPPING
 {
-    arion::ADDR start;
-    arion::ADDR end;
+    ADDR start;
+    ADDR end;
     std::string name;
 
-    TRACER_MAPPING(arion::ADDR start, arion::ADDR end, std::string name) : start(start), end(end), name(name) {};
+    TRACER_MAPPING(ADDR start, ADDR end, std::string name) : start(start), end(end), name(name) {};
 };
 
 class ARION_EXPORT CodeTracer
@@ -66,11 +69,11 @@ class ARION_EXPORT CodeTracer
     off_t mod_sec_off;
     std::vector<std::unique_ptr<CODE_HIT>> hits;
     std::vector<std::unique_ptr<TRACER_MAPPING>> mappings;
-    static void instr_hook(std::shared_ptr<Arion> arion, arion::ADDR addr, size_t sz, void *user_data);
-    static void block_hook(std::shared_ptr<Arion> arion, arion::ADDR addr, size_t sz, void *user_data);
+    static void instr_hook(std::shared_ptr<Arion> arion, ADDR addr, size_t sz, void *user_data);
+    static void block_hook(std::shared_ptr<Arion> arion, ADDR addr, size_t sz, void *user_data);
     void prepare_file();
     void release_file();
-    void process_hit(arion::ADDR addr, size_t sz);
+    void process_hit(ADDR addr, size_t sz);
     void flush_hits();
 
   public:
@@ -83,5 +86,7 @@ class ARION_EXPORT CodeTracer
     bool ARION_EXPORT is_enabled();
     TRACE_MODE ARION_EXPORT get_mode();
 };
+
+}; // namespace arion
 
 #endif // ARION_CODE_TRACER_HPP

@@ -4,6 +4,11 @@
 #include <arion/common/global_defs.hpp>
 #include <vector>
 
-std::vector<arion::BYTE> gen_random_bytes(std::size_t n);
+namespace arion
+{
+
+std::vector<BYTE> gen_random_bytes(std::size_t n);
+
+};
 
 #endif // ARION_MATH_UTILS_HPP

@@ -14,7 +14,7 @@
 
 using namespace arion;
 
-std::map<LIEF::ELF::Header::FILE_TYPE, ELF_FILE_TYPE> lief_arion_file_types = {
+std::map<LIEF::ELF::Header::FILE_TYPE, ELF_FILE_TYPE> arion::lief_arion_file_types = {
     {LIEF::ELF::Header::FILE_TYPE::NONE, ELF_FILE_TYPE::UNKNOWN_FILE},
     {LIEF::ELF::Header::FILE_TYPE::REL, ELF_FILE_TYPE::REL},
     {LIEF::ELF::Header::FILE_TYPE::EXEC, ELF_FILE_TYPE::EXEC},

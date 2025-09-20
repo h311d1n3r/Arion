@@ -1,5 +1,7 @@
 #include <arion/common/executable_parser.hpp>
 
+using namespace arion;
+
 std::shared_ptr<ARION_EXECUTABLE_PARSER_ATTRIBUTES> ExecutableParser::get_attrs()
 {
     return this->attrs;

@@ -6,13 +6,16 @@
 #include <memory>
 #include <string>
 
-class Arion;
-
 #define COMMON_TYPE_PRIORITY 0
 #define OS_BASE_TYPE_PRIORITY 1
 #define OS_STRUCT_FACTORY_PRIORITY 2
 #define OS_STRUCT_TYPE_PRIORITY 3
 #define OS_VARIABLE_STRUCT_TYPE_PRIORITY 4
+
+namespace arion
+{
+
+class Arion;
 
 class ArionType
 {
@@ -102,5 +105,7 @@ class ArionRawStringType : public ArionType
     std::string str(std::shared_ptr<Arion> arion, uint64_t val) override;
 };
 extern std::shared_ptr<ArionRawStringType> ARION_RAW_STRING_TYPE;
+
+}; // namespace arion
 
 #endif // ARION_TYPE_UTILS_HPP

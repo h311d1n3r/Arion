@@ -9,6 +9,9 @@
 #include <string>
 #include <vector>
 
+namespace arion
+{
+
 class Arion;
 
 const char CONTEXT_FILE_MAGIC[] = "ARIONCTX";
@@ -48,5 +51,7 @@ class ARION_EXPORT ContextManager
     void ARION_EXPORT save_to_file(std::string file_path);
     void ARION_EXPORT restore_from_file(std::string file_path);
 };
+
+}; // namespace arion
 
 #endif // ARION_CONTEXT_MANAGER_HPP

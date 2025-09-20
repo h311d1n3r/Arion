@@ -1,6 +1,8 @@
 #include <arion/arion.hpp>
 #include <arion_test/common.hpp>
 
+using namespace arion;
+
 bool intr_hook_bkpt_hit = false;
 
 void intr_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data)

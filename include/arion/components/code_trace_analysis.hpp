@@ -7,16 +7,19 @@
 #include <map>
 #include <string>
 
+namespace arion
+{
+
 struct TRACE_MODULE
 {
     uint16_t mod_id;
     std::string name;
     std::string hash;
-    arion::ADDR start;
-    arion::ADDR end;
+    ADDR start;
+    ADDR end;
 
     TRACE_MODULE() {};
-    TRACE_MODULE(uint16_t mod_id, std::string name, std::string hash, arion::ADDR start, arion::ADDR end)
+    TRACE_MODULE(uint16_t mod_id, std::string name, std::string hash, ADDR start, ADDR end)
         : mod_id(mod_id), name(name), hash(hash), start(start), end(end) {};
     TRACE_MODULE(TRACE_MODULE *mod)
         : mod_id(mod->mod_id), name(mod->name), hash(mod->hash), start(mod->start), end(mod->end) {};
@@ -31,7 +34,7 @@ class CodeTraceReader
     float version;
     TRACE_MODE mode;
     size_t total_hits;
-    std::vector<arion::REG> ctxt_regs;
+    std::vector<REG> ctxt_regs;
     off_t secs_table_off;
     off_t mod_sec_off;
     off_t regs_sec_off;
@@ -49,7 +52,7 @@ class CodeTraceReader
     std::unique_ptr<CODE_HIT> curr_hit();
     std::unique_ptr<CODE_HIT> next_hit();
     std::unique_ptr<CODE_HIT> next_mod_hit(uint16_t mod_id);
-    std::unique_ptr<CODE_HIT> reach_addr(arion::ADDR addr);
+    std::unique_ptr<CODE_HIT> reach_addr(ADDR addr);
     std::unique_ptr<CODE_HIT> reach_off(uint16_t mod_id, uint32_t off);
     off_t get_hit_index();
     void set_hit_index(off_t hit_i);
@@ -58,7 +61,7 @@ class CodeTraceReader
     std::unique_ptr<TRACE_MODULE> get_module(uint16_t mod_id);
     std::unique_ptr<TRACE_MODULE> find_module_from_name(std::string name);
     std::unique_ptr<TRACE_MODULE> find_module_from_hash(std::string hash);
-    bool has_reg(arion::REG reg);
+    bool has_reg(REG reg);
 };
 
 struct ARION_EXPORT ANALYSIS_HIT
@@ -67,12 +70,11 @@ struct ARION_EXPORT ANALYSIS_HIT
     std::string mod_name;
     uint32_t off;
     uint16_t sz;
-    std::unique_ptr<std::map<arion::REG, arion::RVAL>> regs;
+    std::unique_ptr<std::map<REG, RVAL>> regs;
 
     ANALYSIS_HIT();
-    ANALYSIS_HIT(off_t hit_i, std::string mod_name, uint32_t off, uint16_t sz, std::map<arion::REG, arion::RVAL> *regs)
-        : hit_i(hit_i), mod_name(mod_name), off(off), sz(sz),
-          regs(std::make_unique<std::map<arion::REG, arion::RVAL>>(*regs)) {};
+    ANALYSIS_HIT(off_t hit_i, std::string mod_name, uint32_t off, uint16_t sz, std::map<REG, RVAL> *regs)
+        : hit_i(hit_i), mod_name(mod_name), off(off), sz(sz), regs(std::make_unique<std::map<REG, RVAL>>(*regs)) {};
 };
 
 using ANALYZER_HIT_CALLBACK = std::function<bool(std::unique_ptr<ANALYSIS_HIT> hit)>;
@@ -84,19 +86,19 @@ class ARION_EXPORT CodeTraceAnalyzer
 
   public:
     ARION_EXPORT CodeTraceAnalyzer(std::string trace_path);
-    void ARION_EXPORT reach_address(arion::ADDR addr);
+    void ARION_EXPORT reach_address(ADDR addr);
     void ARION_EXPORT reach_offset(std::string name, uint32_t off);
     void ARION_EXPORT loop_on_every_hit(ANALYZER_HIT_CALLBACK callback, bool reset_cursor = true);
     void ARION_EXPORT loop_on_every_mod_hit(ANALYZER_HIT_CALLBACK callback, std::string name, bool reset_cursor = true);
-    void ARION_EXPORT search_hit_address(ANALYZER_HIT_CALLBACK callback, arion::ADDR addr, bool reset_cursor = true);
-    void ARION_EXPORT search_hit_address_range(ANALYZER_HIT_CALLBACK callback, arion::ADDR start_addr,
-                                               arion::ADDR end_addr, bool reset_cursor = true);
+    void ARION_EXPORT search_hit_address(ANALYZER_HIT_CALLBACK callback, ADDR addr, bool reset_cursor = true);
+    void ARION_EXPORT search_hit_address_range(ANALYZER_HIT_CALLBACK callback, ADDR start_addr, ADDR end_addr,
+                                               bool reset_cursor = true);
     void ARION_EXPORT search_hit_offset(ANALYZER_HIT_CALLBACK callback, std::string name, uint32_t off,
                                         bool reset_cursor = true);
-    void ARION_EXPORT search_hit_offset_range(ANALYZER_HIT_CALLBACK callback, std::string name, arion::ADDR start_off,
-                                              arion::ADDR end_off, bool reset_cursor = true);
+    void ARION_EXPORT search_hit_offset_range(ANALYZER_HIT_CALLBACK callback, std::string name, ADDR start_off,
+                                              ADDR end_off, bool reset_cursor = true);
 
-    template <typename T> void ARION_EXPORT search_reg_val(ANALYZER_HIT_CALLBACK callback, arion::REG reg, T val)
+    template <typename T> void ARION_EXPORT search_reg_val(ANALYZER_HIT_CALLBACK callback, REG reg, T val)
     {
         if (this->reader.get_mode() != TRACE_MODE::CTXT)
             throw WrongTraceModeException();
@@ -107,27 +109,27 @@ class ARION_EXPORT CodeTraceAnalyzer
         std::unique_ptr<CODE_HIT> hit;
         while ((hit = this->reader.next_hit()))
         {
-            arion::RVAL hit_val = hit->regs->at(reg);
+            RVAL hit_val = hit->regs->at(reg);
             bool is_equal = false;
-            if constexpr (std::is_same_v<T, arion::RVAL8>)
+            if constexpr (std::is_same_v<T, RVAL8>)
                 if (hit_val.r8 != val)
                     continue;
-            if constexpr (std::is_same_v<T, arion::RVAL16>)
+            if constexpr (std::is_same_v<T, RVAL16>)
                 if (hit_val.r16 != val)
                     continue;
-            if constexpr (std::is_same_v<T, arion::RVAL32>)
+            if constexpr (std::is_same_v<T, RVAL32>)
                 if (hit_val.r32 != val)
                     continue;
-            if constexpr (std::is_same_v<T, arion::RVAL64>)
+            if constexpr (std::is_same_v<T, RVAL64>)
                 if (hit_val.r64 != val)
                     continue;
-            if constexpr (std::is_same_v<T, arion::RVAL128>)
+            if constexpr (std::is_same_v<T, RVAL128>)
                 if (hit_val.r128 != val)
                     continue;
-            if constexpr (std::is_same_v<T, arion::RVAL256>)
+            if constexpr (std::is_same_v<T, RVAL256>)
                 if (hit_val.r256 != val)
                     continue;
-            if constexpr (std::is_same_v<T, arion::RVAL512>)
+            if constexpr (std::is_same_v<T, RVAL512>)
                 if (hit_val.r512 != val)
                     continue;
             std::unique_ptr<TRACE_MODULE> mod = this->reader.get_module(hit->mod_id);
@@ -147,12 +149,14 @@ class ARION_EXPORT CodeTraceComparator
 
   public:
     ARION_EXPORT CodeTraceComparator(std::string trace_path1, std::string trace_path2);
-    void ARION_EXPORT merge_at_address(arion::ADDR addr);
+    void ARION_EXPORT merge_at_address(ADDR addr);
     void ARION_EXPORT merge_at_offset(std::string name, uint32_t off);
     void ARION_EXPORT search_uneq_hit_offset(COMPARATOR_HIT_CALLBACK callback, bool reset_cursors = true);
     void ARION_EXPORT search_uneq_hit_offset_mod(COMPARATOR_HIT_CALLBACK callback, std::string name,
                                                  bool reset_cursors = true);
     void ARION_EXPORT search_uneq_reg(COMPARATOR_HIT_CALLBACK callback, bool reset_cursors = true);
 };
+
+}; // namespace arion
 
 #endif // ARION_CODE_TRACE_ANALYSIS_HPP

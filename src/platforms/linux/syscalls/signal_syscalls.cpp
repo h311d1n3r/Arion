@@ -8,7 +8,7 @@
 
 using namespace arion;
 
-uint64_t sys_rt_sigaction(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
+uint64_t arion::sys_rt_sigaction(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     int signo = params.at(0);
     ADDR act_addr = params.at(1);
@@ -32,7 +32,7 @@ uint64_t sys_rt_sigaction(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> p
     return 0;
 }
 
-uint64_t sys_rt_sigreturn(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
+uint64_t arion::sys_rt_sigreturn(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     if (arion->signals->sigreturn())
     {
@@ -43,7 +43,7 @@ uint64_t sys_rt_sigreturn(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> p
     return -1;
 }
 
-uint64_t sys_sigreturn(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
+uint64_t arion::sys_sigreturn(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     if (arion->signals->sigreturn())
     {
@@ -54,7 +54,7 @@ uint64_t sys_sigreturn(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> para
     return -1;
 }
 
-uint64_t sys_pause(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
+uint64_t arion::sys_pause(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     pid_t curr_tid = arion->threads->get_running_tid();
     std::unique_ptr<ARION_THREAD> arion_t = std::move(arion->threads->threads_map.at(curr_tid));
@@ -63,7 +63,7 @@ uint64_t sys_pause(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, 
     return 0;
 }
 
-uint64_t sys_wait4(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
+uint64_t arion::sys_wait4(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     pid_t pid = params.at(0);
     ADDR stat_addr = params.at(1);
@@ -76,7 +76,7 @@ uint64_t sys_wait4(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, 
     return 0;
 }
 
-uint64_t sys_kill(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
+uint64_t arion::sys_kill(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     pid_t pid = params.at(0);
     int sig = params.at(1);
@@ -90,7 +90,7 @@ uint64_t sys_kill(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, b
     return 0;
 }
 
-uint64_t sys_tgkill(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
+uint64_t arion::sys_tgkill(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     pid_t tgid = params.at(0);
     pid_t tid = params.at(1);
@@ -113,7 +113,7 @@ uint64_t sys_tgkill(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params,
     return 0;
 }
 
-uint64_t sys_waitid(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
+uint64_t arion::sys_waitid(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     int idtype = params.at(0);
     id_t id = params.at(1);

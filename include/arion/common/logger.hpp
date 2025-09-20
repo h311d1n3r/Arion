@@ -12,6 +12,9 @@
 #include <arion/common/global_defs.hpp>
 #include <stack>
 
+namespace arion
+{
+
 class Arion;
 
 enum ARION_LOG_COLOR
@@ -75,7 +78,7 @@ class ARION_EXPORT Logger
     uint64_t id;
     pid_t curr_pid;
     pid_t curr_tid;
-    arion::LOG_LEVEL log_lvl;
+    LOG_LEVEL log_lvl;
     std::weak_ptr<Arion> arion;
 #ifdef ARION_ONLY
     // spdlog should only be considered when compiling libarion.so as it is header-only
@@ -86,11 +89,10 @@ class ARION_EXPORT Logger
     void refresh_prefix(bool force = false);
 
   public:
-    static std::unique_ptr<Logger> initialize(std::weak_ptr<Arion> arion,
-                                              arion::LOG_LEVEL lvl = arion::LOG_LEVEL::INFO);
+    static std::unique_ptr<Logger> initialize(std::weak_ptr<Arion> arion, LOG_LEVEL lvl = LOG_LEVEL::INFO);
     Logger(std::weak_ptr<Arion> arion);
-    void ARION_EXPORT set_log_level(arion::LOG_LEVEL lvl);
-    arion::LOG_LEVEL ARION_EXPORT get_log_level();
+    void ARION_EXPORT set_log_level(LOG_LEVEL lvl);
+    LOG_LEVEL ARION_EXPORT get_log_level();
     void trace(std::string str);
     void debug(std::string str);
     void info(std::string str);
@@ -98,5 +100,7 @@ class ARION_EXPORT Logger
     void error(std::string str);
     void critical(std::string str);
 };
+
+}; // namespace arion
 
 #endif // ARION_LOGGER_HPP
