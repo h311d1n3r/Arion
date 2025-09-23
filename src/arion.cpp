@@ -307,7 +307,7 @@ void Arion::init_engines(arion::CPU_ARCH arch)
     }
 }
 
-void Arion::init_file_program(std::shared_ptr<ElfParser> prog_parser)
+void Arion::init_file_program(std::shared_ptr<ExecutableParser> prog_parser)
 {
     std::shared_ptr<Arion> curr_instance = shared_from_this();
     const std::string program_path = this->program_args.at(0);
@@ -347,7 +347,7 @@ void Arion::init_baremetal_program()
     this->loader_params = loader.process();
 }
 
-void Arion::init_dynamic_program(std::shared_ptr<ElfParser> prog_parser)
+void Arion::init_dynamic_program(std::shared_ptr<ExecutableParser> prog_parser)
 {
     std::shared_ptr<Arion> curr_instance = shared_from_this();
     std::string interpreter_path = prog_parser->get_attrs()->interpreter_path;
@@ -356,14 +356,16 @@ void Arion::init_dynamic_program(std::shared_ptr<ElfParser> prog_parser)
     interp_parser->process();
     if (interp_parser->get_attrs()->linkage != LINKAGE_TYPE::STATIC_LINKAGE)
         throw BadLinkageTypeException(interpreter_path);
-    ElfLoader loader(curr_instance, interp_parser, prog_parser, this->program_args, this->program_env);
+    ElfLoader loader(curr_instance, interp_parser, std::dynamic_pointer_cast<ElfParser>(prog_parser),
+                     this->program_args, this->program_env);
     this->loader_params = loader.process();
 }
 
-void Arion::init_static_program(std::shared_ptr<ElfParser> prog_parser)
+void Arion::init_static_program(std::shared_ptr<ExecutableParser> prog_parser)
 {
     std::shared_ptr<Arion> curr_instance = shared_from_this();
-    ElfLoader loader(curr_instance, prog_parser, this->program_args, this->program_env);
+    ElfLoader loader(curr_instance, std::dynamic_pointer_cast<ElfParser>(prog_parser), this->program_args,
+                     this->program_env);
     this->loader_params = loader.process();
 }
 

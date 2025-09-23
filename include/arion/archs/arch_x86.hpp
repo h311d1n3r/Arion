@@ -16,6 +16,7 @@ class Arion;
 
 namespace arion_x86
 {
+/// A map identifying a x86 syscall name given its number.
 inline std::map<uint64_t, std::string> NAME_BY_SYSCALL_NO = {{0, "restart_syscall"},
                                                              {1, "exit"},
                                                              {2, "fork"},
@@ -447,6 +448,7 @@ inline std::map<uint64_t, std::string> NAME_BY_SYSCALL_NO = {{0, "restart_syscal
                                                              {465, "listxattrat"},
                                                              {466, "removexattrat"}};
 
+/// A map identifying a Unicorn x86 register given its name.
 inline std::map<std::string, arion::REG> ARCH_REGS = {
     {"AH", UC_X86_REG_AH},       {"AL", UC_X86_REG_AL},         {"AX", UC_X86_REG_AX},     {"BH", UC_X86_REG_BH},
     {"BL", UC_X86_REG_BL},       {"BP", UC_X86_REG_BP},         {"BPL", UC_X86_REG_BPL},   {"BX", UC_X86_REG_BX},
@@ -474,6 +476,7 @@ inline std::map<std::string, arion::REG> ARCH_REGS = {
     {"FLAGS", UC_X86_REG_FLAGS}, {"EFLAGS", UC_X86_REG_EFLAGS}, {"FIP", UC_X86_REG_FIP},   {"FCS", UC_X86_REG_FCS},
     {"FDP", UC_X86_REG_FDP},     {"FDS", UC_X86_REG_FDS},       {"FOP", UC_X86_REG_FOP}};
 
+/// A map identifying a Unicorn x86 register size given the register.
 inline std::map<arion::REG, uint8_t> ARCH_REGS_SZ = {
     {UC_X86_REG_AH, 1},    {UC_X86_REG_AL, 1},    {UC_X86_REG_AX, 2},     {UC_X86_REG_BH, 1},    {UC_X86_REG_BL, 1},
     {UC_X86_REG_BP, 2},    {UC_X86_REG_BPL, 1},   {UC_X86_REG_BX, 2},     {UC_X86_REG_CH, 1},    {UC_X86_REG_CL, 1},
@@ -496,6 +499,7 @@ inline std::map<arion::REG, uint8_t> ARCH_REGS_SZ = {
     {UC_X86_REG_MXCSR, 4}, {UC_X86_REG_FLAGS, 2}, {UC_X86_REG_EFLAGS, 4}, {UC_X86_REG_FIP, 8},   {UC_X86_REG_FCS, 2},
     {UC_X86_REG_FDP, 8},   {UC_X86_REG_FDS, 2},   {UC_X86_REG_FOP, 2}};
 
+/// The list of high-level x86 registers that make up the context to be saved and restored.
 inline std::vector<arion::REG> CTXT_REGS = {
     UC_X86_REG_FS,   UC_X86_REG_GS,   UC_X86_REG_EAX,   UC_X86_REG_EBP,  UC_X86_REG_EBX,  UC_X86_REG_ECX,
     UC_X86_REG_EDI,  UC_X86_REG_EDX,  UC_X86_REG_EIP,   UC_X86_REG_ESI,  UC_X86_REG_ESP,  UC_X86_REG_SS,
@@ -505,6 +509,7 @@ inline std::vector<arion::REG> CTXT_REGS = {
     UC_X86_REG_YMM0, UC_X86_REG_YMM1, UC_X86_REG_YMM2,  UC_X86_REG_YMM3, UC_X86_REG_YMM4, UC_X86_REG_YMM5,
     UC_X86_REG_YMM6, UC_X86_REG_YMM7, UC_X86_REG_EFLAGS};
 
+/// The x86 Interrupt Descriptor Table
 inline std::map<uint64_t, arion::CPU_INTR> IDT = {{0, arion::DIVIDE_ERROR},
                                                   {1, arion::DEBUG_EXCEPTION},
                                                   {2, arion::NON_MASKABLE_INTR},
@@ -526,45 +531,90 @@ inline std::map<uint64_t, arion::CPU_INTR> IDT = {{0, arion::DIVIDE_ERROR},
                                                   {18, arion::MACHINE_CHECK},
                                                   {19, arion::SIMD_FLOATING_POINT_ERROR}};
 
+/// Unicorn x86 IP and SP registers for genericity.
 inline arion::ABI_REGISTERS ABI_REGS = arion::ABI_REGISTERS(UC_X86_REG_EIP, UC_X86_REG_ESP);
 
+/// Unicorn x86 Registers involved in calling convention.
 inline arion::ABI_CALLING_CONVENTION ABI_CALLING_CONV = arion::ABI_CALLING_CONVENTION(UC_X86_REG_EAX, {});
 
+/// Unicorn x86 Registers involved in syscalling convention.
 inline arion::ABI_SYSCALLING_CONVENTION ABI_SYSCALLING_CONV = arion::ABI_SYSCALLING_CONVENTION(
     UC_X86_REG_EAX, UC_X86_REG_EAX,
     {UC_X86_REG_EBX, UC_X86_REG_ECX, UC_X86_REG_EDX, UC_X86_REG_ESI, UC_X86_REG_EDI, UC_X86_REG_EBP});
 
+/// x86 flags telling the loader which kernel segments should be mapped in memory.
 inline arion::KERNEL_SEG_FLAGS SEG_FLAGS = ARION_VVAR_PRESENT | ARION_VDSO_PRESENT;
 
+/// Some well working x86 chip HWCAP2 value.
 inline uint32_t HWCAP2 = 2;
 
+/// Some well working x86 chip HWCAP value.
 inline uint32_t HWCAP = 0xbfebfbff;
 
+/// Size in bytes of a pointer in a x86 chip.
 inline const size_t PTR_SZ = 4;
 
+/// Size in bits of the x86 general-purpose registers.
 inline const uint16_t ARCH_SZ = 32;
 
+/// Arion CPU_ARCH for x86.
 inline arion::CPU_ARCH ARCH = arion::CPU_ARCH::X86_ARCH;
 
+/// Multiple architecture specific attributes for x86, grouped in a structure for genericity purpose.
 inline arion::ARCH_ATTRIBUTES ARCH_ATTRS =
     arion::ARCH_ATTRIBUTES(ARCH, ARCH_SZ, PTR_SZ, HWCAP, HWCAP2, SEG_FLAGS, ABI_REGS, ABI_CALLING_CONV,
                            ABI_SYSCALLING_CONV, NAME_BY_SYSCALL_NO);
 
+/// A class responsible for performing architecture specific operations in case of an x86 chip emulation.
 class ArchManagerX86 : public arion::ArchManager
 {
   private:
+    /**
+     * Interrupt hook used to detect syscalls.
+     * @param[in] arion The Arion instance responsible for the interrupt.
+     * @param[in] intno The interrupt number.
+     * @param[in] user_data Additional user data.
+     */
     static void int_hook(std::shared_ptr<arion::Arion> arion, uint32_t intno, void *user_data);
+    /**
+     * Prepares the ArchManagerX86 for emulation.
+     */
     void setup() override;
 
   public:
+    /**
+     * Builder for ArchManagerX86 instances.
+     */
     ArchManagerX86()
         : ArchManager(std::make_shared<arion::ARCH_ATTRIBUTES>(arion_x86::ARCH_ATTRS), arion_x86::ARCH_REGS,
                       arion_x86::ARCH_REGS_SZ, arion_x86::CTXT_REGS, arion_x86::IDT, true) {};
 
+    /**
+     * Associates a new in-memory Thread Local Storage (TLS) to the Global Descriptor Table (GDT) like in the syscall
+     * new_tls.
+     * @param[in] udesc_addr Address of the new TLS.
+     * @return Selector for the new GDT entry.
+     */
     uint16_t new_tls(arion::ADDR udesc_addr);
+    /**
+     * Retrieves the Keystone engine associated with this instance.
+     * @return The Keystone engine.
+     */
     ks_engine *curr_ks() override;
+    /**
+     * Retrieves the Capstone engine associated with this instance.
+     * @return The Capstone engine.
+     */
     csh *curr_cs() override;
+    /**
+     * Retrieves the current Thread Local Storage (TLS) address from the emulation context.
+     * @return The TLS address.
+     */
     arion::ADDR dump_tls() override;
+    /**
+     * Defines a Thread Local Storage (TLS) address to apply to the emulation.
+     * @param[in] new_tls The new TLS address.
+     */
     void load_tls(arion::ADDR new_tls) override;
 };
 

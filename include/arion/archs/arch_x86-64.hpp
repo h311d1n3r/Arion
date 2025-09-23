@@ -16,6 +16,8 @@ class Arion;
 
 namespace arion_x86_64
 {
+
+/// A map identifying a x86-64 syscall name given its number.
 inline std::map<uint64_t, std::string> NAME_BY_SYSCALL_NO = {{0, "read"},
                                                              {1, "write"},
                                                              {2, "open"},
@@ -375,6 +377,7 @@ inline std::map<uint64_t, std::string> NAME_BY_SYSCALL_NO = {{0, "read"},
                                                              {461, "lsm_list_modules"},
                                                              {462, "mseal"}};
 
+/// A map identifying a Unicorn x86-64 register given its name.
 inline std::map<std::string, arion::REG> ARCH_REGS = {
     {"AH", UC_X86_REG_AH},           {"AL", UC_X86_REG_AL},       {"AX", UC_X86_REG_AX},
     {"BH", UC_X86_REG_BH},           {"BL", UC_X86_REG_BL},       {"BP", UC_X86_REG_BP},
@@ -451,6 +454,7 @@ inline std::map<std::string, arion::REG> ARCH_REGS = {
     {"RFLAGS", UC_X86_REG_RFLAGS},   {"FIP", UC_X86_REG_FIP},     {"FCS", UC_X86_REG_FCS},
     {"FDP", UC_X86_REG_FDP},         {"FDS", UC_X86_REG_FDS},     {"FOP", UC_X86_REG_FOP}};
 
+/// A map identifying a Unicorn x86-64 register size given the register.
 inline std::map<arion::REG, uint8_t> ARCH_REGS_SZ = {
     {UC_X86_REG_AH, 1},      {UC_X86_REG_AL, 1},      {UC_X86_REG_AX, 2},     {UC_X86_REG_BH, 1},
     {UC_X86_REG_BL, 1},      {UC_X86_REG_BP, 2},      {UC_X86_REG_BPL, 1},    {UC_X86_REG_BX, 2},
@@ -509,6 +513,7 @@ inline std::map<arion::REG, uint8_t> ARCH_REGS_SZ = {
     {UC_X86_REG_RFLAGS, 8},  {UC_X86_REG_FIP, 8},     {UC_X86_REG_FCS, 2},    {UC_X86_REG_FDP, 8},
     {UC_X86_REG_FDS, 2},     {UC_X86_REG_FOP, 2}};
 
+/// The list of high-level x86-64 registers that make up the context to be saved and restored.
 inline std::vector<arion::REG> CTXT_REGS = {
     UC_X86_REG_FS,     UC_X86_REG_GS,    UC_X86_REG_RAX,   UC_X86_REG_RBP,   UC_X86_REG_RBX,     UC_X86_REG_RCX,
     UC_X86_REG_RDI,    UC_X86_REG_RDX,   UC_X86_REG_RIP,   UC_X86_REG_RSI,   UC_X86_REG_RSP,     UC_X86_REG_SS,
@@ -525,6 +530,7 @@ inline std::vector<arion::REG> CTXT_REGS = {
     UC_X86_REG_RFLAGS,
 };
 
+/// The x86-64 Interrupt Descriptor Table
 inline std::map<uint64_t, arion::CPU_INTR> IDT = {{0, arion::DIVIDE_ERROR},
                                                   {1, arion::DEBUG_EXCEPTION},
                                                   {2, arion::NON_MASKABLE_INTR},
@@ -546,46 +552,89 @@ inline std::map<uint64_t, arion::CPU_INTR> IDT = {{0, arion::DIVIDE_ERROR},
                                                   {18, arion::MACHINE_CHECK},
                                                   {19, arion::SIMD_FLOATING_POINT_ERROR}};
 
+/// Unicorn x86-64 IP and SP registers for genericity.
 inline arion::ABI_REGISTERS ABI_REGS = arion::ABI_REGISTERS(UC_X86_REG_RIP, UC_X86_REG_RSP);
 
+/// Unicorn x86-64 Registers involved in calling convention.
 inline arion::ABI_CALLING_CONVENTION ABI_CALLING_CONV = arion::ABI_CALLING_CONVENTION(
     UC_X86_REG_RAX, {UC_X86_REG_RDI, UC_X86_REG_RSI, UC_X86_REG_RDX, UC_X86_REG_RCX, UC_X86_REG_R8, UC_X86_REG_R9});
 
+/// Unicorn x86-64 Registers involved in syscalling convention.
 inline arion::ABI_SYSCALLING_CONVENTION ABI_SYSCALLING_CONV = arion::ABI_SYSCALLING_CONVENTION(
     UC_X86_REG_RAX, UC_X86_REG_RAX,
     {UC_X86_REG_RDI, UC_X86_REG_RSI, UC_X86_REG_RDX, UC_X86_REG_R10, UC_X86_REG_R8, UC_X86_REG_R9});
 
+/// x86-64 flags telling the loader which kernel segments should be mapped in memory.
 inline arion::KERNEL_SEG_FLAGS SEG_FLAGS = ARION_VVAR_PRESENT | ARION_VDSO_PRESENT | ARION_VSYSCALL_PRESENT;
 
+/// Some well working x86-64 chip HWCAP2 value.
 inline uint32_t HWCAP2 = 2;
 
+/// Some well working x86-64 chip HWCAP value.
 inline uint32_t HWCAP = 0xbfebfbff;
 
+/// Size in bytes of a pointer in a x86-64 chip.
 inline const size_t PTR_SZ = 8;
 
+/// Size in bits of the x86-64 general-purpose registers.
 inline const uint16_t ARCH_SZ = 64;
 
+/// Arion CPU_ARCH for x86-64.
 inline arion::CPU_ARCH ARCH = arion::CPU_ARCH::X8664_ARCH;
 
+/// Multiple architecture specific attributes for x86-64, grouped in a structure for genericity purpose.
 inline arion::ARCH_ATTRIBUTES ARCH_ATTRS =
     arion::ARCH_ATTRIBUTES(ARCH, ARCH_SZ, PTR_SZ, HWCAP, HWCAP2, SEG_FLAGS, ABI_REGS, ABI_CALLING_CONV,
                            ABI_SYSCALLING_CONV, NAME_BY_SYSCALL_NO);
 
+/// A class responsible for performing architecture specific operations in case of an x86-64 chip emulation.
 class ArchManagerX8664 : public arion::ArchManager
 {
   private:
+    /**
+     * A hook used to detect syscalls.
+     * @param[in] arion The Arion instance responsible for the interrupt.
+     * @param[in] user_data Additional user data.
+     */
     static void syscall_hook(std::shared_ptr<arion::Arion> arion, void *user_data);
+    /**
+     * Prepares the ArchManagerX8664 for emulation.
+     */
     void setup() override;
 
   public:
+    /**
+     * Builder for ArchManagerX8664 instances.
+     */
     ArchManagerX8664()
         : ArchManager(std::make_shared<arion::ARCH_ATTRIBUTES>(arion_x86_64::ARCH_ATTRS), arion_x86_64::ARCH_REGS,
                       arion_x86_64::ARCH_REGS_SZ, arion_x86_64::CTXT_REGS, arion_x86_64::IDT, false) {};
 
+    /**
+     * Builds a syscall entry for the vsyscall segment.
+     * @param[in] syscall_no The syscall number.
+     * @return An array of bytes for the entry.
+     */
     std::array<arion::BYTE, VSYSCALL_ENTRY_SZ> gen_vsyscall_entry(uint64_t syscall_no);
+    /**
+     * Retrieves the Keystone engine associated with this instance.
+     * @return The Keystone engine.
+     */
     ks_engine *curr_ks() override;
+    /**
+     * Retrieves the Capstone engine associated with this instance.
+     * @return The Capstone engine.
+     */
     csh *curr_cs() override;
+    /**
+     * Retrieves the current Thread Local Storage (TLS) address from the emulation context.
+     * @return The TLS address.
+     */
     arion::ADDR dump_tls() override;
+    /**
+     * Defines a Thread Local Storage (TLS) address to apply to the emulation.
+     * @param[in] new_tls The new TLS address.
+     */
     void load_tls(arion::ADDR new_tls) override;
 };
 
