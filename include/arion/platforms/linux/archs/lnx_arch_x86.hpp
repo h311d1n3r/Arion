@@ -34,12 +34,12 @@ inline std::vector<arion::REG> uc_user_regs = {
     UC_X86_REG_EAX, UC_X86_REG_DS,  UC_X86_REG_ES,     UC_X86_REG_FS,  UC_X86_REG_GS,  UC_X86_REG_INVALID,
     UC_X86_REG_EIP, UC_X86_REG_CS,  UC_X86_REG_EFLAGS, UC_X86_REG_ESP, UC_X86_REG_SS};
 
-const size_t ELF_NGREG = (sizeof(struct user_regs_struct) / sizeof(arion::elf_greg_t));
-typedef arion::elf_greg_t elf_gregset_t[ELF_NGREG];
+const size_t ELF_NGREG = (sizeof(struct user_regs_struct) / sizeof(arion_lnx_type::elf_greg_t));
+typedef arion_lnx_type::elf_greg_t elf_gregset_t[ELF_NGREG];
 
 struct elf_prstatus
 {
-    struct arion::elf_prstatus_common common;
+    struct arion_lnx_type::elf_prstatus_common common;
     elf_gregset_t pr_reg;
     int pr_fpvalid;
 };

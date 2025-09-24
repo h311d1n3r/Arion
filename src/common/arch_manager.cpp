@@ -17,6 +17,7 @@
 #include <sys/wait.h>
 
 using namespace arion;
+using namespace arion_exception;
 
 std::map<CPU_INTR, int> ArchManager::signo_by_intr = {
     // x86 interrupts

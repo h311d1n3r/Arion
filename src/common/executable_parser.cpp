@@ -2,7 +2,7 @@
 
 using namespace arion;
 
-std::shared_ptr<ARION_EXECUTABLE_PARSER_ATTRIBUTES> ExecutableParser::get_attrs()
+std::shared_ptr<EXECUTABLE_PARSER_ATTRIBUTES> ExecutableParser::get_attrs()
 {
     return this->attrs;
 }

@@ -5,6 +5,7 @@
 
 using namespace arion;
 using namespace arion_arm64;
+using namespace arion_exception;
 
 void ArchManagerARM64::int_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data)
 {

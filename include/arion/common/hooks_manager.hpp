@@ -177,7 +177,7 @@ class ARION_EXPORT HooksManager
                 HOOK_CALLBACK &callback = hook.second->param->callback;
                 std::shared_ptr<Arion> arion = hook.second->param->arion.lock();
                 if (!arion)
-                    throw ExpiredWeakPtrException("Arion");
+                    throw arion_exception::ExpiredWeakPtrException("Arion");
                 void *user_data = hook.second->param->user_data;
 
                 std::visit(
@@ -186,7 +186,7 @@ class ARION_EXPORT HooksManager
                         if constexpr (std::is_invocable_v<CallbackType, std::shared_ptr<Arion>, HookParams..., void *>)
                             cb(arion, params..., user_data);
                         else
-                            throw WrongHookParamsException();
+                            throw arion_exception::WrongHookParamsException();
                     },
                     callback);
             }

@@ -9,6 +9,7 @@
 #include <regex>
 
 using namespace arion;
+using namespace arion_exception;
 
 std::vector<BYTE> arion::serialize_arion_file(ARION_FILE *arion_f)
 {

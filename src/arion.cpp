@@ -17,6 +17,8 @@
 #include <sys/wait.h>
 
 using namespace arion;
+using namespace arion_exception;
+using namespace arion_type;
 
 // Replace import of udbserver with extern "C" to prevent C++ mangling import problem
 extern "C"
@@ -209,8 +211,8 @@ std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program_args
                                            std::vector<std::string> program_env, std::string cwd,
                                            std::unique_ptr<Config> config)
 {
-    if (!ArionTypeRegistry::instance().is_initialized())
-        ArionTypeRegistry::instance().init_types();
+    if (!KernelTypeRegistry::instance().is_initialized())
+        KernelTypeRegistry::instance().init_types();
     if (!program_args.size())
         throw InvalidArgumentException("Program arguments must at least contain target name.");
     std::shared_ptr<Arion> arion = std::make_shared<Arion>();
@@ -221,8 +223,8 @@ std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program_args
     std::string program_path = prog_parser->get_attrs()->usr_path;
     Arion::new_instance_common_finish(arion, prog_parser->get_attrs()->arch);
     colorstream init_msg;
-    init_msg << ARION_LOG_COLOR::WHITE << "Initializing Arion instance for image " << ARION_LOG_COLOR::GREEN << "\""
-             << program_path << "\"" << ARION_LOG_COLOR::WHITE << ".";
+    init_msg << LOG_COLOR::WHITE << "Initializing Arion instance for image " << LOG_COLOR::GREEN << "\""
+             << program_path << "\"" << LOG_COLOR::WHITE << ".";
     arion->logger->info(init_msg.str());
     if (!std::filesystem::exists(program_path))
         throw FileNotFoundException(program_path);
@@ -236,15 +238,15 @@ std::shared_ptr<Arion> Arion::new_instance(std::unique_ptr<BaremetalManager> bar
                                            std::vector<std::string> program_env, std::string cwd,
                                            std::unique_ptr<Config> config)
 {
-    if (!ArionTypeRegistry::instance().is_initialized())
-        ArionTypeRegistry::instance().init_types();
+    if (!KernelTypeRegistry::instance().is_initialized())
+        KernelTypeRegistry::instance().init_types();
     std::shared_ptr<Arion> arion = std::make_shared<Arion>();
     Arion::new_instance_common_init(arion, fs_path, program_env, cwd, std::move(config));
     arion->baremetal = std::move(baremetal);
     Arion::new_instance_common_finish(arion, arion->baremetal->get_arch());
     colorstream init_msg;
-    init_msg << ARION_LOG_COLOR::WHITE << "Initializing Arion instance in " << ARION_LOG_COLOR::MAGENTA << "baremetal"
-             << ARION_LOG_COLOR::WHITE << " mode.";
+    init_msg << LOG_COLOR::WHITE << "Initializing Arion instance in " << LOG_COLOR::MAGENTA << "baremetal"
+             << LOG_COLOR::WHITE << " mode.";
     arion->logger->info(init_msg.str());
     arion->init_baremetal_program();
     return arion;
@@ -253,7 +255,7 @@ std::shared_ptr<Arion> Arion::new_instance(std::unique_ptr<BaremetalManager> bar
 Arion::~Arion()
 {
     colorstream destroy_msg;
-    destroy_msg << ARION_LOG_COLOR::WHITE << "Destroying Arion instance.";
+    destroy_msg << LOG_COLOR::WHITE << "Destroying Arion instance.";
     this->logger->info(destroy_msg.str());
 
     std::shared_ptr<ArionGroup> group = this->group.lock();

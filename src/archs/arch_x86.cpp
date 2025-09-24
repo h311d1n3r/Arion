@@ -4,6 +4,7 @@
 
 using namespace arion;
 using namespace arion_x86;
+using namespace arion_exception;
 
 ks_engine *ArchManagerX86::curr_ks()
 {

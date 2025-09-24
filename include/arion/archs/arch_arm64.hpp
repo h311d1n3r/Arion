@@ -573,15 +573,15 @@ inline std::map<uint64_t, arion::CPU_INTR> IDT = {/*{1, UDEF},
                                            {21, LSERR},
                                            {22, UNALIGNED}*/};
 
-/// Unicorn ARM64 IP and SP registers for genericity.
+/// Unicorn ARM64 PC and SP registers for genericity.
 inline arion::ABI_REGISTERS ABI_REGS = arion::ABI_REGISTERS(UC_ARM64_REG_PC, UC_ARM64_REG_SP);
 
-/// Unicorn ARM64 Registers involved in calling convention.
+/// Unicorn ARM64 registers involved in calling convention.
 inline arion::ABI_CALLING_CONVENTION ABI_CALLING_CONV = arion::ABI_CALLING_CONVENTION(
     UC_ARM64_REG_X0, {UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X2, UC_ARM64_REG_X3, UC_ARM64_REG_X4,
                       UC_ARM64_REG_X5, UC_ARM64_REG_X6, UC_ARM64_REG_X7});
 
-/// Unicorn ARM64 Registers involved in syscalling convention.
+/// Unicorn ARM64 registers involved in syscalling convention.
 inline arion::ABI_SYSCALLING_CONVENTION ABI_SYSCALLING_CONV = arion::ABI_SYSCALLING_CONVENTION(
     UC_ARM64_REG_X8, UC_ARM64_REG_X0,
     {UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X2, UC_ARM64_REG_X3, UC_ARM64_REG_X4, UC_ARM64_REG_X5});

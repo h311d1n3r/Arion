@@ -18,12 +18,12 @@ inline std::vector<arion::REG> uc_pt_regs = {
     UC_ARM_REG_R6, UC_ARM_REG_R7, UC_ARM_REG_R8, UC_ARM_REG_R9, UC_ARM_REG_R10,  UC_ARM_REG_FP,
     UC_ARM_REG_IP, UC_ARM_REG_SP, UC_ARM_REG_LR, UC_ARM_REG_PC, UC_ARM_REG_CPSR, UC_ARM_REG_INVALID};
 
-const size_t ELF_NGREG = (sizeof(struct pt_regs) / sizeof(arion::elf_greg_t));
-typedef arion::elf_greg_t elf_gregset_t[ELF_NGREG];
+const size_t ELF_NGREG = (sizeof(struct pt_regs) / sizeof(arion_lnx_type::elf_greg_t));
+typedef arion_lnx_type::elf_greg_t elf_gregset_t[ELF_NGREG];
 
 struct elf_prstatus
 {
-    struct arion::elf_prstatus_common common;
+    struct arion_lnx_type::elf_prstatus_common common;
     elf_gregset_t pr_reg;
     int pr_fpvalid;
 };

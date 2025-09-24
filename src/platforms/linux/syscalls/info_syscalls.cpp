@@ -11,6 +11,7 @@
 #include <sys/utsname.h>
 
 using namespace arion;
+using namespace arion_lnx_type;
 
 uint64_t arion::sys_newuname(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {

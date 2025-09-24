@@ -13,6 +13,7 @@
 #include <memory>
 
 using namespace arion;
+using namespace arion_exception;
 
 std::map<LIEF::ELF::Header::FILE_TYPE, ELF_FILE_TYPE> arion::lief_arion_file_types = {
     {LIEF::ELF::Header::FILE_TYPE::NONE, ELF_FILE_TYPE::UNKNOWN_FILE},
@@ -39,7 +40,7 @@ void ElfCoredumpParser::parse_file_note(const LIEF::ELF::Note &note,
 }
 
 void ElfCoredumpParser::parse_prstatus_note(const LIEF::ELF::Note &note,
-                                            std::shared_ptr<ARION_ELF_PARSER_ATTRIBUTES> attrs)
+                                            std::shared_ptr<ELF_PARSER_ATTRIBUTES> attrs)
 {
     if (!LIEF::ELF::CorePrStatus::classof(&note))
         return;
@@ -47,11 +48,11 @@ void ElfCoredumpParser::parse_prstatus_note(const LIEF::ELF::Note &note,
     const auto &nt_core_prstatus = static_cast<const LIEF::ELF::CorePrStatus &>(note);
     LIEF::span<const uint8_t> prstatus_desc = nt_core_prstatus.description();
     std::vector<BYTE> prstatus_content(prstatus_desc.begin(), prstatus_desc.end());
-    attrs->coredump->threads.push_back(std::make_unique<ARION_ELF_COREDUMP_THREAD>(prstatus_content));
+    attrs->coredump->threads.push_back(std::make_unique<ELF_COREDUMP_THREAD>(prstatus_content));
 }
 
 void ElfCoredumpParser::parse_prpsinfo_note(const LIEF::ELF::Note &note,
-                                            std::shared_ptr<ARION_ELF_PARSER_ATTRIBUTES> attrs)
+                                            std::shared_ptr<ELF_PARSER_ATTRIBUTES> attrs)
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
@@ -78,12 +79,12 @@ void ElfCoredumpParser::parse_prpsinfo_note(const LIEF::ELF::Note &note,
 }
 
 void ElfCoredumpParser::parse_fpregset_note(const LIEF::ELF::Note &note,
-                                            std::shared_ptr<ARION_ELF_PARSER_ATTRIBUTES> attrs)
+                                            std::shared_ptr<ELF_PARSER_ATTRIBUTES> attrs)
 {
     size_t threads_sz = attrs->coredump->threads.size();
     if (!threads_sz)
         throw NoCoredumpCurrentThreadException();
-    std::unique_ptr<ARION_ELF_COREDUMP_THREAD> thread = std::move(attrs->coredump->threads.at(threads_sz - 1));
+    std::unique_ptr<ELF_COREDUMP_THREAD> thread = std::move(attrs->coredump->threads.at(threads_sz - 1));
 
     LIEF::span<const uint8_t> fpregset_desc = note.description();
     std::vector<BYTE> fpregset_content(fpregset_desc.begin(), fpregset_desc.end());
@@ -93,14 +94,14 @@ void ElfCoredumpParser::parse_fpregset_note(const LIEF::ELF::Note &note,
 }
 
 std::unique_ptr<LIEF::ELF::Binary> ElfCoredumpParser::parse_coredump_data(
-    std::unique_ptr<LIEF::ELF::Binary> elf, std::shared_ptr<ARION_ELF_PARSER_ATTRIBUTES> attrs,
+    std::unique_ptr<LIEF::ELF::Binary> elf, std::shared_ptr<ELF_PARSER_ATTRIBUTES> attrs,
     std::vector<std::shared_ptr<struct arion::SEGMENT>> segments)
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    attrs->coredump = std::make_unique<ARION_ELF_COREDUMP_ATTRS>();
+    attrs->coredump = std::make_unique<ELF_COREDUMP_ATTRS>();
     for (const LIEF::ELF::Note &note : elf->notes())
     {
         switch (note.type())
@@ -119,8 +120,8 @@ std::unique_ptr<LIEF::ELF::Binary> ElfCoredumpParser::parse_coredump_data(
             break;
         default: {
             colorstream cs;
-            cs << ARION_LOG_COLOR::ORANGE << "Coredump note " << ARION_LOG_COLOR::MAGENTA
-               << int_to_hex<uint32_t>(note.original_type()) << ARION_LOG_COLOR::ORANGE << " is not implemented.";
+            cs << LOG_COLOR::ORANGE << "Coredump note " << LOG_COLOR::MAGENTA
+               << int_to_hex<uint32_t>(note.original_type()) << LOG_COLOR::ORANGE << " is not implemented.";
             arion->logger->warn(cs.str());
             break;
         }
@@ -136,7 +137,7 @@ void ElfParser::process()
     this->attrs->usr_path = this->attrs->path; // "usr_path" is the path passed by the user to Arion whereas "path" can
                                                // be resolved to another path (e.g in core dumps)
 
-    auto elf_attrs = std::dynamic_pointer_cast<ARION_ELF_PARSER_ATTRIBUTES>(this->attrs);
+    auto elf_attrs = std::dynamic_pointer_cast<ELF_PARSER_ATTRIBUTES>(this->attrs);
 
     std::unique_ptr<LIEF::ELF::Binary> elf = LIEF::ELF::Parser::parse(this->attrs->path);
     if (!elf)
@@ -152,7 +153,7 @@ std::unique_ptr<LIEF::ELF::Binary> ElfParser::parse_general_data(std::unique_ptr
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
-    auto elf_attrs = std::dynamic_pointer_cast<ARION_ELF_PARSER_ATTRIBUTES>(this->attrs);
+    auto elf_attrs = std::dynamic_pointer_cast<ELF_PARSER_ATTRIBUTES>(this->attrs);
 
     elf_attrs->linkage = LINKAGE_TYPE::DYNAMIC_LINKAGE;
     elf_attrs->type = lief_arion_file_types.at(elf->header().file_type());
@@ -188,7 +189,7 @@ std::unique_ptr<LIEF::ELF::Binary> ElfParser::parse_general_data(std::unique_ptr
 
 std::unique_ptr<LIEF::ELF::Binary> ElfParser::parse_segments(std::unique_ptr<LIEF::ELF::Binary> elf)
 {
-    auto elf_attrs = std::dynamic_pointer_cast<ARION_ELF_PARSER_ATTRIBUTES>(this->attrs);
+    auto elf_attrs = std::dynamic_pointer_cast<ELF_PARSER_ATTRIBUTES>(this->attrs);
 
     for (const LIEF::ELF::Segment &lief_seg : elf->segments())
     {

@@ -7,6 +7,7 @@
 #include <memory>
 
 using namespace arion;
+using namespace arion_exception;
 
 std::vector<BYTE> arion::serialize_arion_futex(ARION_FUTEX *arion_f)
 {

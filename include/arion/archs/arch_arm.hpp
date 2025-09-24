@@ -8,9 +8,11 @@
 #include <map>
 #include <string>
 
+/// Value of the CPSR thumb bit for ARM mode
 #define ARION_ARM_MODE 0
+/// Value of the CPSR thumb bit for THUMB mode
 #define ARION_THUMB_MODE 1
-
+/// Mask for the ARM CPSR thumb bit
 #define ARION_ARM_CPSR_THUMB_BIT (1 << 5)
 
 namespace arion_arm
@@ -618,14 +620,14 @@ inline std::map<uint64_t, arion::CPU_INTR> IDT = {/*{1, UDEF},
                                            {21, LSERR},
                                            {22, UNALIGNED}*/};
 
-/// Unicorn ARM IP and SP registers for genericity.
+/// Unicorn ARM PC and SP registers for genericity.
 inline arion::ABI_REGISTERS ABI_REGS = arion::ABI_REGISTERS(UC_ARM_REG_PC, UC_ARM_REG_SP);
 
-/// Unicorn ARM Registers involved in calling convention.
+/// Unicorn ARM registers involved in calling convention.
 inline arion::ABI_CALLING_CONVENTION ABI_CALLING_CONV =
     arion::ABI_CALLING_CONVENTION(UC_ARM_REG_R0, {UC_ARM_REG_R0, UC_ARM_REG_R1, UC_ARM_REG_R2, UC_ARM_REG_R3});
 
-/// Unicorn ARM Registers involved in syscalling convention.
+/// Unicorn ARM registers involved in syscalling convention.
 inline arion::ABI_SYSCALLING_CONVENTION ABI_SYSCALLING_CONV = arion::ABI_SYSCALLING_CONVENTION(
     UC_ARM_REG_R7, UC_ARM_REG_R0,
     {UC_ARM_REG_R0, UC_ARM_REG_R1, UC_ARM_REG_R2, UC_ARM_REG_R3, UC_ARM_REG_R4, UC_ARM_REG_R5, UC_ARM_REG_R6});

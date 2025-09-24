@@ -531,13 +531,13 @@ inline std::map<uint64_t, arion::CPU_INTR> IDT = {{0, arion::DIVIDE_ERROR},
                                                   {18, arion::MACHINE_CHECK},
                                                   {19, arion::SIMD_FLOATING_POINT_ERROR}};
 
-/// Unicorn x86 IP and SP registers for genericity.
+/// Unicorn x86 PC and SP registers for genericity.
 inline arion::ABI_REGISTERS ABI_REGS = arion::ABI_REGISTERS(UC_X86_REG_EIP, UC_X86_REG_ESP);
 
-/// Unicorn x86 Registers involved in calling convention.
+/// Unicorn x86 registers involved in calling convention.
 inline arion::ABI_CALLING_CONVENTION ABI_CALLING_CONV = arion::ABI_CALLING_CONVENTION(UC_X86_REG_EAX, {});
 
-/// Unicorn x86 Registers involved in syscalling convention.
+/// Unicorn x86 registers involved in syscalling convention.
 inline arion::ABI_SYSCALLING_CONVENTION ABI_SYSCALLING_CONV = arion::ABI_SYSCALLING_CONVENTION(
     UC_X86_REG_EAX, UC_X86_REG_EAX,
     {UC_X86_REG_EBX, UC_X86_REG_ECX, UC_X86_REG_EDX, UC_X86_REG_ESI, UC_X86_REG_EDI, UC_X86_REG_EBP});

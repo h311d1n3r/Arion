@@ -20,7 +20,7 @@ inline CPU_ARCH get_host_cpu_arch()
 #else
 #error "Unsupported host CPU architecture"
 #endif
-    throw UnsupportedHostCpuArchException();
+    throw arion_exception::UnsupportedHostCpuArchException();
 }
 
 }; // namespace arion

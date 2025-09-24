@@ -14,6 +14,7 @@
 #include <unistd.h>
 
 using namespace arion;
+using namespace arion_exception;
 
 std::vector<BYTE> arion::serialize_arion_mapping(ARION_MAPPING *arion_m)
 {

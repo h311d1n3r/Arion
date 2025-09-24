@@ -101,9 +101,9 @@ class ARION_EXPORT CodeTraceAnalyzer
     template <typename T> void ARION_EXPORT search_reg_val(ANALYZER_HIT_CALLBACK callback, REG reg, T val)
     {
         if (this->reader.get_mode() != TRACE_MODE::CTXT)
-            throw WrongTraceModeException();
+            throw arion_exception::WrongTraceModeException();
         if (!this->reader.has_reg(reg))
-            throw UnknownTraceRegException(reg);
+            throw arion_exception::UnknownTraceRegException(reg);
 
         this->reader.reset_hit_cursor();
         std::unique_ptr<CODE_HIT> hit;

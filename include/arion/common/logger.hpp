@@ -17,7 +17,7 @@ namespace arion
 
 class Arion;
 
-enum ARION_LOG_COLOR
+enum LOG_COLOR
 {
     DEFAULT,
     BLACK,
@@ -38,23 +38,20 @@ enum ARION_LOG_COLOR
     WHITE
 };
 
-inline std::map<ARION_LOG_COLOR, std::string> arion_log_colors_str = {
-    {ARION_LOG_COLOR::DEFAULT, "\033[39m"},      {ARION_LOG_COLOR::BLACK, "\033[30m"},
-    {ARION_LOG_COLOR::DARK_RED, "\033[31m"},     {ARION_LOG_COLOR::DARK_GREEN, "\033[32m"},
-    {ARION_LOG_COLOR::DARK_YELLOW, "\033[33m"},  {ARION_LOG_COLOR::DARK_BLUE, "\033[34m"},
-    {ARION_LOG_COLOR::DARK_MAGENTA, "\033[35m"}, {ARION_LOG_COLOR::DARK_CYAN, "\033[36m"},
-    {ARION_LOG_COLOR::LIGHT_GRAY, "\033[37m"},   {ARION_LOG_COLOR::DARK_GRAY, "\033[90m"},
-    {ARION_LOG_COLOR::RED, "\033[91m"},          {ARION_LOG_COLOR::GREEN, "\033[92m"},
-    {ARION_LOG_COLOR::ORANGE, "\033[93m"},       {ARION_LOG_COLOR::BLUE, "\033[94m"},
-    {ARION_LOG_COLOR::MAGENTA, "\033[95m"},      {ARION_LOG_COLOR::CYAN, "\033[96m"},
-    {ARION_LOG_COLOR::WHITE, "\033[97m"},
+inline std::map<LOG_COLOR, std::string> arion_log_colors_str = {
+    {LOG_COLOR::DEFAULT, "\033[39m"},      {LOG_COLOR::BLACK, "\033[30m"},       {LOG_COLOR::DARK_RED, "\033[31m"},
+    {LOG_COLOR::DARK_GREEN, "\033[32m"},   {LOG_COLOR::DARK_YELLOW, "\033[33m"}, {LOG_COLOR::DARK_BLUE, "\033[34m"},
+    {LOG_COLOR::DARK_MAGENTA, "\033[35m"}, {LOG_COLOR::DARK_CYAN, "\033[36m"},   {LOG_COLOR::LIGHT_GRAY, "\033[37m"},
+    {LOG_COLOR::DARK_GRAY, "\033[90m"},    {LOG_COLOR::RED, "\033[91m"},         {LOG_COLOR::GREEN, "\033[92m"},
+    {LOG_COLOR::ORANGE, "\033[93m"},       {LOG_COLOR::BLUE, "\033[94m"},        {LOG_COLOR::MAGENTA, "\033[95m"},
+    {LOG_COLOR::CYAN, "\033[96m"},         {LOG_COLOR::WHITE, "\033[97m"},
 
 };
 
 class colorstream : public std::stringstream
 {
   public:
-    inline colorstream &operator<<(const ARION_LOG_COLOR &color)
+    inline colorstream &operator<<(const LOG_COLOR &color)
     {
         (*static_cast<std::stringstream *>(this)) << arion_log_colors_str.at(color);
         return *this;

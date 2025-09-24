@@ -11,9 +11,9 @@ namespace arion
 
 class Arion;
 
-struct ARION_EXECUTABLE_PARSER_ATTRIBUTES
+struct EXECUTABLE_PARSER_ATTRIBUTES
 {
-    virtual ~ARION_EXECUTABLE_PARSER_ATTRIBUTES() = default;
+    virtual ~EXECUTABLE_PARSER_ATTRIBUTES() = default;
     std::string usr_path;
     std::string path;
     std::vector<std::string> args;
@@ -27,13 +27,13 @@ class ExecutableParser
 {
   protected:
     std::weak_ptr<Arion> arion;
-    std::shared_ptr<ARION_EXECUTABLE_PARSER_ATTRIBUTES> attrs;
+    std::shared_ptr<EXECUTABLE_PARSER_ATTRIBUTES> attrs;
     std::vector<std::shared_ptr<struct SEGMENT>> segments;
 
   public:
     ExecutableParser(std::weak_ptr<Arion> arion) : arion(arion) {};
     virtual void process() = 0;
-    std::shared_ptr<ARION_EXECUTABLE_PARSER_ATTRIBUTES> get_attrs();
+    std::shared_ptr<EXECUTABLE_PARSER_ATTRIBUTES> get_attrs();
     std::vector<std::shared_ptr<struct SEGMENT>> get_segments();
 };
 

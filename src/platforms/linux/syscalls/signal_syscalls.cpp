@@ -7,6 +7,7 @@
 #include <sys/wait.h>
 
 using namespace arion;
+using namespace arion_lnx_type;
 
 uint64_t arion::sys_rt_sigaction(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
@@ -18,13 +19,13 @@ uint64_t arion::sys_rt_sigaction(std::shared_ptr<Arion> arion, std::vector<SYS_P
     if (old_act_addr && arion->signals->has_sighandler(signo))
     {
         std::shared_ptr<struct ksigaction> old_act = arion->signals->get_sighandler(signo);
-        std::vector<BYTE> old_act_data(sizeof(struct ksigaction));
-        memcpy(old_act_data.data(), old_act.get(), sizeof(struct ksigaction));
+        std::vector<BYTE> old_act_data(sizeof(struct arion_lnx_type::ksigaction));
+        memcpy(old_act_data.data(), old_act.get(), sizeof(struct arion_lnx_type::ksigaction));
         arion->mem->write(old_act_addr, old_act_data.data(), old_act_data.size());
     }
     if (act_addr)
     {
-        std::vector<BYTE> act_data = arion->mem->read(act_addr, sizeof(struct ksigaction));
+        std::vector<BYTE> act_data = arion->mem->read(act_addr, sizeof(struct arion_lnx_type::ksigaction));
         std::shared_ptr<struct ksigaction> act = std::make_shared<struct ksigaction>();
         memcpy(act.get(), act_data.data(), act_data.size());
         arion->signals->set_sighandler(signo, act);

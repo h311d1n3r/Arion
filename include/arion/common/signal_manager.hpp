@@ -2,6 +2,7 @@
 #define ARION_SIGNAL_MANAGER_HPP
 
 #include <arion/common/global_defs.hpp>
+#include <arion/platforms/linux/lnx_kernel_utils.hpp>
 #include <arion/unicorn/unicorn.h>
 #include <map>
 #include <memory>
@@ -15,7 +16,7 @@ class SignalManager
 {
   private:
     std::weak_ptr<Arion> arion;
-    std::map<int, std::shared_ptr<struct ksigaction>> sighandlers;
+    std::map<int, std::shared_ptr<struct arion_lnx_type::ksigaction>> sighandlers;
     std::map<pid_t, pid_t> sigwait_list;
     std::unique_ptr<std::map<REG, RVAL>> ucontext_regs;
     static std::map<int, std::string> signals;
@@ -33,8 +34,8 @@ class SignalManager
     void handle_signal(pid_t source_pid, int signo);
     void wait_for_sig(pid_t target_tid, pid_t source_pid, ADDR wait_status_addr);
     bool has_sighandler(int signo);
-    std::shared_ptr<struct ksigaction> get_sighandler(int signo);
-    void set_sighandler(int signo, std::shared_ptr<struct ksigaction> sighandler);
+    std::shared_ptr<struct arion_lnx_type::ksigaction> get_sighandler(int signo);
+    void set_sighandler(int signo, std::shared_ptr<struct arion_lnx_type::ksigaction> sighandler);
     bool sigreturn();
 };
 

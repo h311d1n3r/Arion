@@ -17,32 +17,38 @@ namespace arion
 
 class Arion;
 
-class ArionType
+};
+
+namespace arion_type
+{
+
+class KernelType
 {
   private:
     std::string name;
-    ARION_LOG_COLOR color;
+    arion::LOG_COLOR color;
 
   protected:
-    ArionType(std::string name, ARION_LOG_COLOR color = ARION_LOG_COLOR::DEFAULT) : name(name), color(color) {};
+    KernelType(std::string name, arion::LOG_COLOR color = arion::LOG_COLOR::DEFAULT)
+        : name(name), color(color) {};
 
   public:
-    virtual ~ArionType() = default;
-    ARION_LOG_COLOR get_color();
-    virtual std::string str(std::shared_ptr<Arion> arion, uint64_t val);
+    virtual ~KernelType() = default;
+    arion::LOG_COLOR get_color();
+    virtual std::string str(std::shared_ptr<arion::Arion> arion, uint64_t val);
 };
 
 using InitFn = std::function<void()>;
-class ArionTypeRegistry
+class KernelTypeRegistry
 {
   private:
     std::vector<std::tuple<int, InitFn>> initializers;
     bool initialized = false;
 
   public:
-    static ArionTypeRegistry &instance()
+    static KernelTypeRegistry &instance()
     {
-        static ArionTypeRegistry r;
+        static KernelTypeRegistry r;
         return r;
     }
 
@@ -67,45 +73,45 @@ class ArionTypeRegistry
     }
 };
 
-#define REGISTER_ARION_TYPE(VAR, TYPE, PRIORITY)                                                                       \
+#define ARION_REGISTER_KERNEL_TYPE(VAR, TYPE, PRIORITY)                                                                \
     static_assert(std::is_same_v<decltype(VAR), std::shared_ptr<TYPE>>,                                                \
-                  "REGISTER_ARION_TYPE expects shared_ptr<TYPE>");                                                     \
-    static struct ArionTypeRegistrar_##VAR                                                                             \
+                  "ARION_REGISTER_KERNEL_TYPE expects shared_ptr<TYPE>");                                              \
+    static struct KernelTypeRegistrar_##VAR                                                                            \
     {                                                                                                                  \
-        ArionTypeRegistrar_##VAR()                                                                                     \
+        KernelTypeRegistrar_##VAR()                                                                                    \
         {                                                                                                              \
-            ArionTypeRegistry::instance().register_type(PRIORITY, [] { VAR = std::make_shared<TYPE>(); });             \
+            KernelTypeRegistry::instance().register_type(PRIORITY, [] { VAR = std::make_shared<TYPE>(); });            \
         }                                                                                                              \
-    } ArionTypeRegistrarInstance_##VAR;
+    } KernelTypeRegistrarInstance_##VAR;
 
-class ArionFlagType : public ArionType
+class FlagType : public KernelType
 {
   private:
     std::map<uint64_t, std::string> flag_map;
 
   protected:
-    ArionFlagType(std::string name, std::map<uint64_t, std::string> flag_map)
-        : ArionType(name, ARION_LOG_COLOR::CYAN), flag_map(flag_map) {};
+    FlagType(std::string name, std::map<uint64_t, std::string> flag_map)
+        : KernelType(name, arion::LOG_COLOR::CYAN), flag_map(flag_map) {};
 
   public:
-    std::string str(std::shared_ptr<Arion> arion, uint64_t val) override;
+    std::string str(std::shared_ptr<arion::Arion> arion, uint64_t val) override;
 };
 
-class ArionIntType : public ArionType
+class IntType : public KernelType
 {
   public:
-    ArionIntType() : ArionType("Int", ARION_LOG_COLOR::MAGENTA) {};
+    IntType() : KernelType("Int", arion::LOG_COLOR::MAGENTA) {};
 };
-extern std::shared_ptr<ArionIntType> ARION_INT_TYPE;
+extern std::shared_ptr<IntType> INT_TYPE;
 
-class ArionRawStringType : public ArionType
+class RawStringType : public KernelType
 {
   public:
-    ArionRawStringType() : ArionType("Raw String", ARION_LOG_COLOR::GREEN) {};
-    std::string str(std::shared_ptr<Arion> arion, uint64_t val) override;
+    RawStringType() : KernelType("Raw String", arion::LOG_COLOR::GREEN) {};
+    std::string str(std::shared_ptr<arion::Arion> arion, uint64_t val) override;
 };
-extern std::shared_ptr<ArionRawStringType> ARION_RAW_STRING_TYPE;
+extern std::shared_ptr<RawStringType> RAW_STRING_TYPE;
 
-}; // namespace arion
+}; // namespace arion_type
 
 #endif // ARION_TYPE_UTILS_HPP

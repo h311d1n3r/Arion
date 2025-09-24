@@ -9,12 +9,12 @@
 namespace arion
 {
 
-struct ARION_PARSED_COREDUMP_THREAD
+struct PARSED_COREDUMP_THREAD
 {
-    std::unique_ptr<ARION_ELF_COREDUMP_THREAD> thread;
+    std::unique_ptr<ELF_COREDUMP_THREAD> thread;
     std::map<REG, RVAL> regs;
 
-    ARION_PARSED_COREDUMP_THREAD() {};
+    PARSED_COREDUMP_THREAD() {};
 };
 
 class LinuxArchManager
@@ -24,8 +24,8 @@ class LinuxArchManager
     virtual std::map<REG, RVAL> fpregset_to_regs(std::vector<BYTE> fpregset) = 0;
 
   public:
-    std::unique_ptr<ARION_PARSED_COREDUMP_THREAD> parse_coredump_thread(
-        std::shared_ptr<Arion> arion, std::unique_ptr<ARION_ELF_COREDUMP_THREAD> thread,
+    std::unique_ptr<PARSED_COREDUMP_THREAD> parse_coredump_thread(
+        std::shared_ptr<Arion> arion, std::unique_ptr<ELF_COREDUMP_THREAD> thread,
         std::shared_ptr<ElfParser> prog_parser);
 };
 

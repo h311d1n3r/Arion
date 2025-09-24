@@ -3,6 +3,7 @@
 #include <arion/common/socket_manager.hpp>
 
 using namespace arion;
+using namespace arion_exception;
 
 std::vector<BYTE> arion::serialize_arion_socket(ARION_SOCKET *arion_s)
 {

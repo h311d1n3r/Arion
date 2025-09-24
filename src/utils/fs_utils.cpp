@@ -10,6 +10,7 @@
 #include <uuid/uuid.h>
 
 using namespace arion;
+using namespace arion_exception;
 
 void arion::read_bin_file(std::string file_path, ADDR off, size_t sz, RD_BIN_CALLBACK callback)
 {

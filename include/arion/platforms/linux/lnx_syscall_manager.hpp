@@ -16,11 +16,11 @@ class Arion;
 struct SYSCALL_FUNC
 {
     std::function<uint64_t(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)> func;
-    std::vector<std::shared_ptr<ArionType>> signature;
+    std::vector<std::shared_ptr<arion_type::KernelType>> signature;
 
     SYSCALL_FUNC(
         std::function<uint64_t(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)> func,
-        std::vector<std::shared_ptr<ArionType>> signature)
+        std::vector<std::shared_ptr<arion_type::KernelType>> signature)
         : func(func), signature(signature) {};
 };
 
@@ -37,13 +37,13 @@ class ARION_EXPORT LinuxSyscallManager
         std::function<uint64_t(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)> func,
         SignatureArgs &&...signature)
     {
-        std::vector<std::shared_ptr<ArionType>> sig_vec = {std::forward<SignatureArgs>(signature)...};
+        std::vector<std::shared_ptr<arion_type::KernelType>> sig_vec = {std::forward<SignatureArgs>(signature)...};
         return std::make_shared<SYSCALL_FUNC>(func, sig_vec);
     }
     void init_syscall_funcs();
     void print_syscall(std::shared_ptr<Arion> arion, std::string sys_name,
-                       std::vector<std::shared_ptr<ArionType>> signature, std::vector<SYS_PARAM> func_params,
-                       uint64_t syscall_ret);
+                       std::vector<std::shared_ptr<arion_type::KernelType>> signature,
+                       std::vector<SYS_PARAM> func_params, uint64_t syscall_ret);
 
   public:
     static std::unique_ptr<LinuxSyscallManager> initialize(std::weak_ptr<Arion> arion);

@@ -25,7 +25,9 @@
 #include <sys/xattr.h>
 
 using namespace arion;
+using namespace arion_lnx_type;
 using namespace arion_poly_struct;
+using namespace arion_exception;
 
 std::map<uint8_t, std::pair<std::string, std::function<uint64_t(std::shared_ptr<Arion> arion,
                                                                 std::vector<SYS_PARAM> params, bool &cancel)>>>
@@ -433,8 +435,8 @@ uint64_t arion::sys_ioctl(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> p
     }
     default: {
         colorstream warn_msg;
-        warn_msg << ARION_LOG_COLOR::ORANGE << "Unsupported IOCTL value: " << ARION_LOG_COLOR::MAGENTA
-                 << int_to_hex<uint64_t>(cmd) << ARION_LOG_COLOR::ORANGE << std::string(".");
+        warn_msg << LOG_COLOR::ORANGE << "Unsupported IOCTL value: " << LOG_COLOR::MAGENTA
+                 << int_to_hex<uint64_t>(cmd) << LOG_COLOR::ORANGE << std::string(".");
         arion->logger->warn(warn_msg.str());
         return 0;
     }

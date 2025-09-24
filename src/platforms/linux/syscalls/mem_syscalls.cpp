@@ -10,6 +10,7 @@
 #include <sys/mman.h>
 
 using namespace arion;
+using namespace arion_lnx_type;
 
 ADDR do_mmap(std::shared_ptr<Arion> arion, ADDR addr, size_t len, int prot, int flags, int fd, off_t off)
 {

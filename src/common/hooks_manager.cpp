@@ -7,6 +7,7 @@
 #include <memory>
 
 using namespace arion;
+using namespace arion_exception;
 
 std::map<ARION_HOOK_TYPE, uc_hook_type> arion::ARION_UC_HOOK_TYPES{
     {ARION_HOOK_TYPE::INTR_HOOK, uc_hook_type::UC_HOOK_INTR},

@@ -59,12 +59,12 @@ struct pt_regs
     uint64_t exit_rcu;
 };
 
-const size_t ELF_NGREG = (sizeof(struct user_pt_regs) / sizeof(arion::elf_greg_t));
-typedef arion::elf_greg_t elf_gregset_t[ELF_NGREG];
+const size_t ELF_NGREG = (sizeof(struct user_pt_regs) / sizeof(arion_lnx_type::elf_greg_t));
+typedef arion_lnx_type::elf_greg_t elf_gregset_t[ELF_NGREG];
 
 struct elf_prstatus
 {
-    struct arion::elf_prstatus_common common;
+    struct arion_lnx_type::elf_prstatus_common common;
     elf_gregset_t pr_reg;
     int pr_fpvalid;
 };

@@ -8,6 +8,7 @@
 #include <memory>
 
 using namespace arion;
+using namespace arion_exception;
 
 std::unique_ptr<GdtManager> GdtManager::initialize(std::weak_ptr<Arion> arion)
 {

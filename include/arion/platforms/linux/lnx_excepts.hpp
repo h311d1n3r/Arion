@@ -1,6 +1,6 @@
 #include <arion/common/global_excepts.hpp>
 
-namespace arion
+namespace arion_exception
 {
 
 class ReadLinkFileException : public ArionException
@@ -25,4 +25,4 @@ class MultiplePrPsInfoNotesException : public ArionException
         : ArionException(std::string("Coredump file contains information for more than one process.")) {};
 };
 
-}; // namespace arion
+}; // namespace arion_exception

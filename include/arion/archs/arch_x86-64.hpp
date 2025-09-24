@@ -552,14 +552,14 @@ inline std::map<uint64_t, arion::CPU_INTR> IDT = {{0, arion::DIVIDE_ERROR},
                                                   {18, arion::MACHINE_CHECK},
                                                   {19, arion::SIMD_FLOATING_POINT_ERROR}};
 
-/// Unicorn x86-64 IP and SP registers for genericity.
+/// Unicorn x86-64 PC and SP registers for genericity.
 inline arion::ABI_REGISTERS ABI_REGS = arion::ABI_REGISTERS(UC_X86_REG_RIP, UC_X86_REG_RSP);
 
-/// Unicorn x86-64 Registers involved in calling convention.
+/// Unicorn x86-64 registers involved in calling convention.
 inline arion::ABI_CALLING_CONVENTION ABI_CALLING_CONV = arion::ABI_CALLING_CONVENTION(
     UC_X86_REG_RAX, {UC_X86_REG_RDI, UC_X86_REG_RSI, UC_X86_REG_RDX, UC_X86_REG_RCX, UC_X86_REG_R8, UC_X86_REG_R9});
 
-/// Unicorn x86-64 Registers involved in syscalling convention.
+/// Unicorn x86-64 registers involved in syscalling convention.
 inline arion::ABI_SYSCALLING_CONVENTION ABI_SYSCALLING_CONV = arion::ABI_SYSCALLING_CONVENTION(
     UC_X86_REG_RAX, UC_X86_REG_RAX,
     {UC_X86_REG_RDI, UC_X86_REG_RSI, UC_X86_REG_RDX, UC_X86_REG_R10, UC_X86_REG_R8, UC_X86_REG_R9});
@@ -615,7 +615,7 @@ class ArchManagerX8664 : public arion::ArchManager
      * @param[in] syscall_no The syscall number.
      * @return An array of bytes for the entry.
      */
-    std::array<arion::BYTE, VSYSCALL_ENTRY_SZ> gen_vsyscall_entry(uint64_t syscall_no);
+    std::array<arion::BYTE, ARION_VSYSCALL_ENTRY_SZ> gen_vsyscall_entry(uint64_t syscall_no);
     /**
      * Retrieves the Keystone engine associated with this instance.
      * @return The Keystone engine.
