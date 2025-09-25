@@ -1,0 +1,30 @@
+name: Arion documentation deployment workflow
+
+on:
+  push:
+    branches: [ "dev" ]
+    tags: [ '*' ]
+  workflow_dispatch:
+
+jobs:
+  documentation:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        lfs: 'true'
+
+    - name: Install Doxygen
+      run: sudo apt update && sudo apt -y install doxygen graphviz
+
+    - name: Generate documentation
+      run: doxygen Doxyfile
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v6
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/html
+        publish_branch: gh-pages
