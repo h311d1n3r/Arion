@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['name_5ffrom_5fpath_0',['name_from_path',['../namespacearion.html#a356438eb86957c08bff14eb789388227',1,'arion']]],
+  ['new_5finstance_1',['new_instance',['../classarion_1_1Arion.html#a1a418bddae508905c4431971d1b88529',1,'arion::Arion::new_instance(std::unique_ptr&lt; BaremetalManager &gt; baremetal, std::string fs_path=&quot;/&quot;, std::vector&lt; std::string &gt; program_env=std::vector&lt; std::string &gt;(), std::string cwd=&quot;&quot;, std::unique_ptr&lt; Config &gt; config=std::move(std::make_unique&lt; Config &gt;()))'],['../classarion_1_1Arion.html#a1366bd36217189d8305ec97e1adbe2c1',1,'arion::Arion::new_instance(std::vector&lt; std::string &gt; program_args, std::string fs_path=&quot;/&quot;, std::vector&lt; std::string &gt; program_env=std::vector&lt; std::string &gt;(), std::string cwd=&quot;&quot;, std::unique_ptr&lt; Config &gt; config=std::move(std::make_unique&lt; Config &gt;()))']]],
+  ['new_5finstance_5fcommon_5ffinish_2',['new_instance_common_finish',['../classarion_1_1Arion.html#a30ad5791041f040877870153429812c6',1,'arion::Arion']]],
+  ['new_5finstance_5fcommon_5finit_3',['new_instance_common_init',['../classarion_1_1Arion.html#a956807cc8a47b22edddc2e1c7ccb7548',1,'arion::Arion']]],
+  ['new_5ftls_4',['new_tls',['../classarion__x86_1_1ArchManagerX86.html#a3c90e8ffb8c034ff58e8bc87e72971b9',1,'arion_x86::ArchManagerX86']]],
+  ['newercontextfileversionexception_5',['NewerContextFileVersionException',['../classarion__exception_1_1NewerContextFileVersionException.html#af5b2beebb504afc2897cc34e80c067ec',1,'arion_exception::NewerContextFileVersionException']]],
+  ['newertracefileversionexception_6',['NewerTraceFileVersionException',['../classarion__exception_1_1NewerTraceFileVersionException.html#a9f132a5a8e4bf9c23ee15ae2c944d730',1,'arion_exception::NewerTraceFileVersionException']]],
+  ['next_5fhit_7',['next_hit',['../classarion_1_1CodeTraceReader.html#a3d30ff4cae959bb4dcc42d40c68e09a0',1,'arion::CodeTraceReader']]],
+  ['next_5fmod_5fhit_8',['next_mod_hit',['../classarion_1_1CodeTraceReader.html#a1bd617928beaf08390c1d9aa25ea68a5',1,'arion::CodeTraceReader']]],
+  ['nochildwithpidexception_9',['NoChildWithPidException',['../classarion__exception_1_1NoChildWithPidException.html#a9040dcf6c25627afca5b7408fb09aa8c',1,'arion_exception::NoChildWithPidException']]],
+  ['nocoredumpcurrentthreadexception_10',['NoCoredumpCurrentThreadException',['../classarion__exception_1_1NoCoredumpCurrentThreadException.html#ab1fcce84cf980b9d2315e3461b0a2674',1,'arion_exception::NoCoredumpCurrentThreadException']]],
+  ['nofileatfdexception_11',['NoFileAtFdException',['../classarion__exception_1_1NoFileAtFdException.html#a33a77ff512f249d4c78e05a3ba643e20',1,'arion_exception::NoFileAtFdException']]],
+  ['nofreegdtentryexception_12',['NoFreeGdtEntryException',['../classarion__exception_1_1NoFreeGdtEntryException.html#ababa17db255c0e2c7c36186a78847424',1,'arion_exception::NoFreeGdtEntryException']]],
+  ['noidtentrywithintnoexception_13',['NoIdtEntryWithIntnoException',['../classarion__exception_1_1NoIdtEntryWithIntnoException.html#a363ddc1a5c904637cd4572e00c104556',1,'arion_exception::NoIdtEntryWithIntnoException']]],
+  ['noprocesswithpidexception_14',['NoProcessWithPidException',['../classarion__exception_1_1NoProcessWithPidException.html#a3934d1ad5ea6090645bb5bce77bc6607',1,'arion_exception::NoProcessWithPidException']]],
+  ['noregwithnameexception_15',['NoRegWithNameException',['../classarion__exception_1_1NoRegWithNameException.html#a15257d13d4ec86d6fe503ec1a31f3e53',1,'arion_exception::NoRegWithNameException']]],
+  ['noregwithvalueexception_16',['NoRegWithValueException',['../classarion__exception_1_1NoRegWithValueException.html#a8e65fe997ffb8ec9232bdf9d41c6f33d',1,'arion_exception::NoRegWithValueException']]],
+  ['nosegmentataddrexception_17',['NoSegmentAtAddrException',['../classarion__exception_1_1NoSegmentAtAddrException.html#ae21fe198e8718bbee12b7c10ed49c364',1,'arion_exception::NoSegmentAtAddrException']]],
+  ['nosegmentwithinfoexception_18',['NoSegmentWithInfoException',['../classarion__exception_1_1NoSegmentWithInfoException.html#a6b9c71b850d4fa21c3eadfe03c562b81',1,'arion_exception::NoSegmentWithInfoException']]],
+  ['nosighandlerforsignalexception_19',['NoSighandlerForSignalException',['../classarion__exception_1_1NoSighandlerForSignalException.html#a112189d0061ff7820c3bfb3382cf1bfd',1,'arion_exception::NoSighandlerForSignalException']]],
+  ['nosignalforintrexception_20',['NoSignalForIntrException',['../classarion__exception_1_1NoSignalForIntrException.html#a256c7fc00da4cbdd55142e9bb7407e37',1,'arion_exception::NoSignalForIntrException']]],
+  ['nosocketatfdexception_21',['NoSocketAtFdException',['../classarion__exception_1_1NoSocketAtFdException.html#a534e6d948cc886cdb28cb01be33bb253',1,'arion_exception::NoSocketAtFdException']]],
+  ['nostructfieldwithnameexception_22',['NoStructFieldWithNameException',['../classarion__exception_1_1NoStructFieldWithNameException.html#aa79e132febe5370f6b2bce20500a8608',1,'arion_exception::NoStructFieldWithNameException']]]
+];

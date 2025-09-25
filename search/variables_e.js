@@ -1,0 +1,7 @@
+var searchData=
+[
+  ['name_0',['name',['../structarion_1_1TRACER__MAPPING.html#ab137fc563ce4b2a8ef6baba33299dadd',1,'arion::TRACER_MAPPING::name'],['../structarion_1_1TRACE__MODULE.html#a65420f2ba0b96c714965499dfaf0986f',1,'arion::TRACE_MODULE::name'],['../structarion_1_1ARM__TRAP.html#ae7b4b0d62aff0605737bf866cc4ada1b',1,'arion::ARM_TRAP::name'],['../structarion__poly__struct_1_1POLYMORPHIC__STRUCT__FIELD.html#aa053a5b8b6f01485a0ea1603e48e0d39',1,'arion_poly_struct::POLYMORPHIC_STRUCT_FIELD::name'],['../classarion__type_1_1KernelType.html#a2fff6a5a269d6981740d8f7558f3f82d',1,'arion_type::KernelType::name']]],
+  ['name_5fby_5fsyscall_5fno_1',['name_by_syscall_no',['../structarion_1_1ARCH__ATTRIBUTES.html#ab2361f44cff90718b84e125c1580899d',1,'arion::ARCH_ATTRIBUTES::name_by_syscall_no'],['../namespacearion__arm.html#ad02584168edf8099b3510515a2bfdbda',1,'arion_arm::NAME_BY_SYSCALL_NO'],['../namespacearion__arm64.html#ae7d02df389721b910eaf00a31b1716ee',1,'arion_arm64::NAME_BY_SYSCALL_NO'],['../namespacearion__x86__64.html#a12bae8fd7fd2ec8b6c3287e930a97fb0',1,'arion_x86_64::NAME_BY_SYSCALL_NO'],['../namespacearion__x86.html#aed2767cb590f8f74864e9a1f7b838b9b',1,'arion_x86::NAME_BY_SYSCALL_NO']]],
+  ['name_5ffrom_5farch_2',['NAME_FROM_ARCH',['../namespacearion.html#a25705023b2b8f6a94f529376d923dc09',1,'arion']]],
+  ['next_5fpid_3',['next_pid',['../classarion_1_1ArionGroup.html#a872ce8a7a662f612da5ea5147bf02a4e',1,'arion::ArionGroup']]]
+];
