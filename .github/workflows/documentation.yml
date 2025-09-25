@@ -2,7 +2,7 @@ name: Arion documentation deployment workflow
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "main" ]
     tags: [ '*' ]
   workflow_dispatch:
 
