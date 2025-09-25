@@ -105,7 +105,7 @@ class ARION_EXPORT ArionGroup : public std::enable_shared_from_this<ArionGroup>
     pid_t ARION_EXPORT get_curr_pid();
     /**
      * Define which Arion instance should be currently run in the group, given its PID.
-     * @param[in] The PID.
+     * @param[in] pid The PID.
      */
     void set_curr_pid(pid_t pid);
     /**
@@ -117,7 +117,7 @@ class ARION_EXPORT ArionGroup : public std::enable_shared_from_this<ArionGroup>
     /**
      * Defines the next PID to be associated with an Arion instance, in case none is provided when inserting it in the
      * group.
-     * @param pid The PID.
+     * @param[in] pid The PID.
      */
     void set_next_pid(pid_t pid);
 };

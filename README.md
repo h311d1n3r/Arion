@@ -29,6 +29,7 @@ Arion currently implements the following features :
 - **Memory reading / writing**  
 - **File system management**  
 - **Network sockets management**  
+- **Coredumps support**
 
 ## Table of contents
 [Installation](#install)  

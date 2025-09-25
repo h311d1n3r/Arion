@@ -6,9 +6,10 @@
 - GCC 15 compatibility
 - PIN tool for AVX/SSE bypass via CPUID
 - Changed AbiManager to ArchManager
-- Fixed unreadable symbolic link erro
+- Fixed unreadable symbolic link error
 - Better handling of file descriptors availability
 - Syscalls types added to logging
+- Namespaces rework
 
 # 1.0.1-alpha
 - Added UnicornAFL fuzzing mode
