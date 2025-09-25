@@ -36,9 +36,10 @@ Arion currently implements the following features :
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Download a release](#install_release)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Build the library with Docker](#install_build_docker)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Build the library on host machine](#install_build_host)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Enable testing](#install_build_host_testing)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Enable testing](#install_build_host_testing)  
 [Performance comparison](#perfs)  
 [How to use ?](#how)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Wiki and documentation](#how_wiki_doc)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Examples](#how_examples)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Fuzzing](#how_fuzzing)  
 [Contributing](#contributing)  
@@ -95,7 +96,11 @@ In the first graph, the variable is the amount of syscalls executed by the targe
 <a name="how"/>
 
 ## How to use ?
-**A wiki and a documentation are to come**. For now, you can rely on the examples and visit the headers in `include` directory to learn more about what you can do with **Arion**.  
+
+<a name="how_wiki_doc"/>
+
+### Wiki and documentation
+A wiki containing **guided tutorials** and a **complete documentation** of the latest stable version of the code is hosted [here](https://h311d1n3r.github.io/Arion).  
 
 <a name="how_examples"/>
 
