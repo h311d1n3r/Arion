@@ -21,16 +21,16 @@ std::vector<BYTE> arion::serialize_arion_futex(ARION_FUTEX *arion_f)
     return srz_futex;
 }
 
-ARION_FUTEX *arion::deserialize_arion_futex(std::vector<BYTE> srz_thread)
+ARION_FUTEX *arion::deserialize_arion_futex(std::vector<BYTE> srz_futex)
 {
     ARION_FUTEX *arion_f = new ARION_FUTEX;
 
     off_t off = 0;
-    memcpy(&arion_f->futex_addr, srz_thread.data() + off, sizeof(ADDR));
+    memcpy(&arion_f->futex_addr, srz_futex.data() + off, sizeof(ADDR));
     off += sizeof(ADDR);
-    memcpy(&arion_f->futex_bitmask, srz_thread.data() + off, sizeof(uint32_t));
+    memcpy(&arion_f->futex_bitmask, srz_futex.data() + off, sizeof(uint32_t));
     off += sizeof(uint32_t);
-    memcpy(&arion_f->tid, srz_thread.data() + off, sizeof(pid_t));
+    memcpy(&arion_f->tid, srz_futex.data() + off, sizeof(pid_t));
 
     return arion_f;
 }

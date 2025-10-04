@@ -182,7 +182,7 @@ class ARION_EXPORT FileSystemManager
     void ARION_EXPORT rm_file_entry(int target_fd);
     /**
      * Retrieves an ARION_FILE instance from a UNIX file descriptor from the emulation context.
-     * @param[in] target_fd The UNIX file descriptor;
+     * @param[in] target_fd The UNIX file descriptor.
      * @return The retrieved ARION_FILE.
      */
     std::shared_ptr<ARION_FILE> ARION_EXPORT get_arion_file(int target_fd);
