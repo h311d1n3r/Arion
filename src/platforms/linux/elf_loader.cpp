@@ -5,6 +5,7 @@
 #include <arion/common/global_excepts.hpp>
 #include <arion/common/memory_manager.hpp>
 #include <arion/platforms/linux/elf_loader.hpp>
+#include <arion/platforms/linux/lnx_arch_manager.hpp>
 #include <arion/utils/fs_utils.hpp>
 #include <arion/utils/math_utils.hpp>
 #include <array>
@@ -13,6 +14,7 @@
 #include <unistd.h>
 
 using namespace arion;
+using namespace arion_exception;
 
 std::unique_ptr<LNX_LOADER_PARAMS> ElfLoader::process()
 {
@@ -21,7 +23,7 @@ std::unique_ptr<LNX_LOADER_PARAMS> ElfLoader::process()
         throw ExpiredWeakPtrException("Arion");
 
     uint16_t arch_sz = arion->arch->get_attrs()->arch_sz;
-    auto prog_elf_attrs = std::dynamic_pointer_cast<ARION_ELF_PARSER_ATTRIBUTES>(prog_parser->get_attrs());
+    auto prog_elf_attrs = std::dynamic_pointer_cast<ELF_PARSER_ATTRIBUTES>(prog_parser->get_attrs());
 
     std::shared_ptr<LNX_LOADER_PARAMS> params = std::make_shared<LNX_LOADER_PARAMS>();
     this->is_pie = prog_elf_attrs->type == ELF_FILE_TYPE::DYN;
@@ -41,7 +43,8 @@ std::unique_ptr<LNX_LOADER_PARAMS> ElfLoader::process()
         params->vdso_address = this->map_vdso();
     else
         params->vdso_address = 0;
-    params->stack_address = this->map_stack(params, prog_elf_attrs->path);
+    if (!prog_elf_attrs->coredump)
+        params->stack_address = this->map_stack(params, prog_elf_attrs->path);
     if (seg_flags & ARION_VSYSCALL_PRESENT)
         params->vsyscall_address = this->map_vsyscall();
     else
@@ -54,13 +57,17 @@ std::unique_ptr<LNX_LOADER_PARAMS> ElfLoader::process()
     ADDR entry_addr;
     if (!this->is_static)
     {
-        auto interp_elf_attrs = std::dynamic_pointer_cast<ARION_ELF_PARSER_ATTRIBUTES>(interp_parser->get_attrs());
+        auto interp_elf_attrs = std::dynamic_pointer_cast<ELF_PARSER_ATTRIBUTES>(interp_parser->get_attrs());
         entry_addr = interp_elf_attrs->entry + params->interp_address;
     }
     else
         entry_addr = this->is_pie ? prog_elf_attrs->entry + params->load_address : prog_elf_attrs->entry;
 
-    this->init_main_thread(params, entry_addr);
+    if (prog_elf_attrs->coredump)
+        this->init_coredump_threads();
+    else
+        this->init_main_thread(params, entry_addr);
+
     return std::make_unique<LNX_LOADER_PARAMS>(*params.get());
 }
 
@@ -70,8 +77,8 @@ ADDR ElfLoader::map_elf_segments(const std::shared_ptr<ElfParser> parser, ADDR l
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    auto elf_attrs = std::dynamic_pointer_cast<ARION_ELF_PARSER_ATTRIBUTES>(parser->get_attrs());
-    const std::string program_name = elf_attrs->path;
+    auto elf_attrs = std::dynamic_pointer_cast<ELF_PARSER_ATTRIBUTES>(parser->get_attrs());
+    const std::string program_name = elf_attrs->usr_path;
 
     ADDR first_addr = ARION_MAX_U64, last_addr = 0;
     for (const std::shared_ptr<struct SEGMENT> seg : parser->get_segments())
@@ -82,7 +89,8 @@ ADDR ElfLoader::map_elf_segments(const std::shared_ptr<ElfParser> parser, ADDR l
         if (seg->align > 1)
         {
             seg_start_addr -= (seg_start_addr % seg->align);
-            seg_end_addr += (seg->align - (seg_end_addr % seg->align));
+            if ((seg_end_addr % seg->align))
+                seg_end_addr += (seg->align - (seg_end_addr % seg->align));
         }
         size_t data_seg_sz = seg_end_addr - seg_data_start_addr;
         if (seg->phy_sz > data_seg_sz)
@@ -158,7 +166,7 @@ ADDR ElfLoader::map_vsyscall()
 
     std::array<std::string, 3> vsyscalls = {"gettimeofday", "time", "getcpu"};
 
-    size_t vsyscall_seg_sz = vsyscalls.size() * VSYSCALL_ENTRY_SZ;
+    size_t vsyscall_seg_sz = vsyscalls.size() * ARION_VSYSCALL_ENTRY_SZ;
     vsyscall_seg_sz += LINUX_64_VSYSCALL_ALIGN - (vsyscall_seg_sz % LINUX_64_VSYSCALL_ALIGN);
 
     arion->mem->unmap(LINUX_64_VSYSCALL_ADDR, LINUX_64_VSYSCALL_ADDR + vsyscall_seg_sz);
@@ -168,9 +176,9 @@ ADDR ElfLoader::map_vsyscall()
     {
         std::string syscall_name = vsyscalls.at(syscall_i);
         uint64_t syscall_no = arion->arch->get_syscall_no_by_name(syscall_name);
-        std::array<BYTE, VSYSCALL_ENTRY_SZ> syscall_asm =
-            static_cast<ArchManagerX8664 *>(arion->arch.get())->gen_vsyscall_entry(syscall_no);
-        arion->mem->write(vsyscall_addr + syscall_i * VSYSCALL_ENTRY_SZ, syscall_asm.data(),
+        std::array<BYTE, ARION_VSYSCALL_ENTRY_SZ> syscall_asm =
+            static_cast<arion_x86_64::ArchManagerX8664 *>(arion->arch.get())->gen_vsyscall_entry(syscall_no);
+        arion->mem->write(vsyscall_addr + syscall_i * ARION_VSYSCALL_ENTRY_SZ, syscall_asm.data(),
                           syscall_asm.size() * sizeof(BYTE));
     }
     return 0;
@@ -207,7 +215,7 @@ void ElfLoader::setup_specific_auxv(std::shared_ptr<LNX_LOADER_PARAMS> params, u
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    auto prog_elf_attrs = std::dynamic_pointer_cast<ARION_ELF_PARSER_ATTRIBUTES>(prog_parser->get_attrs());
+    auto prog_elf_attrs = std::dynamic_pointer_cast<ELF_PARSER_ATTRIBUTES>(prog_parser->get_attrs());
 
     this->write_auxv_entry(AUXV::AT_ENTRY,
                            this->is_pie ? prog_elf_attrs->entry + params->load_address : prog_elf_attrs->entry);
@@ -221,4 +229,32 @@ void ElfLoader::setup_specific_auxv(std::shared_ptr<LNX_LOADER_PARAMS> params, u
         this->write_auxv_entry(AUXV::AT_SYSINFO, params->vdso_address + LINUX_VDSO_KERNEL_VSYSCALL_OFF);
     if (arion->arch->get_attrs()->seg_flags & ARION_VDSO_PRESENT)
         this->write_auxv_entry(AUXV::AT_SYSINFO_EHDR, params->vdso_address);
+}
+
+void ElfLoader::init_coredump_threads()
+{
+    std::shared_ptr<Arion> arion = this->arion.lock();
+    if (!arion)
+        throw ExpiredWeakPtrException("Arion");
+
+    auto prog_elf_attrs = std::dynamic_pointer_cast<ELF_PARSER_ATTRIBUTES>(prog_parser->get_attrs());
+    auto *lnx_arch = dynamic_cast<LinuxArchManager *>(arion->arch.get());
+
+    bool first_thread = true;
+    for (std::unique_ptr<ELF_COREDUMP_THREAD> &thread : prog_elf_attrs->coredump->threads)
+    {
+        std::unique_ptr<PARSED_COREDUMP_THREAD> parsed_thread =
+            lnx_arch->parse_coredump_thread(arion, std::move(thread), prog_parser);
+        thread = std::move(parsed_thread->thread);
+
+        std::unique_ptr<ARION_THREAD> arion_t = std::make_unique<ARION_THREAD>(
+            0, 0, 0, 0, 0, std::make_unique<std::map<arion::REG, arion::RVAL>>(parsed_thread->regs), 0);
+        if (first_thread)
+        {
+            first_thread = false;
+            arion->arch->load_regs(std::move(arion_t->regs_state));
+            arion->threads->set_running_tid(arion_t->tid);
+        }
+        arion->threads->add_thread_entry(std::move(arion_t));
+    }
 }

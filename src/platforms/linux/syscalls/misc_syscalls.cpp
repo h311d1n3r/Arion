@@ -4,7 +4,7 @@
 
 using namespace arion;
 
-uint64_t sys_getrandom(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_getrandom(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR buf_addr = params.at(0);
     size_t len = params.at(1);

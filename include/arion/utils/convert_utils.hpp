@@ -11,6 +11,9 @@
 #include <sstream>
 #include <string>
 
+namespace arion
+{
+
 std::string inline str_to_uppercase(const std::string &input)
 {
     std::string result = input;
@@ -38,7 +41,7 @@ template <typename T> inline std::string int_to_hex(T value, uint8_t padding = 0
     return stream.str();
 }
 
-std::string inline prot_flags_to_str(arion::PROT_FLAGS flags)
+std::string inline prot_flags_to_str(PROT_FLAGS flags)
 {
     const std::string generic_flags = "rwx";
     std::stringstream ss;
@@ -96,5 +99,7 @@ std::string inline name_from_path(const std::string &path)
     }
     return path;
 }
+
+}; // namespace arion
 
 #endif // ARION_CONVERT_UTILS_HPP

@@ -12,7 +12,7 @@
 
 using namespace arion;
 
-uint64_t sys_clone(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_clone(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     uint64_t clone_flags = params.at(0);
     ADDR new_sp = params.at(1);
@@ -36,14 +36,14 @@ uint64_t sys_clone(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     return child_pid;
 }
 
-uint64_t sys_fork(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_fork(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     pid_t child_pid = arion->threads->fork_process(0, 0, 0, 0, 0, 0);
     arion->sync_threads();
     return child_pid;
 }
 
-uint64_t sys_execve(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_execve(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR file_name_addr = params.at(0);
     ADDR argv_addr = params.at(1);
@@ -69,7 +69,7 @@ uint64_t sys_execve(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     return 0;
 }
 
-uint64_t sys_exit(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_exit(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     int error_code = params.at(0);
 
@@ -95,7 +95,7 @@ uint64_t sys_exit(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     return arion->arch->read_arch_reg(ret_reg);
 }
 
-uint64_t sys_futex(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_futex(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR uaddr = params.at(0);
     int op = params.at(1);
@@ -131,7 +131,7 @@ uint64_t sys_futex(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     return ret_val;
 }
 
-uint64_t sys_futex_time64(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_futex_time64(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR uaddr = params.at(0);
     int op = params.at(1);
@@ -167,7 +167,7 @@ uint64_t sys_futex_time64(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> p
     return ret_val;
 }
 
-uint64_t sys_set_tid_address(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_set_tid_address(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR tid_ptr = params.at(0);
 
@@ -179,7 +179,7 @@ uint64_t sys_set_tid_address(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM
     return curr_tid;
 }
 
-uint64_t sys_set_thread_area(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_set_thread_area(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR u_info_addr = params.at(0);
 
@@ -188,26 +188,26 @@ uint64_t sys_set_thread_area(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM
 
     ADDR new_tls = u_info_addr;
     if (arion->arch->get_attrs()->arch == CPU_ARCH::X86_ARCH)
-        new_tls = static_cast<ArchManagerX86 *>(arion->arch.get())->new_tls(u_info_addr);
+        new_tls = static_cast<arion_x86::ArchManagerX86 *>(arion->arch.get())->new_tls(u_info_addr);
 
     arion->arch->load_tls(new_tls);
 
     return 0;
 }
 
-uint64_t sys_set_tls(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_set_tls(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR tls_addr = params.at(0);
 
     if (arion->arch->get_attrs()->arch == CPU_ARCH::X86_ARCH)
-        tls_addr = static_cast<ArchManagerX86 *>(arion->arch.get())->new_tls(tls_addr);
+        tls_addr = static_cast<arion_x86::ArchManagerX86 *>(arion->arch.get())->new_tls(tls_addr);
 
     arion->arch->load_tls(tls_addr);
 
     return tls_addr;
 }
 
-uint64_t sys_exit_group(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_exit_group(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     int error_code = params.at(0);
 
@@ -236,7 +236,7 @@ uint64_t sys_exit_group(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> par
     return arion->arch->read_arch_reg(ret_reg);
 }
 
-uint64_t sys_clone3(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_clone3(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR args_addr = params.at(0);
     size_t args_sz = params.at(1);
@@ -256,7 +256,7 @@ uint64_t sys_clone3(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
 }
 
 // obsolete in linux kernel > 6.X
-uint64_t sys_set_robust_list(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_set_robust_list(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR head = params.at(0);
     size_t len = params.at(1);
@@ -271,7 +271,7 @@ uint64_t sys_set_robust_list(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM
     return 0;
 }
 
-uint64_t sys_rseq(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_rseq(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR rseq_addr = params.at(0);
     uint32_t rseq_len = params.at(1);

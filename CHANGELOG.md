@@ -1,9 +1,15 @@
 # 1.0.2-alpha
-- Loading coredumps
+- Core dumps support
+- X11 support
 - Memory restoring strategies
 - Implemented module for procfs
+- GCC 15 compatibility
+- PIN tool for AVX/SSE bypass via CPUID
 - Changed AbiManager to ArchManager
 - Fixed unreadable symbolic link error
+- Better handling of file descriptors availability
+- Syscalls types added to logging
+- Namespaces rework
 
 # 1.0.1-alpha
 - Added UnicornAFL fuzzing mode

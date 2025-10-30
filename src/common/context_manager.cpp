@@ -6,6 +6,7 @@
 #include <memory>
 
 using namespace arion;
+using namespace arion_exception;
 
 std::unique_ptr<ContextManager> ContextManager::initialize(std::weak_ptr<Arion> arion)
 {
@@ -155,6 +156,10 @@ void ContextManager::restore(std::shared_ptr<ARION_CONTEXT> ctx, bool restore_ma
         arion->threads->futex_wait(arion_f->tid, arion_f->futex_addr, arion_f->futex_bitmask);
     arion->threads->set_running_tid(ctx->running_tid);
     arion->arch->load_regs(std::move(arion->threads->threads_map[ctx->running_tid]->regs_state));
+    //never restore tls if arm_traps isn't loaded
+    if (arion->baremetal) {
+        if (!arion->baremetal->additional_mapped_segments.ARM_TRAPS) {return;}
+    }
     arion->arch->load_tls(std::move(arion->threads->threads_map[ctx->running_tid]->tls_addr));
 }
 

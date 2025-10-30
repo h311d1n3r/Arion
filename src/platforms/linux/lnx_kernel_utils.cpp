@@ -2,9 +2,12 @@
 #include <arion/common/global_defs.hpp>
 #include <arion/platforms/linux/lnx_kernel_utils.hpp>
 #include <sys/mman.h>
+#include <sys/socket.h>
 
 using namespace arion;
+using namespace arion_lnx_type;
 using namespace arion_poly_struct;
+using namespace arion_type;
 
 std::map<uint64_t, std::string> errno_names = {
     {0, "SUCCESS"},
@@ -140,62 +143,88 @@ std::map<uint64_t, std::string> errno_names = {
 };
 
 // Base types declaration
-std::shared_ptr<ArionErrCodeType> ARION_ERR_CODE_TYPE;
-std::shared_ptr<ArionFileDescriptorType> ARION_FILE_DESCRIPTOR_TYPE;
-std::shared_ptr<ArionAccessModeType> ARION_ACCESS_MODE_TYPE;
-std::shared_ptr<ArionOpenModeType> ARION_OPEN_MODE_TYPE;
-std::shared_ptr<ArionFileATFlagType> ARION_FILE_AT_FLAG_TYPE;
-std::shared_ptr<ArionStatxMaskType> ARION_STATX_MASK_TYPE;
-std::shared_ptr<ArionStatxAttrsType> ARION_STATX_ATTRS_TYPE;
-std::shared_ptr<ArionProtFlagType> ARION_PROT_FLAG_TYPE;
-std::shared_ptr<ArionMmapFlagType> ARION_MMAP_FLAG_TYPE;
-std::shared_ptr<ArionSeekWhenceType> ARION_SEEK_WHENCE_TYPE;
-std::shared_ptr<ArionFutexOpType> ARION_FUTEX_OP_TYPE;
-std::shared_ptr<ArionCloneFlagType> ARION_CLONE_FLAG_TYPE;
-std::shared_ptr<ArionSignalType> ARION_SIGNAL_TYPE;
-std::shared_ptr<ArionFileModeType> ARION_FILE_MODE_TYPE;
+std::shared_ptr<ErrCodeType> arion_lnx_type::ERR_CODE_TYPE;
+std::shared_ptr<FileDescriptorType> arion_lnx_type::FILE_DESCRIPTOR_TYPE;
+std::shared_ptr<AccessModeType> arion_lnx_type::ACCESS_MODE_TYPE;
+std::shared_ptr<OpenModeType> arion_lnx_type::OPEN_MODE_TYPE;
+std::shared_ptr<FileATFlagType> arion_lnx_type::FILE_AT_FLAG_TYPE;
+std::shared_ptr<StatxMaskType> arion_lnx_type::STATX_MASK_TYPE;
+std::shared_ptr<StatxAttrsType> arion_lnx_type::STATX_ATTRS_TYPE;
+std::shared_ptr<ProtFlagType> arion_lnx_type::PROT_FLAG_TYPE;
+std::shared_ptr<MmapFlagType> arion_lnx_type::MMAP_FLAG_TYPE;
+std::shared_ptr<SeekWhenceType> arion_lnx_type::SEEK_WHENCE_TYPE;
+std::shared_ptr<FutexOpType> arion_lnx_type::FUTEX_OP_TYPE;
+std::shared_ptr<CloneFlagType> arion_lnx_type::CLONE_FLAG_TYPE;
+std::shared_ptr<SignalType> arion_lnx_type::SIGNAL_TYPE;
+std::shared_ptr<FileModeType> arion_lnx_type::FILE_MODE_TYPE;
+std::shared_ptr<SocketDomainType> arion_lnx_type::SOCKET_DOMAIN_TYPE;
+std::shared_ptr<SocketTypeType> arion_lnx_type::SOCKET_TYPE_TYPE;
+std::shared_ptr<InAddrTType> arion_lnx_type::IN_ADDR_T_TYPE;
+std::shared_ptr<In6AddrTType> arion_lnx_type::IN6_ADDR_T_TYPE;
 
 // Struct factories declaration
-std::shared_ptr<StatStructFactory> arion_poly_struct::STAT_STRUCT_FACTORY;
-std::shared_ptr<StatxStructFactory> arion_poly_struct::STATX_STRUCT_FACTORY;
-std::shared_ptr<TimespecStructFactory> arion_poly_struct::TIMESPEC_STRUCT_FACTORY;
-std::shared_ptr<CloneArgsStructFactory> arion_poly_struct::CLONE_ARGS_STRUCT_FACTORY;
+std::shared_ptr<StatStructFactory> arion_lnx_type::STAT_STRUCT_FACTORY;
+std::shared_ptr<StatxStructFactory> arion_lnx_type::STATX_STRUCT_FACTORY;
+std::shared_ptr<TimespecStructFactory> arion_lnx_type::TIMESPEC_STRUCT_FACTORY;
+std::shared_ptr<CloneArgsStructFactory> arion_lnx_type::CLONE_ARGS_STRUCT_FACTORY;
+std::shared_ptr<SockaddrInStructFactory> arion_lnx_type::SOCKADDR_IN_STRUCT_FACTORY;
+std::shared_ptr<SockaddrIn6StructFactory> arion_lnx_type::SOCKADDR_IN6_STRUCT_FACTORY;
+std::shared_ptr<SockaddrUnStructFactory> arion_lnx_type::SOCKADDR_UN_STRUCT_FACTORY;
 
 // Struct types declaration
-std::shared_ptr<ArionStructStatType> arion_poly_struct::ARION_STRUCT_STAT_TYPE;
-std::shared_ptr<ArionStructStatxType> arion_poly_struct::ARION_STRUCT_STATX_TYPE;
-std::shared_ptr<ArionStructTimespecType> arion_poly_struct::ARION_STRUCT_TIMESPEC_TYPE;
-std::shared_ptr<ArionStructCloneArgsType> arion_poly_struct::ARION_STRUCT_CLONE_ARGS_TYPE;
+std::shared_ptr<StructStatType> arion_lnx_type::STRUCT_STAT_TYPE;
+std::shared_ptr<StructStatxType> arion_lnx_type::STRUCT_STATX_TYPE;
+std::shared_ptr<StructTimespecType> arion_lnx_type::STRUCT_TIMESPEC_TYPE;
+std::shared_ptr<StructCloneArgsType> arion_lnx_type::STRUCT_CLONE_ARGS_TYPE;
+std::shared_ptr<StructSockaddrInType> arion_lnx_type::STRUCT_SOCKADDR_IN_TYPE;
+std::shared_ptr<StructSockaddrIn6Type> arion_lnx_type::STRUCT_SOCKADDR_IN6_TYPE;
+std::shared_ptr<StructSockaddrUnType> arion_lnx_type::STRUCT_SOCKADDR_UN_TYPE;
+
+// Variable struct types declaration
+std::shared_ptr<StructSockaddrType> arion_lnx_type::STRUCT_SOCKADDR_TYPE;
 
 // Base types registration
-REGISTER_ARION_TYPE(ARION_ERR_CODE_TYPE, ArionErrCodeType, OS_BASE_TYPE_PRIORITY);
-REGISTER_ARION_TYPE(ARION_FILE_DESCRIPTOR_TYPE, ArionFileDescriptorType, OS_BASE_TYPE_PRIORITY);
-REGISTER_ARION_TYPE(ARION_ACCESS_MODE_TYPE, ArionAccessModeType, OS_BASE_TYPE_PRIORITY);
-REGISTER_ARION_TYPE(ARION_OPEN_MODE_TYPE, ArionOpenModeType, OS_BASE_TYPE_PRIORITY);
-REGISTER_ARION_TYPE(ARION_FILE_AT_FLAG_TYPE, ArionFileATFlagType, OS_BASE_TYPE_PRIORITY);
-REGISTER_ARION_TYPE(ARION_STATX_MASK_TYPE, ArionStatxMaskType, OS_BASE_TYPE_PRIORITY);
-REGISTER_ARION_TYPE(ARION_STATX_ATTRS_TYPE, ArionStatxAttrsType, OS_BASE_TYPE_PRIORITY);
-REGISTER_ARION_TYPE(ARION_PROT_FLAG_TYPE, ArionProtFlagType, OS_BASE_TYPE_PRIORITY);
-REGISTER_ARION_TYPE(ARION_MMAP_FLAG_TYPE, ArionMmapFlagType, OS_BASE_TYPE_PRIORITY);
-REGISTER_ARION_TYPE(ARION_SEEK_WHENCE_TYPE, ArionSeekWhenceType, OS_BASE_TYPE_PRIORITY);
-REGISTER_ARION_TYPE(ARION_FUTEX_OP_TYPE, ArionFutexOpType, OS_BASE_TYPE_PRIORITY);
-REGISTER_ARION_TYPE(ARION_CLONE_FLAG_TYPE, ArionCloneFlagType, OS_BASE_TYPE_PRIORITY);
-REGISTER_ARION_TYPE(ARION_SIGNAL_TYPE, ArionSignalType, OS_BASE_TYPE_PRIORITY);
-REGISTER_ARION_TYPE(ARION_FILE_MODE_TYPE, ArionFileModeType, OS_BASE_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(ERR_CODE_TYPE, ErrCodeType, OS_BASE_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(FILE_DESCRIPTOR_TYPE, FileDescriptorType, OS_BASE_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(ACCESS_MODE_TYPE, AccessModeType, OS_BASE_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(OPEN_MODE_TYPE, OpenModeType, OS_BASE_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(FILE_AT_FLAG_TYPE, FileATFlagType, OS_BASE_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(STATX_MASK_TYPE, StatxMaskType, OS_BASE_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(STATX_ATTRS_TYPE, StatxAttrsType, OS_BASE_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(PROT_FLAG_TYPE, ProtFlagType, OS_BASE_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(MMAP_FLAG_TYPE, MmapFlagType, OS_BASE_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(SEEK_WHENCE_TYPE, SeekWhenceType, OS_BASE_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(FUTEX_OP_TYPE, FutexOpType, OS_BASE_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(CLONE_FLAG_TYPE, CloneFlagType, OS_BASE_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(SIGNAL_TYPE, SignalType, OS_BASE_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(FILE_MODE_TYPE, FileModeType, OS_BASE_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(SOCKET_DOMAIN_TYPE, SocketDomainType, OS_BASE_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(SOCKET_TYPE_TYPE, SocketTypeType, OS_BASE_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(IN_ADDR_T_TYPE, InAddrTType, OS_BASE_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(IN6_ADDR_T_TYPE, In6AddrTType, OS_BASE_TYPE_PRIORITY);
 
 // Struct factories registration
-REGISTER_ARION_TYPE(STAT_STRUCT_FACTORY, StatStructFactory, OS_STRUCT_FACTORY_PRIORITY);
-REGISTER_ARION_TYPE(STATX_STRUCT_FACTORY, StatxStructFactory, OS_STRUCT_FACTORY_PRIORITY);
-REGISTER_ARION_TYPE(TIMESPEC_STRUCT_FACTORY, TimespecStructFactory, OS_STRUCT_FACTORY_PRIORITY);
-REGISTER_ARION_TYPE(CLONE_ARGS_STRUCT_FACTORY, CloneArgsStructFactory, OS_STRUCT_FACTORY_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(STAT_STRUCT_FACTORY, StatStructFactory, OS_STRUCT_FACTORY_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(STATX_STRUCT_FACTORY, StatxStructFactory, OS_STRUCT_FACTORY_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(TIMESPEC_STRUCT_FACTORY, TimespecStructFactory, OS_STRUCT_FACTORY_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(CLONE_ARGS_STRUCT_FACTORY, CloneArgsStructFactory, OS_STRUCT_FACTORY_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(SOCKADDR_IN_STRUCT_FACTORY, SockaddrInStructFactory, OS_STRUCT_FACTORY_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(SOCKADDR_IN6_STRUCT_FACTORY, SockaddrIn6StructFactory, OS_STRUCT_FACTORY_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(SOCKADDR_UN_STRUCT_FACTORY, SockaddrUnStructFactory, OS_STRUCT_FACTORY_PRIORITY);
 
 // Struct types registration
-REGISTER_ARION_TYPE(ARION_STRUCT_STAT_TYPE, ArionStructStatType, OS_STRUCT_TYPE_PRIORITY);
-REGISTER_ARION_TYPE(ARION_STRUCT_STATX_TYPE, ArionStructStatxType, OS_STRUCT_TYPE_PRIORITY);
-REGISTER_ARION_TYPE(ARION_STRUCT_TIMESPEC_TYPE, ArionStructTimespecType, OS_STRUCT_TYPE_PRIORITY);
-REGISTER_ARION_TYPE(ARION_STRUCT_CLONE_ARGS_TYPE, ArionStructCloneArgsType, OS_STRUCT_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(STRUCT_STAT_TYPE, StructStatType, OS_STRUCT_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(STRUCT_STATX_TYPE, StructStatxType, OS_STRUCT_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(STRUCT_TIMESPEC_TYPE, StructTimespecType, OS_STRUCT_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(STRUCT_CLONE_ARGS_TYPE, StructCloneArgsType, OS_STRUCT_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(STRUCT_SOCKADDR_IN_TYPE, StructSockaddrInType, OS_STRUCT_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(STRUCT_SOCKADDR_IN6_TYPE, StructSockaddrIn6Type, OS_STRUCT_TYPE_PRIORITY);
+ARION_REGISTER_KERNEL_TYPE(STRUCT_SOCKADDR_UN_TYPE, StructSockaddrUnType, OS_STRUCT_TYPE_PRIORITY);
 
-std::string ArionErrCodeType::str(std::shared_ptr<Arion> arion, uint64_t val)
+// Variable struct types registration
+ARION_REGISTER_KERNEL_TYPE(STRUCT_SOCKADDR_TYPE, StructSockaddrType, OS_VARIABLE_STRUCT_TYPE_PRIORITY);
+
+std::string ErrCodeType::str(std::shared_ptr<Arion> arion, uint64_t val)
 {
     auto flag_it = errno_names.find(-((int64_t)val));
     if (flag_it == errno_names.end())
@@ -203,14 +232,32 @@ std::string ArionErrCodeType::str(std::shared_ptr<Arion> arion, uint64_t val)
     return flag_it->second;
 }
 
-std::string ArionFileDescriptorType::str(std::shared_ptr<Arion> arion, uint64_t val)
+std::string FileDescriptorType::str(std::shared_ptr<Arion> arion, uint64_t val)
 {
     if (val == (uint32_t)AT_FDCWD)
         return "AT_FDCWD";
     return int_to_hex<uint64_t>(val);
 }
 
-std::string ArionProtFlagType::str(std::shared_ptr<Arion> arion, uint64_t val)
+std::string InAddrTType::str(std::shared_ptr<Arion> arion, uint64_t val)
+{
+    struct in_addr ip_addr;
+    ip_addr.s_addr = val;
+    return std::string(inet_ntoa(ip_addr));
+}
+
+std::string In6AddrTType::str(std::shared_ptr<Arion> arion, uint64_t val)
+{
+    if (!arion->mem->is_mapped(val))
+        return INT_TYPE->str(arion, val);
+    std::vector<BYTE> ip_data = arion->mem->read(val, INET6_ADDRSTRLEN);
+    char ip_str[INET6_ADDRSTRLEN];
+    if (!inet_ntop(AF_INET6, ip_data.data(), ip_str, INET6_ADDRSTRLEN))
+        return INT_TYPE->str(arion, val);
+    return std::string(ip_str);
+}
+
+std::string ProtFlagType::str(std::shared_ptr<Arion> arion, uint64_t val)
 {
     if (!val)
         return "PROT_NONE";
@@ -234,7 +281,38 @@ std::string ArionProtFlagType::str(std::shared_ptr<Arion> arion, uint64_t val)
     return prot_ss.str();
 }
 
-PROT_FLAGS kernel_prot_to_arion_prot(int kflags)
+std::shared_ptr<AbsArionStructType> StructSockaddrType::process(std::shared_ptr<Arion> arion, uint64_t val)
+{
+    if (!arion->mem->is_mapped(val))
+        return std::dynamic_pointer_cast<AbsArionStructType>(STRUCT_SOCKADDR_UN_TYPE);
+    uint16_t sa_family_t = arion->mem->read_val(val, 2);
+    switch (sa_family_t)
+    {
+    case AF_INET:
+        return std::dynamic_pointer_cast<AbsArionStructType>(STRUCT_SOCKADDR_IN_TYPE);
+    case AF_INET6:
+        return std::dynamic_pointer_cast<AbsArionStructType>(STRUCT_SOCKADDR_IN6_TYPE);
+    case AF_LOCAL:
+        return std::dynamic_pointer_cast<AbsArionStructType>(STRUCT_SOCKADDR_UN_TYPE);
+    default:
+        return std::dynamic_pointer_cast<AbsArionStructType>(STRUCT_SOCKADDR_UN_TYPE);
+    }
+}
+
+std::string StructSockaddrUnType::str(std::shared_ptr<Arion> arion, uint64_t val)
+{
+    arion::CPU_ARCH arch = this->arion_curr_arch(arion);
+    std::string struct_str = ArionStructType::str(arion, val);
+    if (!arion->mem->is_mapped(val + 2))
+        return int_to_hex<uint64_t>(val);
+    bool is_domain_socket = arion->mem->read_val(val + 2, 1) == 0;
+    std::string sun_path = arion->mem->read_c_string(val + 2 + is_domain_socket);
+    struct_str = struct_str.substr(0, struct_str.length() - 1) + ", sun_path=" + (is_domain_socket ? "@" : "") + "\"" +
+                 sun_path + "\"}";
+    return struct_str;
+}
+
+PROT_FLAGS arion_lnx_type::kernel_prot_to_arion_prot(int kflags)
 {
     PROT_FLAGS flags = 0;
     if (kflags & PROT_EXEC)

@@ -17,6 +17,8 @@
 #include <sys/wait.h>
 
 using namespace arion;
+using namespace arion_exception;
+using namespace arion_type;
 
 // Replace import of udbserver with extern "C" to prevent C++ mangling import problem
 extern "C"
@@ -209,8 +211,8 @@ std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program_args
                                            std::vector<std::string> program_env, std::string cwd,
                                            std::unique_ptr<Config> config)
 {
-    if (!ArionTypeRegistry::instance().is_initialized())
-        ArionTypeRegistry::instance().init_types();
+    if (!KernelTypeRegistry::instance().is_initialized())
+        KernelTypeRegistry::instance().init_types();
     if (!program_args.size())
         throw InvalidArgumentException("Program arguments must at least contain target name.");
     std::shared_ptr<Arion> arion = std::make_shared<Arion>();
@@ -218,11 +220,11 @@ std::shared_ptr<Arion> Arion::new_instance(std::vector<std::string> program_args
     arion->program_args = program_args;
     std::shared_ptr<ElfParser> prog_parser = std::make_shared<ElfParser>(arion, program_args);
     prog_parser->process();
-    std::string program_path = prog_parser->get_attrs()->path;
+    std::string program_path = prog_parser->get_attrs()->usr_path;
     Arion::new_instance_common_finish(arion, prog_parser->get_attrs()->arch);
     colorstream init_msg;
-    init_msg << ARION_LOG_COLOR::WHITE << "Initializing Arion instance for image " << ARION_LOG_COLOR::GREEN << "\""
-             << program_path << "\"" << ARION_LOG_COLOR::WHITE << ".";
+    init_msg << LOG_COLOR::WHITE << "Initializing Arion instance for image " << LOG_COLOR::GREEN << "\""
+             << program_path << "\"" << LOG_COLOR::WHITE << ".";
     arion->logger->info(init_msg.str());
     if (!std::filesystem::exists(program_path))
         throw FileNotFoundException(program_path);
@@ -236,15 +238,15 @@ std::shared_ptr<Arion> Arion::new_instance(std::unique_ptr<BaremetalManager> bar
                                            std::vector<std::string> program_env, std::string cwd,
                                            std::unique_ptr<Config> config)
 {
-    if (!ArionTypeRegistry::instance().is_initialized())
-        ArionTypeRegistry::instance().init_types();
+    if (!KernelTypeRegistry::instance().is_initialized())
+        KernelTypeRegistry::instance().init_types();
     std::shared_ptr<Arion> arion = std::make_shared<Arion>();
     Arion::new_instance_common_init(arion, fs_path, program_env, cwd, std::move(config));
     arion->baremetal = std::move(baremetal);
     Arion::new_instance_common_finish(arion, arion->baremetal->get_arch());
     colorstream init_msg;
-    init_msg << ARION_LOG_COLOR::WHITE << "Initializing Arion instance in " << ARION_LOG_COLOR::MAGENTA << "baremetal"
-             << ARION_LOG_COLOR::WHITE << " mode.";
+    init_msg << LOG_COLOR::WHITE << "Initializing Arion instance in " << LOG_COLOR::MAGENTA << "baremetal"
+             << LOG_COLOR::WHITE << " mode.";
     arion->logger->info(init_msg.str());
     arion->init_baremetal_program();
     return arion;
@@ -253,7 +255,7 @@ std::shared_ptr<Arion> Arion::new_instance(std::unique_ptr<BaremetalManager> bar
 Arion::~Arion()
 {
     colorstream destroy_msg;
-    destroy_msg << ARION_LOG_COLOR::WHITE << "Destroying Arion instance.";
+    destroy_msg << LOG_COLOR::WHITE << "Destroying Arion instance.";
     this->logger->info(destroy_msg.str());
 
     std::shared_ptr<ArionGroup> group = this->group.lock();
@@ -307,7 +309,7 @@ void Arion::init_engines(arion::CPU_ARCH arch)
     }
 }
 
-void Arion::init_file_program(std::shared_ptr<ElfParser> prog_parser)
+void Arion::init_file_program(std::shared_ptr<ExecutableParser> prog_parser)
 {
     std::shared_ptr<Arion> curr_instance = shared_from_this();
     const std::string program_path = this->program_args.at(0);
@@ -347,7 +349,7 @@ void Arion::init_baremetal_program()
     this->loader_params = loader.process();
 }
 
-void Arion::init_dynamic_program(std::shared_ptr<ElfParser> prog_parser)
+void Arion::init_dynamic_program(std::shared_ptr<ExecutableParser> prog_parser)
 {
     std::shared_ptr<Arion> curr_instance = shared_from_this();
     std::string interpreter_path = prog_parser->get_attrs()->interpreter_path;
@@ -356,14 +358,16 @@ void Arion::init_dynamic_program(std::shared_ptr<ElfParser> prog_parser)
     interp_parser->process();
     if (interp_parser->get_attrs()->linkage != LINKAGE_TYPE::STATIC_LINKAGE)
         throw BadLinkageTypeException(interpreter_path);
-    ElfLoader loader(curr_instance, interp_parser, prog_parser, this->program_args, this->program_env);
+    ElfLoader loader(curr_instance, interp_parser, std::dynamic_pointer_cast<ElfParser>(prog_parser),
+                     this->program_args, this->program_env);
     this->loader_params = loader.process();
 }
 
-void Arion::init_static_program(std::shared_ptr<ElfParser> prog_parser)
+void Arion::init_static_program(std::shared_ptr<ExecutableParser> prog_parser)
 {
     std::shared_ptr<Arion> curr_instance = shared_from_this();
-    ElfLoader loader(curr_instance, prog_parser, this->program_args, this->program_env);
+    ElfLoader loader(curr_instance, std::dynamic_pointer_cast<ElfParser>(prog_parser), this->program_args,
+                     this->program_env);
     this->loader_params = loader.process();
 }
 
@@ -416,6 +420,7 @@ bool Arion::run_current()
     this->arch->prerun_hook(pc_addr);
     uc_err uc_run_err = uc_emu_start(this->uc, pc_addr, this->end.value_or(0), 0,
                                      (multi_process || multi_thread) ? ARION_CYCLES_PER_THREAD : 0);
+    this->running = false;
     pc_addr = this->arch->read_arch_reg(pc);
     if (this->uc_exception)
         std::rethrow_exception(this->uc_exception);
@@ -426,16 +431,15 @@ bool Arion::run_current()
         this->end = 0;
         return false;
     }
+    threads_count = this->threads->get_threads_count();
+    if (!threads_count)
+        return false;
+    this->threads->switch_to_next_thread();
     if (this->sync)
     {
         this->sync = false;
         return true;
     }
-    threads_count = this->threads->get_threads_count();
-    if (!threads_count)
-        return false;
-    this->threads->switch_to_next_thread();
-    this->running = false;
     return true;
 }
 

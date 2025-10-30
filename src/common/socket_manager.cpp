@@ -3,8 +3,9 @@
 #include <arion/common/socket_manager.hpp>
 
 using namespace arion;
+using namespace arion_exception;
 
-std::vector<BYTE> serialize_arion_socket(ARION_SOCKET *arion_s)
+std::vector<BYTE> arion::serialize_arion_socket(ARION_SOCKET *arion_s)
 {
     std::vector<BYTE> srz_socket;
 
@@ -24,6 +25,7 @@ std::vector<BYTE> serialize_arion_socket(ARION_SOCKET *arion_s)
                       (BYTE *)&arion_s->server_listen + sizeof(bool));
     srz_socket.insert(srz_socket.end(), (BYTE *)&arion_s->server_backlog,
                       (BYTE *)&arion_s->server_backlog + sizeof(int));
+    srz_socket.insert(srz_socket.end(), (BYTE *)&arion_s->blocking, (BYTE *)&arion_s->blocking + sizeof(bool));
     srz_socket.insert(srz_socket.end(), (BYTE *)&arion_s->s_addr_sz, (BYTE *)&arion_s->s_addr_sz + sizeof(socklen_t));
     if (arion_s->s_addr_sz)
         srz_socket.insert(srz_socket.end(), (BYTE *)arion_s->s_addr, (BYTE *)arion_s->s_addr + arion_s->s_addr_sz);
@@ -31,7 +33,7 @@ std::vector<BYTE> serialize_arion_socket(ARION_SOCKET *arion_s)
     return srz_socket;
 }
 
-ARION_SOCKET *deserialize_arion_socket(std::vector<BYTE> srz_socket)
+ARION_SOCKET *arion::deserialize_arion_socket(std::vector<BYTE> srz_socket)
 {
     ARION_SOCKET *arion_s = new ARION_SOCKET;
 
@@ -68,6 +70,8 @@ ARION_SOCKET *deserialize_arion_socket(std::vector<BYTE> srz_socket)
     off += sizeof(bool);
     memcpy(&arion_s->server_backlog, srz_socket.data() + off, sizeof(int));
     off += sizeof(int);
+    memcpy(&arion_s->blocking, srz_socket.data() + off, sizeof(bool));
+    off += sizeof(bool);
     memcpy(&arion_s->s_addr_sz, srz_socket.data() + off, sizeof(socklen_t));
     off += sizeof(socklen_t);
     if (arion_s->s_addr_sz)

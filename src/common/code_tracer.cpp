@@ -11,6 +11,9 @@
 #include <memory>
 
 using namespace arion;
+using namespace arion_exception;
+
+static size_t anon_code_counter = 0;
 
 std::unique_ptr<CodeTracer> CodeTracer::initialize(std::weak_ptr<Arion> arion)
 {
@@ -178,7 +181,7 @@ void CodeTracer::process_hit(ADDR addr, size_t sz)
     this->hits.push_back(std::move(hit));
 
     size_t hits_sz = this->hits.size();
-    size_t max_hits = this->mode == TRACE_MODE::CTXT ? MAX_HEAVY_HITS : MAX_LIGHT_HITS;
+    size_t max_hits = this->mode == TRACE_MODE::CTXT ? ARION_MAX_HEAVY_HITS : ARION_MAX_LIGHT_HITS;
     if (hits_sz >= max_hits)
         this->flush_hits();
 }
@@ -209,6 +212,7 @@ void CodeTracer::start(std::string out_f_path, TRACE_MODE mode)
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
+    anon_code_counter = 0;
     if (this->enabled)
         throw TracerAlreadyEnabledException();
     this->enabled = true;
@@ -256,7 +260,14 @@ void CodeTracer::process_new_mapping(std::shared_ptr<ARION_MAPPING> mapping)
 
     if (arion->is_running() && !this->enabled)
         return;
-    if (!mapping->info.size() || !std::filesystem::exists(mapping->info))
+
+    // patch : custom user memory mapped segment can be without info but executable : must trace it
+    if (mapping->info.empty() && mapping->perms & LINUX_EXEC_PERMS) {
+        anon_code_counter++;
+        mapping->info = "[code" + std::to_string(anon_code_counter) + "]";
+    }
+
+    if (!mapping->info.size())
         return;
 
     for (std::unique_ptr<TRACER_MAPPING> &tr_mapping : this->mappings)

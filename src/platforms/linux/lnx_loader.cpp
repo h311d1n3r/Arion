@@ -13,6 +13,7 @@
 #include <unistd.h>
 
 using namespace arion;
+using namespace arion_exception;
 
 void LinuxLoader::write_auxv_entry(AUXV auxv, uint64_t val)
 {
@@ -131,9 +132,9 @@ void LinuxLoader::init_main_thread(std::shared_ptr<LNX_LOADER_PARAMS> params, AD
 
     std::shared_ptr<ARION_MAPPING> stack_mapping = arion->mem->get_mapping_at(params->stack_address);
     REG sp = arion->arch->get_attrs()->regs.sp;
-
     ADDR sp_val = arion->arch->read_arch_reg(sp);
     std::unique_ptr<std::map<REG, RVAL>> regs = arion->arch->init_thread_regs(entry_addr, sp_val);
+
     std::unique_ptr<ARION_THREAD> arion_t = std::make_unique<ARION_THREAD>(0, 0, 0, 0, 0, std::move(regs), 0);
     arion->arch->load_regs(std::move(arion_t->regs_state));
     arion->threads->add_thread_entry(std::move(arion_t));

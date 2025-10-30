@@ -4,6 +4,8 @@
 #include <arion/unicorn/arm.h>
 
 using namespace arion;
+using namespace arion_arm;
+using namespace arion_exception;
 
 void ArchManagerARM::int_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data)
 {

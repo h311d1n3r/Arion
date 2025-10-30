@@ -12,6 +12,9 @@ build_*/
 # Object files
 *.o
 
+# Documentation
+doc/
+
 # Misc
 .cache/
 lab/
