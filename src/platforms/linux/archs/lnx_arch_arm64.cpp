@@ -2,6 +2,7 @@
 #include <arion/platforms/linux/archs/lnx_arch_arm64.hpp>
 
 using namespace arion;
+using namespace arion_lnx_arm64;
 
 std::map<arion::REG, arion::RVAL> ArchManagerLinuxARM64::prstatus_to_regs(std::vector<arion::BYTE> prstatus)
 {

@@ -6,6 +6,7 @@
 #include <memory>
 
 using namespace arion;
+using namespace arion_exception;
 
 std::unique_ptr<ContextManager> ContextManager::initialize(std::weak_ptr<Arion> arion)
 {

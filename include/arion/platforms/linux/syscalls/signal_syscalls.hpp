@@ -3,13 +3,18 @@
 
 #include <arion/platforms/linux/lnx_syscall_manager.hpp>
 
-uint64_t sys_rt_sigaction(std::shared_ptr<Arion> arion, std::vector<arion::SYS_PARAM> params, bool &cancel);
-uint64_t sys_rt_sigreturn(std::shared_ptr<Arion> arion, std::vector<arion::SYS_PARAM> params, bool &cancel);
-uint64_t sys_sigreturn(std::shared_ptr<Arion> arion, std::vector<arion::SYS_PARAM> params, bool &cancel);
-uint64_t sys_pause(std::shared_ptr<Arion> arion, std::vector<arion::SYS_PARAM> params, bool &cancel);
-uint64_t sys_wait4(std::shared_ptr<Arion> arion, std::vector<arion::SYS_PARAM> params, bool &cancel);
-uint64_t sys_kill(std::shared_ptr<Arion> arion, std::vector<arion::SYS_PARAM> params, bool &cancel);
-uint64_t sys_tgkill(std::shared_ptr<Arion> arion, std::vector<arion::SYS_PARAM> params, bool &cancel);
-uint64_t sys_waitid(std::shared_ptr<Arion> arion, std::vector<arion::SYS_PARAM> params, bool &cancel);
+namespace arion
+{
+
+uint64_t sys_rt_sigaction(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel);
+uint64_t sys_rt_sigreturn(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel);
+uint64_t sys_sigreturn(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel);
+uint64_t sys_pause(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel);
+uint64_t sys_wait4(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel);
+uint64_t sys_kill(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel);
+uint64_t sys_tgkill(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel);
+uint64_t sys_waitid(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel);
+
+}; // namespace arion
 
 #endif // ARION_SIGNAL_SYSCALLS_HPP

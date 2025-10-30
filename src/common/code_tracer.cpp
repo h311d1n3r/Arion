@@ -11,6 +11,7 @@
 #include <memory>
 
 using namespace arion;
+using namespace arion_exception;
 
 static size_t anon_code_counter = 0;
 
@@ -180,7 +181,7 @@ void CodeTracer::process_hit(ADDR addr, size_t sz)
     this->hits.push_back(std::move(hit));
 
     size_t hits_sz = this->hits.size();
-    size_t max_hits = this->mode == TRACE_MODE::CTXT ? MAX_HEAVY_HITS : MAX_LIGHT_HITS;
+    size_t max_hits = this->mode == TRACE_MODE::CTXT ? ARION_MAX_HEAVY_HITS : ARION_MAX_LIGHT_HITS;
     if (hits_sz >= max_hits)
         this->flush_hits();
 }

@@ -7,6 +7,7 @@
 #include <memory>
 
 using namespace arion;
+using namespace arion_exception;
 
 void CodeTraceReader::read_header()
 {

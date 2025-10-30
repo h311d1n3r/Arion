@@ -1,6 +1,8 @@
 #include <arion/arion.hpp>
 #include <arion_test/common.hpp>
 
+using namespace arion;
+
 size_t block_hook_syscall_ctr = 0;
 
 void block_hook(std::shared_ptr<Arion> arion, arion::ADDR addr, size_t sz, void *user_data)

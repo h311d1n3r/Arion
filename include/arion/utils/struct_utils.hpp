@@ -66,20 +66,20 @@ struct POLYMORPHIC_STRUCT_FIELD
 {
     POLYMORPHIC_STRUCT_CONSTRAINT constraint;
     POLYMORPHIC_STRUCT_FIELD_TYPE type;
-    std::shared_ptr<ArionType> arion_type;
+    std::shared_ptr<arion_type::KernelType> arion_type;
     std::string name;
     size_t sz;
 
     POLYMORPHIC_STRUCT_FIELD(POLYMORPHIC_STRUCT_CONSTRAINT constraint, POLYMORPHIC_STRUCT_FIELD_TYPE type,
-                             std::shared_ptr<ArionType> arion_type, std::string name, size_t sz)
+                             std::shared_ptr<arion_type::KernelType> arion_type, std::string name, size_t sz)
         : constraint(constraint), type(type), arion_type(arion_type), name(name), sz(sz) {};
     POLYMORPHIC_STRUCT_FIELD(POLYMORPHIC_STRUCT_CONSTRAINT constraint, POLYMORPHIC_STRUCT_FIELD_TYPE type,
-                             std::shared_ptr<ArionType> arion_type, std::string name)
+                             std::shared_ptr<arion_type::KernelType> arion_type, std::string name)
         : POLYMORPHIC_STRUCT_FIELD(constraint, type, arion_type, name, 0) {};
-    POLYMORPHIC_STRUCT_FIELD(POLYMORPHIC_STRUCT_FIELD_TYPE type, std::shared_ptr<ArionType> arion_type,
+    POLYMORPHIC_STRUCT_FIELD(POLYMORPHIC_STRUCT_FIELD_TYPE type, std::shared_ptr<arion_type::KernelType> arion_type,
                              std::string name, size_t sz)
         : POLYMORPHIC_STRUCT_FIELD({}, type, arion_type, name, sz) {};
-    POLYMORPHIC_STRUCT_FIELD(POLYMORPHIC_STRUCT_FIELD_TYPE type, std::shared_ptr<ArionType> arion_type,
+    POLYMORPHIC_STRUCT_FIELD(POLYMORPHIC_STRUCT_FIELD_TYPE type, std::shared_ptr<arion_type::KernelType> arion_type,
                              std::string name)
         : POLYMORPHIC_STRUCT_FIELD({}, type, arion_type, name, 0) {};
 };
@@ -116,7 +116,7 @@ class PolymorphicStruct
     {
         auto int_it = this->int_vals.find(name);
         if (int_it == this->int_vals.end())
-            throw NoStructFieldWithNameException(name);
+            throw arion_exception::NoStructFieldWithNameException(name);
         return int_it->second;
     }
     bool has_arr_field(std::string name)
@@ -128,7 +128,7 @@ class PolymorphicStruct
     {
         auto arr_it = this->arr_vals.find(name);
         if (arr_it == this->arr_vals.end())
-            throw NoStructFieldWithNameException(name);
+            throw arion_exception::NoStructFieldWithNameException(name);
         return arr_it->second;
     }
 };
@@ -152,7 +152,7 @@ template <typename T> class PolymorphicStructFactory
         else
         {
             if (this->curr_id == ARION_MAX_U64)
-                throw TooManyStructsException();
+                throw arion_exception::TooManyStructsException();
             id = this->curr_id++;
         }
         return id;
@@ -169,7 +169,7 @@ template <typename T> class PolymorphicStructFactory
     {
         auto align_it = ALIGN_BY_ARCH.find(arch);
         if (align_it == ALIGN_BY_ARCH.end())
-            throw UnsupportedCpuArchException();
+            throw arion_exception::UnsupportedCpuArchException();
         return align_it->second;
     }
 
@@ -177,7 +177,7 @@ template <typename T> class PolymorphicStructFactory
     {
         auto ptr_sz_it = PTR_SZ_BY_ARCH.find(arch);
         if (ptr_sz_it == PTR_SZ_BY_ARCH.end())
-            throw UnsupportedCpuArchException();
+            throw arion_exception::UnsupportedCpuArchException();
         return ptr_sz_it->second;
     }
 
@@ -185,7 +185,7 @@ template <typename T> class PolymorphicStructFactory
     {
         auto arch_sz_it = ARCH_SZ.find(arch);
         if (arch_sz_it == ARCH_SZ.end())
-            throw UnsupportedCpuArchException();
+            throw arion_exception::UnsupportedCpuArchException();
         return arch_sz_it->second;
     }
 
@@ -195,6 +195,9 @@ template <typename T> class PolymorphicStructFactory
     {
         this->clear_structs();
     }
+
+    // Macros for syntax simplification in subclasses.
+    using ftype = arion_poly_struct::POLYMORPHIC_STRUCT_FIELD_TYPE;
 
   public:
     size_t get_struct_sz(arion::CPU_ARCH arch)
@@ -288,7 +291,7 @@ template <typename T> class PolymorphicStructFactory
 
     size_t get_host_struct_sz()
     {
-        return this->get_struct_sz(get_host_cpu_arch());
+        return this->get_struct_sz(arion::get_host_cpu_arch());
     }
 
     STRUCT_ID feed(arion::CPU_ARCH arch, arion::BYTE *struct_inst)
@@ -411,7 +414,7 @@ template <typename T> class PolymorphicStructFactory
     {
         arion::BYTE *data = (arion::BYTE *)malloc(sizeof(T));
         memcpy(data, struct_inst, sizeof(T));
-        STRUCT_ID id = this->feed(get_host_cpu_arch(), data);
+        STRUCT_ID id = this->feed(arion::get_host_cpu_arch(), data);
         free(data);
         return id;
     }
@@ -420,7 +423,7 @@ template <typename T> class PolymorphicStructFactory
     {
         auto struct_it = this->curr_structs.find(id);
         if (struct_it == this->curr_structs.end())
-            throw WrongStructIdException();
+            throw arion_exception::WrongStructIdException();
         std::unique_ptr<PolymorphicStruct> curr_struct = std::move(struct_it->second);
 
         std::vector<arion::BYTE> data_vec;
@@ -597,7 +600,7 @@ template <typename T> class PolymorphicStructFactory
     T *build_host(STRUCT_ID id)
     {
         size_t data_len;
-        arion::BYTE *data = this->build(id, get_host_cpu_arch(), data_len);
+        arion::BYTE *data = this->build(id, arion::get_host_cpu_arch(), data_len);
         T *struct_inst = (T *)malloc(sizeof(T));
         size_t min_sz = std::min(sizeof(T), data_len);
         memcpy(struct_inst, data, min_sz);
@@ -605,11 +608,11 @@ template <typename T> class PolymorphicStructFactory
         return struct_inst;
     }
 
-    std::string to_string(STRUCT_ID id, std::shared_ptr<Arion> arion, arion::CPU_ARCH arch)
+    std::string to_string(STRUCT_ID id, std::shared_ptr<arion::Arion> arion, arion::CPU_ARCH arch)
     {
         auto struct_it = this->curr_structs.find(id);
         if (struct_it == this->curr_structs.end())
-            throw WrongStructIdException();
+            throw arion_exception::WrongStructIdException();
         std::unique_ptr<PolymorphicStruct> curr_struct = std::move(struct_it->second);
 
         uint8_t align = this->get_align(arch);
@@ -734,7 +737,7 @@ template <typename T> class PolymorphicStructFactory
     {
         auto struct_it = this->curr_structs.find(id);
         if (struct_it == this->curr_structs.end())
-            throw WrongStructIdException();
+            throw arion_exception::WrongStructIdException();
 
         this->curr_structs.erase(id);
         if (this->curr_structs.size())
@@ -760,25 +763,25 @@ class AbsArionStructType
 {
   protected:
     virtual ~AbsArionStructType() = default;
-    bool arion_is_mapped(std::shared_ptr<Arion> arion, arion::ADDR addr);
-    arion::CPU_ARCH arion_curr_arch(std::shared_ptr<Arion> arion);
-    std::vector<arion::BYTE> arion_read_mem(std::shared_ptr<Arion> arion, arion::ADDR addr, size_t sz);
+    bool arion_is_mapped(std::shared_ptr<arion::Arion> arion, arion::ADDR addr);
+    arion::CPU_ARCH arion_curr_arch(std::shared_ptr<arion::Arion> arion);
+    std::vector<arion::BYTE> arion_read_mem(std::shared_ptr<arion::Arion> arion, arion::ADDR addr, size_t sz);
 };
 
-template <typename T> class ArionStructType : public ArionType, public AbsArionStructType
+template <typename T> class ArionStructType : public arion_type::KernelType, public AbsArionStructType
 {
   private:
     std::shared_ptr<arion_poly_struct::PolymorphicStructFactory<T>> factory;
 
   protected:
     ArionStructType(std::string name, std::shared_ptr<arion_poly_struct::PolymorphicStructFactory<T>> factory)
-        : ArionType(name, ARION_LOG_COLOR::BLUE), factory(factory) {};
+        : arion_type::KernelType(name, arion::LOG_COLOR::BLUE), factory(factory) {};
 
   public:
-    std::string str(std::shared_ptr<Arion> arion, uint64_t val) override
+    std::string str(std::shared_ptr<arion::Arion> arion, uint64_t val) override
     {
         if (!val || !this->arion_is_mapped(arion, val))
-            return int_to_hex<uint64_t>(val);
+            return arion::int_to_hex<uint64_t>(val);
         arion::CPU_ARCH arch = this->arion_curr_arch(arion);
         size_t struct_sz = this->factory->get_struct_sz(arch);
         arion::BYTE *struct_buf = (arion::BYTE *)malloc(struct_sz);
@@ -792,24 +795,24 @@ template <typename T> class ArionStructType : public ArionType, public AbsArionS
     }
 };
 
-class ArionVariableStructType : public ArionType
+class ArionVariableStructType : public arion_type::KernelType
 {
   private:
-    virtual std::shared_ptr<arion_poly_struct::AbsArionStructType> process(std::shared_ptr<Arion> arion,
+    virtual std::shared_ptr<arion_poly_struct::AbsArionStructType> process(std::shared_ptr<arion::Arion> arion,
                                                                            uint64_t val) = 0;
 
   protected:
-    ArionVariableStructType(std::string name) : ArionType(name, ARION_LOG_COLOR::BLUE) {};
+    ArionVariableStructType(std::string name) : arion_type::KernelType(name, arion::LOG_COLOR::BLUE) {};
 
   public:
-    std::string str(std::shared_ptr<Arion> arion, uint64_t val) override
+    std::string str(std::shared_ptr<arion::Arion> arion, uint64_t val) override
     {
         std::shared_ptr<AbsArionStructType> struct_type = this->process(arion, val);
         if (!struct_type)
-            return ARION_INT_TYPE->str(arion, val);
-        std::shared_ptr<ArionType> type = std::dynamic_pointer_cast<ArionType>(struct_type);
+            return arion_type::INT_TYPE->str(arion, val);
+        std::shared_ptr<arion_type::KernelType> type = std::dynamic_pointer_cast<arion_type::KernelType>(struct_type);
         if (!type)
-            return ARION_INT_TYPE->str(arion, val);
+            return arion_type::INT_TYPE->str(arion, val);
         return type->str(arion, val);
     }
 };

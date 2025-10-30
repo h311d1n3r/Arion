@@ -5,6 +5,8 @@
 #include <sys/wait.h>
 
 using namespace arion;
+using namespace arion_exception;
+using namespace arion_lnx_type;
 
 std::map<int, std::string> SignalManager::signals = {
     // Synchronous signals
@@ -136,7 +138,7 @@ bool SignalManager::handle_sighandler(pid_t source_pid, int signo)
         return false;
     REG pc_reg = arion->arch->get_attrs()->regs.pc;
     REG sp_reg = arion->arch->get_attrs()->regs.sp;
-    std::shared_ptr<struct ksigaction> handler = sighandler_it->second;
+    std::shared_ptr<struct arion_lnx_type::ksigaction> handler = sighandler_it->second;
     std::shared_ptr<ARION_CONTEXT> ctxt = arion->context->save();
     ADDR curr_pc = arion->arch->read_arch_reg(pc_reg);
     arion->arch->write_arch_reg(pc_reg, (ADDR)handler->handler);
@@ -176,12 +178,14 @@ bool SignalManager::handle_sighandler(pid_t source_pid, int signo)
     return true;
 }
 
-void SignalManager::print_signal(std::shared_ptr<Arion> arion, std::string sig_name) {
-    if(arion->logger->get_log_level() > LOG_LEVEL::DEBUG)
+void SignalManager::print_signal(std::shared_ptr<Arion> arion, std::string sig_name)
+{
+    if (arion->logger->get_log_level() > LOG_LEVEL::DEBUG)
         return;
 
     colorstream msg;
-    msg << ARION_LOG_COLOR::BLUE << "SIGNAL" << ARION_LOG_COLOR::WHITE << " -> " << ARION_LOG_COLOR::MAGENTA << sig_name;
+    msg << LOG_COLOR::BLUE << "SIGNAL" << LOG_COLOR::WHITE << " -> " << LOG_COLOR::MAGENTA
+        << sig_name;
     arion->logger->debug(msg.str());
 }
 
@@ -306,7 +310,7 @@ bool SignalManager::has_sighandler(int signo)
     return this->sighandlers.find(signo) != this->sighandlers.end();
 }
 
-std::shared_ptr<struct ksigaction> SignalManager::get_sighandler(int signo)
+std::shared_ptr<struct arion_lnx_type::ksigaction> SignalManager::get_sighandler(int signo)
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
@@ -318,7 +322,7 @@ std::shared_ptr<struct ksigaction> SignalManager::get_sighandler(int signo)
     return sighandler_it->second;
 }
 
-void SignalManager::set_sighandler(int signo, std::shared_ptr<struct ksigaction> sighandler)
+void SignalManager::set_sighandler(int signo, std::shared_ptr<struct arion_lnx_type::ksigaction> sighandler)
 {
     this->sighandlers[signo] = sighandler;
 }

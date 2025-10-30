@@ -8,6 +8,7 @@
 namespace arion_arm64
 {
 
+/// A map identifying an ARM64 syscall name given its number.
 inline std::map<uint64_t, std::string> NAME_BY_SYSCALL_NO = {{0, "io_setup"},
                                                              {1, "io_destroy"},
                                                              {2, "io_submit"},
@@ -329,6 +330,7 @@ inline std::map<uint64_t, std::string> NAME_BY_SYSCALL_NO = {{0, "io_setup"},
                                                              {465, "listxattrat"},
                                                              {466, "removexattrat"}};
 
+/// A map identifying a Unicorn ARM64 register given its name.
 inline std::map<std::string, arion::REG> ARCH_REGS = {
     {"X29", UC_ARM64_REG_X29},   {"X30", UC_ARM64_REG_X30},
     {"NZCV", UC_ARM64_REG_NZCV}, {"SP", UC_ARM64_REG_SP},
@@ -463,6 +465,7 @@ inline std::map<std::string, arion::REG> ARCH_REGS = {
     {"CP", UC_ARM64_REG_CP_REG}, {"CPACR_EL1", UC_ARM64_REG_CPACR_EL1},
     {"FPCR", UC_ARM64_REG_FPCR}, {"FPSR", UC_ARM64_REG_FPSR}};
 
+/// A map identifying a Unicorn ARM64 register size given the register.
 inline std::map<arion::REG, uint8_t> ARCH_REGS_SZ = {
     {UC_ARM64_REG_B0, 1},   {UC_ARM64_REG_B1, 1},   {UC_ARM64_REG_B2, 1},      {UC_ARM64_REG_B3, 1},
     {UC_ARM64_REG_B4, 1},   {UC_ARM64_REG_B5, 1},   {UC_ARM64_REG_B6, 1},      {UC_ARM64_REG_B7, 1},
@@ -531,6 +534,7 @@ inline std::map<arion::REG, uint8_t> ARCH_REGS_SZ = {
     {UC_ARM64_REG_D30, 8},  {UC_ARM64_REG_D31, 8},  {UC_ARM64_REG_NZCV, 4},    {UC_ARM64_REG_FPCR, 4},
     {UC_ARM64_REG_FPSR, 4}, {UC_ARM64_REG_PC, 8},   {UC_ARM64_REG_CP_REG, 32}, {UC_ARM64_REG_CPACR_EL1, 4}};
 
+/// The list of high-level ARM64 registers that make up the context to be saved and restored.
 inline std::vector<arion::REG> CTXT_REGS = {
     UC_ARM64_REG_X0,  UC_ARM64_REG_X1,  UC_ARM64_REG_X2,  UC_ARM64_REG_X3,   UC_ARM64_REG_X4,   UC_ARM64_REG_X5,
     UC_ARM64_REG_X6,  UC_ARM64_REG_X7,  UC_ARM64_REG_X8,  UC_ARM64_REG_X9,   UC_ARM64_REG_X10,  UC_ARM64_REG_X11,
@@ -546,7 +550,8 @@ inline std::vector<arion::REG> CTXT_REGS = {
     UC_ARM64_REG_V24, UC_ARM64_REG_V25, UC_ARM64_REG_V26, UC_ARM64_REG_V27,  UC_ARM64_REG_V28,  UC_ARM64_REG_V29,
     UC_ARM64_REG_V30, UC_ARM64_REG_V31};
 
-inline std::map<uint64_t, CPU_INTR> IDT = {/*{1, UDEF},
+/// The ARM64 Interrupt Descriptor Table
+inline std::map<uint64_t, arion::CPU_INTR> IDT = {/*{1, UDEF},
                                            {2, SWI},
                                            {3, PREFETCH_ABORT},
                                            {4, DATA_ABORT},
@@ -568,49 +573,96 @@ inline std::map<uint64_t, CPU_INTR> IDT = {/*{1, UDEF},
                                            {21, LSERR},
                                            {22, UNALIGNED}*/};
 
-inline ABI_REGISTERS ABI_REGS = ABI_REGISTERS(UC_ARM64_REG_PC, UC_ARM64_REG_SP);
+/// Unicorn ARM64 PC and SP registers for genericity.
+inline arion::ABI_REGISTERS ABI_REGS = arion::ABI_REGISTERS(UC_ARM64_REG_PC, UC_ARM64_REG_SP);
 
-inline ABI_CALLING_CONVENTION ABI_CALLING_CONV =
-    ABI_CALLING_CONVENTION(UC_ARM64_REG_X0, {UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X2, UC_ARM64_REG_X3,
-                                             UC_ARM64_REG_X4, UC_ARM64_REG_X5, UC_ARM64_REG_X6, UC_ARM64_REG_X7});
+/// Unicorn ARM64 registers involved in calling convention.
+inline arion::ABI_CALLING_CONVENTION ABI_CALLING_CONV = arion::ABI_CALLING_CONVENTION(
+    UC_ARM64_REG_X0, {UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X2, UC_ARM64_REG_X3, UC_ARM64_REG_X4,
+                      UC_ARM64_REG_X5, UC_ARM64_REG_X6, UC_ARM64_REG_X7});
 
-inline ABI_SYSCALLING_CONVENTION ABI_SYSCALLING_CONV = ABI_SYSCALLING_CONVENTION(
+/// Unicorn ARM64 registers involved in syscalling convention.
+inline arion::ABI_SYSCALLING_CONVENTION ABI_SYSCALLING_CONV = arion::ABI_SYSCALLING_CONVENTION(
     UC_ARM64_REG_X8, UC_ARM64_REG_X0,
     {UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X2, UC_ARM64_REG_X3, UC_ARM64_REG_X4, UC_ARM64_REG_X5});
 
+/// ARM64 flags telling the loader which kernel segments should be mapped in memory.
 inline arion::KERNEL_SEG_FLAGS SEG_FLAGS = 0;
 
+/// Some well working ARM64 chip HWCAP2 value.
 inline uint32_t HWCAP2 = 0;
 
+/// Some well working ARM64 chip HWCAP value.
 inline uint32_t HWCAP = 0x78bfafd;
 
+/// Size in bytes of a pointer in an ARM64 chip.
 inline const size_t PTR_SZ = 8;
 
+/// Size in bits of the ARM64 general-purpose registers.
 inline const uint16_t ARCH_SZ = 64;
 
+/// Arion CPU_ARCH for ARM64.
 inline arion::CPU_ARCH ARCH = arion::CPU_ARCH::ARM64_ARCH;
 
-inline ARCH_ATTRIBUTES ARCH_ATTRS = ARCH_ATTRIBUTES(ARCH, ARCH_SZ, PTR_SZ, HWCAP, HWCAP2, SEG_FLAGS, ABI_REGS,
-                                                    ABI_CALLING_CONV, ABI_SYSCALLING_CONV, NAME_BY_SYSCALL_NO);
-}; // namespace arion_arm64
+/// Multiple architecture specific attributes for ARM64, grouped in a structure for genericity purpose.
+inline arion::ARCH_ATTRIBUTES ARCH_ATTRS =
+    arion::ARCH_ATTRIBUTES(ARCH, ARCH_SZ, PTR_SZ, HWCAP, HWCAP2, SEG_FLAGS, ABI_REGS, ABI_CALLING_CONV,
+                           ABI_SYSCALLING_CONV, NAME_BY_SYSCALL_NO);
 
-class ArchManagerARM64 : public ArchManager
+/// A class responsible for performing architecture specific operations in case of an ARM64 chip emulation.
+class ArchManagerARM64 : public arion::ArchManager
 {
   private:
-    static void int_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data);
+    /**
+     * Interrupt hook used to detect syscalls.
+     * @param[in] arion The Arion instance responsible for the interrupt.
+     * @param[in] intno The interrupt number.
+     * @param[in] user_data Additional user data.
+     */
+    static void int_hook(std::shared_ptr<arion::Arion> arion, uint32_t intno, void *user_data);
+    /**
+     * Enables the Large System Extensions (LSE) unit of the ARM emulated chip.
+     */
     void enable_lse();
+    /**
+     * Enables the Vector Floating Point (VFP) unit of the ARM64 emulated chip.
+     */
     void enable_vfp();
+    /**
+     * Prepares the ArchManagerARM64 for emulation.
+     */
     void setup() override;
 
   public:
+    /**
+     * Builder for ArchManagerARM64 instances.
+     */
     ArchManagerARM64()
-        : ArchManager(std::make_shared<ARCH_ATTRIBUTES>(arion_arm64::ARCH_ATTRS), arion_arm64::ARCH_REGS,
+        : ArchManager(std::make_shared<arion::ARCH_ATTRIBUTES>(arion_arm64::ARCH_ATTRS), arion_arm64::ARCH_REGS,
                       arion_arm64::ARCH_REGS_SZ, arion_arm64::CTXT_REGS, arion_arm64::IDT, true) {};
 
+    /**
+     * Retrieves the Keystone engine associated with this instance.
+     * @return The Keystone engine.
+     */
     ks_engine *curr_ks() override;
+    /**
+     * Retrieves the Capstone engine associated with this instance.
+     * @return The Capstone engine.
+     */
     csh *curr_cs() override;
+    /**
+     * Retrieves the current Thread Local Storage (TLS) address from the emulation context.
+     * @return The TLS address.
+     */
     arion::ADDR dump_tls() override;
+    /**
+     * Defines a Thread Local Storage (TLS) address to apply to the emulation.
+     * @param[in] new_tls The new TLS address.
+     */
     void load_tls(arion::ADDR new_tls) override;
 };
+
+}; // namespace arion_arm64
 
 #endif // ARION_ARCH_ARM64_HPP

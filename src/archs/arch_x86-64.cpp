@@ -2,6 +2,8 @@
 #include <arion/arion.hpp>
 
 using namespace arion;
+using namespace arion_x86_64;
+using namespace arion_exception;
 
 ks_engine *ArchManagerX8664::curr_ks()
 {
@@ -13,7 +15,7 @@ csh *ArchManagerX8664::curr_cs()
     return this->cs.at(0);
 }
 
-std::array<BYTE, VSYSCALL_ENTRY_SZ> ArchManagerX8664::gen_vsyscall_entry(uint64_t syscall_no)
+std::array<BYTE, ARION_VSYSCALL_ENTRY_SZ> ArchManagerX8664::gen_vsyscall_entry(uint64_t syscall_no)
 {
     char vsyscall_asm[64];
     snprintf(vsyscall_asm, sizeof(vsyscall_asm), "mov rax, 0x%" PRIx64 "; syscall; ret", syscall_no);
@@ -22,7 +24,7 @@ std::array<BYTE, VSYSCALL_ENTRY_SZ> ArchManagerX8664::gen_vsyscall_entry(uint64_
     ks_err ks_asm_err = (ks_err)ks_asm(this->ks.at(0), vsyscall_asm, 0, &asm_buf, &asm_sz, &asm_cnt);
     if (ks_asm_err != KS_ERR_OK)
         throw KeystoneAsmException(ks_asm_err);
-    std::array<BYTE, VSYSCALL_ENTRY_SZ> vsyscall_entry;
+    std::array<BYTE, ARION_VSYSCALL_ENTRY_SZ> vsyscall_entry;
     std::copy(asm_buf, asm_buf + asm_sz, vsyscall_entry.begin());
     std::fill(vsyscall_entry.begin() + asm_sz, vsyscall_entry.end(), 0xCC); // INT3
     ks_free(asm_buf);

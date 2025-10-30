@@ -158,7 +158,11 @@ add_custom_command(
     COMMENT "Building the udbserver library"
     COMMAND mkdir -p ${UDBSERVER_BUILD_PATH}
     COMMAND cargo install cargo-c
+    # Force unicorn-engine v2.1.3 crate and force rustup 1.88 to prevent lifetime errors
     COMMAND /bin/sh -c "RUSTFLAGS='-L native=${UNICORN_LIB_DIR} -l static=unicorn' CARGO_TARGET_DIR=${UDBSERVER_TARGET_PATH} \
+        rustup install 1.88.0 && \
+        rustup override set 1.88.0 && \
+        cargo update -p unicorn-engine --precise 2.1.3 && \
         cargo cinstall --release --prefix=/usr --destdir=${UDBSERVER_BUILD_PATH}"
     COMMAND find "${UDBSERVER_BUILD_PATH}/usr" -name ${UDBSERVER_LIB_NAME} -exec cp {} ${UDBSERVER_LIB} \;
     WORKING_DIRECTORY ${UDBSERVER_PATH}
@@ -328,6 +332,7 @@ install(DIRECTORY ${UNICORN_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${UNICORNAFL_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${CAPSTONE_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${KEYSTONE_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
+install(DIRECTORY ${LIEF_INCLUDE_DIR} DESTINATION include/arion)
 install(DIRECTORY ${LIEF_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${LIEF_BUILD_INCLUDE_INSTALL_DIR} DESTINATION include/arion)
 install(DIRECTORY ${SPDLOG_INCLUDE_INSTALL_DIR} DESTINATION include/arion)

@@ -14,8 +14,9 @@
 #include <unistd.h>
 
 using namespace arion;
+using namespace arion_exception;
 
-std::vector<BYTE> serialize_arion_mapping(ARION_MAPPING *arion_m)
+std::vector<BYTE> arion::serialize_arion_mapping(ARION_MAPPING *arion_m)
 {
     std::vector<BYTE> srz_mapping;
 
@@ -31,7 +32,7 @@ std::vector<BYTE> serialize_arion_mapping(ARION_MAPPING *arion_m)
     return srz_mapping;
 }
 
-ARION_MAPPING *deserialize_arion_mapping(std::vector<BYTE> srz_mapping)
+ARION_MAPPING *arion::deserialize_arion_mapping(std::vector<BYTE> srz_mapping)
 {
     ARION_MAPPING *arion_m = new ARION_MAPPING;
 

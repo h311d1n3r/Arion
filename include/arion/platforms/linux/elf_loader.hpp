@@ -40,18 +40,21 @@
 
 #define LINUX_VDSO_KERNEL_VSYSCALL_OFF 0x570
 
+extern char _binary_vdso_bin_start[];
+extern char _binary_vdso_bin_end[];
+
+namespace arion
+{
+
 struct ARM_TRAP
 {
     std::string name;
     off_t off;
-    std::vector<arion::BYTE> code;
+    std::vector<BYTE> code;
 
-    ARM_TRAP(std::string name, off_t off, std::vector<arion::BYTE> code)
+    ARM_TRAP(std::string name, off_t off, std::vector<BYTE> code)
         : name(std::move(name)), off(off), code(std::move(code)) {};
 };
-
-extern char _binary_vdso_bin_start[];
-extern char _binary_vdso_bin_end[];
 
 class ElfLoader : LinuxLoader
 {
@@ -59,11 +62,11 @@ class ElfLoader : LinuxLoader
     std::shared_ptr<ElfParser> prog_parser, interp_parser;
     bool is_pie;
     bool is_static;
-    arion::ADDR map_elf_segments(const std::shared_ptr<ElfParser> parser, arion::ADDR load_addr);
-    arion::ADDR map_vvar();
-    arion::ADDR map_vdso();
-    arion::ADDR map_vsyscall();
-    arion::ADDR map_arm_traps();
+    ADDR map_elf_segments(const std::shared_ptr<ElfParser> parser, ADDR load_addr);
+    ADDR map_vvar();
+    ADDR map_vdso();
+    ADDR map_vsyscall();
+    ADDR map_arm_traps();
     void init_coredump_threads();
 
   protected:
@@ -79,5 +82,7 @@ class ElfLoader : LinuxLoader
         : ElfLoader(arion, nullptr, std::move(prog_parser), program_args, program_env) {};
     std::unique_ptr<LNX_LOADER_PARAMS> process() override;
 };
+
+}; // namespace arion
 
 #endif // ARION_ELF_LOADER_HPP

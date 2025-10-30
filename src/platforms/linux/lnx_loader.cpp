@@ -13,6 +13,7 @@
 #include <unistd.h>
 
 using namespace arion;
+using namespace arion_exception;
 
 void LinuxLoader::write_auxv_entry(AUXV auxv, uint64_t val)
 {

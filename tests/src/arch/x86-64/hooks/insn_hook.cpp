@@ -1,6 +1,8 @@
 #include <arion/arion.hpp>
 #include <arion_test/common.hpp>
 
+using namespace arion;
+
 size_t insn_hook_syscall_ctr = 0;
 
 void insn_hook(std::shared_ptr<Arion> arion, void *user_data)
