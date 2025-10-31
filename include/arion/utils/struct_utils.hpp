@@ -22,6 +22,7 @@ inline std::map<arion::CPU_ARCH, uint8_t> ALIGN_BY_ARCH{
     {arion::CPU_ARCH::X8664_ARCH, 8},
     {arion::CPU_ARCH::ARM_ARCH, 8},
     {arion::CPU_ARCH::ARM64_ARCH, 8},
+    {arion::CPU_ARCH::PPC32_ARCH, 8},
 };
 
 inline std::map<arion::CPU_ARCH, uint8_t> PTR_SZ_BY_ARCH{
@@ -29,6 +30,7 @@ inline std::map<arion::CPU_ARCH, uint8_t> PTR_SZ_BY_ARCH{
     {arion::CPU_ARCH::X8664_ARCH, 8},
     {arion::CPU_ARCH::ARM_ARCH, 4},
     {arion::CPU_ARCH::ARM64_ARCH, 8},
+    {arion::CPU_ARCH::PPC32_ARCH, 4},
 };
 
 inline std::map<arion::CPU_ARCH, uint16_t> ARCH_SZ{
@@ -36,6 +38,7 @@ inline std::map<arion::CPU_ARCH, uint16_t> ARCH_SZ{
     {arion::CPU_ARCH::X8664_ARCH, 64},
     {arion::CPU_ARCH::ARM_ARCH, 32},
     {arion::CPU_ARCH::ARM64_ARCH, 64},
+    {arion::CPU_ARCH::PPC32_ARCH, 32},
 };
 
 enum POLYMORPHIC_STRUCT_FIELD_TYPE

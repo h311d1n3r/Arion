@@ -17,7 +17,7 @@
 #include <sys/wait.h>
 
 using namespace arion;
-using namespace arion_exception;
+using namespace arion_exception;a
 using namespace arion_type;
 
 // Replace import of udbserver with extern "C" to prevent C++ mangling import problem
@@ -30,21 +30,26 @@ std::map<arion::CPU_ARCH, std::pair<uc_arch, uc_mode>> arion::ARION_TO_UC_ARCH{
     {CPU_ARCH::X86_ARCH, {uc_arch::UC_ARCH_X86, uc_mode::UC_MODE_32}},
     {CPU_ARCH::X8664_ARCH, {uc_arch::UC_ARCH_X86, uc_mode::UC_MODE_64}},
     {CPU_ARCH::ARM_ARCH, {uc_arch::UC_ARCH_ARM, uc_mode::UC_MODE_ARM}},
-    {CPU_ARCH::ARM64_ARCH, {uc_arch::UC_ARCH_ARM64, uc_mode::UC_MODE_LITTLE_ENDIAN}}};
+    {CPU_ARCH::ARM64_ARCH, {uc_arch::UC_ARCH_ARM64, uc_mode::UC_MODE_LITTLE_ENDIAN}},
+    {CPU_ARCH::PPC32_ARCH, 
+     {uc_arch::UC_ARCH_PPC, static_cast<uc_mode>(uc_mode::UC_MODE_PPC32 | uc_mode::UC_MODE_BIG_ENDIAN)}}};
 
 std::map<arion::CPU_ARCH, std::vector<std::pair<ks_arch, ks_mode>>> arion::ARION_TO_KS_ARCH{
     {CPU_ARCH::X86_ARCH, {{ks_arch::KS_ARCH_X86, ks_mode::KS_MODE_32}}},
     {CPU_ARCH::X8664_ARCH, {{ks_arch::KS_ARCH_X86, ks_mode::KS_MODE_64}}},
     {CPU_ARCH::ARM_ARCH,
      {{ks_arch::KS_ARCH_ARM, ks_mode::KS_MODE_ARM}, {ks_arch::KS_ARCH_ARM, ks_mode::KS_MODE_THUMB}}},
-    {CPU_ARCH::ARM64_ARCH, {{ks_arch::KS_ARCH_ARM64, ks_mode::KS_MODE_LITTLE_ENDIAN}}}};
+    {CPU_ARCH::ARM64_ARCH, {{ks_arch::KS_ARCH_ARM64, ks_mode::KS_MODE_LITTLE_ENDIAN}}},
+    {CPU_ARCH::PPC32_ARCH, {}}};
 
 std::map<arion::CPU_ARCH, std::vector<std::pair<cs_arch, cs_mode>>> arion::ARION_TO_CS_ARCH{
     {CPU_ARCH::X86_ARCH, {{cs_arch::CS_ARCH_X86, cs_mode::CS_MODE_32}}},
     {CPU_ARCH::X8664_ARCH, {{cs_arch::CS_ARCH_X86, cs_mode::CS_MODE_64}}},
-    {CPU_ARCH::ARM_ARCH,
+    {CPU_ARCH::ARM_ARCH, 
      {{cs_arch::CS_ARCH_ARM, cs_mode::CS_MODE_ARM}, {cs_arch::CS_ARCH_ARM, cs_mode::CS_MODE_THUMB}}},
-    {CPU_ARCH::ARM64_ARCH, {{cs_arch::CS_ARCH_AARCH64, cs_mode::CS_MODE_LITTLE_ENDIAN}}}};
+    {CPU_ARCH::ARM64_ARCH, {{cs_arch::CS_ARCH_AARCH64, cs_mode::CS_MODE_LITTLE_ENDIAN}}},
+    {CPU_ARCH::PPC32_ARCH, 
+     {{cs_arch::CS_ARCH_PPC, static_cast<cs_mode>(cs_mode::CS_MODE_32 | cs_mode::CS_MODE_BIG_ENDIAN)}}}};
 
 size_t ArionGroup::count_arion_instances()
 {

@@ -16,17 +16,17 @@ if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 endif()
 
-set(ARION_SUPPORTED_ARCHS x86 x86-64 arm arm64)
-set(ARION_SUPPORTED_GNU_TRIPLETS i686-linux-gnu x86_64-linux-gnu arm-linux-gnueabi aarch64-linux-gnu)
+set(ARION_SUPPORTED_ARCHS x86 x86-64 arm arm64 ppc32)
+set(ARION_SUPPORTED_GNU_TRIPLETS i686-linux-gnu x86_64-linux-gnu arm-linux-gnueabi aarch64-linux-gnu powerpc-linux-gn)
 
-set(UNICORN_ARCH "x86;arm;aarch64" CACHE STRING "Build only x86, ARM, and ARM64 for Unicorn")
+set(UNICORN_ARCH "x86;arm;aarch64;ppc" CACHE STRING "Build only x86, ARM, ARM64 and PPC for Unicorn")
 
 set(CAPSTONE_X86_SUPPORT ON CACHE BOOL "Enable X86 support in Capstone")
 set(CAPSTONE_ARM_SUPPORT ON CACHE BOOL "Enable ARM support in Capstone")
 set(CAPSTONE_ARM64_SUPPORT ON CACHE BOOL "Enable ARM64 support in Capstone")
+set(CAPSTONE_PPC_SUPPORT ON CACHE BOOL "Enable PPC support in Capstone")
 
 set(CAPSTONE_MIPS_SUPPORT OFF CACHE BOOL "Disable MIPS support in Capstone")
-set(CAPSTONE_PPC_SUPPORT OFF CACHE BOOL "Disable PPC support in Capstone")
 set(CAPSTONE_SPARC_SUPPORT OFF CACHE BOOL "Disable SPARC support in Capstone")
 set(CAPSTONE_SYSZ_SUPPORT OFF CACHE BOOL "Disable SYSZ support in Capstone")
 set(CAPSTONE_XCORE_SUPPORT OFF CACHE BOOL "Disable XCore support in Capstone")
@@ -47,12 +47,12 @@ set(CAPSTONE_XTENSA_SUPPORT OFF CACHE BOOL "Disable XTENSA support in Capstone")
 set(CAPSTONE_ARC_SUPPORT OFF CACHE BOOL "Disable ARC support in Capstone")
 set(CAPSTONE_M680X_SUPPORT OFF CACHE BOOL "Disable XCore support in Capstone")
 
-set(KEYSTONE_ARCH "X86;ARM;ARM64" CACHE STRING "Build only X86, ARM, and ARM64 for Keystone")
+set(KEYSTONE_ARCH "X86;ARM;ARM64;PPC" CACHE STRING "Build only X86, ARM, ARM64 and PPC for Keystone")
 set(LIEF_PYTHON_API OFF CACHE BOOL "Disable Python bindings for LIEF")
 set(LIEF_DOC OFF CACHE BOOL "Disable LIEF documentation")
 set(LIEF_EXAMPLES OFF CACHE BOOL "Disable LIEF examples")
 set(LIEF_TESTS OFF CACHE BOOL "Disable LIEF tests")
-set(LIEF_ARCHITECTURES "x86;arm;arm64" CACHE STRING "Build only x86, ARM, and ARM64 for LIEF")
+set(LIEF_ARCHITECTURES "x86;arm;arm64;powerpc" CACHE STRING "Build only x86, ARM, ARM64, and PPC for LIEF")
 
 # Check for cargo installation
 find_program(CARGO_EXECUTABLE cargo)

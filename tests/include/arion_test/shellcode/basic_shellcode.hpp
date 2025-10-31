@@ -46,11 +46,21 @@ inline std::vector<arion::BYTE> BASIC_SHELLCODE_ARM64 = {
     0x00,0x00,0x00,0x48,0x65,0x6c,0x6c,0x6f
 };
 
+// Simple exit syscall
+// 0x00001000: 38 00 00 01       li r0, 1
+// 0x00001004: 38 60 00 2a       li r3, 0x2a
+// 0x00001008: 44 00 00 02       sc
+inline std::vector<arion::BYTE> BASIC_SHELLCODE_POWERPC32 = {
+  0x38,0x00,0x00,0x01, 0x38,0x60,0x00,0x2A, 0x44,0x00,0x00,0x02
+};
+
+
 inline std::map<std::string, std::vector<arion::BYTE>> BASIC_SHELLCODES {
     {"x86", BASIC_SHELLCODE_X86},
     {"x86-64", BASIC_SHELLCODE_X86_64},
     {"arm", BASIC_SHELLCODE_ARM},
-    {"arm64", BASIC_SHELLCODE_ARM64}
+    {"arm64", BASIC_SHELLCODE_ARM64},
+    {"ppc32", BASIC_SHELLCODE_POWERPC32}
 };
 
 #endif // ARION_TEST_BASIC_SHELLCODE_HPP

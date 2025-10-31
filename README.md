@@ -9,7 +9,7 @@
 <div align="center"><img src="./res/img/logo.png" alt="Arion Logo" width="300"></div>
 
 ## A high-performance C++ framework for emulating executable binaries  
-**Arion** is a library that aims to emulate various **executable formats** (ELF, PE, Mach-O...) coming from **different platforms** (Linux, Windows, macOS...) and with **different CPU architectures** (x86, ARM, MIPS...).  
+**Arion** is a library that aims to emulate various **executable formats** (ELF, PE, Mach-O...) coming from **different platforms** (Linux, Windows, macOS...) and with **different CPU architectures** (x86, ARM, MIPS,...).  
 Based on [**Unicorn**](https://github.com/unicorn-engine/unicorn) and written in **C++**, it should allow fast emulation especially for **fuzzing purposes**.  
 Inspired by [**Qiling**](https://github.com/qilingframework/qiling), Arion in its current form is not intended to replace this awesome Python library, but to complement it **with higher performance**.  
 
@@ -18,7 +18,7 @@ Inspired by [**Qiling**](https://github.com/qilingframework/qiling), Arion in it
 **This project is still in alpha development. It can be unstable and/or lead to undesired behaviors so you may want to deploy it in a containerized environment.**  
 ### Features
 Arion currently implements the following features :  
-- **Emulating Linux ELFs for x86, x86-64, ARM, ARM64**  
+- **Emulating Linux ELFs for x86, x86-64, ARM, ARM64, PPC32**  
 - **Snapshot fuzzing with UnicornAFL**  
 - **Emulating more than 120 syscalls**  
 - **Fork handling**  

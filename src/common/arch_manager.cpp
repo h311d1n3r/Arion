@@ -1,12 +1,14 @@
 #include <arion/archs/arch_arm.hpp>
 #include <arion/archs/arch_arm64.hpp>
 #include <arion/archs/arch_x86-64.hpp>
+#include <arion/archs/arch_ppc32.hpp>
 #include <arion/archs/arch_x86.hpp>
 #include <arion/arion.hpp>
 #include <arion/common/arch_manager.hpp>
 #include <arion/common/global_defs.hpp>
 #include <arion/common/global_excepts.hpp>
 #include <arion/platforms/linux/archs/lnx_arch_arm.hpp>
+#include <arion/platforms/linux/archs/lnx_arch_ppc32.hpp>
 #include <arion/platforms/linux/archs/lnx_arch_arm64.hpp>
 #include <arion/platforms/linux/archs/lnx_arch_x86-64.hpp>
 #include <arion/platforms/linux/archs/lnx_arch_x86.hpp>
@@ -84,6 +86,9 @@ std::unique_ptr<ArchManager> ArchManager::initialize(std::weak_ptr<Arion> arion,
         case CPU_ARCH::ARM64_ARCH:
             manager = std::make_unique<arion_lnx_arm64::ArchManagerLinuxARM64>();
             break;
+        case CPU_ARCH::PPC32_ARCH:
+            manager = std::make_unique<arion_lnx_ppc32::ArchManagerLinuxPPC32>();
+            break;
         default:
             throw UnsupportedCpuArchException();
         }
@@ -103,6 +108,9 @@ std::unique_ptr<ArchManager> ArchManager::initialize(std::weak_ptr<Arion> arion,
             break;
         case CPU_ARCH::ARM64_ARCH:
             manager = std::make_unique<arion_arm64::ArchManagerARM64>();
+            break;
+        case CPU_ARCH::PPC32_ARCH:
+            manager = std::make_unique<arion_ppc32::ArchManagerPPC32>();
             break;
         default:
             throw UnsupportedCpuArchException();

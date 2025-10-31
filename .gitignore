@@ -3,8 +3,8 @@ cmake-build-release/
 cmake-build-debug/
 build.dev/
 build.release/
-build/
-build_*/
+build_*
+build.*
 
 # CLion
 .idea/
@@ -21,3 +21,4 @@ lab/
 compile_commands.json
 *.i64
 *.dev.sh
+patchs/

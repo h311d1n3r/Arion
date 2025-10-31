@@ -8,4 +8,4 @@ int main(int argc, char **argv)
 }
 
 INSTANTIATE_TEST_SUITE_P(ArionTargetArchitectures, ArionMultiarchTest,
-                         ::testing::Values("x86", "x86-64", "arm", "arm64"));
+                         ::testing::Values("x86", "x86-64", "arm", "arm64", "ppc32"));

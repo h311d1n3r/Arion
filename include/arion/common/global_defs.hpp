@@ -135,7 +135,9 @@ enum ARION_EXPORT CPU_ARCH
     /// The ARM CPU architecture.
     ARM_ARCH,
     /// The ARM64 CPU architecture.
-    ARM64_ARCH
+    ARM64_ARCH,
+    /// The PowerPC 32-bit CPU architecture.
+    PPC32_ARCH
 };
 
 /// Identifies an Operating System (OS).
@@ -175,14 +177,16 @@ inline std::map<std::string, CPU_ARCH> ARCH_FROM_NAME{{"UNKNOWN", CPU_ARCH::UNKN
                                                       {"X86", CPU_ARCH::X86_ARCH},
                                                       {"X86-64", CPU_ARCH::X8664_ARCH},
                                                       {"ARM", CPU_ARCH::ARM_ARCH},
-                                                      {"ARM64", CPU_ARCH::ARM64_ARCH}};
+                                                      {"ARM64", CPU_ARCH::ARM64_ARCH},
+                                                      {"PPC32", CPU_ARCH::PPC32_ARCH}};
 
 /// A map identifying a name corresponding a given CPU architecture.
 inline std::map<CPU_ARCH, std::string> NAME_FROM_ARCH{{CPU_ARCH::UNKNOWN_ARCH, "UNKNOWN"},
                                                       {CPU_ARCH::X86_ARCH, "X86"},
                                                       {CPU_ARCH::X8664_ARCH, "X86-64"},
                                                       {CPU_ARCH::ARM_ARCH, "ARM"},
-                                                      {CPU_ARCH::ARM64_ARCH, "ARM64"}};
+                                                      {CPU_ARCH::ARM64_ARCH, "ARM64"},
+                                                      {CPU_ARCH::PPC32_ARCH, "PPC32"}};
 
 } // namespace arion
 
