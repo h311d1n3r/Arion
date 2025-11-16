@@ -10,6 +10,7 @@
 - Better handling of file descriptors availability
 - Syscalls types added to logging
 - Namespaces rework
+- Documentation
 
 # 1.0.1-alpha
 - Added UnicornAFL fuzzing mode
