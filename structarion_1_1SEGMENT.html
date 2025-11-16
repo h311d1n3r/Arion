@@ -104,26 +104,38 @@ $(document).ready(function(){initNavTree('structarion_1_1SEGMENT.html',''); init
 </div><!--header-->
 <div class="contents">
 
+<p>Identifies an OS memory segment.  
+ <a href="structarion_1_1SEGMENT.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="global__defs_8hpp_source.html">global_defs.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a4ea9cf4adfd4e83ac06fcaba450b1201" id="r_a4ea9cf4adfd4e83ac06fcaba450b1201"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1SEGMENT.html#a4ea9cf4adfd4e83ac06fcaba450b1201">info</a></td></tr>
+<tr class="memdesc:a4ea9cf4adfd4e83ac06fcaba450b1201"><td class="mdescLeft">&#160;</td><td class="mdescRight">A string associated to this memory segment, for identification purpose.  <br /></td></tr>
 <tr class="separator:a4ea9cf4adfd4e83ac06fcaba450b1201"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8946d8b2381407ee18f0fa314821b060" id="r_a8946d8b2381407ee18f0fa314821b060"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#a58583bcb70d373fc0444d39a9fd06b59">ADDR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1SEGMENT.html#a8946d8b2381407ee18f0fa314821b060">virt_addr</a></td></tr>
+<tr class="memdesc:a8946d8b2381407ee18f0fa314821b060"><td class="mdescLeft">&#160;</td><td class="mdescRight">The address where this segment should stand in memory.  <br /></td></tr>
 <tr class="separator:a8946d8b2381407ee18f0fa314821b060"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac62cb70667f435d331823a962666bee5" id="r_ac62cb70667f435d331823a962666bee5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#a58583bcb70d373fc0444d39a9fd06b59">ADDR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1SEGMENT.html#ac62cb70667f435d331823a962666bee5">file_addr</a></td></tr>
+<tr class="memdesc:ac62cb70667f435d331823a962666bee5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The offset where data for this segment holds in its associated file.  <br /></td></tr>
 <tr class="separator:ac62cb70667f435d331823a962666bee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e29a0f740c0b909fee94b2c395d5958" id="r_a7e29a0f740c0b909fee94b2c395d5958"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1SEGMENT.html#a7e29a0f740c0b909fee94b2c395d5958">align</a></td></tr>
+<tr class="memdesc:a7e29a0f740c0b909fee94b2c395d5958"><td class="mdescLeft">&#160;</td><td class="mdescRight">The byte alignment value that this segment must respect when being mapped in memory.  <br /></td></tr>
 <tr class="separator:a7e29a0f740c0b909fee94b2c395d5958"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1bd37e372b022095504a1de708d2a54" id="r_ac1bd37e372b022095504a1de708d2a54"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1SEGMENT.html#ac1bd37e372b022095504a1de708d2a54">virt_sz</a></td></tr>
+<tr class="memdesc:ac1bd37e372b022095504a1de708d2a54"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of this segment when allocated in memory.  <br /></td></tr>
 <tr class="separator:ac1bd37e372b022095504a1de708d2a54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9d5fe3fa262573699d0e505b6a8dd69" id="r_ae9d5fe3fa262573699d0e505b6a8dd69"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1SEGMENT.html#ae9d5fe3fa262573699d0e505b6a8dd69">phy_sz</a></td></tr>
+<tr class="memdesc:ae9d5fe3fa262573699d0e505b6a8dd69"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of this segment in the file that describes it.  <br /></td></tr>
 <tr class="separator:ae9d5fe3fa262573699d0e505b6a8dd69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70b50deec4313966322fb3829a59a80b" id="r_a70b50deec4313966322fb3829a59a80b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#a9a45e4538187604eaf992774e4760470">PROT_FLAGS</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1SEGMENT.html#a70b50deec4313966322fb3829a59a80b">flags</a></td></tr>
+<tr class="memdesc:a70b50deec4313966322fb3829a59a80b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Memory protection rights for this segment.  <br /></td></tr>
 <tr class="separator:a70b50deec4313966322fb3829a59a80b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Identifies an OS memory segment. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a7e29a0f740c0b909fee94b2c395d5958" name="a7e29a0f740c0b909fee94b2c395d5958"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7e29a0f740c0b909fee94b2c395d5958">&#9670;&#160;</a></span>align</h2>
 
@@ -135,6 +147,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>The byte alignment value that this segment must respect when being mapped in memory. </p>
 
 </div>
 </div>
@@ -150,6 +164,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The offset where data for this segment holds in its associated file. </p>
+
 </div>
 </div>
 <a id="a70b50deec4313966322fb3829a59a80b" name="a70b50deec4313966322fb3829a59a80b"></a>
@@ -163,6 +179,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Memory protection rights for this segment. </p>
 
 </div>
 </div>
@@ -178,6 +196,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>A string associated to this memory segment, for identification purpose. </p>
+
 </div>
 </div>
 <a id="ae9d5fe3fa262573699d0e505b6a8dd69" name="ae9d5fe3fa262573699d0e505b6a8dd69"></a>
@@ -191,6 +211,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>The size of this segment in the file that describes it. </p>
 
 </div>
 </div>
@@ -206,6 +228,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The address where this segment should stand in memory. </p>
+
 </div>
 </div>
 <a id="ac1bd37e372b022095504a1de708d2a54" name="ac1bd37e372b022095504a1de708d2a54"></a>
@@ -220,10 +244,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The size of this segment when allocated in memory. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/common/<a class="el" href="global__defs_8hpp_source.html">global_defs.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/common/<a class="el" href="global__defs_8hpp_source.html">global_defs.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

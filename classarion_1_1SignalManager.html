@@ -109,6 +109,9 @@ $(document).ready(function(){initNavTree('classarion_1_1SignalManager.html','');
 </div><!--header-->
 <div class="contents">
 
+<p>This class manages signal handling within an <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> emulation session.  
+ <a href="classarion_1_1SignalManager.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="signal__manager_8hpp_source.html">signal_manager.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -154,20 +157,27 @@ Static Private Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a3aad8e53135ab390f86aa08efa1d88b1" id="r_a3aad8e53135ab390f86aa08efa1d88b1"><td class="memItemLeft" align="right" valign="top">std::weak_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1SignalManager.html#a3aad8e53135ab390f86aa08efa1d88b1">arion</a></td></tr>
+<tr class="memdesc:a3aad8e53135ab390f86aa08efa1d88b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this instance.  <br /></td></tr>
 <tr class="separator:a3aad8e53135ab390f86aa08efa1d88b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4070ae45720a8cfd42f3d96aca46fa30" id="r_a4070ae45720a8cfd42f3d96aca46fa30"><td class="memItemLeft" align="right" valign="top">std::map&lt; int, std::shared_ptr&lt; struct <a class="el" href="structarion__lnx__type_1_1ksigaction.html">arion_lnx_type::ksigaction</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1SignalManager.html#a4070ae45720a8cfd42f3d96aca46fa30">sighandlers</a></td></tr>
+<tr class="memdesc:a4070ae45720a8cfd42f3d96aca46fa30"><td class="mdescLeft">&#160;</td><td class="mdescRight">A map identifying a ksigaction structure given its associated signal number.  <br /></td></tr>
 <tr class="separator:a4070ae45720a8cfd42f3d96aca46fa30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa030f155b03e306e2e7d2f52ea29904" id="r_aaa030f155b03e306e2e7d2f52ea29904"><td class="memItemLeft" align="right" valign="top">std::map&lt; pid_t, pid_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1SignalManager.html#aaa030f155b03e306e2e7d2f52ea29904">sigwait_list</a></td></tr>
+<tr class="memdesc:aaa030f155b03e306e2e7d2f52ea29904"><td class="mdescLeft">&#160;</td><td class="mdescRight">A map identifying a process (ID) given the process (ID) it is waiting for.  <br /></td></tr>
 <tr class="separator:aaa030f155b03e306e2e7d2f52ea29904"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adb39110205b954e83c27abd1a78b4930" id="r_adb39110205b954e83c27abd1a78b4930"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; std::map&lt; <a class="el" href="namespacearion.html#a1bc7997a0cf279f7e07ce89b9e72e899">REG</a>, <a class="el" href="unionarion_1_1RVAL.html">RVAL</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1SignalManager.html#adb39110205b954e83c27abd1a78b4930">ucontext_regs</a></td></tr>
+<tr class="memdesc:adb39110205b954e83c27abd1a78b4930"><td class="mdescLeft">&#160;</td><td class="mdescRight">A map identifying a saved register value to be restored, given the Unicorn register it is associated to.  <br /></td></tr>
 <tr class="separator:adb39110205b954e83c27abd1a78b4930"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
 <tr class="memitem:aa53971629929f8fc377fa02cc6995bd0" id="r_aa53971629929f8fc377fa02cc6995bd0"><td class="memItemLeft" align="right" valign="top">static std::map&lt; int, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1SignalManager.html#aa53971629929f8fc377fa02cc6995bd0">signals</a></td></tr>
+<tr class="memdesc:aa53971629929f8fc377fa02cc6995bd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">A map identifying a signal description string given its signal number.  <br /></td></tr>
 <tr class="separator:aa53971629929f8fc377fa02cc6995bd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This class manages signal handling within an <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> emulation session. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ab3d78400aedc332f4b588dfe3080316d" name="ab3d78400aedc332f4b588dfe3080316d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab3d78400aedc332f4b588dfe3080316d">&#9670;&#160;</a></span>SignalManager()</h2>
 
@@ -183,6 +193,12 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="classarion_1_1SignalManager.html" title="This class manages signal handling within an Arion emulation session.">SignalManager</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this instance. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -202,6 +218,13 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Retrieves a sighandler from a given signal. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">signo</td><td>The signal number. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The sighandler. </dd></dl>
 
 </div>
 </div>
@@ -228,6 +251,12 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Handles the specific case of SIGCHLD signals where a process waiting for another can be resumed. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">source_pid</td><td>The Process ID that generated the SIGCHLD signal. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -264,6 +293,14 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>If a sighandler is associated with a given signal for a given process, triggers its execution. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">source_pid</td><td>The Process ID that generated the signal. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">signo</td><td>The signal number. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if a sighandler was found and executed for the given parameters. </dd></dl>
 
 </div>
 </div>
@@ -292,6 +329,13 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Processes a signal after it has been triggered by a given process. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">source_pid</td><td>The process that triggered the signal. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">signo</td><td>The signal number. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -310,6 +354,13 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Checks whether a given signal has a sighandler being attached. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">signo</td><td>The signal number. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the given signal has a sighandler being attached. </dd></dl>
 
 </div>
 </div>
@@ -336,6 +387,13 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Instanciates and initializes new <a class="el" href="classarion_1_1SignalManager.html" title="This class manages signal handling within an Arion emulation session.">SignalManager</a> objects with some parameters. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this instance. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A new <a class="el" href="classarion_1_1SignalManager.html" title="This class manages signal handling within an Arion emulation session.">SignalManager</a> instance. </dd></dl>
 
 </div>
 </div>
@@ -378,6 +436,14 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>A hook callback which is triggered when an interrupt occurs. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance that triggered the hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">intno</td><td>The interrupt number. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -414,6 +480,14 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>A hook callback which is triggered when an invalid instruction gets fetched. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance that triggered the hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the hook handled the access and default behavior should be suppressed. </dd></dl>
 
 </div>
 </div>
@@ -474,6 +548,18 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>A hook callback which is triggered when a memory access violation occurs. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance that triggered the hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">access</td><td>Type of memory access (e.g., UC_MEM_READ, UC_MEM_WRITE, UC_MEM_FETCH). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Memory address being accessed. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>Size of the memory access. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">val</td><td>Value attempted to be written. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the hook handled the access and default behavior should be suppressed. </dd></dl>
 
 </div>
 </div>
@@ -502,6 +588,13 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Logs a signal given its name. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance which triggered the signal. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">sig_name</td><td>Name of the signal. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -530,6 +623,13 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Associates a sighandler to a given signal. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">signo</td><td>The signal number. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">sighandler</td><td>The sighandler. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -547,6 +647,7 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Returns from a sighandler by restoring context. </p><dl class="section return"><dt>Returns</dt><dd>True if a context could be restored. </dd></dl>
 
 </div>
 </div>
@@ -581,6 +682,14 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Sets a thread in a paused state, waiting for a given process to trigger a signal before resuming its execution. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">target_tid</td><td>The thread waiting for a given process. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">source_pid</td><td>The process which must trigger a signal to resume the thread execution. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">wait_status_addr</td><td>The address where to store the exit status of the signaled process. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -605,6 +714,8 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this instance. </p>
+
 </div>
 </div>
 <a id="a4070ae45720a8cfd42f3d96aca46fa30" name="a4070ae45720a8cfd42f3d96aca46fa30"></a>
@@ -626,6 +737,8 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>A map identifying a ksigaction structure given its associated signal number. </p>
 
 </div>
 </div>
@@ -649,6 +762,8 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>A map identifying a signal description string given its signal number. </p>
+
 </div>
 </div>
 <a id="aaa030f155b03e306e2e7d2f52ea29904" name="aaa030f155b03e306e2e7d2f52ea29904"></a>
@@ -670,6 +785,8 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>A map identifying a process (ID) given the process (ID) it is waiting for. </p>
 
 </div>
 </div>
@@ -693,10 +810,12 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>A map identifying a saved register value to be restored, given the Unicorn register it is associated to. </p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/common/<a class="el" href="signal__manager_8hpp_source.html">signal_manager.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/common/<a class="el" href="signal__manager_8hpp_source.html">signal_manager.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

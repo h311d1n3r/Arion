@@ -162,13 +162,16 @@ Static Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a48856def8e213824262fd1ae26cb1e5b" id="r_a48856def8e213824262fd1ae26cb1e5b"><td class="memItemLeft" align="right" valign="top">std::map&lt; pid_t, std::unique_ptr&lt; <a class="el" href="structarion_1_1ARION__THREAD.html">ARION_THREAD</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1ThreadingManager.html#a48856def8e213824262fd1ae26cb1e5b">threads_map</a></td></tr>
+<tr class="memdesc:a48856def8e213824262fd1ae26cb1e5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">A map identifying an <a class="el" href="structarion_1_1ARION__THREAD.html" title="This structure holds data about a UNIX thread.">ARION_THREAD</a> instance given its associated Thread ID.  <br /></td></tr>
 <tr class="separator:a48856def8e213824262fd1ae26cb1e5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c63619908d9727527a9457135c78dce" id="r_a9c63619908d9727527a9457135c78dce"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacearion.html#a58583bcb70d373fc0444d39a9fd06b59">ADDR</a>, std::vector&lt; std::unique_ptr&lt; <a class="el" href="structarion_1_1ARION__FUTEX.html">ARION_FUTEX</a> &gt; &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1ThreadingManager.html#a9c63619908d9727527a9457135c78dce">futex_list</a></td></tr>
+<tr class="memdesc:a9c63619908d9727527a9457135c78dce"><td class="mdescLeft">&#160;</td><td class="mdescRight">A map identifying an <a class="el" href="structarion_1_1ARION__FUTEX.html" title="This structure holds data about a Fast Userspace muTEX.">ARION_FUTEX</a> instance given the address of the futex.  <br /></td></tr>
 <tr class="separator:a9c63619908d9727527a9457135c78dce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:a94dfa7f418bd4cc6b2324221ea286c43" id="r_a94dfa7f418bd4cc6b2324221ea286c43"><td class="memItemLeft" align="right" valign="top">static std::map&lt; pid_t, std::vector&lt; std::unique_ptr&lt; <a class="el" href="structarion_1_1ARION__TGROUP__ENTRY.html">ARION_TGROUP_ENTRY</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1ThreadingManager.html#a94dfa7f418bd4cc6b2324221ea286c43">thread_groups</a></td></tr>
+<tr class="memdesc:a94dfa7f418bd4cc6b2324221ea286c43"><td class="mdescLeft">&#160;</td><td class="mdescRight">A map identifying a thread group given its associated Thread ID.  <br /></td></tr>
 <tr class="separator:a94dfa7f418bd4cc6b2324221ea286c43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
@@ -181,15 +184,21 @@ Private Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a5e3f1d7e96d8e005181ea5f94fd82154" id="r_a5e3f1d7e96d8e005181ea5f94fd82154"><td class="memItemLeft" align="right" valign="top">std::weak_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1ThreadingManager.html#a5e3f1d7e96d8e005181ea5f94fd82154">arion</a></td></tr>
+<tr class="memdesc:a5e3f1d7e96d8e005181ea5f94fd82154"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this instance.  <br /></td></tr>
 <tr class="separator:a5e3f1d7e96d8e005181ea5f94fd82154"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d54c4eef6096f4abd9a214d8190febd" id="r_a3d54c4eef6096f4abd9a214d8190febd"><td class="memItemLeft" align="right" valign="top">pid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1ThreadingManager.html#a3d54c4eef6096f4abd9a214d8190febd">curr_id</a> = 1</td></tr>
+<tr class="memdesc:a3d54c4eef6096f4abd9a214d8190febd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The next thread ID to assign when creating new threads.  <br /></td></tr>
 <tr class="separator:a3d54c4eef6096f4abd9a214d8190febd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7f3b38f966e2330c509324269068d87" id="r_ab7f3b38f966e2330c509324269068d87"><td class="memItemLeft" align="right" valign="top">pid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1ThreadingManager.html#ab7f3b38f966e2330c509324269068d87">running_tid</a> = 1</td></tr>
+<tr class="memdesc:ab7f3b38f966e2330c509324269068d87"><td class="mdescLeft">&#160;</td><td class="mdescRight">The thread ID of the currently running thread.  <br /></td></tr>
 <tr class="separator:ab7f3b38f966e2330c509324269068d87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a900f197930c34782477b0f631b97eef3" id="r_a900f197930c34782477b0f631b97eef3"><td class="memItemLeft" align="right" valign="top">std::stack&lt; pid_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1ThreadingManager.html#a900f197930c34782477b0f631b97eef3">free_thread_ids</a></td></tr>
+<tr class="memdesc:a900f197930c34782477b0f631b97eef3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stack of reusable thread IDs from previously terminated threads.  <br /></td></tr>
 <tr class="separator:a900f197930c34782477b0f631b97eef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This class is used to manage threading operations. It is responsible for creating, managing, and synchronizing threads and processes. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a9757845e74b21279d25030d0028dd628" name="a9757845e74b21279d25030d0028dd628"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9757845e74b21279d25030d0028dd628">&#9670;&#160;</a></span>ThreadingManager()</h2>
 
@@ -205,6 +214,12 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="classarion_1_1ThreadingManager.html">ThreadingManager</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this instance. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -222,6 +237,7 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Destructor for <a class="el" href="classarion_1_1ThreadingManager.html">ThreadingManager</a> instances. </p>
 
 </div>
 </div>
@@ -241,6 +257,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Adds a new thread entry to the internal tracking structures. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">thread</td><td>The <a class="el" href="structarion_1_1ARION__THREAD.html" title="This structure holds data about a UNIX thread.">ARION_THREAD</a> instance to register. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The newly assigned thread ID (TID). </dd></dl>
 
 </div>
 </div>
@@ -258,6 +281,7 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Removes all thread entries and clears the internal structures. </p>
 
 </div>
 </div>
@@ -310,6 +334,18 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new thread by emulating the clone() system call. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">flags</td><td>Clone flags defining thread sharing behavior. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">new_sp</td><td>New stack pointer for the thread. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">new_tls</td><td>New TLS (Thread-Local Storage) address. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">child_tid_addr</td><td>Address where the child TID will be written. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">parent_tid_addr</td><td>Address where the parent TID will be written. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">exit_signal</td><td>Signal to send when the thread exits. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The newly created thread's TID. </dd></dl>
 
 </div>
 </div>
@@ -362,6 +398,18 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new process by emulating the fork() system call. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">flags</td><td>Fork flags defining process creation behavior. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">new_sp</td><td>New stack pointer for the process. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">new_tls</td><td>New TLS (Thread-Local Storage) address. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">child_tid_addr</td><td>Address where the child TID will be written. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">parent_tid_addr</td><td>Address where the parent TID will be written. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">exit_signal</td><td>Signal to send when the process exits. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The newly created process's PID. </dd></dl>
 
 </div>
 </div>
@@ -396,6 +444,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Makes the specified thread wait on a futex. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">tid</td><td>The thread ID that will wait. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">futex_addr</td><td>Address of the futex being waited on. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">futex_bitmask</td><td>Bitmask used for wake filtering. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -424,6 +480,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Makes the currently running thread wait on a futex. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">futex_addr</td><td>Address of the futex being waited on. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">futex_bitmask</td><td>Bitmask used for wake filtering. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -452,6 +515,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Wakes up threads waiting on a futex. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">futex_addr</td><td>Address of the futex being signaled. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">futex_bitmask</td><td>Bitmask used for filtering which threads to wake. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The number of threads woken up. </dd></dl>
 
 </div>
 </div>
@@ -477,6 +548,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Generates the next available Thread ID. </p><dl class="section return"><dt>Returns</dt><dd>The next unique Thread ID. </dd></dl>
 
 </div>
 </div>
@@ -494,6 +566,7 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Retrieves the ID of the currently running thread. </p><dl class="section return"><dt>Returns</dt><dd>The running thread's TID. </dd></dl>
 
 </div>
 </div>
@@ -511,6 +584,7 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Retrieves the total number of threads currently managed by this instance. </p><dl class="section return"><dt>Returns</dt><dd>The number of active threads. </dd></dl>
 
 </div>
 </div>
@@ -537,6 +611,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Instanciates and initializes new <a class="el" href="classarion_1_1ThreadingManager.html">ThreadingManager</a> objects with some parameters. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this instance. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A new <a class="el" href="classarion_1_1ThreadingManager.html">ThreadingManager</a> instance. </dd></dl>
 
 </div>
 </div>
@@ -554,6 +635,7 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Checks whether the currently running thread is locked. </p><dl class="section return"><dt>Returns</dt><dd>True if the thread is locked, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -572,6 +654,12 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Removes a thread entry from the <a class="el" href="classarion_1_1ThreadingManager.html">ThreadingManager</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">tid</td><td>The thread ID to remove. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -608,6 +696,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Removes a thread entry, used internally by other methods. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">tid</td><td>The Thread ID to remove. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">clearing</td><td>Whether this removal is part of a global clear operation. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -636,6 +731,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Sets the same thread group ID (TGID) for all managed threads. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">tgid</td><td>The thread group ID to assign. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">init</td><td>Whether this is part of an initialization sequence. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -654,6 +756,12 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Sets the currently running thread ID. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">tid</td><td>The TID of the thread to mark as running. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -688,6 +796,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Sets the thread group ID (TGID) for a specific thread. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">tid</td><td>The thread ID. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">tgid</td><td>The thread group ID. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">init</td><td>Whether this is part of an initialization sequence. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -722,6 +838,15 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Makes a target thread wait for a signal from a source process. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">target_tid</td><td>The thread ID that will wait. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">source_pid</td><td>The PID of the process sending the signal. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">wait_status_addr</td><td>Address where the wait status will be stored. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the wait was successful, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -750,6 +875,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Makes the currently running thread wait for a signal from a source process. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">source_pid</td><td>The PID of the process sending the signal. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">wait_status_addr</td><td>Address where the wait status will be stored. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the wait was successful, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -767,6 +900,7 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Switches execution context to the next available thread. </p>
 
 </div>
 </div>
@@ -785,6 +919,12 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Switches execution context to the thread identified by <code>tid</code>. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">tid</td><td>The target thread ID to switch to. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -809,6 +949,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this instance. </p>
+
 </div>
 </div>
 <a id="a3d54c4eef6096f4abd9a214d8190febd" name="a3d54c4eef6096f4abd9a214d8190febd"></a>
@@ -830,6 +972,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>The next thread ID to assign when creating new threads. </p>
 
 </div>
 </div>
@@ -853,6 +997,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Stack of reusable thread IDs from previously terminated threads. </p>
+
 </div>
 </div>
 <a id="a9c63619908d9727527a9457135c78dce" name="a9c63619908d9727527a9457135c78dce"></a>
@@ -866,6 +1012,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>A map identifying an <a class="el" href="structarion_1_1ARION__FUTEX.html" title="This structure holds data about a Fast Userspace muTEX.">ARION_FUTEX</a> instance given the address of the futex. </p>
 
 </div>
 </div>
@@ -889,6 +1037,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>The thread ID of the currently running thread. </p>
+
 </div>
 </div>
 <a id="a94dfa7f418bd4cc6b2324221ea286c43" name="a94dfa7f418bd4cc6b2324221ea286c43"></a>
@@ -911,6 +1061,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>A map identifying a thread group given its associated Thread ID. </p>
+
 </div>
 </div>
 <a id="a48856def8e213824262fd1ae26cb1e5b" name="a48856def8e213824262fd1ae26cb1e5b"></a>
@@ -925,10 +1077,12 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>A map identifying an <a class="el" href="structarion_1_1ARION__THREAD.html" title="This structure holds data about a UNIX thread.">ARION_THREAD</a> instance given its associated Thread ID. </p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/common/<a class="el" href="threading__manager_8hpp_source.html">threading_manager.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/common/<a class="el" href="threading__manager_8hpp_source.html">threading_manager.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

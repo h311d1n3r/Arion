@@ -134,6 +134,7 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-types" name="pro-types"></a>
 Protected Types</h2></td></tr>
 <tr class="memitem:a230e2c97863e019dc1ea8928e4548ebf" id="r_a230e2c97863e019dc1ea8928e4548ebf"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__poly__struct_1_1PolymorphicStructFactory.html#a230e2c97863e019dc1ea8928e4548ebf">ftype</a> = <a class="el" href="namespacearion__poly__struct.html#a28e3c9eb930bf9140e66e4ab5af6b396">arion_poly_struct::POLYMORPHIC_STRUCT_FIELD_TYPE</a></td></tr>
+<tr class="memdesc:a230e2c97863e019dc1ea8928e4548ebf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Macro for easy access to <code>POLYMORPHIC_STRUCT_FIELD_TYPE</code> in subclass definitions.  <br /></td></tr>
 <tr class="separator:a230e2c97863e019dc1ea8928e4548ebf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
@@ -159,15 +160,27 @@ Private Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a44afb6f48c959f5738a3663feeb2bf58" id="r_a44afb6f48c959f5738a3663feeb2bf58"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion__poly__struct.html#a33e4fe11cedc641ca0d66ea7086a84c9">STRUCT_ID</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__poly__struct_1_1PolymorphicStructFactory.html#a44afb6f48c959f5738a3663feeb2bf58">curr_id</a> = 1</td></tr>
+<tr class="memdesc:a44afb6f48c959f5738a3663feeb2bf58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Counter for generating unique structure IDs.  <br /></td></tr>
 <tr class="separator:a44afb6f48c959f5738a3663feeb2bf58"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac601e324589fad573b4e6894ae63932f" id="r_ac601e324589fad573b4e6894ae63932f"><td class="memItemLeft" align="right" valign="top">std::stack&lt; <a class="el" href="namespacearion__poly__struct.html#a33e4fe11cedc641ca0d66ea7086a84c9">STRUCT_ID</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__poly__struct_1_1PolymorphicStructFactory.html#ac601e324589fad573b4e6894ae63932f">free_ids</a></td></tr>
+<tr class="memdesc:ac601e324589fad573b4e6894ae63932f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stack of released IDs for reuse.  <br /></td></tr>
 <tr class="separator:ac601e324589fad573b4e6894ae63932f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a421df957e8d959b7426b40a984a9efbf" id="r_a421df957e8d959b7426b40a984a9efbf"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacearion__poly__struct.html#a33e4fe11cedc641ca0d66ea7086a84c9">STRUCT_ID</a>, std::unique_ptr&lt; <a class="el" href="classarion__poly__struct_1_1PolymorphicStruct.html">PolymorphicStruct</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__poly__struct_1_1PolymorphicStructFactory.html#a421df957e8d959b7426b40a984a9efbf">curr_structs</a></td></tr>
+<tr class="memdesc:a421df957e8d959b7426b40a984a9efbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map of currently allocated polymorphic structure instances.  <br /></td></tr>
 <tr class="separator:a421df957e8d959b7426b40a984a9efbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abffd59cd495542e3b05e160a1a9a8207" id="r_abffd59cd495542e3b05e160a1a9a8207"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structarion__poly__struct_1_1POLYMORPHIC__STRUCT__FIELD.html">POLYMORPHIC_STRUCT_FIELD</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__poly__struct_1_1PolymorphicStructFactory.html#abffd59cd495542e3b05e160a1a9a8207">fields</a></td></tr>
+<tr class="memdesc:abffd59cd495542e3b05e160a1a9a8207"><td class="mdescLeft">&#160;</td><td class="mdescRight">Definition of all potential fields in the polymorphic structure.  <br /></td></tr>
 <tr class="separator:abffd59cd495542e3b05e160a1a9a8207"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Typedef Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename T&gt;<br />
+class arion_poly_struct::PolymorphicStructFactory&lt; T &gt;</div><p>Manages the definition and instantiation of polymorphic structures (structs whose layout changes per architecture). </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>The host-side C++ type corresponding to the structure being managed. </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a230e2c97863e019dc1ea8928e4548ebf" name="a230e2c97863e019dc1ea8928e4548ebf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a230e2c97863e019dc1ea8928e4548ebf">&#9670;&#160;</a></span>ftype</h2>
 
@@ -189,6 +202,8 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Macro for easy access to <code>POLYMORPHIC_STRUCT_FIELD_TYPE</code> in subclass definitions. </p>
 
 </div>
 </div>
@@ -218,6 +233,12 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="classarion__poly__struct_1_1PolymorphicStructFactory.html">PolymorphicStructFactory</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">fields</td><td>The vector of field definitions defining the structure layout. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -245,6 +266,7 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Destructor: cleans up all currently managed structure instances. </p>
 
 </div>
 </div>
@@ -274,6 +296,13 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Allocates a new <code>STRUCT_ID</code> and stores the polymorphic instance. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">struct_inst</td><td>Unique pointer to the <code><a class="el" href="classarion__poly__struct_1_1PolymorphicStruct.html" title="Represents a single instance of a polymorphic structure, storing its field values dynamically.">PolymorphicStruct</a></code> instance. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The assigned <code>STRUCT_ID</code>. </dd></dl>
 
 </div>
 </div>
@@ -318,6 +347,15 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builds the raw memory representation of a managed structure instance for a target architecture. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The ID of the managed structure instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">arch</td><td>The target CPU architecture for layout. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">struct_len</td><td>The size of the resulting raw data buffer. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the dynamically allocated raw byte array representing the structure. </dd></dl>
 
 </div>
 </div>
@@ -346,6 +384,13 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builds and returns a host-side C++ structure (<code>T</code>) instance from a managed instance. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The ID of the managed structure instance. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the newly allocated host structure (<code>T*</code>). </dd></dl>
 
 </div>
 </div>
@@ -373,6 +418,7 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Releases all currently managed structure instances. </p>
 
 </div>
 </div>
@@ -411,6 +457,14 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Parses raw memory data representing a structure instance and creates a corresponding <code><a class="el" href="classarion__poly__struct_1_1PolymorphicStruct.html" title="Represents a single instance of a polymorphic structure, storing its field values dynamically.">PolymorphicStruct</a></code> object. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arch</td><td>The architecture used to interpret the structure layout (size, alignment). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">struct_inst</td><td>Pointer to the raw byte data of the structure. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The unique ID of the newly created <code><a class="el" href="classarion__poly__struct_1_1PolymorphicStruct.html" title="Represents a single instance of a polymorphic structure, storing its field values dynamically.">PolymorphicStruct</a></code> instance. </dd></dl>
 
 </div>
 </div>
@@ -439,6 +493,13 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Feeds an existing host-side structure instance to the factory and gets its <code>STRUCT_ID</code>. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">struct_inst</td><td>Pointer to the host structure instance. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The unique ID of the newly created <code><a class="el" href="classarion__poly__struct_1_1PolymorphicStruct.html" title="Represents a single instance of a polymorphic structure, storing its field values dynamically.">PolymorphicStruct</a></code> instance. </dd></dl>
 
 </div>
 </div>
@@ -466,6 +527,7 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Generates a new unique <code>STRUCT_ID</code>. </p><dl class="section return"><dt>Returns</dt><dd>The next available <code>STRUCT_ID</code>. </dd></dl>
 
 </div>
 </div>
@@ -494,6 +556,13 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Retrieves the required memory alignment for the given architecture. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arch</td><td>The CPU architecture. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The alignment size in bytes. </dd></dl>
 
 </div>
 </div>
@@ -522,6 +591,13 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Retrieves the bit size (32 or 64) for the given architecture. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arch</td><td>The CPU architecture. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The architecture size in bits. </dd></dl>
 
 </div>
 </div>
@@ -549,6 +625,7 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Calculates the memory size of the structure instance for the host architecture. </p><dl class="section return"><dt>Returns</dt><dd>The calculated size of the structure in bytes. </dd></dl>
 
 </div>
 </div>
@@ -577,6 +654,13 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Retrieves the pointer size for the given architecture. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arch</td><td>The CPU architecture. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The pointer size in bytes. </dd></dl>
 
 </div>
 </div>
@@ -605,6 +689,13 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Calculates the memory size of the structure instance for a given target architecture, accounting for padding and alignment. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arch</td><td>The target CPU architecture. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The calculated size of the structure in bytes. </dd></dl>
 
 </div>
 </div>
@@ -633,6 +724,12 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Releases a managed structure instance, freeing its allocated resources and making its ID available for reuse. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The ID of the structure instance to release. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -677,6 +774,15 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Generates a string representation of the managed structure instance, formatting values using their <code>KernelType</code>. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The ID of the managed structure instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>Shared pointer to the Arion instance (needed for memory access in some <code>KernelType::str</code> calls). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">arch</td><td>The architecture to assume for pointer sizes and field interpretation. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A formatted string representation of the structure (e.g., "{field1=value, field2=value}"). </dd></dl>
 
 </div>
 </div>
@@ -703,6 +809,8 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>Counter for generating unique structure IDs. </p>
+
 </div>
 </div>
 <a id="a421df957e8d959b7426b40a984a9efbf" name="a421df957e8d959b7426b40a984a9efbf"></a>
@@ -726,6 +834,8 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Map of currently allocated polymorphic structure instances. </p>
 
 </div>
 </div>
@@ -751,6 +861,8 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>Definition of all potential fields in the polymorphic structure. </p>
+
 </div>
 </div>
 <a id="ac601e324589fad573b4e6894ae63932f" name="ac601e324589fad573b4e6894ae63932f"></a>
@@ -775,10 +887,12 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>Stack of released IDs for reuse. </p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/utils/<a class="el" href="struct__utils_8hpp_source.html">struct_utils.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/utils/<a class="el" href="struct__utils_8hpp_source.html">struct_utils.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

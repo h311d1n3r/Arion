@@ -108,28 +108,36 @@ $(document).ready(function(){initNavTree('namespacearion__lnx__x86.html',''); in
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__lnx__x86_1_1ArchManagerLinuxX86.html">ArchManagerLinuxX86</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Linux x86 architecture manager class for Arion.  <a href="classarion__lnx__x86_1_1ArchManagerLinuxX86.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__x86_1_1elf__prstatus.html">elf_prstatus</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure for a process status ELF note (NT_PRSTATUS) for x86 (32-bit), containing general registers.  <a href="structarion__lnx__x86_1_1elf__prstatus.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__x86_1_1user__i387__struct.html">user_i387_struct</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__x86_1_1user__regs__struct.html">user_regs_struct</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure representing the x86 (32-bit) general-purpose registers as saved by the Linux kernel on the stack.  <a href="structarion__lnx__x86_1_1user__regs__struct.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:a8fbace1aa4ff652149ea2cd5fdac3d6d" id="r_a8fbace1aa4ff652149ea2cd5fdac3d6d"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="namespacearion__lnx__type.html#abc9712287958c302788e0ec31d2fba0b">arion_lnx_type::elf_greg_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion__lnx__x86.html#a8fbace1aa4ff652149ea2cd5fdac3d6d">elf_gregset_t</a>[<a class="el" href="namespacearion__lnx__x86.html#a30f7cac7e173212db9b691f09d9f8043">ELF_NGREG</a>]</td></tr>
+<tr class="memdesc:a8fbace1aa4ff652149ea2cd5fdac3d6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Definition of the general-purpose register set type for ELF notes (NT_PRSTATUS).  <br /></td></tr>
 <tr class="separator:a8fbace1aa4ff652149ea2cd5fdac3d6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a425e12a359636ba387a68a9f2ea0a963" id="r_a425e12a359636ba387a68a9f2ea0a963"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structarion__lnx__x86_1_1user__i387__struct.html">user_i387_struct</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion__lnx__x86.html#a425e12a359636ba387a68a9f2ea0a963">elf_fpregset_t</a></td></tr>
+<tr class="memdesc:a425e12a359636ba387a68a9f2ea0a963"><td class="mdescLeft">&#160;</td><td class="mdescRight">Definition of the floating-point register set type for ELF notes (NT_FPREGSET).  <br /></td></tr>
 <tr class="separator:a425e12a359636ba387a68a9f2ea0a963"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a47c056b76cbe38db1207b8d6d651c082" id="r_a47c056b76cbe38db1207b8d6d651c082"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacearion.html#a1bc7997a0cf279f7e07ce89b9e72e899">arion::REG</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion__lnx__x86.html#a47c056b76cbe38db1207b8d6d651c082">uc_user_regs</a></td></tr>
+<tr class="memdesc:a47c056b76cbe38db1207b8d6d651c082"><td class="mdescLeft">&#160;</td><td class="mdescRight">A vector mapping the <code><a class="el" href="structarion__lnx__x86_1_1user__regs__struct.html" title="Structure representing the x86 (32-bit) general-purpose registers as saved by the Linux kernel on the...">user_regs_struct</a></code> fields to ARION's universal register enumeration (<code><a class="el" href="namespacearion.html#a1bc7997a0cf279f7e07ce89b9e72e899" title="Identifies a Unicorn register.">arion::REG</a></code>).  <br /></td></tr>
 <tr class="separator:a47c056b76cbe38db1207b8d6d651c082"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30f7cac7e173212db9b691f09d9f8043" id="r_a30f7cac7e173212db9b691f09d9f8043"><td class="memItemLeft" align="right" valign="top">const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion__lnx__x86.html#a30f7cac7e173212db9b691f09d9f8043">ELF_NGREG</a> = (sizeof(struct <a class="el" href="structarion__lnx__x86_1_1user__regs__struct.html">user_regs_struct</a>) / sizeof(<a class="el" href="namespacearion__lnx__type.html#abc9712287958c302788e0ec31d2fba0b">arion_lnx_type::elf_greg_t</a>))</td></tr>
+<tr class="memdesc:a30f7cac7e173212db9b691f09d9f8043"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of 32-bit words (general registers) in the <code><a class="el" href="structarion__lnx__x86_1_1user__regs__struct.html" title="Structure representing the x86 (32-bit) general-purpose registers as saved by the Linux kernel on the...">user_regs_struct</a></code>, used for ELF notes.  <br /></td></tr>
 <tr class="separator:a30f7cac7e173212db9b691f09d9f8043"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17f22f4401513bc9a92dd135bdc45834" id="r_a17f22f4401513bc9a92dd135bdc45834"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacearion.html#a1bc7997a0cf279f7e07ce89b9e72e899">arion::REG</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion__lnx__x86.html#a17f22f4401513bc9a92dd135bdc45834">uc_st_space_regs</a></td></tr>
+<tr class="memdesc:a17f22f4401513bc9a92dd135bdc45834"><td class="mdescLeft">&#160;</td><td class="mdescRight">A vector mapping the FPU stack register space (<code>st_space</code>) to ARION's universal register enumeration.  <br /></td></tr>
 <tr class="separator:a17f22f4401513bc9a92dd135bdc45834"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
@@ -145,6 +153,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Definition of the floating-point register set type for ELF notes (NT_FPREGSET). </p>
+
 </div>
 </div>
 <a id="a8fbace1aa4ff652149ea2cd5fdac3d6d" name="a8fbace1aa4ff652149ea2cd5fdac3d6d"></a>
@@ -158,6 +168,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Definition of the general-purpose register set type for ELF notes (NT_PRSTATUS). </p>
 
 </div>
 </div>
@@ -173,6 +185,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>The number of 32-bit words (general registers) in the <code><a class="el" href="structarion__lnx__x86_1_1user__regs__struct.html" title="Structure representing the x86 (32-bit) general-purpose registers as saved by the Linux kernel on the...">user_regs_struct</a></code>, used for ELF notes. </p>
 
 </div>
 </div>
@@ -198,6 +212,8 @@ Variables</h2></td></tr>
 <b>Initial value:</b><div class="fragment"><div class="line">= {UC_X86_REG_FP0, UC_X86_REG_FP1, UC_X86_REG_FP2, UC_X86_REG_FP3,</div>
 <div class="line">                                                   UC_X86_REG_FP4, UC_X86_REG_FP5, UC_X86_REG_FP6, UC_X86_REG_FP7}</div>
 </div><!-- fragment -->
+<p>A vector mapping the FPU stack register space (<code>st_space</code>) to ARION's universal register enumeration. </p>
+
 </div>
 </div>
 <a id="a47c056b76cbe38db1207b8d6d651c082" name="a47c056b76cbe38db1207b8d6d651c082"></a>
@@ -224,6 +240,8 @@ Variables</h2></td></tr>
 <div class="line">    UC_X86_REG_EAX, UC_X86_REG_DS,  UC_X86_REG_ES,     UC_X86_REG_FS,  UC_X86_REG_GS,  UC_X86_REG_INVALID,</div>
 <div class="line">    UC_X86_REG_EIP, UC_X86_REG_CS,  UC_X86_REG_EFLAGS, UC_X86_REG_ESP, UC_X86_REG_SS}</div>
 </div><!-- fragment -->
+<p>A vector mapping the <code><a class="el" href="structarion__lnx__x86_1_1user__regs__struct.html" title="Structure representing the x86 (32-bit) general-purpose registers as saved by the Linux kernel on the...">user_regs_struct</a></code> fields to ARION's universal register enumeration (<code><a class="el" href="namespacearion.html#a1bc7997a0cf279f7e07ce89b9e72e899" title="Identifies a Unicorn register.">arion::REG</a></code>). </p>
+
 </div>
 </div>
 </div><!-- contents -->

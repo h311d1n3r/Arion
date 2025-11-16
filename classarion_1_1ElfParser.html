@@ -106,6 +106,9 @@ $(document).ready(function(){initNavTree('classarion_1_1ElfParser.html',''); ini
 </div><!--header-->
 <div class="contents">
 
+<p>Primary class for parsing ELF executables, shared objects, or core dumps. Inherits from <a class="el" href="classarion_1_1ExecutableParser.html" title="This class is responsible for extracting specific data from an executable file.">ExecutableParser</a>.  
+ <a href="classarion_1_1ElfParser.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="elf__parser_8hpp_source.html">elf_parser.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for arion::ElfParser:</div>
@@ -141,6 +144,7 @@ Private Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a87438c7ca75e2e6e8dd157192b706df6" id="r_a87438c7ca75e2e6e8dd157192b706df6"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classarion_1_1ElfCoredumpParser.html">ElfCoredumpParser</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1ElfParser.html#a87438c7ca75e2e6e8dd157192b706df6">coredump_parser</a></td></tr>
+<tr class="memdesc:a87438c7ca75e2e6e8dd157192b706df6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instance of the core dump parser used if the file type is CORE.  <br /></td></tr>
 <tr class="separator:a87438c7ca75e2e6e8dd157192b706df6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
@@ -156,7 +160,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memdesc:af9a7c53c9fe2efca4137a5d607c8cce2 inherit pro_attribs_classarion_1_1ExecutableParser"><td class="mdescLeft">&#160;</td><td class="mdescRight">The memory segments in the executable.  <br /></td></tr>
 <tr class="separator:af9a7c53c9fe2efca4137a5d607c8cce2 inherit pro_attribs_classarion_1_1ExecutableParser"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Primary class for parsing ELF executables, shared objects, or core dumps. Inherits from <a class="el" href="classarion_1_1ExecutableParser.html" title="This class is responsible for extracting specific data from an executable file.">ExecutableParser</a>. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3572165d9cc0871e2c688dd5df669bad" name="a3572165d9cc0871e2c688dd5df669bad"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3572165d9cc0871e2c688dd5df669bad">&#9670;&#160;</a></span>ElfParser()</h2>
 
@@ -190,6 +196,19 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="classarion_1_1ElfParser.html" title="Primary class for parsing ELF executables, shared objects, or core dumps. Inherits from ExecutablePar...">ElfParser</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>Weak pointer to the main <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">args</td><td>Vector of command-line arguments, where the first element is the target file path. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classarion__exception_1_1InvalidArgumentException.html" title="Thrown when passing an invalid argument to a method.">arion_exception::InvalidArgumentException</a></td><td>if <code>args</code> is empty. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -217,6 +236,13 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Parses general ELF header data (magic, architecture, entry point, file type). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">elf</td><td>The unique pointer to the LIEF ELF Binary representation. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The unique pointer to the LIEF ELF Binary. </dd></dl>
 
 </div>
 </div>
@@ -243,6 +269,13 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Parses the loadable segments (Program Headers of type PT_LOAD) and populates the segment list in attributes. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">elf</td><td>The unique pointer to the LIEF ELF Binary representation. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The unique pointer to the LIEF ELF Binary. </dd></dl>
 
 </div>
 </div>
@@ -268,7 +301,7 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Processes the requested executable file by parsing its format and extracting some specific data. </p>
+<p>Main method to process and parse the entire ELF file, including loading, segment parsing, and core dump analysis. </p>
 
 <p>Implements <a class="el" href="classarion_1_1ExecutableParser.html#a04ba04a50eee8cfc48176f9224e13664">arion::ExecutableParser</a>.</p>
 
@@ -295,10 +328,12 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Instance of the core dump parser used if the file type is CORE. </p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/platforms/linux/<a class="el" href="elf__parser_8hpp_source.html">elf_parser.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/platforms/linux/<a class="el" href="elf__parser_8hpp_source.html">elf_parser.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

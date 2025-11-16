@@ -105,6 +105,9 @@ $(document).ready(function(){initNavTree('structarion_1_1ARION__SOCKET.html','')
 </div><!--header-->
 <div class="contents">
 
+<p>This structure holds data about a UNIX socket.  
+ <a href="structarion_1_1ARION__SOCKET.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="socket__manager_8hpp_source.html">socket_manager.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -123,33 +126,48 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a0682eddd33dede5621167f0b54ce01cf" id="r_a0682eddd33dede5621167f0b54ce01cf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__SOCKET.html#a0682eddd33dede5621167f0b54ce01cf">fd</a></td></tr>
+<tr class="memdesc:a0682eddd33dede5621167f0b54ce01cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">File Descriptor of the socket.  <br /></td></tr>
 <tr class="separator:a0682eddd33dede5621167f0b54ce01cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a2988967fc0730e948c143f531a7ddc" id="r_a3a2988967fc0730e948c143f531a7ddc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__SOCKET.html#a3a2988967fc0730e948c143f531a7ddc">family</a></td></tr>
+<tr class="memdesc:a3a2988967fc0730e948c143f531a7ddc"><td class="mdescLeft">&#160;</td><td class="mdescRight">UNIX family of the socket (e.g, AF_UNIX, AF_INET).  <br /></td></tr>
 <tr class="separator:a3a2988967fc0730e948c143f531a7ddc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d32ef2b8a221ebca63a92371d0fc3bf" id="r_a7d32ef2b8a221ebca63a92371d0fc3bf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__SOCKET.html#a7d32ef2b8a221ebca63a92371d0fc3bf">type</a></td></tr>
+<tr class="memdesc:a7d32ef2b8a221ebca63a92371d0fc3bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">UNIX type of the socket (e.g, SOCK_STREAM, SOCK_DGRAM).  <br /></td></tr>
 <tr class="separator:a7d32ef2b8a221ebca63a92371d0fc3bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57f26840d0e73115e22d83c173eb2955" id="r_a57f26840d0e73115e22d83c173eb2955"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__SOCKET.html#a57f26840d0e73115e22d83c173eb2955">protocol</a></td></tr>
+<tr class="memdesc:a57f26840d0e73115e22d83c173eb2955"><td class="mdescLeft">&#160;</td><td class="mdescRight">UNIX protocol of the socket.  <br /></td></tr>
 <tr class="separator:a57f26840d0e73115e22d83c173eb2955"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af34c610da45d1abca7078b3deb5bc837" id="r_af34c610da45d1abca7078b3deb5bc837"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__SOCKET.html#af34c610da45d1abca7078b3deb5bc837">ip</a></td></tr>
+<tr class="memdesc:af34c610da45d1abca7078b3deb5bc837"><td class="mdescLeft">&#160;</td><td class="mdescRight">IP address associated to the socket, when relevant.  <br /></td></tr>
 <tr class="separator:af34c610da45d1abca7078b3deb5bc837"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad48d7b941c71bef158e47dfd70838910" id="r_ad48d7b941c71bef158e47dfd70838910"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__SOCKET.html#ad48d7b941c71bef158e47dfd70838910">port</a></td></tr>
+<tr class="memdesc:ad48d7b941c71bef158e47dfd70838910"><td class="mdescLeft">&#160;</td><td class="mdescRight">Port associated to the socket, when relevant.  <br /></td></tr>
 <tr class="separator:ad48d7b941c71bef158e47dfd70838910"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68797414b4f9a467d3aae92975cc84da" id="r_a68797414b4f9a467d3aae92975cc84da"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__SOCKET.html#a68797414b4f9a467d3aae92975cc84da">path</a></td></tr>
+<tr class="memdesc:a68797414b4f9a467d3aae92975cc84da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Path associated to the socket, when relevant.  <br /></td></tr>
 <tr class="separator:a68797414b4f9a467d3aae92975cc84da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4df85c687c358ac830233bfc381140b" id="r_ad4df85c687c358ac830233bfc381140b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__SOCKET.html#ad4df85c687c358ac830233bfc381140b">server</a> = false</td></tr>
+<tr class="memdesc:ad4df85c687c358ac830233bfc381140b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether this socket acts as a server.  <br /></td></tr>
 <tr class="separator:ad4df85c687c358ac830233bfc381140b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e6f12db604f369d252745db2da147e6" id="r_a2e6f12db604f369d252745db2da147e6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__SOCKET.html#a2e6f12db604f369d252745db2da147e6">server_listen</a> = false</td></tr>
+<tr class="memdesc:a2e6f12db604f369d252745db2da147e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether this socket acts as a server and listens to incoming requests.  <br /></td></tr>
 <tr class="separator:a2e6f12db604f369d252745db2da147e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47c1b38913f8b0e204073be6abfcf25a" id="r_a47c1b38913f8b0e204073be6abfcf25a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__SOCKET.html#a47c1b38913f8b0e204073be6abfcf25a">server_backlog</a> = 0</td></tr>
+<tr class="memdesc:a47c1b38913f8b0e204073be6abfcf25a"><td class="mdescLeft">&#160;</td><td class="mdescRight">If this socket acts as a server, size of the queue in which other sockets await for connection.  <br /></td></tr>
 <tr class="separator:a47c1b38913f8b0e204073be6abfcf25a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60298f4bf17e0ee6b40d82639ba7e6b4" id="r_a60298f4bf17e0ee6b40d82639ba7e6b4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__SOCKET.html#a60298f4bf17e0ee6b40d82639ba7e6b4">blocking</a> = false</td></tr>
+<tr class="memdesc:a60298f4bf17e0ee6b40d82639ba7e6b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether this socket is in blocking mode.  <br /></td></tr>
 <tr class="separator:a60298f4bf17e0ee6b40d82639ba7e6b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45ce51d2f040598a9b4e7f46adcb0432" id="r_a45ce51d2f040598a9b4e7f46adcb0432"><td class="memItemLeft" align="right" valign="top">socklen_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__SOCKET.html#a45ce51d2f040598a9b4e7f46adcb0432">s_addr_sz</a> = 0</td></tr>
+<tr class="memdesc:a45ce51d2f040598a9b4e7f46adcb0432"><td class="mdescLeft">&#160;</td><td class="mdescRight">Length of the socket sockaddr address, when relevant.  <br /></td></tr>
 <tr class="separator:a45ce51d2f040598a9b4e7f46adcb0432"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d79206517a5df06a83c82e6c3ce060d" id="r_a4d79206517a5df06a83c82e6c3ce060d"><td class="memItemLeft" align="right" valign="top">sockaddr *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__SOCKET.html#a4d79206517a5df06a83c82e6c3ce060d">s_addr</a> = nullptr</td></tr>
+<tr class="memdesc:a4d79206517a5df06a83c82e6c3ce060d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The socket sockaddr address, when relevant.  <br /></td></tr>
 <tr class="separator:a4d79206517a5df06a83c82e6c3ce060d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This structure holds data about a UNIX socket. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac23f4f45c8203e3cfc5d8b9406745296" name="ac23f4f45c8203e3cfc5d8b9406745296"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac23f4f45c8203e3cfc5d8b9406745296">&#9670;&#160;</a></span>ARION_SOCKET() <span class="overload">[1/4]</span></h2>
 
@@ -172,6 +190,7 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="structarion_1_1ARION__SOCKET.html" title="This structure holds data about a UNIX socket.">ARION_SOCKET</a> instances. </p>
 
 </div>
 </div>
@@ -220,6 +239,15 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="structarion_1_1ARION__SOCKET.html" title="This structure holds data about a UNIX socket.">ARION_SOCKET</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">fd</td><td>File Descriptor of the socket. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">family</td><td>UNIX family of the socket (e.g, AF_UNIX, AF_INET). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">type</td><td>UNIX type of the socket (e.g, SOCK_STREAM, SOCK_DGRAM). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">protocol</td><td>UNIX protocol of the socket. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -246,6 +274,12 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="structarion_1_1ARION__SOCKET.html" title="This structure holds data about a UNIX socket.">ARION_SOCKET</a> instances used to clone an <a class="el" href="structarion_1_1ARION__SOCKET.html" title="This structure holds data about a UNIX socket.">ARION_SOCKET</a> instance. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>the <a class="el" href="structarion_1_1ARION__SOCKET.html" title="This structure holds data about a UNIX socket.">ARION_SOCKET</a> instance to be cloned. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -272,6 +306,12 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="structarion_1_1ARION__SOCKET.html" title="This structure holds data about a UNIX socket.">ARION_SOCKET</a> instances used to clone an <a class="el" href="structarion_1_1ARION__SOCKET.html" title="This structure holds data about a UNIX socket.">ARION_SOCKET</a> instance. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>the <a class="el" href="structarion_1_1ARION__SOCKET.html" title="This structure holds data about a UNIX socket.">ARION_SOCKET</a> instance to be cloned. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -297,6 +337,7 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Destructor for <a class="el" href="structarion_1_1ARION__SOCKET.html" title="This structure holds data about a UNIX socket.">ARION_SOCKET</a> instances. </p>
 
 </div>
 </div>
@@ -313,6 +354,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Whether this socket is in blocking mode. </p>
+
 </div>
 </div>
 <a id="a3a2988967fc0730e948c143f531a7ddc" name="a3a2988967fc0730e948c143f531a7ddc"></a>
@@ -326,6 +369,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>UNIX family of the socket (e.g, AF_UNIX, AF_INET). </p>
 
 </div>
 </div>
@@ -341,6 +386,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>File Descriptor of the socket. </p>
+
 </div>
 </div>
 <a id="af34c610da45d1abca7078b3deb5bc837" name="af34c610da45d1abca7078b3deb5bc837"></a>
@@ -354,6 +401,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>IP address associated to the socket, when relevant. </p>
 
 </div>
 </div>
@@ -369,6 +418,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Path associated to the socket, when relevant. </p>
+
 </div>
 </div>
 <a id="ad48d7b941c71bef158e47dfd70838910" name="ad48d7b941c71bef158e47dfd70838910"></a>
@@ -382,6 +433,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Port associated to the socket, when relevant. </p>
 
 </div>
 </div>
@@ -397,6 +450,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>UNIX protocol of the socket. </p>
+
 </div>
 </div>
 <a id="a4d79206517a5df06a83c82e6c3ce060d" name="a4d79206517a5df06a83c82e6c3ce060d"></a>
@@ -410,6 +465,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>The socket sockaddr address, when relevant. </p>
 
 </div>
 </div>
@@ -425,6 +482,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Length of the socket sockaddr address, when relevant. </p>
+
 </div>
 </div>
 <a id="ad4df85c687c358ac830233bfc381140b" name="ad4df85c687c358ac830233bfc381140b"></a>
@@ -438,6 +497,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Whether this socket acts as a server. </p>
 
 </div>
 </div>
@@ -453,6 +514,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>If this socket acts as a server, size of the queue in which other sockets await for connection. </p>
+
 </div>
 </div>
 <a id="a2e6f12db604f369d252745db2da147e6" name="a2e6f12db604f369d252745db2da147e6"></a>
@@ -466,6 +529,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Whether this socket acts as a server and listens to incoming requests. </p>
 
 </div>
 </div>
@@ -481,10 +546,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>UNIX type of the socket (e.g, SOCK_STREAM, SOCK_DGRAM). </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/common/<a class="el" href="socket__manager_8hpp_source.html">socket_manager.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/common/<a class="el" href="socket__manager_8hpp_source.html">socket_manager.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

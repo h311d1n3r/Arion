@@ -105,6 +105,9 @@ $(document).ready(function(){initNavTree('classarion__poly__struct_1_1Polymorphi
 </div><!--header-->
 <div class="contents">
 
+<p>Represents a single instance of a polymorphic structure, storing its field values dynamically.  
+ <a href="classarion__poly__struct_1_1PolymorphicStruct.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="struct__utils_8hpp_source.html">struct_utils.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -112,26 +115,36 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0b3af990986e78bbed444d03f4685170" id="r_a0b3af990986e78bbed444d03f4685170"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__poly__struct_1_1PolymorphicStruct.html#a0b3af990986e78bbed444d03f4685170">~PolymorphicStruct</a> ()</td></tr>
 <tr class="separator:a0b3af990986e78bbed444d03f4685170"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70a195260486195a13192f4609ad3592" id="r_a70a195260486195a13192f4609ad3592"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__poly__struct_1_1PolymorphicStruct.html#a70a195260486195a13192f4609ad3592">set_field</a> (std::string name, uint64_t val)</td></tr>
+<tr class="memdesc:a70a195260486195a13192f4609ad3592"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets an integer/primitive field value.  <br /></td></tr>
 <tr class="separator:a70a195260486195a13192f4609ad3592"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f69def07f2c148abee71ffef9568089" id="r_a7f69def07f2c148abee71ffef9568089"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__poly__struct_1_1PolymorphicStruct.html#a7f69def07f2c148abee71ffef9568089">set_field</a> (std::string name, void *arr)</td></tr>
+<tr class="memdesc:a7f69def07f2c148abee71ffef9568089"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets an array field value (takes ownership of the pointer).  <br /></td></tr>
 <tr class="separator:a7f69def07f2c148abee71ffef9568089"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af35ae5aa737e4c60714d48b3600f6e7a" id="r_af35ae5aa737e4c60714d48b3600f6e7a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__poly__struct_1_1PolymorphicStruct.html#af35ae5aa737e4c60714d48b3600f6e7a">has_int_field</a> (std::string name)</td></tr>
+<tr class="memdesc:af35ae5aa737e4c60714d48b3600f6e7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a named integer field exists.  <br /></td></tr>
 <tr class="separator:af35ae5aa737e4c60714d48b3600f6e7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61fd01ea6a91917c9fe547104baedb06" id="r_a61fd01ea6a91917c9fe547104baedb06"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__poly__struct_1_1PolymorphicStruct.html#a61fd01ea6a91917c9fe547104baedb06">get_int_field</a> (std::string name)</td></tr>
+<tr class="memdesc:a61fd01ea6a91917c9fe547104baedb06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the value of a named integer field.  <br /></td></tr>
 <tr class="separator:a61fd01ea6a91917c9fe547104baedb06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6471eacdfd3ececf729f654d4dad9f3" id="r_ae6471eacdfd3ececf729f654d4dad9f3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__poly__struct_1_1PolymorphicStruct.html#ae6471eacdfd3ececf729f654d4dad9f3">has_arr_field</a> (std::string name)</td></tr>
+<tr class="memdesc:ae6471eacdfd3ececf729f654d4dad9f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a named array field exists.  <br /></td></tr>
 <tr class="separator:ae6471eacdfd3ececf729f654d4dad9f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac7db9eb20427230301a0202c44755e5" id="r_aac7db9eb20427230301a0202c44755e5"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__poly__struct_1_1PolymorphicStruct.html#aac7db9eb20427230301a0202c44755e5">get_arr_field</a> (std::string name)</td></tr>
+<tr class="memdesc:aac7db9eb20427230301a0202c44755e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the pointer to a named array field.  <br /></td></tr>
 <tr class="separator:aac7db9eb20427230301a0202c44755e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a9d4a21991e2ee47543216e89d726bc7e" id="r_a9d4a21991e2ee47543216e89d726bc7e"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__poly__struct_1_1PolymorphicStruct.html#a9d4a21991e2ee47543216e89d726bc7e">int_vals</a></td></tr>
+<tr class="memdesc:a9d4a21991e2ee47543216e89d726bc7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map storing integer/primitive field values by name.  <br /></td></tr>
 <tr class="separator:a9d4a21991e2ee47543216e89d726bc7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6cb848456c5e475c50b15ce2e275991" id="r_aa6cb848456c5e475c50b15ce2e275991"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, void * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__poly__struct_1_1PolymorphicStruct.html#aa6cb848456c5e475c50b15ce2e275991">arr_vals</a></td></tr>
+<tr class="memdesc:aa6cb848456c5e475c50b15ce2e275991"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map storing pointers to dynamically allocated array field values by name.  <br /></td></tr>
 <tr class="separator:aa6cb848456c5e475c50b15ce2e275991"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Represents a single instance of a polymorphic structure, storing its field values dynamically. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0b3af990986e78bbed444d03f4685170" name="a0b3af990986e78bbed444d03f4685170"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0b3af990986e78bbed444d03f4685170">&#9670;&#160;</a></span>~PolymorphicStruct()</h2>
 
@@ -154,6 +167,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Destructor: handles the cleanup of dynamically allocated array memory. </p>
 
 </div>
 </div>
@@ -182,6 +196,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Retrieves the pointer to a named array field. </p>
+
 </div>
 </div>
 <a id="a61fd01ea6a91917c9fe547104baedb06" name="a61fd01ea6a91917c9fe547104baedb06"></a>
@@ -207,6 +223,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Retrieves the value of a named integer field. </p>
 
 </div>
 </div>
@@ -234,6 +252,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Checks if a named array field exists. </p>
+
 </div>
 </div>
 <a id="af35ae5aa737e4c60714d48b3600f6e7a" name="af35ae5aa737e4c60714d48b3600f6e7a"></a>
@@ -259,6 +279,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Checks if a named integer field exists. </p>
 
 </div>
 </div>
@@ -296,6 +318,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Sets an integer/primitive field value. </p>
+
 </div>
 </div>
 <a id="a7f69def07f2c148abee71ffef9568089" name="a7f69def07f2c148abee71ffef9568089"></a>
@@ -332,6 +356,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Sets an array field value (takes ownership of the pointer). </p>
+
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -355,6 +381,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Map storing pointers to dynamically allocated array field values by name. </p>
+
 </div>
 </div>
 <a id="a9d4a21991e2ee47543216e89d726bc7e" name="a9d4a21991e2ee47543216e89d726bc7e"></a>
@@ -377,10 +405,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Map storing integer/primitive field values by name. </p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/utils/<a class="el" href="struct__utils_8hpp_source.html">struct_utils.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/utils/<a class="el" href="struct__utils_8hpp_source.html">struct_utils.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

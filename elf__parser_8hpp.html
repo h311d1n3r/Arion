@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Arion: include/arion/platforms/linux/elf_parser.hpp File Reference</title>
+<title>Arion: /home/runner/work/Arion/Arion/include/arion/platforms/linux/elf_parser.hpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -118,14 +118,19 @@ $(document).ready(function(){initNavTree('elf__parser_8hpp.html',''); initResiza
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ELF__COREDUMP__THREAD.html">arion::ELF_COREDUMP_THREAD</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure holding register data for a single thread extracted from an ELF core dump.  <a href="structarion_1_1ELF__COREDUMP__THREAD.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ELF__COREDUMP__ATTRS.html">arion::ELF_COREDUMP_ATTRS</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure holding attributes extracted from an ELF core dump, primarily threads' register states.  <a href="structarion_1_1ELF__COREDUMP__ATTRS.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ELF__PARSER__ATTRIBUTES.html">arion::ELF_PARSER_ATTRIBUTES</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extended attributes structure for the ELF file parser.  <a href="structarion_1_1ELF__PARSER__ATTRIBUTES.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1ElfCoredumpParser.html">arion::ElfCoredumpParser</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper class responsible for parsing the specific NOTE sections of an ELF core dump file.  <a href="classarion_1_1ElfCoredumpParser.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1ElfParser.html">arion::ElfParser</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Primary class for parsing ELF executables, shared objects, or core dumps. Inherits from <a class="el" href="classarion_1_1ExecutableParser.html" title="This class is responsible for extracting specific data from an executable file.">ExecutableParser</a>.  <a href="classarion_1_1ElfParser.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
@@ -145,11 +150,13 @@ Enumerations</h2></td></tr>
 , <a class="el" href="namespacearion.html#aefad64e5619975900515a4731ec98f2eaa06b865ca422e21b63c96b81bb07c2a5">arion::NUM</a>
 <br />
  }</td></tr>
+<tr class="memdesc:aefad64e5619975900515a4731ec98f2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration of possible ELF file types relevant to the Arion emulator.  <a href="namespacearion.html#aefad64e5619975900515a4731ec98f2e">More...</a><br /></td></tr>
 <tr class="separator:aefad64e5619975900515a4731ec98f2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a2b822ae96cec51b4ac10144e13f484b9" id="r_a2b822ae96cec51b4ac10144e13f484b9"><td class="memItemLeft" align="right" valign="top">std::map&lt; LIEF::ELF::Header::FILE_TYPE, <a class="el" href="namespacearion.html#aefad64e5619975900515a4731ec98f2e">ELF_FILE_TYPE</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a2b822ae96cec51b4ac10144e13f484b9">arion::lief_arion_file_types</a></td></tr>
+<tr class="memdesc:a2b822ae96cec51b4ac10144e13f484b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mapping from LIEF's internal ELF file type enumeration to <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a>'s <code>ELF_FILE_TYPE</code>.  <br /></td></tr>
 <tr class="separator:a2b822ae96cec51b4ac10144e13f484b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->

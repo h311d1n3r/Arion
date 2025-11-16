@@ -235,7 +235,7 @@ var searchData=
   ['sys_5fnewuname_232',['sys_newuname',['../namespacearion.html#a6b4d9607ac93c9e93a3d4b6922e368a2',1,'arion']]],
   ['sys_5fopen_233',['sys_open',['../namespacearion.html#ab1839ede3153075c7093ed1f9c89f41e',1,'arion']]],
   ['sys_5fopenat_234',['sys_openat',['../namespacearion.html#acd88d901df73ef975b12d62e28a6441c',1,'arion']]],
-  ['sys_5fparam_235',['SYS_PARAM',['../namespacearion.html#a9b29ca82a25f4b6c7f7efe85abb1d926',1,'arion']]],
+  ['sys_5fparam_235',['SYS_PARAM',['../namespacearion.html#a1b0b9beda4f339ebd4d0597834af40cb',1,'arion']]],
   ['sys_5fparam_5fregs_236',['sys_param_regs',['../structarion_1_1ABI__SYSCALLING__CONVENTION.html#a97bce65cd054b2b004ecb4786b379666',1,'arion::ABI_SYSCALLING_CONVENTION']]],
   ['sys_5fpause_237',['sys_pause',['../namespacearion.html#a6ce28e8ebf5b4648150f8a4d63cb1a3f',1,'arion']]],
   ['sys_5fpoll_238',['sys_poll',['../namespacearion.html#a1fc8e05e861d48da65bceac3c0d36412',1,'arion']]],

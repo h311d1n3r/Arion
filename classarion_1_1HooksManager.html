@@ -107,6 +107,9 @@ $(document).ready(function(){initNavTree('classarion_1_1HooksManager.html',''); 
 </div><!--header-->
 <div class="contents">
 
+<p>This class purpose is to manage user-defined <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> hooks including hook creation, deletion, trigger handling...  
+ <a href="classarion_1_1HooksManager.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="hooks__manager_8hpp_source.html">hooks_manager.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -185,17 +188,24 @@ Private Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ab8f3c3ecaa9d8fa0023bd1d2f578a506" id="r_ab8f3c3ecaa9d8fa0023bd1d2f578a506"><td class="memItemLeft" align="right" valign="top">std::weak_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1HooksManager.html#ab8f3c3ecaa9d8fa0023bd1d2f578a506">arion</a></td></tr>
+<tr class="memdesc:ab8f3c3ecaa9d8fa0023bd1d2f578a506"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this instance.  <br /></td></tr>
 <tr class="separator:ab8f3c3ecaa9d8fa0023bd1d2f578a506"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc17e6dcaa63b5b6694a6c72e138c512" id="r_afc17e6dcaa63b5b6694a6c72e138c512"><td class="memItemLeft" align="right" valign="top">uc_engine *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1HooksManager.html#afc17e6dcaa63b5b6694a6c72e138c512">uc</a></td></tr>
+<tr class="memdesc:afc17e6dcaa63b5b6694a6c72e138c512"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Unicorn engine associated with this instance.  <br /></td></tr>
 <tr class="separator:afc17e6dcaa63b5b6694a6c72e138c512"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4bd0b4a354d5f3ee9b73b86f174fe7a" id="r_af4bd0b4a354d5f3ee9b73b86f174fe7a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#a88f442989871be938f7a07b0ae96f8d3">HOOK_ID</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1HooksManager.html#af4bd0b4a354d5f3ee9b73b86f174fe7a">curr_id</a> = 1</td></tr>
+<tr class="memdesc:af4bd0b4a354d5f3ee9b73b86f174fe7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">ID of the next hook to be created.  <br /></td></tr>
 <tr class="separator:af4bd0b4a354d5f3ee9b73b86f174fe7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa56fd664f037048025dcccb427105f63" id="r_aa56fd664f037048025dcccb427105f63"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacearion.html#a88f442989871be938f7a07b0ae96f8d3">HOOK_ID</a>, std::shared_ptr&lt; <a class="el" href="structarion_1_1ARION__HOOK.html">ARION_HOOK</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1HooksManager.html#aa56fd664f037048025dcccb427105f63">hooks</a></td></tr>
+<tr class="memdesc:aa56fd664f037048025dcccb427105f63"><td class="mdescLeft">&#160;</td><td class="mdescRight">A map identifying an <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> hook given its ID.  <br /></td></tr>
 <tr class="separator:aa56fd664f037048025dcccb427105f63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ac5b7596d2e0c9896c8e478ff01978e" id="r_a5ac5b7596d2e0c9896c8e478ff01978e"><td class="memItemLeft" align="right" valign="top">std::stack&lt; <a class="el" href="namespacearion.html#a88f442989871be938f7a07b0ae96f8d3">HOOK_ID</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1HooksManager.html#a5ac5b7596d2e0c9896c8e478ff01978e">free_hook_ids</a></td></tr>
+<tr class="memdesc:a5ac5b7596d2e0c9896c8e478ff01978e"><td class="mdescLeft">&#160;</td><td class="mdescRight">A stack of hook IDs that got deleted and that can be reused.  <br /></td></tr>
 <tr class="separator:a5ac5b7596d2e0c9896c8e478ff01978e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This class purpose is to manage user-defined <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> hooks including hook creation, deletion, trigger handling... </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a133c9f99cff9b39f9e081c1ace377621" name="a133c9f99cff9b39f9e081c1ace377621"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a133c9f99cff9b39f9e081c1ace377621">&#9670;&#160;</a></span>HooksManager()</h2>
 
@@ -211,6 +221,12 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="classarion_1_1HooksManager.html" title="This class purpose is to manage user-defined Arion hooks including hook creation, deletion,...">HooksManager</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this instance. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -228,6 +244,7 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Destructor for <a class="el" href="classarion_1_1HooksManager.html" title="This class purpose is to manage user-defined Arion hooks including hook creation, deletion,...">HooksManager</a> instances. </p>
 
 </div>
 </div>
@@ -246,6 +263,7 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Deletes all <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> hooks, preventing them from being triggered. </p>
 
 </div>
 </div>
@@ -271,6 +289,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Generates a new hook ID. </p><dl class="section return"><dt>Returns</dt><dd>The new ID. </dd></dl>
 
 </div>
 </div>
@@ -305,6 +324,15 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered when execution reaches a specific address. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Exact memory address where the hook should trigger. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -347,6 +375,15 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Creates a new hook which is not related to the Unicorn engine. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">type</td><td><a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> type for the hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td><a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> callback which gets called when the Unicorn hook is triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -387,6 +424,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered at the start of a new basic block or translation block (TB). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Start memory address where the hook should trigger. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>End memory address where the hook should trigger. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -427,6 +474,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered when code execution reaches a specified address or range. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Start memory address where the hook should trigger. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>End memory address where the hook should trigger. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -467,6 +524,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered when a new control-flow edge (translation block to translation block) is generated. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Start memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>End memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -495,6 +562,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered when a process executes a new program (via execve()). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -523,6 +598,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered when a process forks (via fork(), vfork(), or clone()). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -569,6 +652,17 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered before or after executing a specific instruction. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">insn</td><td>Instruction identifier (architecture-specific). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Start memory address where the hook should trigger. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>End memory address where the hook should trigger. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -609,6 +703,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered when an invalid or unimplemented instruction is encountered. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Start memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>End memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -649,6 +753,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered when an interrupt occurs (e.g., software or hardware interrupt). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Start memory address where the hook should trigger. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>End memory address where the hook should trigger. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -689,6 +803,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered when fetching instructions from valid mapped memory. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Start memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>End memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -729,6 +853,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered when fetching instructions from a protected region. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Start memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>End memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -769,6 +903,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered when fetching instructions from an unmapped region. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Start memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>End memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -809,6 +953,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered on every valid memory read access. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Start memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>End memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -849,6 +1003,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered after a memory read operation completes. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Start memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>End memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -889,6 +1053,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered on a memory read violating protection flags. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Start memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>End memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -929,6 +1103,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered on a memory read from an unmapped region. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Start memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>End memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -969,6 +1153,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered on every valid memory write access. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Start memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>End memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -1009,6 +1203,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered on a memory write violating protection flags. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Start memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>End memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -1049,6 +1253,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered on a memory write to an unmapped region. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Start memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>End memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -1077,6 +1291,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered when a system call is invoked. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -1129,6 +1351,18 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered for each TCG opcode during translation or emulation. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">aux1</td><td>Auxiliary value (architecture-specific argument 1). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">aux2</td><td>Auxiliary value (architecture-specific argument 2). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Start memory address where the hook should trigger. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>End memory address where the hook should trigger. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -1169,6 +1403,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates a new hook that gets triggered when a TLB entry is filled or a translation lookup occurs. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>Callback being called when this hook gets triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Start memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>End memory address range monitored by this hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -1231,6 +1475,24 @@ template&lt;typename... UcParams&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Creates a new hook related to the Unicorn engine, which means every hooks that are defined in Unicorn. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">UcParams</td><td>Additional parameters for genericity purpose. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">type</td><td><a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> type for the hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td><a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> callback which gets called when the Unicorn hook is triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Start memory address where the hook should trigger. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>End memory address where the hook should trigger. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">uc_params</td><td>Additional parameters for the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new hook ID. </dd></dl>
 
 </div>
 </div>
@@ -1257,6 +1519,13 @@ template&lt;typename... UcParams&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Instanciates and initializes new <a class="el" href="classarion_1_1HooksManager.html" title="This class purpose is to manage user-defined Arion hooks including hook creation, deletion,...">HooksManager</a> objects with some parameters. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this instance. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A new <a class="el" href="classarion_1_1HooksManager.html" title="This class purpose is to manage user-defined Arion hooks including hook creation, deletion,...">HooksManager</a> instance. </dd></dl>
 
 </div>
 </div>
@@ -1295,6 +1564,19 @@ template&lt;typename... HookParams&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Triggers all hooks with a given type, which are not related to the Unicorn engine. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">HookParams</td><td>Additional parameters for genericity purpose. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">type</td><td><a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> type for the hooks to be triggered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">params</td><td>Additional parameters for the hooks. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1313,6 +1595,12 @@ template&lt;typename... HookParams&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Deletes an <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> hook, preventing it from being triggered. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">hook_id</td><td>ID of the hook which must get deleted. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1337,6 +1625,8 @@ template&lt;typename... HookParams&gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this instance. </p>
+
 </div>
 </div>
 <a id="af4bd0b4a354d5f3ee9b73b86f174fe7a" name="af4bd0b4a354d5f3ee9b73b86f174fe7a"></a>
@@ -1358,6 +1648,8 @@ template&lt;typename... HookParams&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>ID of the next hook to be created. </p>
 
 </div>
 </div>
@@ -1381,6 +1673,8 @@ template&lt;typename... HookParams&gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>A stack of hook IDs that got deleted and that can be reused. </p>
+
 </div>
 </div>
 <a id="aa56fd664f037048025dcccb427105f63" name="aa56fd664f037048025dcccb427105f63"></a>
@@ -1402,6 +1696,8 @@ template&lt;typename... HookParams&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>A map identifying an <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> hook given its ID. </p>
 
 </div>
 </div>
@@ -1425,10 +1721,12 @@ template&lt;typename... HookParams&gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>The Unicorn engine associated with this instance. </p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/common/<a class="el" href="hooks__manager_8hpp_source.html">hooks_manager.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/common/<a class="el" href="hooks__manager_8hpp_source.html">hooks_manager.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

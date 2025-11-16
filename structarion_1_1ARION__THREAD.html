@@ -105,6 +105,9 @@ $(document).ready(function(){initNavTree('structarion_1_1ARION__THREAD.html','')
 </div><!--header-->
 <div class="contents">
 
+<p>This structure holds data about a UNIX thread.  
+ <a href="structarion_1_1ARION__THREAD.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="threading__manager_8hpp_source.html">threading_manager.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -119,37 +122,53 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:afa62a4f8526a6eaa49c6e1896c926c6b" id="r_afa62a4f8526a6eaa49c6e1896c926c6b"><td class="memItemLeft" align="right" valign="top">pid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__THREAD.html#afa62a4f8526a6eaa49c6e1896c926c6b">tid</a></td></tr>
+<tr class="memdesc:afa62a4f8526a6eaa49c6e1896c926c6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The thread ID (TID) associated with this thread.  <br /></td></tr>
 <tr class="separator:afa62a4f8526a6eaa49c6e1896c926c6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78950b6ae2fe0fa9a25298adbb1071d5" id="r_a78950b6ae2fe0fa9a25298adbb1071d5"><td class="memItemLeft" align="right" valign="top">pid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__THREAD.html#a78950b6ae2fe0fa9a25298adbb1071d5">tgid</a></td></tr>
+<tr class="memdesc:a78950b6ae2fe0fa9a25298adbb1071d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The thread group ID (TGID) associated with this thread.  <br /></td></tr>
 <tr class="separator:a78950b6ae2fe0fa9a25298adbb1071d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfab129ed7d1347c962f0e28605cccb0" id="r_abfab129ed7d1347c962f0e28605cccb0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__THREAD.html#abfab129ed7d1347c962f0e28605cccb0">exit_signal</a></td></tr>
+<tr class="memdesc:abfab129ed7d1347c962f0e28605cccb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The signal to be sent to the parent process when the thread terminates.  <br /></td></tr>
 <tr class="separator:abfab129ed7d1347c962f0e28605cccb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb1a552e71f9fb12d76ace5b5df209ae" id="r_aeb1a552e71f9fb12d76ace5b5df209ae"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__THREAD.html#aeb1a552e71f9fb12d76ace5b5df209ae">flags</a></td></tr>
+<tr class="memdesc:aeb1a552e71f9fb12d76ace5b5df209ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">The clone flags used when the thread was created.  <br /></td></tr>
 <tr class="separator:aeb1a552e71f9fb12d76ace5b5df209ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa328ec1c20e106b4be6b3bcd2ece1337" id="r_aa328ec1c20e106b4be6b3bcd2ece1337"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#a58583bcb70d373fc0444d39a9fd06b59">ADDR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__THREAD.html#aa328ec1c20e106b4be6b3bcd2ece1337">child_cleartid_addr</a></td></tr>
+<tr class="memdesc:aa328ec1c20e106b4be6b3bcd2ece1337"><td class="mdescLeft">&#160;</td><td class="mdescRight">The address of the child_tid variable to be cleared when the thread exits (used with CLONE_CHILD_CLEARTID).  <br /></td></tr>
 <tr class="separator:aa328ec1c20e106b4be6b3bcd2ece1337"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21d2dd0cb5081490de5cfd2562d5ce3e" id="r_a21d2dd0cb5081490de5cfd2562d5ce3e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#a58583bcb70d373fc0444d39a9fd06b59">ADDR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__THREAD.html#a21d2dd0cb5081490de5cfd2562d5ce3e">child_settid_addr</a></td></tr>
+<tr class="memdesc:a21d2dd0cb5081490de5cfd2562d5ce3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The address of the child_tid variable to be set when the thread starts (used with CLONE_CHILD_SETTID).  <br /></td></tr>
 <tr class="separator:a21d2dd0cb5081490de5cfd2562d5ce3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8dbb8f336c7fb9c756edc6dff9e415f7" id="r_a8dbb8f336c7fb9c756edc6dff9e415f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#a58583bcb70d373fc0444d39a9fd06b59">ADDR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__THREAD.html#a8dbb8f336c7fb9c756edc6dff9e415f7">parent_tid_addr</a></td></tr>
 <tr class="separator:a8dbb8f336c7fb9c756edc6dff9e415f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad10051455b3026374d883ea560bb6a9b" id="r_ad10051455b3026374d883ea560bb6a9b"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; std::map&lt; <a class="el" href="namespacearion.html#a1bc7997a0cf279f7e07ce89b9e72e899">REG</a>, <a class="el" href="unionarion_1_1RVAL.html">RVAL</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__THREAD.html#ad10051455b3026374d883ea560bb6a9b">regs_state</a> = nullptr</td></tr>
+<tr class="memdesc:ad10051455b3026374d883ea560bb6a9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The saved register state of the thread, mapping each Unicorn register (REG) to its corresponding value (<a class="el" href="unionarion_1_1RVAL.html" title="Identifies a size-agnostic register value.">RVAL</a>).  <br /></td></tr>
 <tr class="separator:ad10051455b3026374d883ea560bb6a9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f3365fb90b22476b5af07b14a7f9b75" id="r_a6f3365fb90b22476b5af07b14a7f9b75"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#a58583bcb70d373fc0444d39a9fd06b59">ADDR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__THREAD.html#a6f3365fb90b22476b5af07b14a7f9b75">tls_addr</a></td></tr>
+<tr class="memdesc:a6f3365fb90b22476b5af07b14a7f9b75"><td class="mdescLeft">&#160;</td><td class="mdescRight">The address of the thread’s thread-local storage (TLS) block.  <br /></td></tr>
 <tr class="separator:a6f3365fb90b22476b5af07b14a7f9b75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a10c46720a7cec9acf80326ae91d9689a" id="r_a10c46720a7cec9acf80326ae91d9689a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#a58583bcb70d373fc0444d39a9fd06b59">ADDR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__THREAD.html#a10c46720a7cec9acf80326ae91d9689a">wait_status_addr</a> = 0</td></tr>
+<tr class="memdesc:a10c46720a7cec9acf80326ae91d9689a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The address where the thread’s wait status is stored, used for synchronization with other threads.  <br /></td></tr>
 <tr class="separator:a10c46720a7cec9acf80326ae91d9689a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6f18565226bf8ba052307ccf815f22f" id="r_ab6f18565226bf8ba052307ccf815f22f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__THREAD.html#ab6f18565226bf8ba052307ccf815f22f">stopped</a> = false</td></tr>
+<tr class="memdesc:ab6f18565226bf8ba052307ccf815f22f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether the thread is currently stopped.  <br /></td></tr>
 <tr class="separator:ab6f18565226bf8ba052307ccf815f22f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc2766f69d0c3642a9a13287f0e4a268" id="r_abc2766f69d0c3642a9a13287f0e4a268"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#a58583bcb70d373fc0444d39a9fd06b59">ADDR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__THREAD.html#abc2766f69d0c3642a9a13287f0e4a268">robust_list_head</a> = 0</td></tr>
+<tr class="memdesc:abc2766f69d0c3642a9a13287f0e4a268"><td class="mdescLeft">&#160;</td><td class="mdescRight">The head of the robust futex list, used for robust mutex handling by the Linux kernel.  <br /></td></tr>
 <tr class="separator:abc2766f69d0c3642a9a13287f0e4a268"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a4dc2130f0e50317d2ac8ab07750876" id="r_a6a4dc2130f0e50317d2ac8ab07750876"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#a58583bcb70d373fc0444d39a9fd06b59">ADDR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__THREAD.html#a6a4dc2130f0e50317d2ac8ab07750876">rseq_addr</a> = 0</td></tr>
+<tr class="memdesc:a6a4dc2130f0e50317d2ac8ab07750876"><td class="mdescLeft">&#160;</td><td class="mdescRight">The address of the restartable sequences (rseq) structure for this thread.  <br /></td></tr>
 <tr class="separator:a6a4dc2130f0e50317d2ac8ab07750876"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3cfbbc5aee310b6c73843e55769a79de" id="r_a3cfbbc5aee310b6c73843e55769a79de"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__THREAD.html#a3cfbbc5aee310b6c73843e55769a79de">rseq_len</a> = 0</td></tr>
+<tr class="memdesc:a3cfbbc5aee310b6c73843e55769a79de"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of the restartable sequences (rseq) area in bytes.  <br /></td></tr>
 <tr class="separator:a3cfbbc5aee310b6c73843e55769a79de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afbf9faa856170e969ea53e8dc63a60c4" id="r_afbf9faa856170e969ea53e8dc63a60c4"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__THREAD.html#afbf9faa856170e969ea53e8dc63a60c4">rseq_sig</a> = 0</td></tr>
+<tr class="memdesc:afbf9faa856170e969ea53e8dc63a60c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">The signature used to identify aborted restartable sequences.  <br /></td></tr>
 <tr class="separator:afbf9faa856170e969ea53e8dc63a60c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This structure holds data about a UNIX thread. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aba069afd596d7787a341371ff1df4d10" name="aba069afd596d7787a341371ff1df4d10"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aba069afd596d7787a341371ff1df4d10">&#9670;&#160;</a></span>ARION_THREAD() <span class="overload">[1/3]</span></h2>
 
@@ -172,6 +191,7 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="structarion_1_1ARION__THREAD.html" title="This structure holds data about a UNIX thread.">ARION_THREAD</a> instances. </p>
 
 </div>
 </div>
@@ -238,6 +258,18 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="structarion_1_1ARION__THREAD.html" title="This structure holds data about a UNIX thread.">ARION_THREAD</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">exit_signal</td><td>The signal to be sent to the parent process when the thread terminates. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">flags</td><td>The clone flags used when the thread was created. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">child_cleartid_addr</td><td>The address of the child_tid variable to be cleared when the thread exits (used with CLONE_CHILD_CLEARTID). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">child_settid_addr</td><td>The address of the child_tid variable to be set when the thread starts (used with CLONE_CHILD_SETTID). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">parent_tid_addr</td><td>The address in the parent process where the TID of the newly created thread is stored (used with CLONE_PARENT_SETTID). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">regs_state</td><td>The saved register state of the thread, mapping each Unicorn register (REG) to its corresponding value (<a class="el" href="unionarion_1_1RVAL.html" title="Identifies a size-agnostic register value.">RVAL</a>). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">tls_addr</td><td>The address of the thread’s thread-local storage (TLS) block. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -264,6 +296,12 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="structarion_1_1ARION__THREAD.html" title="This structure holds data about a UNIX thread.">ARION_THREAD</a> instances used to clone an <a class="el" href="structarion_1_1ARION__THREAD.html" title="This structure holds data about a UNIX thread.">ARION_THREAD</a> instance. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion_t</td><td>The <a class="el" href="structarion_1_1ARION__THREAD.html" title="This structure holds data about a UNIX thread.">ARION_THREAD</a> instance to be cloned. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -280,6 +318,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The address of the child_tid variable to be cleared when the thread exits (used with CLONE_CHILD_CLEARTID). </p>
+
 </div>
 </div>
 <a id="a21d2dd0cb5081490de5cfd2562d5ce3e" name="a21d2dd0cb5081490de5cfd2562d5ce3e"></a>
@@ -293,6 +333,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>The address of the child_tid variable to be set when the thread starts (used with CLONE_CHILD_SETTID). </p>
 
 </div>
 </div>
@@ -308,6 +350,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The signal to be sent to the parent process when the thread terminates. </p>
+
 </div>
 </div>
 <a id="aeb1a552e71f9fb12d76ace5b5df209ae" name="aeb1a552e71f9fb12d76ace5b5df209ae"></a>
@@ -322,6 +366,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The clone flags used when the thread was created. </p>
+
 </div>
 </div>
 <a id="a8dbb8f336c7fb9c756edc6dff9e415f7" name="a8dbb8f336c7fb9c756edc6dff9e415f7"></a>
@@ -335,6 +381,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>The address in the parent process where the TID of the newly created thread is stored (used with CLONE_PARENT_SETTID). </p>
 
 </div>
 </div>
@@ -350,6 +397,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The saved register state of the thread, mapping each Unicorn register (REG) to its corresponding value (<a class="el" href="unionarion_1_1RVAL.html" title="Identifies a size-agnostic register value.">RVAL</a>). </p>
+
 </div>
 </div>
 <a id="abc2766f69d0c3642a9a13287f0e4a268" name="abc2766f69d0c3642a9a13287f0e4a268"></a>
@@ -363,6 +412,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>The head of the robust futex list, used for robust mutex handling by the Linux kernel. </p>
 
 </div>
 </div>
@@ -378,6 +429,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The address of the restartable sequences (rseq) structure for this thread. </p>
+
 </div>
 </div>
 <a id="a3cfbbc5aee310b6c73843e55769a79de" name="a3cfbbc5aee310b6c73843e55769a79de"></a>
@@ -391,6 +444,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>The size of the restartable sequences (rseq) area in bytes. </p>
 
 </div>
 </div>
@@ -406,6 +461,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The signature used to identify aborted restartable sequences. </p>
+
 </div>
 </div>
 <a id="ab6f18565226bf8ba052307ccf815f22f" name="ab6f18565226bf8ba052307ccf815f22f"></a>
@@ -419,6 +476,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Indicates whether the thread is currently stopped. </p>
 
 </div>
 </div>
@@ -434,6 +493,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The thread group ID (TGID) associated with this thread. </p>
+
 </div>
 </div>
 <a id="afa62a4f8526a6eaa49c6e1896c926c6b" name="afa62a4f8526a6eaa49c6e1896c926c6b"></a>
@@ -447,6 +508,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>The thread ID (TID) associated with this thread. </p>
 
 </div>
 </div>
@@ -462,6 +525,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The address of the thread’s thread-local storage (TLS) block. </p>
+
 </div>
 </div>
 <a id="a10c46720a7cec9acf80326ae91d9689a" name="a10c46720a7cec9acf80326ae91d9689a"></a>
@@ -476,10 +541,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The address where the thread’s wait status is stored, used for synchronization with other threads. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/common/<a class="el" href="threading__manager_8hpp_source.html">threading_manager.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/common/<a class="el" href="threading__manager_8hpp_source.html">threading_manager.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

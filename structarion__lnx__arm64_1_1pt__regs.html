@@ -104,6 +104,9 @@ $(document).ready(function(){initNavTree('structarion__lnx__arm64_1_1pt__regs.ht
 </div><!--header-->
 <div class="contents">
 
+<p>Structure representing the full kernel-internal AArch64 register state.  
+ <a href="structarion__lnx__arm64_1_1pt__regs.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="lnx__arch__arm64_8hpp_source.html">lnx_arch_arm64.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
@@ -111,6 +114,7 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a7ea8001bfb939e5fe734532b9cb96fb7" id="r_a7ea8001bfb939e5fe734532b9cb96fb7"><td class="memItemLeft" >union {&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b1e92b8401f29f6bdd569b9b225d92c" id="r_a5b1e92b8401f29f6bdd569b9b225d92c"><td class="memItemLeft" >&#160;&#160;&#160;struct <a class="el" href="structarion__lnx__arm64_1_1user__pt__regs.html">user_pt_regs</a>&#160;&#160;&#160;<a class="el" href="structarion__lnx__arm64_1_1pt__regs.html#a5e1d5a8386a0c5d39be6f7f938d58fd2">user_regs</a>&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
+<tr class="memdesc:a5b1e92b8401f29f6bdd569b9b225d92c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The standard user register set.  <a href="structarion__lnx__arm64_1_1pt__regs.html#a5e1d5a8386a0c5d39be6f7f938d58fd2">More...</a><br /></td></tr>
 <tr class="separator:a5b1e92b8401f29f6bdd569b9b225d92c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af722fc89bfcfff5d89a3e599e90e82c1" id="r_af722fc89bfcfff5d89a3e599e90e82c1"><td class="memItemLeft" >&#160;&#160;&#160;struct {&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,25 +127,36 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a224db63c55989cbd5aa961b471ec19d7" id="r_a224db63c55989cbd5aa961b471ec19d7"><td class="memItemLeft" >&#160;&#160;&#160;&#160;&#160;&#160;uint64_t&#160;&#160;&#160;<a class="el" href="structarion__lnx__arm64_1_1pt__regs.html#ab9be920cb13c3e7c75718f88fdc1fb89">pstate</a>&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
 <tr class="separator:a224db63c55989cbd5aa961b471ec19d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af722fc89bfcfff5d89a3e599e90e82c1" id="r_af722fc89bfcfff5d89a3e599e90e82c1"><td class="memItemLeft" valign="top">&#160;&#160;&#160;}&#160;</td><td class="memItemRight" valign="bottom">&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
+<tr class="memdesc:af722fc89bfcfff5d89a3e599e90e82c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Anonymous structure for individual register access. <br /></td></tr>
 <tr class="separator:af722fc89bfcfff5d89a3e599e90e82c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ea8001bfb939e5fe734532b9cb96fb7" id="r_a7ea8001bfb939e5fe734532b9cb96fb7"><td class="memItemLeft" valign="top">};&#160;</td><td class="memItemRight" valign="bottom">&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
+<tr class="memdesc:a7ea8001bfb939e5fe734532b9cb96fb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Union to access user registers either as a block or individually. <br /></td></tr>
 <tr class="separator:a7ea8001bfb939e5fe734532b9cb96fb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e62bd07878d85879416dd041d2afae2" id="r_a6e62bd07878d85879416dd041d2afae2"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm64_1_1pt__regs.html#a6e62bd07878d85879416dd041d2afae2">orig_x0</a></td></tr>
+<tr class="memdesc:a6e62bd07878d85879416dd041d2afae2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Original value of X0 before a syscall.  <br /></td></tr>
 <tr class="separator:a6e62bd07878d85879416dd041d2afae2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5478f026b833e37e9dca4e4330c13094" id="r_a5478f026b833e37e9dca4e4330c13094"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm64_1_1pt__regs.html#a5478f026b833e37e9dca4e4330c13094">syscallno</a></td></tr>
+<tr class="memdesc:a5478f026b833e37e9dca4e4330c13094"><td class="mdescLeft">&#160;</td><td class="mdescRight">The system call number.  <br /></td></tr>
 <tr class="separator:a5478f026b833e37e9dca4e4330c13094"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa250aae85f191513f6daf704ed62e482" id="r_aa250aae85f191513f6daf704ed62e482"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm64_1_1pt__regs.html#aa250aae85f191513f6daf704ed62e482">pmr</a></td></tr>
+<tr class="memdesc:aa250aae85f191513f6daf704ed62e482"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performance Monitoring Register (PMR).  <br /></td></tr>
 <tr class="separator:aa250aae85f191513f6daf704ed62e482"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4cb2b6a6618d037c49667f645347a088" id="r_a4cb2b6a6618d037c49667f645347a088"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm64_1_1pt__regs.html#a4cb2b6a6618d037c49667f645347a088">sdei_ttbr1</a></td></tr>
+<tr class="memdesc:a4cb2b6a6618d037c49667f645347a088"><td class="mdescLeft">&#160;</td><td class="mdescRight">Security Device-Enabled Interrupts (SDEI) translation table base register 1.  <br /></td></tr>
 <tr class="separator:a4cb2b6a6618d037c49667f645347a088"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f639f119c75c60dc42ea48bbb0d7e97" id="r_a0f639f119c75c60dc42ea48bbb0d7e97"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structarion__lnx__arm64_1_1frame__record__meta.html">frame_record_meta</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm64_1_1pt__regs.html#a0f639f119c75c60dc42ea48bbb0d7e97">stackframe</a></td></tr>
+<tr class="memdesc:a0f639f119c75c60dc42ea48bbb0d7e97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stack frame metadata.  <br /></td></tr>
 <tr class="separator:a0f639f119c75c60dc42ea48bbb0d7e97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a770ca9f6c66987c325bdc65fb4f0bc03" id="r_a770ca9f6c66987c325bdc65fb4f0bc03"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm64_1_1pt__regs.html#a770ca9f6c66987c325bdc65fb4f0bc03">lockdep_hardirqs</a></td></tr>
+<tr class="memdesc:a770ca9f6c66987c325bdc65fb4f0bc03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lock dependency tracking for hard interrupts.  <br /></td></tr>
 <tr class="separator:a770ca9f6c66987c325bdc65fb4f0bc03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a346e2c67c0a1f3ab3923b9890311dfbd" id="r_a346e2c67c0a1f3ab3923b9890311dfbd"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm64_1_1pt__regs.html#a346e2c67c0a1f3ab3923b9890311dfbd">exit_rcu</a></td></tr>
+<tr class="memdesc:a346e2c67c0a1f3ab3923b9890311dfbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">RCU (Read-Copy-Update) exit counter.  <br /></td></tr>
 <tr class="separator:a346e2c67c0a1f3ab3923b9890311dfbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Structure representing the full kernel-internal AArch64 register state. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a7ea8001bfb939e5fe734532b9cb96fb7" name="a7ea8001bfb939e5fe734532b9cb96fb7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7ea8001bfb939e5fe734532b9cb96fb7">&#9670;&#160;</a></span>[union]</h2>
 
@@ -153,6 +168,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Union to access user registers either as a block or individually. </p>
 
 </div>
 </div>
@@ -168,6 +185,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>RCU (Read-Copy-Update) exit counter. </p>
+
 </div>
 </div>
 <a id="a770ca9f6c66987c325bdc65fb4f0bc03" name="a770ca9f6c66987c325bdc65fb4f0bc03"></a>
@@ -182,6 +201,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Lock dependency tracking for hard interrupts. </p>
+
 </div>
 </div>
 <a id="a6e62bd07878d85879416dd041d2afae2" name="a6e62bd07878d85879416dd041d2afae2"></a>
@@ -195,6 +216,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Original value of X0 before a syscall. </p>
 
 </div>
 </div>
@@ -223,6 +246,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Performance Monitoring Register (PMR). </p>
 
 </div>
 </div>
@@ -266,6 +291,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Security Device-Enabled Interrupts (SDEI) translation table base register 1. </p>
+
 </div>
 </div>
 <a id="a33cc48dd396990d1e20926d6af9c2e6b" name="a33cc48dd396990d1e20926d6af9c2e6b"></a>
@@ -294,6 +321,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Stack frame metadata. </p>
+
 </div>
 </div>
 <a id="a5478f026b833e37e9dca4e4330c13094" name="a5478f026b833e37e9dca4e4330c13094"></a>
@@ -307,6 +336,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>The system call number. </p>
 
 </div>
 </div>
@@ -322,10 +353,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The standard user register set. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/platforms/linux/archs/<a class="el" href="lnx__arch__arm64_8hpp_source.html">lnx_arch_arm64.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/platforms/linux/archs/<a class="el" href="lnx__arch__arm64_8hpp_source.html">lnx_arch_arm64.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

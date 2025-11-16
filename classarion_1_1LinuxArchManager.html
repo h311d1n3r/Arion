@@ -105,6 +105,9 @@ $(document).ready(function(){initNavTree('classarion_1_1LinuxArchManager.html','
 </div><!--header-->
 <div class="contents">
 
+<p>Abstract base class for managing Linux architecture-specific details, particularly for core dump parsing.  
+ <a href="classarion_1_1LinuxArchManager.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="lnx__arch__manager_8hpp_source.html">lnx_arch_manager.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for arion::LinuxArchManager:</div>
@@ -112,10 +115,10 @@ Inheritance diagram for arion::LinuxArchManager:</div>
  <div class="center">
   <img src="classarion_1_1LinuxArchManager.png" usemap="#arion::LinuxArchManager_map" alt=""/>
   <map id="arion::LinuxArchManager_map" name="arion::LinuxArchManager_map">
-<area href="classarion__lnx__arm64_1_1ArchManagerLinuxARM64.html" alt="arion_lnx_arm64::ArchManagerLinuxARM64" shape="rect" coords="0,56,264,80"/>
-<area href="classarion__lnx__arm_1_1ArchManagerLinuxARM.html" alt="arion_lnx_arm::ArchManagerLinuxARM" shape="rect" coords="274,56,538,80"/>
-<area href="classarion__lnx__x86_1_1ArchManagerLinuxX86.html" alt="arion_lnx_x86::ArchManagerLinuxX86" shape="rect" coords="548,56,812,80"/>
-<area href="classarion__lnx__x86__64_1_1ArchManagerLinuxX8664.html" alt="arion_lnx_x86_64::ArchManagerLinuxX8664" shape="rect" coords="822,56,1086,80"/>
+<area href="classarion__lnx__arm64_1_1ArchManagerLinuxARM64.html" title="Linux AArch64 architecture manager class for Arion." alt="arion_lnx_arm64::ArchManagerLinuxARM64" shape="rect" coords="0,56,264,80"/>
+<area href="classarion__lnx__arm_1_1ArchManagerLinuxARM.html" title="Linux ARM architecture manager class for Arion." alt="arion_lnx_arm::ArchManagerLinuxARM" shape="rect" coords="274,56,538,80"/>
+<area href="classarion__lnx__x86_1_1ArchManagerLinuxX86.html" title="Linux x86 architecture manager class for Arion." alt="arion_lnx_x86::ArchManagerLinuxX86" shape="rect" coords="548,56,812,80"/>
+<area href="classarion__lnx__x86__64_1_1ArchManagerLinuxX8664.html" title="Linux x86-64 architecture manager class for Arion." alt="arion_lnx_x86_64::ArchManagerLinuxX8664" shape="rect" coords="822,56,1086,80"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -131,7 +134,9 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:aa649cf18bae4c0ff9f9c221f25f770d7" id="r_aa649cf18bae4c0ff9f9c221f25f770d7"><td class="memItemLeft" align="right" valign="top">virtual std::map&lt; <a class="el" href="namespacearion.html#a1bc7997a0cf279f7e07ce89b9e72e899">REG</a>, <a class="el" href="unionarion_1_1RVAL.html">RVAL</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1LinuxArchManager.html#aa649cf18bae4c0ff9f9c221f25f770d7">fpregset_to_regs</a> (std::vector&lt; <a class="el" href="namespacearion.html#a7903048e93fdb36816a483e988c7408e">BYTE</a> &gt; fpregset)=0</td></tr>
 <tr class="separator:aa649cf18bae4c0ff9f9c221f25f770d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Abstract base class for managing Linux architecture-specific details, particularly for core dump parsing. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="aa649cf18bae4c0ff9f9c221f25f770d7" name="aa649cf18bae4c0ff9f9c221f25f770d7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa649cf18bae4c0ff9f9c221f25f770d7">&#9670;&#160;</a></span>fpregset_to_regs()</h2>
 
@@ -155,6 +160,13 @@ Private Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>**(Pure Virtual)** Converts the raw floating-point register data (<code>fpregset</code>) from an ELF core dump into <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a>'s unified register map. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">fpregset</td><td>Raw byte vector containing the architecture-specific <code>fpregset</code> structure. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A map of <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> universal register IDs to their values (<code><a class="el" href="unionarion_1_1RVAL.html" title="Identifies a size-agnostic register value.">arion::RVAL</a></code>). </dd></dl>
 
 </div>
 </div>
@@ -189,6 +201,15 @@ Private Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Parses the raw register data of a single core dump thread using the architecture-specific conversion methods. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>Shared pointer to the main <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">thread</td><td>Unique pointer to the raw ELF thread data (<code><a class="el" href="structarion_1_1ELF__COREDUMP__THREAD.html" title="Structure holding register data for a single thread extracted from an ELF core dump.">ELF_COREDUMP_THREAD</a></code>). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">prog_parser</td><td>Shared pointer to the ELF parser for context. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A unique pointer to the fully parsed register data for the thread (<code><a class="el" href="structarion_1_1PARSED__COREDUMP__THREAD.html" title="Structure holding the fully parsed register state for a thread retrieved from a core dump.">PARSED_COREDUMP_THREAD</a></code>). </dd></dl>
 
 </div>
 </div>
@@ -215,11 +236,18 @@ Private Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>**(Pure Virtual)** Converts the raw <code>prstatus</code> register data from an ELF core dump into <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a>'s unified register map. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">prstatus</td><td>Raw byte vector containing the architecture-specific <code>prstatus</code> structure. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A map of <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> universal register IDs to their values (<code><a class="el" href="unionarion_1_1RVAL.html" title="Identifies a size-agnostic register value.">arion::RVAL</a></code>). </dd></dl>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/platforms/linux/<a class="el" href="lnx__arch__manager_8hpp_source.html">lnx_arch_manager.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/platforms/linux/<a class="el" href="lnx__arch__manager_8hpp_source.html">lnx_arch_manager.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

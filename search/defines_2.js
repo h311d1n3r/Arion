@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['c_0',['C',['../md5_8hpp.html#ac4cf4b2ab929bd23951a8676eeac086b',1,'md5.hpp']]],
-  ['common_5ftype_5fpriority_1',['COMMON_TYPE_PRIORITY',['../type__utils_8hpp.html#a1c5f6554f615cefd1dcf4b4465394beb',1,'type_utils.hpp']]]
+  ['heap_5fperms_0',['HEAP_PERMS',['../elf__loader_8hpp.html#a09f12b8f335b4d229b15eea0d670026d',1,'elf_loader.hpp']]],
+  ['heap_5fsz_1',['HEAP_SZ',['../elf__loader_8hpp.html#a22eb9f043e11047a75e8ea6ef2489fb3',1,'elf_loader.hpp']]]
 ];

@@ -58,14 +58,13 @@ var searchData=
   ['message_55',['message',['../classarion__exception_1_1ArionException.html#af8c584e148394590f556eafdaa115716',1,'arion_exception::ArionException']]],
   ['misc_5fsyscalls_2ehpp_56',['misc_syscalls.hpp',['../misc__syscalls_8hpp.html',1,'']]],
   ['mmap_5fflag_5ftype_57',['MMAP_FLAG_TYPE',['../namespacearion__lnx__type.html#a672e1369b9c8cfe7843f2fd6f069c6b5',1,'arion_lnx_type']]],
-  ['mmap_5fmin_5faddr_58',['MMAP_MIN_ADDR',['../mem__syscalls_8hpp.html#af172bee06633330e1418d6305228b76b',1,'mem_syscalls.hpp']]],
-  ['mmapflagtype_59',['mmapflagtype',['../classarion__lnx__type_1_1MmapFlagType.html',1,'arion_lnx_type::MmapFlagType'],['../classarion__lnx__type_1_1MmapFlagType.html#ad75eb86ebf0f331ba29bbc877d6f080a',1,'arion_lnx_type::MmapFlagType::MmapFlagType()']]],
-  ['mod_5fid_60',['mod_id',['../structarion_1_1TRACE__MODULE.html#a60c591f045b375cab1eacc5714d175b2',1,'arion::TRACE_MODULE::mod_id'],['../structarion_1_1CODE__HIT.html#ab263ad78c7ea473b40b55216b835f386',1,'arion::CODE_HIT::mod_id']]],
-  ['mod_5fname_61',['mod_name',['../structarion_1_1ANALYSIS__HIT.html#ad3e7a3d02386893f574a654d87e78cf2',1,'arion::ANALYSIS_HIT']]],
-  ['mod_5fsec_5foff_62',['mod_sec_off',['../classarion_1_1CodeTracer.html#ad011e3836e2c5c8eb4c7585e28ec3be5',1,'arion::CodeTracer::mod_sec_off'],['../classarion_1_1CodeTraceReader.html#a6998fc11b7fe67ba278a461f3f3a0289',1,'arion::CodeTraceReader::mod_sec_off']]],
-  ['mode_63',['mode',['../classarion_1_1CodeTracer.html#ae7978fbeead4b205ec3cb6715e2c4ced',1,'arion::CodeTracer::mode'],['../structarion_1_1ARION__FILE.html#ace3624dbb995b1084a43747460d2b10a',1,'arion::ARION_FILE::mode'],['../classarion_1_1CodeTraceReader.html#aa75e4dfce50c8cc632006949a8de3827',1,'arion::CodeTraceReader::mode']]],
-  ['modules_64',['modules',['../classarion_1_1CodeTraceReader.html#a14932902da92181e669693bcc9311e88',1,'arion::CodeTraceReader']]],
-  ['multipleprpsinfonotesexception_65',['multipleprpsinfonotesexception',['../classarion__exception_1_1MultiplePrPsInfoNotesException.html',1,'arion_exception::MultiplePrPsInfoNotesException'],['../classarion__exception_1_1MultiplePrPsInfoNotesException.html#ab41e21e4f12b41044de7f0b8979f8941',1,'arion_exception::MultiplePrPsInfoNotesException::MultiplePrPsInfoNotesException()']]],
-  ['mxcsr_66',['mxcsr',['../structarion__lnx__x86__64_1_1user__i387__struct.html#aabefe66319ad731dee61a3a23ee3fb5c',1,'arion_lnx_x86_64::user_i387_struct']]],
-  ['mxcsr_5fmask_67',['mxcsr_mask',['../structarion__lnx__x86__64_1_1user__i387__struct.html#a5d67b155b651f78eb8034c5518dd865e',1,'arion_lnx_x86_64::user_i387_struct']]]
+  ['mmapflagtype_58',['mmapflagtype',['../classarion__lnx__type_1_1MmapFlagType.html',1,'arion_lnx_type::MmapFlagType'],['../classarion__lnx__type_1_1MmapFlagType.html#ad75eb86ebf0f331ba29bbc877d6f080a',1,'arion_lnx_type::MmapFlagType::MmapFlagType()']]],
+  ['mod_5fid_59',['mod_id',['../structarion_1_1CODE__HIT.html#ab263ad78c7ea473b40b55216b835f386',1,'arion::CODE_HIT::mod_id'],['../structarion_1_1TRACE__MODULE.html#a60c591f045b375cab1eacc5714d175b2',1,'arion::TRACE_MODULE::mod_id']]],
+  ['mod_5fname_60',['mod_name',['../structarion_1_1ANALYSIS__HIT.html#ad3e7a3d02386893f574a654d87e78cf2',1,'arion::ANALYSIS_HIT']]],
+  ['mod_5fsec_5foff_61',['mod_sec_off',['../classarion_1_1CodeTracer.html#ad011e3836e2c5c8eb4c7585e28ec3be5',1,'arion::CodeTracer::mod_sec_off'],['../classarion_1_1CodeTraceReader.html#a6998fc11b7fe67ba278a461f3f3a0289',1,'arion::CodeTraceReader::mod_sec_off']]],
+  ['mode_62',['mode',['../classarion_1_1CodeTracer.html#ae7978fbeead4b205ec3cb6715e2c4ced',1,'arion::CodeTracer::mode'],['../structarion_1_1ARION__FILE.html#ace3624dbb995b1084a43747460d2b10a',1,'arion::ARION_FILE::mode'],['../classarion_1_1CodeTraceReader.html#aa75e4dfce50c8cc632006949a8de3827',1,'arion::CodeTraceReader::mode']]],
+  ['modules_63',['modules',['../classarion_1_1CodeTraceReader.html#a14932902da92181e669693bcc9311e88',1,'arion::CodeTraceReader']]],
+  ['multipleprpsinfonotesexception_64',['multipleprpsinfonotesexception',['../classarion__exception_1_1MultiplePrPsInfoNotesException.html',1,'arion_exception::MultiplePrPsInfoNotesException'],['../classarion__exception_1_1MultiplePrPsInfoNotesException.html#ab41e21e4f12b41044de7f0b8979f8941',1,'arion_exception::MultiplePrPsInfoNotesException::MultiplePrPsInfoNotesException()']]],
+  ['mxcsr_65',['mxcsr',['../structarion__lnx__x86__64_1_1user__i387__struct.html#aabefe66319ad731dee61a3a23ee3fb5c',1,'arion_lnx_x86_64::user_i387_struct']]],
+  ['mxcsr_5fmask_66',['mxcsr_mask',['../structarion__lnx__x86__64_1_1user__i387__struct.html#a5d67b155b651f78eb8034c5518dd865e',1,'arion_lnx_x86_64::user_i387_struct']]]
 ];

@@ -3,7 +3,7 @@ var searchData=
   ['debug_0',['debug',['../classarion_1_1Logger.html#a82ea85bdb672c0c89303fce32489236e',1,'arion::Logger']]],
   ['demangle_5fcxx_5fsymbol_1',['demangle_cxx_symbol',['../namespacearion.html#a9902a02e30f63fc96dd98a2430370631',1,'arion']]],
   ['deserialize_5farion_5ffile_2',['deserialize_arion_file',['../namespacearion.html#af66ac0cbc6bdd997f5b87b8245d99f06',1,'arion']]],
-  ['deserialize_5farion_5ffutex_3',['deserialize_arion_futex',['../namespacearion.html#ad217ee37dbc73da31ceb7e7d3258f016',1,'arion']]],
+  ['deserialize_5farion_5ffutex_3',['deserialize_arion_futex',['../namespacearion.html#a77a82d38dda47b62ed4e6a747b9a216c',1,'arion']]],
   ['deserialize_5farion_5fmapping_4',['deserialize_arion_mapping',['../namespacearion.html#ac091dea1ac74a222b16382937613dbd3',1,'arion']]],
   ['deserialize_5farion_5fsocket_5',['deserialize_arion_socket',['../namespacearion.html#af0d182bc731aa8f82250dc1e9a281bd0',1,'arion']]],
   ['deserialize_5farion_5fthread_6',['deserialize_arion_thread',['../namespacearion.html#a70ebaaa2f4ae0f3d540e84e923b88b9c',1,'arion']]],

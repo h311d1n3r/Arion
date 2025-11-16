@@ -130,14 +130,18 @@ Static Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a2b9c5a4905bccef454d4d140741ac7e9" id="r_a2b9c5a4905bccef454d4d140741ac7e9"><td class="memItemLeft" align="right" valign="top">std::map&lt; int, std::shared_ptr&lt; <a class="el" href="structarion_1_1ARION__SOCKET.html">ARION_SOCKET</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1SocketManager.html#a2b9c5a4905bccef454d4d140741ac7e9">sockets</a></td></tr>
+<tr class="memdesc:a2b9c5a4905bccef454d4d140741ac7e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">A map identifying a socket given its UNIX file descriptor.  <br /></td></tr>
 <tr class="separator:a2b9c5a4905bccef454d4d140741ac7e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:aaaf33ecb330dab83ed64f5557ddd69f3" id="r_aaaf33ecb330dab83ed64f5557ddd69f3"><td class="memItemLeft" align="right" valign="top">std::weak_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1SocketManager.html#aaaf33ecb330dab83ed64f5557ddd69f3">arion</a></td></tr>
+<tr class="memdesc:aaaf33ecb330dab83ed64f5557ddd69f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated to this instance.  <br /></td></tr>
 <tr class="separator:aaaf33ecb330dab83ed64f5557ddd69f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This class handles socket-related operations. It maintains a mapping of file descriptors to their respective <a class="el" href="structarion_1_1ARION__SOCKET.html" title="This structure holds data about a UNIX socket.">ARION_SOCKET</a> instances. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a2947f53174fdff2e39f6a7dba41d0740" name="a2947f53174fdff2e39f6a7dba41d0740"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2947f53174fdff2e39f6a7dba41d0740">&#9670;&#160;</a></span>SocketManager()</h2>
 
@@ -161,6 +165,12 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="classarion_1_1SocketManager.html">SocketManager</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated to this instance. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -190,6 +200,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Inserts a new socket to the "sockets" vector. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">target_fd</td><td>The UNIX file descriptor for the new socket, in the emulation context. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">socket</td><td>The new socket to be inserted. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -208,6 +225,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Retrieves an <a class="el" href="structarion_1_1ARION__SOCKET.html" title="This structure holds data about a UNIX socket.">ARION_SOCKET</a> instance from a UNIX file descriptor from the emulation context. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">target_fd</td><td>The UNIX file descriptor. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The retrieved <a class="el" href="structarion_1_1ARION__SOCKET.html" title="This structure holds data about a UNIX socket.">ARION_SOCKET</a>. </dd></dl>
 
 </div>
 </div>
@@ -226,6 +250,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Checks whether the "sockets" vector contains a given file descriptor. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">target_fd</td><td>The UNIX socket descriptor. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the "sockets" vector contains the file descriptor. </dd></dl>
 
 </div>
 </div>
@@ -252,6 +283,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Instanciates and initializes new <a class="el" href="classarion_1_1SocketManager.html">SocketManager</a> objects with some parameters. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance used for emulation. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A new <a class="el" href="classarion_1_1SocketManager.html">SocketManager</a> instance. </dd></dl>
 
 </div>
 </div>
@@ -270,6 +308,12 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Removes a file entry from the "sockets" vector. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">target_fd</td><td>The UNIX file descriptor of the socket to be removed. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -294,6 +338,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated to this instance. </p>
+
 </div>
 </div>
 <a id="a2b9c5a4905bccef454d4d140741ac7e9" name="a2b9c5a4905bccef454d4d140741ac7e9"></a>
@@ -308,10 +354,12 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>A map identifying a socket given its UNIX file descriptor. </p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/common/<a class="el" href="socket__manager_8hpp_source.html">socket_manager.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/common/<a class="el" href="socket__manager_8hpp_source.html">socket_manager.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

@@ -105,6 +105,9 @@ $(document).ready(function(){initNavTree('structarion_1_1ARM__TRAP.html',''); in
 </div><!--header-->
 <div class="contents">
 
+<p>Structure representing a kernel trap entry for the 32-bit ARM architecture.  
+ <a href="structarion_1_1ARM__TRAP.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="elf__loader_8hpp_source.html">elf_loader.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -115,13 +118,18 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ae7b4b0d62aff0605737bf866cc4ada1b" id="r_ae7b4b0d62aff0605737bf866cc4ada1b"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARM__TRAP.html#ae7b4b0d62aff0605737bf866cc4ada1b">name</a></td></tr>
+<tr class="memdesc:ae7b4b0d62aff0605737bf866cc4ada1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of the trap function (e.g., syscall).  <br /></td></tr>
 <tr class="separator:ae7b4b0d62aff0605737bf866cc4ada1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aefb3a75502583d7869814916e518083f" id="r_aefb3a75502583d7869814916e518083f"><td class="memItemLeft" align="right" valign="top">off_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARM__TRAP.html#aefb3a75502583d7869814916e518083f">off</a></td></tr>
+<tr class="memdesc:aefb3a75502583d7869814916e518083f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset within the ARM traps page.  <br /></td></tr>
 <tr class="separator:aefb3a75502583d7869814916e518083f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a74314a271e5a8a4eb063873a96bbea74" id="r_a74314a271e5a8a4eb063873a96bbea74"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacearion.html#a7903048e93fdb36816a483e988c7408e">BYTE</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARM__TRAP.html#a74314a271e5a8a4eb063873a96bbea74">code</a></td></tr>
+<tr class="memdesc:a74314a271e5a8a4eb063873a96bbea74"><td class="mdescLeft">&#160;</td><td class="mdescRight">The actual machine code bytes of the trap.  <br /></td></tr>
 <tr class="separator:a74314a271e5a8a4eb063873a96bbea74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Structure representing a kernel trap entry for the 32-bit ARM architecture. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a388710f0ac9455703bb1d736c10b47ea" name="a388710f0ac9455703bb1d736c10b47ea"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a388710f0ac9455703bb1d736c10b47ea">&#9670;&#160;</a></span>ARM_TRAP()</h2>
 
@@ -161,6 +169,14 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="structarion_1_1ARM__TRAP.html" title="Structure representing a kernel trap entry for the 32-bit ARM architecture.">ARM_TRAP</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>Name of the trap function. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">off</td><td>Offset within the traps page. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">code</td><td>The code bytes. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -177,6 +193,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The actual machine code bytes of the trap. </p>
+
 </div>
 </div>
 <a id="ae7b4b0d62aff0605737bf866cc4ada1b" name="ae7b4b0d62aff0605737bf866cc4ada1b"></a>
@@ -190,6 +208,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Name of the trap function (e.g., syscall). </p>
 
 </div>
 </div>
@@ -205,10 +225,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Offset within the ARM traps page. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/platforms/linux/<a class="el" href="elf__loader_8hpp_source.html">elf_loader.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/platforms/linux/<a class="el" href="elf__loader_8hpp_source.html">elf_loader.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

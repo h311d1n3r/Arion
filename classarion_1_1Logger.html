@@ -109,6 +109,9 @@ $(document).ready(function(){initNavTree('classarion_1_1Logger.html',''); initRe
 </div><!--header-->
 <div class="contents">
 
+<p>This class is responsible for managing logging in the <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> emulation framework.  
+ <a href="classarion_1_1Logger.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="logger_8hpp_source.html">logger.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -145,31 +148,42 @@ Private Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
 <tr class="memitem:aa2c79ca9302a92a3fccaec4015700fe9" id="r_aa2c79ca9302a92a3fccaec4015700fe9"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1Logger.html#aa2c79ca9302a92a3fccaec4015700fe9">gen_next_id</a> ()</td></tr>
+<tr class="memdesc:aa2c79ca9302a92a3fccaec4015700fe9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates the next free logger ID.  <br /></td></tr>
 <tr class="separator:aa2c79ca9302a92a3fccaec4015700fe9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a52d3f47ad55173f96dca832d0d0fc7df" id="r_a52d3f47ad55173f96dca832d0d0fc7df"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1Logger.html#a52d3f47ad55173f96dca832d0d0fc7df">id</a></td></tr>
+<tr class="memdesc:a52d3f47ad55173f96dca832d0d0fc7df"><td class="mdescLeft">&#160;</td><td class="mdescRight">The unique identifier for this logger instance.  <br /></td></tr>
 <tr class="separator:a52d3f47ad55173f96dca832d0d0fc7df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a349162c5e675d748dff8a78809cc0f5b" id="r_a349162c5e675d748dff8a78809cc0f5b"><td class="memItemLeft" align="right" valign="top">pid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1Logger.html#a349162c5e675d748dff8a78809cc0f5b">curr_pid</a></td></tr>
+<tr class="memdesc:a349162c5e675d748dff8a78809cc0f5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The process ID of the current process.  <br /></td></tr>
 <tr class="separator:a349162c5e675d748dff8a78809cc0f5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65fd910bf0ed67c4679fc3c406829c8f" id="r_a65fd910bf0ed67c4679fc3c406829c8f"><td class="memItemLeft" align="right" valign="top">pid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1Logger.html#a65fd910bf0ed67c4679fc3c406829c8f">curr_tid</a></td></tr>
+<tr class="memdesc:a65fd910bf0ed67c4679fc3c406829c8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The thread ID of the current thread.  <br /></td></tr>
 <tr class="separator:a65fd910bf0ed67c4679fc3c406829c8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11c20a5c87739a99227b9e4e6f5b687c" id="r_a11c20a5c87739a99227b9e4e6f5b687c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#a82c0b542baf93dc9b2fcc00f19aa4572">LOG_LEVEL</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1Logger.html#a11c20a5c87739a99227b9e4e6f5b687c">log_lvl</a></td></tr>
+<tr class="memdesc:a11c20a5c87739a99227b9e4e6f5b687c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current log level.  <br /></td></tr>
 <tr class="separator:a11c20a5c87739a99227b9e4e6f5b687c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f614f2741106b92d5710cca77e7710b" id="r_a8f614f2741106b92d5710cca77e7710b"><td class="memItemLeft" align="right" valign="top">std::weak_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1Logger.html#a8f614f2741106b92d5710cca77e7710b">arion</a></td></tr>
+<tr class="memdesc:a8f614f2741106b92d5710cca77e7710b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated to this instance.  <br /></td></tr>
 <tr class="separator:a8f614f2741106b92d5710cca77e7710b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9860e3ee5d2d1625c2c5da24f29857da" id="r_a9860e3ee5d2d1625c2c5da24f29857da"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; void &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1Logger.html#a9860e3ee5d2d1625c2c5da24f29857da">logger</a></td></tr>
+<tr class="memdesc:a9860e3ee5d2d1625c2c5da24f29857da"><td class="mdescLeft">&#160;</td><td class="mdescRight">The spdlog logger instance.  <br /></td></tr>
 <tr class="separator:a9860e3ee5d2d1625c2c5da24f29857da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
 <tr class="memitem:a7b6712303019759b2a5a807e014145f9" id="r_a7b6712303019759b2a5a807e014145f9"><td class="memItemLeft" align="right" valign="top">static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1Logger.html#a7b6712303019759b2a5a807e014145f9">curr_id</a></td></tr>
+<tr class="memdesc:a7b6712303019759b2a5a807e014145f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The unique identifier for this logger instance.  <br /></td></tr>
 <tr class="separator:a7b6712303019759b2a5a807e014145f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4353bb4e7679c183c14f6c7ee8f5433" id="r_ad4353bb4e7679c183c14f6c7ee8f5433"><td class="memItemLeft" align="right" valign="top">static std::stack&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1Logger.html#ad4353bb4e7679c183c14f6c7ee8f5433">free_logger_ids</a></td></tr>
+<tr class="memdesc:ad4353bb4e7679c183c14f6c7ee8f5433"><td class="mdescLeft">&#160;</td><td class="mdescRight">A stack of free logger IDs that can be reused.  <br /></td></tr>
 <tr class="separator:ad4353bb4e7679c183c14f6c7ee8f5433"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This class is responsible for managing logging in the <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> emulation framework. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a53be2dbcab589580c72a1bcbfb76f284" name="a53be2dbcab589580c72a1bcbfb76f284"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a53be2dbcab589580c72a1bcbfb76f284">&#9670;&#160;</a></span>Logger()</h2>
 
@@ -185,6 +199,12 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="classarion_1_1Logger.html" title="This class is responsible for managing logging in the Arion emulation framework.">Logger</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this instance. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -204,6 +224,12 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Logs a critical message. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The message to log. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -222,6 +248,12 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Logs a debug message. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The message to log. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -240,6 +272,12 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Logs an error message. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The message to log. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -266,6 +304,8 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Generates the next free logger ID. </p>
+
 </div>
 </div>
 <a id="a5d97c3f10149e7df3f0ce2b246350049" name="a5d97c3f10149e7df3f0ce2b246350049"></a>
@@ -282,6 +322,7 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Retrieves the current log level. </p><dl class="section return"><dt>Returns</dt><dd>The current log level. </dd></dl>
 
 </div>
 </div>
@@ -300,6 +341,12 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Logs an info message. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The message to log. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -336,6 +383,14 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Instanciates and initializes new <a class="el" href="classarion_1_1Logger.html" title="This class is responsible for managing logging in the Arion emulation framework.">Logger</a> objects with some parameters. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lvl</td><td>The initial log level. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A new <a class="el" href="classarion_1_1Logger.html" title="This class is responsible for managing logging in the Arion emulation framework.">Logger</a> instance. </dd></dl>
 
 </div>
 </div>
@@ -362,6 +417,12 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Refreshes the log prefix if needed. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">force</td><td>True if the prefix should be reloaded in all cases. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -380,6 +441,12 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Defines the log level. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">lvl</td><td>The new log level. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -398,6 +465,12 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Logs a trace message. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The message to log. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -416,6 +489,12 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Logs a warning message. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The message to log. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -440,6 +519,8 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated to this instance. </p>
+
 </div>
 </div>
 <a id="a7b6712303019759b2a5a807e014145f9" name="a7b6712303019759b2a5a807e014145f9"></a>
@@ -461,6 +542,8 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>The unique identifier for this logger instance. </p>
 
 </div>
 </div>
@@ -484,6 +567,8 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>The process ID of the current process. </p>
+
 </div>
 </div>
 <a id="a65fd910bf0ed67c4679fc3c406829c8f" name="a65fd910bf0ed67c4679fc3c406829c8f"></a>
@@ -505,6 +590,8 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>The thread ID of the current thread. </p>
 
 </div>
 </div>
@@ -528,6 +615,8 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>A stack of free logger IDs that can be reused. </p>
+
 </div>
 </div>
 <a id="a52d3f47ad55173f96dca832d0d0fc7df" name="a52d3f47ad55173f96dca832d0d0fc7df"></a>
@@ -549,6 +638,8 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>The unique identifier for this logger instance. </p>
 
 </div>
 </div>
@@ -572,6 +663,8 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>The current log level. </p>
+
 </div>
 </div>
 <a id="a9860e3ee5d2d1625c2c5da24f29857da" name="a9860e3ee5d2d1625c2c5da24f29857da"></a>
@@ -594,10 +687,12 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>The spdlog logger instance. </p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/common/<a class="el" href="logger_8hpp_source.html">logger.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/common/<a class="el" href="logger_8hpp_source.html">logger.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

@@ -106,6 +106,9 @@ $(document).ready(function(){initNavTree('classarion__type_1_1KernelType.html','
 </div><!--header-->
 <div class="contents">
 
+<p>Abstract base class for all kernel-related data types used for visualization/logging.  
+ <a href="classarion__type_1_1KernelType.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="type__utils_8hpp_source.html">type_utils.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for arion_type::KernelType:</div>
@@ -120,22 +123,23 @@ Inheritance diagram for arion_type::KernelType:</div>
 <area href="classarion__poly__struct_1_1ArionStructType.html" alt="arion_poly_struct::ArionStructType&lt; struct stat &gt;" shape="rect" coords="354,280,698,304"/>
 <area href="classarion__poly__struct_1_1ArionStructType.html" alt="arion_poly_struct::ArionStructType&lt; struct statx &gt;" shape="rect" coords="354,336,698,360"/>
 <area href="classarion__poly__struct_1_1ArionStructType.html" alt="arion_poly_struct::ArionStructType&lt; struct timespec &gt;" shape="rect" coords="354,392,698,416"/>
-<area href="classarion__lnx__type_1_1ErrCodeType.html" alt="arion_lnx_type::ErrCodeType" shape="rect" coords="354,448,698,472"/>
-<area href="classarion__lnx__type_1_1FileDescriptorType.html" alt="arion_lnx_type::FileDescriptorType" shape="rect" coords="354,504,698,528"/>
-<area href="classarion__lnx__type_1_1In6AddrTType.html" alt="arion_lnx_type::In6AddrTType" shape="rect" coords="354,560,698,584"/>
-<area href="classarion__lnx__type_1_1InAddrTType.html" alt="arion_lnx_type::InAddrTType" shape="rect" coords="354,616,698,640"/>
-<area href="classarion__lnx__type_1_1ProtFlagType.html" alt="arion_lnx_type::ProtFlagType" shape="rect" coords="354,672,698,696"/>
+<area href="classarion__lnx__type_1_1ErrCodeType.html" title="Type used for syscall return error codes (negative values)." alt="arion_lnx_type::ErrCodeType" shape="rect" coords="354,448,698,472"/>
+<area href="classarion__lnx__type_1_1FileDescriptorType.html" title="Type used for file descriptor values." alt="arion_lnx_type::FileDescriptorType" shape="rect" coords="354,504,698,528"/>
+<area href="classarion__lnx__type_1_1In6AddrTType.html" title="Type used for 128-bit IPv6 address values (in6_addr_t)." alt="arion_lnx_type::In6AddrTType" shape="rect" coords="354,560,698,584"/>
+<area href="classarion__lnx__type_1_1InAddrTType.html" title="Type used for 32-bit IPv4 address values (in_addr_t)." alt="arion_lnx_type::InAddrTType" shape="rect" coords="354,616,698,640"/>
+<area href="classarion__lnx__type_1_1ProtFlagType.html" title="Type representing the memory protection flags for mmap/mprotect (PROT_READ, PROT_WRITE,..." alt="arion_lnx_type::ProtFlagType" shape="rect" coords="354,672,698,696"/>
 <area href="classarion__poly__struct_1_1ArionStructType.html" alt="arion_poly_struct::ArionStructType&lt; T &gt;" shape="rect" coords="354,728,698,752"/>
 <area href="classarion__poly__struct_1_1ArionVariableStructType.html" alt="arion_poly_struct::ArionVariableStructType" shape="rect" coords="354,784,698,808"/>
-<area href="classarion__type_1_1FlagType.html" alt="arion_type::FlagType" shape="rect" coords="354,840,698,864"/>
-<area href="classarion__type_1_1IntType.html" alt="arion_type::IntType" shape="rect" coords="354,896,698,920"/>
-<area href="classarion__type_1_1RawStringType.html" alt="arion_type::RawStringType" shape="rect" coords="354,952,698,976"/>
+<area href="classarion__type_1_1FlagType.html" title="Class for data types represented as a set of bit flags or discrete symbolic constants." alt="arion_type::FlagType" shape="rect" coords="354,840,698,864"/>
+<area href="classarion__type_1_1IntType.html" title="Concrete type representing a generic integer value." alt="arion_type::IntType" shape="rect" coords="354,896,698,920"/>
+<area href="classarion__type_1_1RawStringType.html" title="Concrete type representing a memory address pointing to a null-terminated string." alt="arion_type::RawStringType" shape="rect" coords="354,952,698,976"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aefebe31453ef42b38144e7d997193258" id="r_aefebe31453ef42b38144e7d997193258"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__type_1_1KernelType.html#aefebe31453ef42b38144e7d997193258">~KernelType</a> ()=default</td></tr>
+<tr class="memdesc:aefebe31453ef42b38144e7d997193258"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual destructor to allow polymorphic deletion.  <br /></td></tr>
 <tr class="separator:aefebe31453ef42b38144e7d997193258"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3bde54f1596ace75b753bf521f3a5b9" id="r_ad3bde54f1596ace75b753bf521f3a5b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#a83cb12d3bd9a71f0fe5be4663e199f7f">arion::LOG_COLOR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__type_1_1KernelType.html#ad3bde54f1596ace75b753bf521f3a5b9">get_color</a> ()</td></tr>
 <tr class="separator:ad3bde54f1596ace75b753bf521f3a5b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,11 +154,15 @@ Protected Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a2fff6a5a269d6981740d8f7558f3f82d" id="r_a2fff6a5a269d6981740d8f7558f3f82d"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__type_1_1KernelType.html#a2fff6a5a269d6981740d8f7558f3f82d">name</a></td></tr>
+<tr class="memdesc:a2fff6a5a269d6981740d8f7558f3f82d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Display name of the data type (e.g., "File descriptor").  <br /></td></tr>
 <tr class="separator:a2fff6a5a269d6981740d8f7558f3f82d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12f0dba7b3e26bee95941109e2ec2efc" id="r_a12f0dba7b3e26bee95941109e2ec2efc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#a83cb12d3bd9a71f0fe5be4663e199f7f">arion::LOG_COLOR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__type_1_1KernelType.html#a12f0dba7b3e26bee95941109e2ec2efc">color</a></td></tr>
+<tr class="memdesc:a12f0dba7b3e26bee95941109e2ec2efc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The log color associated with this data type for display.  <br /></td></tr>
 <tr class="separator:a12f0dba7b3e26bee95941109e2ec2efc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Abstract base class for all kernel-related data types used for visualization/logging. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="abf3b64ca0b08e059c10e2d57ecf16a27" name="abf3b64ca0b08e059c10e2d57ecf16a27"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abf3b64ca0b08e059c10e2d57ecf16a27">&#9670;&#160;</a></span>KernelType()</h2>
 
@@ -188,6 +196,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="classarion__type_1_1KernelType.html" title="Abstract base class for all kernel-related data types used for visualization/logging.">KernelType</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>The display name of the type. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">color</td><td>The associated log color. Default is <code><a class="el" href="namespacearion.html#a83cb12d3bd9a71f0fe5be4663e199f7faf5ff195629c7211d17cbfe18ebec1c05" title="Default foreground color.">arion::LOG_COLOR::DEFAULT</a></code>. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -214,6 +229,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Virtual destructor to allow polymorphic deletion. </p>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -231,6 +248,7 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Retrieves the color associated with this type. </p><dl class="section return"><dt>Returns</dt><dd>The <code><a class="el" href="namespacearion.html#a83cb12d3bd9a71f0fe5be4663e199f7f" title="These colors can be used for logging.">arion::LOG_COLOR</a></code> enum value. </dd></dl>
 
 </div>
 </div>
@@ -267,6 +285,14 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Converts a raw 64-bit value into a formatted string representation based on the type's semantics. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>Shared pointer to the main Arion instance (needed for memory access/context). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">val</td><td>The raw 64-bit value to interpret. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The formatted string representation. </dd></dl>
 
 <p>Reimplemented in <a class="el" href="classarion__lnx__type_1_1ErrCodeType.html#aca90e69df6cc051a5166829a900bfdaf">arion_lnx_type::ErrCodeType</a>, <a class="el" href="classarion__lnx__type_1_1FileDescriptorType.html#a458cc7b719e195467530294834aecae7">arion_lnx_type::FileDescriptorType</a>, <a class="el" href="classarion__lnx__type_1_1InAddrTType.html#aa92dc0d80accba15530bca99bd662f5f">arion_lnx_type::InAddrTType</a>, <a class="el" href="classarion__lnx__type_1_1In6AddrTType.html#a989f5ce84d5c2d620ca2f7df99ee294f">arion_lnx_type::In6AddrTType</a>, <a class="el" href="classarion__lnx__type_1_1ProtFlagType.html#ad739e8a4ed9a8c50a53b7f8a75b89eef">arion_lnx_type::ProtFlagType</a>, <a class="el" href="classarion__lnx__type_1_1StructSockaddrUnType.html#a78fdfa84e445590402a03842ad9fa627">arion_lnx_type::StructSockaddrUnType</a>, <a class="el" href="classarion__poly__struct_1_1ArionStructType.html#ae3dc0a837601bc2bf6585d467b71501b">arion_poly_struct::ArionStructType&lt; T &gt;</a>, <a class="el" href="classarion__poly__struct_1_1ArionStructType.html#ae3dc0a837601bc2bf6585d467b71501b">arion_poly_struct::ArionStructType&lt; struct clone_args &gt;</a>, <a class="el" href="classarion__poly__struct_1_1ArionStructType.html#ae3dc0a837601bc2bf6585d467b71501b">arion_poly_struct::ArionStructType&lt; struct sockaddr_in &gt;</a>, <a class="el" href="classarion__poly__struct_1_1ArionStructType.html#ae3dc0a837601bc2bf6585d467b71501b">arion_poly_struct::ArionStructType&lt; struct sockaddr_in6 &gt;</a>, <a class="el" href="classarion__poly__struct_1_1ArionStructType.html#ae3dc0a837601bc2bf6585d467b71501b">arion_poly_struct::ArionStructType&lt; struct sockaddr_un &gt;</a>, <a class="el" href="classarion__poly__struct_1_1ArionStructType.html#ae3dc0a837601bc2bf6585d467b71501b">arion_poly_struct::ArionStructType&lt; struct stat &gt;</a>, <a class="el" href="classarion__poly__struct_1_1ArionStructType.html#ae3dc0a837601bc2bf6585d467b71501b">arion_poly_struct::ArionStructType&lt; struct statx &gt;</a>, <a class="el" href="classarion__poly__struct_1_1ArionStructType.html#ae3dc0a837601bc2bf6585d467b71501b">arion_poly_struct::ArionStructType&lt; struct timespec &gt;</a>, <a class="el" href="classarion__poly__struct_1_1ArionVariableStructType.html#a1a66e1c80d4ba0dc45d9f958fe28aa73">arion_poly_struct::ArionVariableStructType</a>, <a class="el" href="classarion__type_1_1FlagType.html#ad4d158e76deac0c183300da5b1715c7f">arion_type::FlagType</a>, and <a class="el" href="classarion__type_1_1RawStringType.html#aa9eebdaa0595a3d40d12e3a9b85a2b3e">arion_type::RawStringType</a>.</p>
 
@@ -293,6 +319,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>The log color associated with this data type for display. </p>
+
 </div>
 </div>
 <a id="a2fff6a5a269d6981740d8f7558f3f82d" name="a2fff6a5a269d6981740d8f7558f3f82d"></a>
@@ -315,10 +343,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Display name of the data type (e.g., "File descriptor"). </p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/utils/<a class="el" href="type__utils_8hpp_source.html">type_utils.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/utils/<a class="el" href="type__utils_8hpp_source.html">type_utils.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

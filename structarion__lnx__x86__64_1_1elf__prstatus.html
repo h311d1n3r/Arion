@@ -104,18 +104,26 @@ $(document).ready(function(){initNavTree('structarion__lnx__x86__64_1_1elf__prst
 </div><!--header-->
 <div class="contents">
 
+<p>Structure for a process status ELF note (NT_PRSTATUS) for x86-64, containing general registers.  
+ <a href="structarion__lnx__x86__64_1_1elf__prstatus.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="lnx__arch__x86-64_8hpp_source.html">lnx_arch_x86-64.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a025280032f6d17f7062856f02c730a22" id="r_a025280032f6d17f7062856f02c730a22"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structarion__lnx__type_1_1elf__prstatus__common.html">arion_lnx_type::elf_prstatus_common</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__x86__64_1_1elf__prstatus.html#a025280032f6d17f7062856f02c730a22">common</a></td></tr>
+<tr class="memdesc:a025280032f6d17f7062856f02c730a22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Common process status fields (pid, signal info, etc.).  <br /></td></tr>
 <tr class="separator:a025280032f6d17f7062856f02c730a22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad077f33ef1651ba8a0952dfcf652813" id="r_aad077f33ef1651ba8a0952dfcf652813"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion__lnx__x86__64.html#aabd61010c046d5a262392dee2cfac47b">elf_gregset_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__x86__64_1_1elf__prstatus.html#aad077f33ef1651ba8a0952dfcf652813">pr_reg</a></td></tr>
+<tr class="memdesc:aad077f33ef1651ba8a0952dfcf652813"><td class="mdescLeft">&#160;</td><td class="mdescRight">The general-purpose registers captured.  <br /></td></tr>
 <tr class="separator:aad077f33ef1651ba8a0952dfcf652813"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4a37b06d2c7a102d5618f91614fdc48" id="r_af4a37b06d2c7a102d5618f91614fdc48"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__x86__64_1_1elf__prstatus.html#af4a37b06d2c7a102d5618f91614fdc48">pr_fpvalid</a></td></tr>
+<tr class="memdesc:af4a37b06d2c7a102d5618f91614fdc48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating whether floating-point registers are valid.  <br /></td></tr>
 <tr class="separator:af4a37b06d2c7a102d5618f91614fdc48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Structure for a process status ELF note (NT_PRSTATUS) for x86-64, containing general registers. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a025280032f6d17f7062856f02c730a22" name="a025280032f6d17f7062856f02c730a22"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a025280032f6d17f7062856f02c730a22">&#9670;&#160;</a></span>common</h2>
 
@@ -127,6 +135,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Common process status fields (pid, signal info, etc.). </p>
 
 </div>
 </div>
@@ -142,6 +152,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Flag indicating whether floating-point registers are valid. </p>
+
 </div>
 </div>
 <a id="aad077f33ef1651ba8a0952dfcf652813" name="aad077f33ef1651ba8a0952dfcf652813"></a>
@@ -156,10 +168,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The general-purpose registers captured. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/platforms/linux/archs/<a class="el" href="lnx__arch__x86-64_8hpp_source.html">lnx_arch_x86-64.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/platforms/linux/archs/<a class="el" href="lnx__arch__x86-64_8hpp_source.html">lnx_arch_x86-64.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

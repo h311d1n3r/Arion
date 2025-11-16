@@ -107,6 +107,9 @@ $(document).ready(function(){initNavTree('classarion_1_1ElfLoader.html',''); ini
 </div><!--header-->
 <div class="contents">
 
+<p>A Linux loader implementation responsible for parsing and mapping ELF binaries (executables and dynamic loaders).  
+ <a href="classarion_1_1ElfLoader.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="elf__loader_8hpp_source.html">elf_loader.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for arion::ElfLoader:</div>
@@ -114,7 +117,7 @@ Inheritance diagram for arion::ElfLoader:</div>
  <div class="center">
   <img src="classarion_1_1ElfLoader.png" usemap="#arion::ElfLoader_map" alt=""/>
   <map id="arion::ElfLoader_map" name="arion::ElfLoader_map">
-<area href="classarion_1_1LinuxLoader.html" alt="arion::LinuxLoader" shape="rect" coords="0,0,117,24"/>
+<area href="classarion_1_1LinuxLoader.html" title="Abstract base class for Linux-specific executable loading and setup routines." alt="arion::LinuxLoader" shape="rect" coords="0,0,117,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -158,22 +161,30 @@ Private Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:aafe1453ea7fdab1a32968b0ac54dfe13" id="r_aafe1453ea7fdab1a32968b0ac54dfe13"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classarion_1_1ElfParser.html">ElfParser</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1ElfLoader.html#aafe1453ea7fdab1a32968b0ac54dfe13">prog_parser</a></td></tr>
+<tr class="memdesc:aafe1453ea7fdab1a32968b0ac54dfe13"><td class="mdescLeft">&#160;</td><td class="mdescRight">ELF parser for the program interpreter (dynamic linker).  <br /></td></tr>
 <tr class="separator:aafe1453ea7fdab1a32968b0ac54dfe13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1870b83d795c22e54f3a687717fbfe28" id="r_a1870b83d795c22e54f3a687717fbfe28"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classarion_1_1ElfParser.html">ElfParser</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1ElfLoader.html#a1870b83d795c22e54f3a687717fbfe28">interp_parser</a></td></tr>
 <tr class="separator:a1870b83d795c22e54f3a687717fbfe28"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff0eccaa2f588779dbdf0652cd006a09" id="r_aff0eccaa2f588779dbdf0652cd006a09"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1ElfLoader.html#aff0eccaa2f588779dbdf0652cd006a09">is_pie</a></td></tr>
+<tr class="memdesc:aff0eccaa2f588779dbdf0652cd006a09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating if the program is Position-Independent Executable (PIE).  <br /></td></tr>
 <tr class="separator:aff0eccaa2f588779dbdf0652cd006a09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2d6d39bc05e3e3183547392c685ee4a" id="r_aa2d6d39bc05e3e3183547392c685ee4a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1ElfLoader.html#aa2d6d39bc05e3e3183547392c685ee4a">is_static</a></td></tr>
+<tr class="memdesc:aa2d6d39bc05e3e3183547392c685ee4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating if the program is statically linked.  <br /></td></tr>
 <tr class="separator:aa2d6d39bc05e3e3183547392c685ee4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_attribs_classarion_1_1LinuxLoader"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classarion_1_1LinuxLoader')"><img src="closed.png" alt="-"/>&#160;Private Attributes inherited from <a class="el" href="classarion_1_1LinuxLoader.html">arion::LinuxLoader</a></td></tr>
 <tr class="memitem:a82fefe752286fc1560f19f82fe6df97e inherit pub_attribs_classarion_1_1LinuxLoader" id="r_a82fefe752286fc1560f19f82fe6df97e"><td class="memItemLeft" align="right" valign="top">std::weak_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1LinuxLoader.html#a82fefe752286fc1560f19f82fe6df97e">arion</a></td></tr>
+<tr class="memdesc:a82fefe752286fc1560f19f82fe6df97e inherit pub_attribs_classarion_1_1LinuxLoader"><td class="mdescLeft">&#160;</td><td class="mdescRight">Weak pointer back to the main <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance.  <br /></td></tr>
 <tr class="separator:a82fefe752286fc1560f19f82fe6df97e inherit pub_attribs_classarion_1_1LinuxLoader"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c6813354c8bf34df376d6f278110bd3 inherit pub_attribs_classarion_1_1LinuxLoader" id="r_a5c6813354c8bf34df376d6f278110bd3"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1LinuxLoader.html#a5c6813354c8bf34df376d6f278110bd3">program_args</a></td></tr>
+<tr class="memdesc:a5c6813354c8bf34df376d6f278110bd3 inherit pub_attribs_classarion_1_1LinuxLoader"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of command-line arguments.  <br /></td></tr>
 <tr class="separator:a5c6813354c8bf34df376d6f278110bd3 inherit pub_attribs_classarion_1_1LinuxLoader"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f99c77c90bdfe135cd0b387a824020d inherit pub_attribs_classarion_1_1LinuxLoader" id="r_a1f99c77c90bdfe135cd0b387a824020d"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1LinuxLoader.html#a1f99c77c90bdfe135cd0b387a824020d">program_env</a></td></tr>
+<tr class="memdesc:a1f99c77c90bdfe135cd0b387a824020d inherit pub_attribs_classarion_1_1LinuxLoader"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of environment variables.  <br /></td></tr>
 <tr class="separator:a1f99c77c90bdfe135cd0b387a824020d inherit pub_attribs_classarion_1_1LinuxLoader"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A Linux loader implementation responsible for parsing and mapping ELF binaries (executables and dynamic loaders). </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a64bd50be69f7d6ebfb55c0a499007546" name="a64bd50be69f7d6ebfb55c0a499007546"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a64bd50be69f7d6ebfb55c0a499007546">&#9670;&#160;</a></span>ElfLoader() <span class="overload">[1/2]</span></h2>
 
@@ -225,6 +236,16 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for a dynamically linked <a class="el" href="classarion_1_1ElfLoader.html" title="A Linux loader implementation responsible for parsing and mapping ELF binaries (executables and dynam...">ElfLoader</a> instance. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>Weak pointer to the <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> emulator instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">interp_parser</td><td>ELF parser for the dynamic linker. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">prog_parser</td><td>ELF parser for the main program. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">program_args</td><td>Vector of command-line arguments. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">program_env</td><td>Vector of environment variables. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -273,6 +294,15 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for a statically linked <a class="el" href="classarion_1_1ElfLoader.html" title="A Linux loader implementation responsible for parsing and mapping ELF binaries (executables and dynam...">ElfLoader</a> instance. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>Weak pointer to the <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> emulator instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">prog_parser</td><td>ELF parser for the main program. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">program_args</td><td>Vector of command-line arguments. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">program_env</td><td>Vector of environment variables. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -299,6 +329,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Initializes thread synchronization structures related to coredumps. </p>
 
 </div>
 </div>
@@ -324,6 +355,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Maps the 32-bit ARM kernel trap page into memory. </p><dl class="section return"><dt>Returns</dt><dd>The base virtual address of the ARM traps page. </dd></dl>
 
 </div>
 </div>
@@ -360,6 +392,14 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Maps the loadable segments of an ELF binary into the emulator's memory space. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">parser</td><td>The ELF parser instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">load_addr</td><td>The base virtual address to load the segments at. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The actual base address where the ELF segments were loaded. </dd></dl>
 
 </div>
 </div>
@@ -385,6 +425,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Maps the kernel's Virtual Dynamic Shared Object (VDSO) page into memory. </p><dl class="section return"><dt>Returns</dt><dd>The base virtual address of the VDSO page. </dd></dl>
 
 </div>
 </div>
@@ -410,6 +451,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Maps the kernel's Virtual Syscall (VSYSCALL) page into memory. </p><dl class="section return"><dt>Returns</dt><dd>The base virtual address of the VSYSCALL page. </dd></dl>
 
 </div>
 </div>
@@ -435,6 +477,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Maps the kernel's Virtual Variable (VVAR) page into memory. </p><dl class="section return"><dt>Returns</dt><dd>The base virtual address of the VVAR page. </dd></dl>
 
 </div>
 </div>
@@ -460,6 +503,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Processes the ELF binary loading, mapping segments, setting up the stack, and finalizing the loader parameters. </p><dl class="section return"><dt>Returns</dt><dd>A unique pointer to the finalized loader parameters (<code><a class="el" href="structarion_1_1LNX__LOADER__PARAMS.html" title="Structure holding the key load addresses of the emulated process.">LNX_LOADER_PARAMS</a></code>). </dd></dl>
 
 <p>Implements <a class="el" href="classarion_1_1LinuxLoader.html#a2207aab4b02a2e1a631455757a073a05">arion::LinuxLoader</a>.</p>
 
@@ -498,6 +542,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Sets up architecture-specific Auxiliary Vector (AUXV) entries before execution starts. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">params</td><td>Shared pointer to the loader parameters structure. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">arch_sz</td><td>The size of the architecture (32 or 64 bit). </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p>Implements <a class="el" href="classarion_1_1LinuxLoader.html#a18a7769f6e4016ea78dd82a0b9d2abc4">arion::LinuxLoader</a>.</p>
 
@@ -546,6 +597,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Flag indicating if the program is Position-Independent Executable (PIE). </p>
+
 </div>
 </div>
 <a id="aa2d6d39bc05e3e3183547392c685ee4a" name="aa2d6d39bc05e3e3183547392c685ee4a"></a>
@@ -567,6 +620,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Flag indicating if the program is statically linked. </p>
 
 </div>
 </div>
@@ -590,10 +645,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>ELF parser for the program interpreter (dynamic linker). </p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/platforms/linux/<a class="el" href="elf__loader_8hpp_source.html">elf_loader.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/platforms/linux/<a class="el" href="elf__loader_8hpp_source.html">elf_loader.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

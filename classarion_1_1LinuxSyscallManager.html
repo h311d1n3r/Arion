@@ -107,6 +107,9 @@ $(document).ready(function(){initNavTree('classarion_1_1LinuxSyscallManager.html
 </div><!--header-->
 <div class="contents">
 
+<p>Manages the emulation and dispatching of Linux system calls.  
+ <a href="classarion_1_1LinuxSyscallManager.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="lnx__syscall__manager_8hpp_source.html">lnx_syscall_manager.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -134,21 +137,25 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a167e29ceb047fc806c12f464fc830e2d" id="r_a167e29ceb047fc806c12f464fc830e2d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1LinuxSyscallManager.html#a167e29ceb047fc806c12f464fc830e2d">add_syscall_entry</a> (std::string name, std::shared_ptr&lt; <a class="el" href="structarion_1_1SYSCALL__FUNC.html">SYSCALL_FUNC</a> &gt; func)</td></tr>
 <tr class="separator:a167e29ceb047fc806c12f464fc830e2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25b2a66bdf102468c482d824af9d3a4a" id="r_a25b2a66bdf102468c482d824af9d3a4a"><td class="memTemplParams" colspan="2">template&lt;typename... SignatureArgs&gt; </td></tr>
-<tr class="memitem:a25b2a66bdf102468c482d824af9d3a4a"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="structarion_1_1SYSCALL__FUNC.html">SYSCALL_FUNC</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classarion_1_1LinuxSyscallManager.html#a25b2a66bdf102468c482d824af9d3a4a">make_sys_func</a> (std::function&lt; uint64_t(std::shared_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt; <a class="el" href="classarion_1_1LinuxSyscallManager.html#ae5ca0ed5f30b66af8e07de9b52628290">arion</a>, std::vector&lt; <a class="el" href="namespacearion.html#a9b29ca82a25f4b6c7f7efe85abb1d926">SYS_PARAM</a> &gt; params, bool &amp;cancel)&gt; func, SignatureArgs &amp;&amp;...signature)</td></tr>
+<tr class="memitem:a25b2a66bdf102468c482d824af9d3a4a"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="structarion_1_1SYSCALL__FUNC.html">SYSCALL_FUNC</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classarion_1_1LinuxSyscallManager.html#a25b2a66bdf102468c482d824af9d3a4a">make_sys_func</a> (std::function&lt; uint64_t(std::shared_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt; <a class="el" href="classarion_1_1LinuxSyscallManager.html#ae5ca0ed5f30b66af8e07de9b52628290">arion</a>, std::vector&lt; <a class="el" href="namespacearion.html#a1b0b9beda4f339ebd4d0597834af40cb">SYS_PARAM</a> &gt; params, bool &amp;cancel)&gt; func, SignatureArgs &amp;&amp;...signature)</td></tr>
 <tr class="separator:a25b2a66bdf102468c482d824af9d3a4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a188ed1bd47debac7f591e10f6a79836d" id="r_a188ed1bd47debac7f591e10f6a79836d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1LinuxSyscallManager.html#a188ed1bd47debac7f591e10f6a79836d">init_syscall_funcs</a> ()</td></tr>
 <tr class="separator:a188ed1bd47debac7f591e10f6a79836d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf35b5100c1e9c66cfb1378e484a74bd" id="r_aaf35b5100c1e9c66cfb1378e484a74bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1LinuxSyscallManager.html#aaf35b5100c1e9c66cfb1378e484a74bd">print_syscall</a> (std::shared_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt; <a class="el" href="classarion_1_1LinuxSyscallManager.html#ae5ca0ed5f30b66af8e07de9b52628290">arion</a>, std::string sys_name, std::vector&lt; std::shared_ptr&lt; <a class="el" href="classarion__type_1_1KernelType.html">arion_type::KernelType</a> &gt; &gt; signature, std::vector&lt; <a class="el" href="namespacearion.html#a9b29ca82a25f4b6c7f7efe85abb1d926">SYS_PARAM</a> &gt; func_params, uint64_t syscall_ret)</td></tr>
+<tr class="memitem:aaf35b5100c1e9c66cfb1378e484a74bd" id="r_aaf35b5100c1e9c66cfb1378e484a74bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1LinuxSyscallManager.html#aaf35b5100c1e9c66cfb1378e484a74bd">print_syscall</a> (std::shared_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt; <a class="el" href="classarion_1_1LinuxSyscallManager.html#ae5ca0ed5f30b66af8e07de9b52628290">arion</a>, std::string sys_name, std::vector&lt; std::shared_ptr&lt; <a class="el" href="classarion__type_1_1KernelType.html">arion_type::KernelType</a> &gt; &gt; signature, std::vector&lt; <a class="el" href="namespacearion.html#a1b0b9beda4f339ebd4d0597834af40cb">SYS_PARAM</a> &gt; func_params, uint64_t syscall_ret)</td></tr>
 <tr class="separator:aaf35b5100c1e9c66cfb1378e484a74bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ae5ca0ed5f30b66af8e07de9b52628290" id="r_ae5ca0ed5f30b66af8e07de9b52628290"><td class="memItemLeft" align="right" valign="top">std::weak_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1LinuxSyscallManager.html#ae5ca0ed5f30b66af8e07de9b52628290">arion</a></td></tr>
+<tr class="memdesc:ae5ca0ed5f30b66af8e07de9b52628290"><td class="mdescLeft">&#160;</td><td class="mdescRight">Weak pointer to the main <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance.  <br /></td></tr>
 <tr class="separator:ae5ca0ed5f30b66af8e07de9b52628290"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e55e5c4725486b8a448a4a3d8e8d3b8" id="r_a1e55e5c4725486b8a448a4a3d8e8d3b8"><td class="memItemLeft" align="right" valign="top">std::map&lt; uint64_t, std::shared_ptr&lt; <a class="el" href="structarion_1_1SYSCALL__FUNC.html">SYSCALL_FUNC</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1LinuxSyscallManager.html#a1e55e5c4725486b8a448a4a3d8e8d3b8">syscall_funcs</a></td></tr>
+<tr class="memdesc:a1e55e5c4725486b8a448a4a3d8e8d3b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map linking the numeric syscall number (<code>sysno</code>) to its emulation function and signature.  <br /></td></tr>
 <tr class="separator:a1e55e5c4725486b8a448a4a3d8e8d3b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Manages the emulation and dispatching of Linux system calls. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ae261b97c2c9c3091e6984f2c6deaa049" name="ae261b97c2c9c3091e6984f2c6deaa049"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae261b97c2c9c3091e6984f2c6deaa049">&#9670;&#160;</a></span>LinuxSyscallManager()</h2>
 
@@ -164,6 +171,12 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="classarion_1_1LinuxSyscallManager.html" title="Manages the emulation and dispatching of Linux system calls.">LinuxSyscallManager</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>Weak pointer to the main <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -201,6 +214,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Adds an entry to the internal <code>syscall_funcs</code> map, looking up the numeric syscall number by its name. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>The string name of the syscall (e.g., "sys_read"). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">func</td><td>Shared pointer to the syscall function and signature structure. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -219,6 +239,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Retrieves the syscall emulation function structure based on its string name. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>The string name of the syscall. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Shared pointer to the found <code><a class="el" href="structarion_1_1SYSCALL__FUNC.html" title="Structure defining a system call function and its parameter signature for logging/analysis.">SYSCALL_FUNC</a></code>, or <code>nullptr</code> if not found. </dd></dl>
 
 </div>
 </div>
@@ -237,6 +264,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Retrieves the syscall emulation function structure based on its numeric syscall number. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">sysno</td><td>The numeric syscall number. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Shared pointer to the found <code><a class="el" href="structarion_1_1SYSCALL__FUNC.html" title="Structure defining a system call function and its parameter signature for logging/analysis.">SYSCALL_FUNC</a></code>, or <code>nullptr</code> if not found. </dd></dl>
 
 </div>
 </div>
@@ -262,6 +296,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Populates the <code>syscall_funcs</code> map by initializing all known syscall emulation functions. </p>
 
 </div>
 </div>
@@ -288,6 +323,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Static method to create and initialize a new <code><a class="el" href="classarion_1_1LinuxSyscallManager.html" title="Manages the emulation and dispatching of Linux system calls.">LinuxSyscallManager</a></code> instance. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>Weak pointer to the main <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A unique pointer to the initialized manager. </dd></dl>
 
 </div>
 </div>
@@ -305,7 +347,7 @@ template&lt;typename... SignatureArgs&gt; </div>
         <tr>
           <td class="memname">std::shared_ptr&lt; <a class="el" href="structarion_1_1SYSCALL__FUNC.html">SYSCALL_FUNC</a> &gt; arion::LinuxSyscallManager::make_sys_func </td>
           <td>(</td>
-          <td class="paramtype">std::function&lt; uint64_t(std::shared_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt; <a class="el" href="classarion_1_1LinuxSyscallManager.html#ae5ca0ed5f30b66af8e07de9b52628290">arion</a>, std::vector&lt; <a class="el" href="namespacearion.html#a9b29ca82a25f4b6c7f7efe85abb1d926">SYS_PARAM</a> &gt; params, bool &amp;cancel)&gt;&#160;</td>
+          <td class="paramtype">std::function&lt; uint64_t(std::shared_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt; <a class="el" href="classarion_1_1LinuxSyscallManager.html#ae5ca0ed5f30b66af8e07de9b52628290">arion</a>, std::vector&lt; <a class="el" href="namespacearion.html#a1b0b9beda4f339ebd4d0597834af40cb">SYS_PARAM</a> &gt; params, bool &amp;cancel)&gt;&#160;</td>
           <td class="paramname"><em>func</em>, </td>
         </tr>
         <tr>
@@ -326,6 +368,20 @@ template&lt;typename... SignatureArgs&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Template helper function to easily create a shared pointer to a <code><a class="el" href="structarion_1_1SYSCALL__FUNC.html" title="Structure defining a system call function and its parameter signature for logging/analysis.">SYSCALL_FUNC</a></code> instance, converting a variadic list of <code>KernelType</code> arguments into the signature vector. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">SignatureArgs</td><td>Types of the kernel types making up the signature. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">func</td><td>The system call emulation function. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">signature</td><td>The <code>KernelType</code> objects defining the return type and parameter types. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A shared pointer to the new <code><a class="el" href="structarion_1_1SYSCALL__FUNC.html" title="Structure defining a system call function and its parameter signature for logging/analysis.">SYSCALL_FUNC</a></code> structure. </dd></dl>
 
 </div>
 </div>
@@ -359,7 +415,7 @@ template&lt;typename... SignatureArgs&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="namespacearion.html#a9b29ca82a25f4b6c7f7efe85abb1d926">SYS_PARAM</a> &gt;&#160;</td>
+          <td class="paramtype">std::vector&lt; <a class="el" href="namespacearion.html#a1b0b9beda4f339ebd4d0597834af40cb">SYS_PARAM</a> &gt;&#160;</td>
           <td class="paramname"><em>func_params</em>, </td>
         </tr>
         <tr>
@@ -380,6 +436,16 @@ template&lt;typename... SignatureArgs&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Logs the executed syscall, formatting parameters and return value based on the syscall's signature. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>Shared pointer to the <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">sys_name</td><td>The string name of the syscall. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">signature</td><td>The type signature of the syscall. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">func_params</td><td>The actual raw parameter values passed to the syscall. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">syscall_ret</td><td>The raw return value of the syscall. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -398,6 +464,12 @@ template&lt;typename... SignatureArgs&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Main entry point for syscall handling: reads registers, looks up the function, executes the handler, and writes the return value. Also handles logic for syscall hooks and canceling/deferring execution based on the <code>cancel</code> boolean. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>Shared pointer to the <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -426,6 +498,13 @@ template&lt;typename... SignatureArgs&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Sets a custom syscall emulation function by its string name. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>The string name of the syscall. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">func</td><td>Shared pointer to the new syscall function structure. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -454,6 +533,13 @@ template&lt;typename... SignatureArgs&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Sets a custom syscall emulation function by its numeric syscall number. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">sysno</td><td>The numeric syscall number. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">func</td><td>Shared pointer to the new syscall function structure. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -478,6 +564,8 @@ template&lt;typename... SignatureArgs&gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>Weak pointer to the main <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance. </p>
+
 </div>
 </div>
 <a id="a1e55e5c4725486b8a448a4a3d8e8d3b8" name="a1e55e5c4725486b8a448a4a3d8e8d3b8"></a>
@@ -500,10 +588,12 @@ template&lt;typename... SignatureArgs&gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>Map linking the numeric syscall number (<code>sysno</code>) to its emulation function and signature. </p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/platforms/linux/<a class="el" href="lnx__syscall__manager_8hpp_source.html">lnx_syscall_manager.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/platforms/linux/<a class="el" href="lnx__syscall__manager_8hpp_source.html">lnx_syscall_manager.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

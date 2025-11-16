@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Arion: include/arion/crypto/md5.hpp Source File</title>
+<title>Arion: /home/runner/work/Arion/Arion/include/arion/crypto/md5.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -112,237 +112,237 @@ $(document).ready(function(){initNavTree('md5_8hpp_source.html',''); initResizab
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="md5_8hpp.html#ae1ccf1a4af3f69b0f73113109de28a90">   11</a></span><span class="preprocessor">#define MD5_DIGEST_LEN 16</span></div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="md5_8hpp.html#a955f504eccf76b4eb2489c0adab03121">   13</a></span><span class="preprocessor">#define A 0x67452301</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="md5_8hpp.html#a111da81ae5883147168bbb8366377b10">   14</a></span><span class="preprocessor">#define B 0xefcdab89</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="md5_8hpp.html#ac4cf4b2ab929bd23951a8676eeac086b">   15</a></span><span class="preprocessor">#define C 0x98badcfe</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="md5_8hpp.html#af316c33cc298530f245e8b55330e86b5">   16</a></span><span class="preprocessor">#define D 0x10325476</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="md5_8hpp.html#ab556fdf30c5e8bb49eb363de2137b1d5">   13</a></span><span class="preprocessor">#define ARION_MD5_A 0x67452301</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="md5_8hpp.html#a2ef2d4d53b0953f95cb73cc3fa39f7e1">   14</a></span><span class="preprocessor">#define ARION_MD5_B 0xefcdab89</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="md5_8hpp.html#a1cacf16d0881bfbb88482dae5294c164">   15</a></span><span class="preprocessor">#define ARION_MD5_C 0x98badcfe</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="md5_8hpp.html#a910620f8046e2c27bf3fc696d7a1e63f">   16</a></span><span class="preprocessor">#define ARION_MD5_D 0x10325476</span></div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacearion.html">arion</a></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>{</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="foldopen" id="foldopen00021" data-start="{" data-end="};">
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="structarion_1_1MD5__CTXT.html">   21</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structarion_1_1MD5__CTXT.html">MD5_CTXT</a></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>{</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">   23</a></span>    uint64_t <a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">size</a>;</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">   24</a></span>    uint32_t <a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>[4];</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">   25</a></span>    uint8_t <a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a>[64];</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="structarion_1_1MD5__CTXT.html#ac91fae6253dc20311a82262c69d72265">   26</a></span>    uint8_t <a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#ac91fae6253dc20311a82262c69d72265">digest</a>[16];</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>};</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="md5_8hpp.html#ad8229ecf0359dbf6030708cc14575562">   18</a></span><span class="preprocessor">#define ARION_MD5_F(X, Y, Z) ((X &amp; Y) | (~X &amp; Z))</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="md5_8hpp.html#a5a1d81303815fb90e57e4c9515058085">   19</a></span><span class="preprocessor">#define ARION_MD5_G(X, Y, Z) ((X &amp; Z) | (Y &amp; ~Z))</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="md5_8hpp.html#a96fac5b985aca86eb6d4a21ed677fb15">   20</a></span><span class="preprocessor">#define ARION_MD5_H(X, Y, Z) (X ^ Y ^ Z)</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="md5_8hpp.html#a64ea135099ca36ba82d6f8589b656811">   21</a></span><span class="preprocessor">#define ARION_MD5_I(X, Y, Z) (Y ^ (X | ~Z))</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacearion.html">arion</a></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>{</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="foldopen" id="foldopen00027" data-start="{" data-end="};">
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="structarion_1_1MD5__CTXT.html">   27</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structarion_1_1MD5__CTXT.html">MD5_CTXT</a></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>{</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">   30</a></span>    uint64_t <a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">size</a>;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">   32</a></span>    uint32_t <a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>[4];</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">   34</a></span>    uint8_t <a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a>[64];</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="structarion_1_1MD5__CTXT.html#ac91fae6253dc20311a82262c69d72265">   36</a></span>    uint8_t <a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#ac91fae6253dc20311a82262c69d72265">digest</a>[16];</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>};</div>
 </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="foldopen" id="foldopen00029" data-start="{" data-end="};">
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="namespacearion.html#a545bfc6266b55b0d59949025fa76d047">   29</a></span><span class="keyword">static</span> uint32_t <a class="code hl_variable" href="namespacearion.html#a545bfc6266b55b0d59949025fa76d047">S</a>[] = {7,  12, 17, 22, 7,  12, 17, 22, 7,  12, 17, 22, 7,  12, 17, 22, 5,  9,  14, 20, 5,  9,</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>                       14, 20, 5,  9,  14, 20, 5,  9,  14, 20, 4,  11, 16, 23, 4,  11, 16, 23, 4,  11, 16, 23,</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>                       4,  11, 16, 23, 6,  10, 15, 21, 6,  10, 15, 21, 6,  10, 15, 21, 6,  10, 15, 21};</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="foldopen" id="foldopen00040" data-start="{" data-end="};">
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="namespacearion.html#a545bfc6266b55b0d59949025fa76d047">   40</a></span><span class="keyword">static</span> uint32_t <a class="code hl_variable" href="namespacearion.html#a545bfc6266b55b0d59949025fa76d047">S</a>[] = {7,  12, 17, 22, 7,  12, 17, 22, 7,  12, 17, 22, 7,  12, 17, 22, 5,  9,  14, 20, 5,  9,</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>                       14, 20, 5,  9,  14, 20, 5,  9,  14, 20, 4,  11, 16, 23, 4,  11, 16, 23, 4,  11, 16, 23,</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>                       4,  11, 16, 23, 6,  10, 15, 21, 6,  10, 15, 21, 6,  10, 15, 21, 6,  10, 15, 21};</div>
 </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="foldopen" id="foldopen00033" data-start="{" data-end="};">
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="namespacearion.html#a8932209106f31f91453f65d50912822e">   33</a></span><span class="keyword">static</span> uint32_t <a class="code hl_variable" href="namespacearion.html#a8932209106f31f91453f65d50912822e">K</a>[] = {0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee, 0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>                       0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be, 0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821,</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>                       0xf61e2562, 0xc040b340, 0x265e5a51, 0xe9b6c7aa, 0xd62f105d, 0x02441453, 0xd8a1e681, 0xe7d3fbc8,</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>                       0x21e1cde6, 0xc33707d6, 0xf4d50d87, 0x455a14ed, 0xa9e3e905, 0xfcefa3f8, 0x676f02d9, 0x8d2a4c8a,</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>                       0xfffa3942, 0x8771f681, 0x6d9d6122, 0xfde5380c, 0xa4beea44, 0x4bdecfa9, 0xf6bb4b60, 0xbebfbc70,</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>                       0x289b7ec6, 0xeaa127fa, 0xd4ef3085, 0x04881d05, 0xd9d4d039, 0xe6db99e5, 0x1fa27cf8, 0xc4ac5665,</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>                       0xf4292244, 0x432aff97, 0xab9423a7, 0xfc93a039, 0x655b59c3, 0x8f0ccc92, 0xffeff47d, 0x85845dd1,</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>                       0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1, 0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391};</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
+<div class="foldopen" id="foldopen00045" data-start="{" data-end="};">
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="namespacearion.html#a8932209106f31f91453f65d50912822e">   45</a></span><span class="keyword">static</span> uint32_t <a class="code hl_variable" href="namespacearion.html#a8932209106f31f91453f65d50912822e">K</a>[] = {0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee, 0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>                       0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be, 0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821,</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>                       0xf61e2562, 0xc040b340, 0x265e5a51, 0xe9b6c7aa, 0xd62f105d, 0x02441453, 0xd8a1e681, 0xe7d3fbc8,</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>                       0x21e1cde6, 0xc33707d6, 0xf4d50d87, 0x455a14ed, 0xa9e3e905, 0xfcefa3f8, 0x676f02d9, 0x8d2a4c8a,</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>                       0xfffa3942, 0x8771f681, 0x6d9d6122, 0xfde5380c, 0xa4beea44, 0x4bdecfa9, 0xf6bb4b60, 0xbebfbc70,</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>                       0x289b7ec6, 0xeaa127fa, 0xd4ef3085, 0x04881d05, 0xd9d4d039, 0xe6db99e5, 0x1fa27cf8, 0xc4ac5665,</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>                       0xf4292244, 0x432aff97, 0xab9423a7, 0xfc93a039, 0x655b59c3, 0x8f0ccc92, 0xffeff47d, 0x85845dd1,</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>                       0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1, 0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391};</div>
 </div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="foldopen" id="foldopen00042" data-start="{" data-end="};">
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="namespacearion.html#aa9afca3821a229d83906015c45b89c3f">   42</a></span><span class="keyword">static</span> uint8_t <a class="code hl_variable" href="namespacearion.html#aa9afca3821a229d83906015c45b89c3f">PADDING</a>[] = {0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>                            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>                            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>                            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>                            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="foldopen" id="foldopen00055" data-start="{" data-end="};">
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="namespacearion.html#aa9afca3821a229d83906015c45b89c3f">   55</a></span><span class="keyword">static</span> uint8_t <a class="code hl_variable" href="namespacearion.html#aa9afca3821a229d83906015c45b89c3f">PADDING</a>[] = {0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>                            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>                            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>                            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>                            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};</div>
 </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="md5_8hpp.html#ad6d7c306af62dbc87d1fcde6cb1bfb0e">   48</a></span><span class="preprocessor">#define F(X, Y, Z) ((X &amp; Y) | (~X &amp; Z))</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="md5_8hpp.html#adbf7bdfe79e039c09c4a945ca9ac0664">   49</a></span><span class="preprocessor">#define G(X, Y, Z) ((X &amp; Z) | (Y &amp; ~Z))</span></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="md5_8hpp.html#a3ab4053d9e8013cba3faa1abf9ef1c9c">   50</a></span><span class="preprocessor">#define H(X, Y, Z) (X ^ Y ^ Z)</span></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="md5_8hpp.html#aa33f2e8f2d68506493eccef4bc022cb5">   51</a></span><span class="preprocessor">#define I(X, Y, Z) (Y ^ (X | ~Z))</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
-<div class="foldopen" id="foldopen00053" data-start="{" data-end="}">
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="namespacearion.html#a5318fc00e6bdb0214ddefc03f90b24fb">   53</a></span><span class="keyword">inline</span> uint32_t <a class="code hl_function" href="namespacearion.html#a5318fc00e6bdb0214ddefc03f90b24fb">rotate_left</a>(uint32_t x, uint32_t n)</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>{</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keywordflow">return</span> (x &lt;&lt; n) | (x &gt;&gt; (32 - n));</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>}</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="foldopen" id="foldopen00067" data-start="{" data-end="}">
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno"><a class="line" href="namespacearion.html#a5318fc00e6bdb0214ddefc03f90b24fb">   67</a></span><span class="keyword">inline</span> uint32_t <a class="code hl_function" href="namespacearion.html#a5318fc00e6bdb0214ddefc03f90b24fb">rotate_left</a>(uint32_t x, uint32_t n)</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>{</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keywordflow">return</span> (x &lt;&lt; n) | (x &gt;&gt; (32 - n));</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>}</div>
 </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="foldopen" id="foldopen00058" data-start="{" data-end="}">
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="namespacearion.html#a518d557b759718374f1916af01edc156">   58</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="namespacearion.html#a518d557b759718374f1916af01edc156">md5_init</a>(<a class="code hl_struct" href="structarion_1_1MD5__CTXT.html">MD5_CTXT</a> *ctx)</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>{</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">size</a> = (uint64_t)0;</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>[0] = (uint32_t)<a class="code hl_define" href="md5_8hpp.html#a955f504eccf76b4eb2489c0adab03121">A</a>;</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>[1] = (uint32_t)<a class="code hl_define" href="md5_8hpp.html#a111da81ae5883147168bbb8366377b10">B</a>;</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>[2] = (uint32_t)<a class="code hl_define" href="md5_8hpp.html#ac4cf4b2ab929bd23951a8676eeac086b">C</a>;</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>[3] = (uint32_t)<a class="code hl_define" href="md5_8hpp.html#af316c33cc298530f245e8b55330e86b5">D</a>;</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>}</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="foldopen" id="foldopen00076" data-start="{" data-end="}">
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="namespacearion.html#a518d557b759718374f1916af01edc156">   76</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="namespacearion.html#a518d557b759718374f1916af01edc156">md5_init</a>(<a class="code hl_struct" href="structarion_1_1MD5__CTXT.html">MD5_CTXT</a> *ctx)</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>{</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">size</a> = (uint64_t)0;</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>[0] = (uint32_t)<a class="code hl_define" href="md5_8hpp.html#ab556fdf30c5e8bb49eb363de2137b1d5">ARION_MD5_A</a>;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>[1] = (uint32_t)<a class="code hl_define" href="md5_8hpp.html#a2ef2d4d53b0953f95cb73cc3fa39f7e1">ARION_MD5_B</a>;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>[2] = (uint32_t)<a class="code hl_define" href="md5_8hpp.html#a1cacf16d0881bfbb88482dae5294c164">ARION_MD5_C</a>;</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>[3] = (uint32_t)<a class="code hl_define" href="md5_8hpp.html#a910620f8046e2c27bf3fc696d7a1e63f">ARION_MD5_D</a>;</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>}</div>
 </div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
-<div class="foldopen" id="foldopen00068" data-start="{" data-end="}">
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="namespacearion.html#a3ef4f65b6d74b4c6b146a123ed770308">   68</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="namespacearion.html#a3ef4f65b6d74b4c6b146a123ed770308">md5_step</a>(uint32_t *buffer, uint32_t *input)</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>{</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    uint32_t AA = buffer[0];</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    uint32_t BB = buffer[1];</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    uint32_t CC = buffer[2];</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    uint32_t DD = buffer[3];</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    uint32_t E;</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> j;</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i = 0; i &lt; 64; ++i)</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    {</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        <span class="keywordflow">switch</span> (i / 16)</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        {</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        <span class="keywordflow">case</span> 0:</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>            E = <a class="code hl_define" href="md5_8hpp.html#ad6d7c306af62dbc87d1fcde6cb1bfb0e">F</a>(BB, CC, DD);</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>            j = i;</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        <span class="keywordflow">case</span> 1:</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>            E = <a class="code hl_define" href="md5_8hpp.html#adbf7bdfe79e039c09c4a945ca9ac0664">G</a>(BB, CC, DD);</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>            j = ((i * 5) + 1) % 16;</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>        <span class="keywordflow">case</span> 2:</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>            E = <a class="code hl_define" href="md5_8hpp.html#a3ab4053d9e8013cba3faa1abf9ef1c9c">H</a>(BB, CC, DD);</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>            j = ((i * 3) + 5) % 16;</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        <span class="keywordflow">default</span>:</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>            E = <a class="code hl_define" href="md5_8hpp.html#aa33f2e8f2d68506493eccef4bc022cb5">I</a>(BB, CC, DD);</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>            j = (i * 7) % 16;</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        }</div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        uint32_t temp = DD;</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        DD = CC;</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        CC = BB;</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        BB = BB + <a class="code hl_function" href="namespacearion.html#a5318fc00e6bdb0214ddefc03f90b24fb">rotate_left</a>(AA + E + <a class="code hl_variable" href="namespacearion.html#a8932209106f31f91453f65d50912822e">K</a>[i] + input[j], <a class="code hl_variable" href="namespacearion.html#a545bfc6266b55b0d59949025fa76d047">S</a>[i]);</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        AA = temp;</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    }</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    buffer[0] += AA;</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    buffer[1] += BB;</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    buffer[2] += CC;</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    buffer[3] += DD;</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>}</div>
-</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> </div>
-<div class="foldopen" id="foldopen00114" data-start="{" data-end="}">
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno"><a class="line" href="namespacearion.html#a9c841e776923f443e297370a7ba1ae0e">  114</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="namespacearion.html#a9c841e776923f443e297370a7ba1ae0e">md5_update</a>(<a class="code hl_struct" href="structarion_1_1MD5__CTXT.html">MD5_CTXT</a> *ctx, uint8_t *input_buffer, <span class="keywordtype">size_t</span> input_len)</div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>{</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    uint32_t input[16];</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> offset = ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">size</a> % 64;</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">size</a> += (uint64_t)input_len;</div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i = 0; i &lt; input_len; ++i)</div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>    {</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a>[offset++] = (uint8_t)*(input_buffer + i);</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
+<div class="foldopen" id="foldopen00091" data-start="{" data-end="}">
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno"><a class="line" href="namespacearion.html#a3ef4f65b6d74b4c6b146a123ed770308">   91</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="namespacearion.html#a3ef4f65b6d74b4c6b146a123ed770308">md5_step</a>(uint32_t *buffer, uint32_t *input)</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>{</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    uint32_t AA = buffer[0];</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    uint32_t BB = buffer[1];</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    uint32_t CC = buffer[2];</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    uint32_t DD = buffer[3];</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    uint32_t E;</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> j;</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i = 0; i &lt; 64; ++i)</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    {</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        <span class="keywordflow">switch</span> (i / 16)</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        {</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        <span class="keywordflow">case</span> 0:</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>            E = <a class="code hl_define" href="md5_8hpp.html#ad8229ecf0359dbf6030708cc14575562">ARION_MD5_F</a>(BB, CC, DD);</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>            j = i;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>        <span class="keywordflow">case</span> 1:</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>            E = <a class="code hl_define" href="md5_8hpp.html#a5a1d81303815fb90e57e4c9515058085">ARION_MD5_G</a>(BB, CC, DD);</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>            j = ((i * 5) + 1) % 16;</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        <span class="keywordflow">case</span> 2:</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>            E = <a class="code hl_define" href="md5_8hpp.html#a96fac5b985aca86eb6d4a21ed677fb15">ARION_MD5_H</a>(BB, CC, DD);</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>            j = ((i * 3) + 5) % 16;</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>        <span class="keywordflow">default</span>:</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>            E = <a class="code hl_define" href="md5_8hpp.html#a64ea135099ca36ba82d6f8589b656811">ARION_MD5_I</a>(BB, CC, DD);</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>            j = (i * 7) % 16;</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        }</div>
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span> </div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        <span class="keywordflow">if</span> (offset % 64 == 0)</div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>        {</div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>            <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> j = 0; j &lt; 16; ++j)</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>            {</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>                input[j] = (uint32_t)(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a>[(j * 4) + 3]) &lt;&lt; 24 | (uint32_t)(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a>[(j * 4) + 2]) &lt;&lt; 16 |</div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>                           (uint32_t)(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a>[(j * 4) + 1]) &lt;&lt; 8 | (uint32_t)(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a>[(j * 4)]);</div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>            }</div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>            <a class="code hl_function" href="namespacearion.html#a3ef4f65b6d74b4c6b146a123ed770308">md5_step</a>(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>, input);</div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>            offset = 0;</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>        }</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>    }</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        uint32_t temp = DD;</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>        DD = CC;</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        CC = BB;</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>        BB = BB + <a class="code hl_function" href="namespacearion.html#a5318fc00e6bdb0214ddefc03f90b24fb">rotate_left</a>(AA + E + <a class="code hl_variable" href="namespacearion.html#a8932209106f31f91453f65d50912822e">K</a>[i] + input[j], <a class="code hl_variable" href="namespacearion.html#a545bfc6266b55b0d59949025fa76d047">S</a>[i]);</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        AA = temp;</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    }</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    buffer[0] += AA;</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    buffer[1] += BB;</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    buffer[2] += CC;</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>    buffer[3] += DD;</div>
 <div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>}</div>
 </div>
 <div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span> </div>
-<div class="foldopen" id="foldopen00137" data-start="{" data-end="}">
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno"><a class="line" href="namespacearion.html#ad0fd274e7fe853acd27f97cfc6258cce">  137</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="namespacearion.html#ad0fd274e7fe853acd27f97cfc6258cce">md5_finalize</a>(<a class="code hl_struct" href="structarion_1_1MD5__CTXT.html">MD5_CTXT</a> *ctx)</div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>{</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    uint32_t input[16];</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> offset = ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">size</a> % 64;</div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> padding_length = offset &lt; 56 ? 56 - offset : (56 + 64) - offset;</div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span> </div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>    <a class="code hl_function" href="namespacearion.html#a9c841e776923f443e297370a7ba1ae0e">md5_update</a>(ctx, <a class="code hl_variable" href="namespacearion.html#aa9afca3821a229d83906015c45b89c3f">PADDING</a>, padding_length);</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>    ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">size</a> -= (uint64_t)padding_length;</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span> </div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> j = 0; j &lt; 14; ++j)</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    {</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>        input[j] = (uint32_t)(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a>[(j * 4) + 3]) &lt;&lt; 24 | (uint32_t)(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a>[(j * 4) + 2]) &lt;&lt; 16 |</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>                   (uint32_t)(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a>[(j * 4) + 1]) &lt;&lt; 8 | (uint32_t)(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a>[(j * 4)]);</div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>    }</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    input[14] = (uint32_t)(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">size</a> * 8);</div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    input[15] = (uint32_t)((ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">size</a> * 8) &gt;&gt; 32);</div>
+<div class="foldopen" id="foldopen00144" data-start="{" data-end="}">
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno"><a class="line" href="namespacearion.html#a9c841e776923f443e297370a7ba1ae0e">  144</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="namespacearion.html#a9c841e776923f443e297370a7ba1ae0e">md5_update</a>(<a class="code hl_struct" href="structarion_1_1MD5__CTXT.html">MD5_CTXT</a> *ctx, uint8_t *input_buffer, <span class="keywordtype">size_t</span> input_len)</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>{</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    uint32_t input[16];</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> offset = ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">size</a> % 64;</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>    ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">size</a> += (uint64_t)input_len;</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span> </div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>    <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i = 0; i &lt; input_len; ++i)</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    {</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>        ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a>[offset++] = (uint8_t)*(input_buffer + i);</div>
 <div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span> </div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    <a class="code hl_function" href="namespacearion.html#a3ef4f65b6d74b4c6b146a123ed770308">md5_step</a>(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>, input);</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span> </div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>    <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i = 0; i &lt; 4; ++i)</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>    {</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>        ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#ac91fae6253dc20311a82262c69d72265">digest</a>[(i * 4) + 0] = (uint8_t)((ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>[i] &amp; 0x000000FF));</div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>        ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#ac91fae6253dc20311a82262c69d72265">digest</a>[(i * 4) + 1] = (uint8_t)((ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>[i] &amp; 0x0000FF00) &gt;&gt; 8);</div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>        ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#ac91fae6253dc20311a82262c69d72265">digest</a>[(i * 4) + 2] = (uint8_t)((ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>[i] &amp; 0x00FF0000) &gt;&gt; 16);</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>        ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#ac91fae6253dc20311a82262c69d72265">digest</a>[(i * 4) + 3] = (uint8_t)((ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>[i] &amp; 0xFF000000) &gt;&gt; 24);</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>    }</div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>}</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>        <span class="keywordflow">if</span> (offset % 64 == 0)</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>        {</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>            <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> j = 0; j &lt; 16; ++j)</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>            {</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>                input[j] = (uint32_t)(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a>[(j * 4) + 3]) &lt;&lt; 24 | (uint32_t)(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a>[(j * 4) + 2]) &lt;&lt; 16 |</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>                           (uint32_t)(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a>[(j * 4) + 1]) &lt;&lt; 8 | (uint32_t)(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a>[(j * 4)]);</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>            }</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>            <a class="code hl_function" href="namespacearion.html#a3ef4f65b6d74b4c6b146a123ed770308">md5_step</a>(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>, input);</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>            offset = 0;</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>        }</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    }</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>}</div>
 </div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span> </div>
-<div class="foldopen" id="foldopen00165" data-start="{" data-end="}">
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno"><a class="line" href="namespacearion.html#a270cc6c0ee6f51afdcfc8c43c967c11a">  165</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="namespacearion.html#a270cc6c0ee6f51afdcfc8c43c967c11a">md5_string</a>(<span class="keywordtype">char</span> *input, uint8_t *result)</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>{</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    <a class="code hl_struct" href="structarion_1_1MD5__CTXT.html">MD5_CTXT</a> ctx;</div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>    <a class="code hl_function" href="namespacearion.html#a518d557b759718374f1916af01edc156">md5_init</a>(&amp;ctx);</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>    <a class="code hl_function" href="namespacearion.html#a9c841e776923f443e297370a7ba1ae0e">md5_update</a>(&amp;ctx, (uint8_t *)input, strlen(input));</div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    <a class="code hl_function" href="namespacearion.html#ad0fd274e7fe853acd27f97cfc6258cce">md5_finalize</a>(&amp;ctx);</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span> </div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>    memcpy(result, ctx.<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#ac91fae6253dc20311a82262c69d72265">digest</a>, 16);</div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>}</div>
-</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span> </div>
-<div class="foldopen" id="foldopen00175" data-start="{" data-end="}">
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno"><a class="line" href="namespacearion.html#ad1a09e583285248fe49d9122983723f5">  175</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="namespacearion.html#ad1a09e583285248fe49d9122983723f5">md5_file</a>(FILE *file, uint8_t *result)</div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>{</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    <span class="keywordtype">char</span> *input_buffer = (<span class="keywordtype">char</span> *)malloc(1024);</div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>    <span class="keywordtype">size_t</span> input_size = 0;</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span> </div>
+<div class="foldopen" id="foldopen00171" data-start="{" data-end="}">
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno"><a class="line" href="namespacearion.html#ad0fd274e7fe853acd27f97cfc6258cce">  171</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="namespacearion.html#ad0fd274e7fe853acd27f97cfc6258cce">md5_finalize</a>(<a class="code hl_struct" href="structarion_1_1MD5__CTXT.html">MD5_CTXT</a> *ctx)</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>{</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>    uint32_t input[16];</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> offset = ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">size</a> % 64;</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> padding_length = offset &lt; 56 ? 56 - offset : (56 + 64) - offset;</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span> </div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    <a class="code hl_function" href="namespacearion.html#a9c841e776923f443e297370a7ba1ae0e">md5_update</a>(ctx, <a class="code hl_variable" href="namespacearion.html#aa9afca3821a229d83906015c45b89c3f">PADDING</a>, padding_length);</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>    ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">size</a> -= (uint64_t)padding_length;</div>
 <div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span> </div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>    <a class="code hl_struct" href="structarion_1_1MD5__CTXT.html">MD5_CTXT</a> ctx;</div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>    <a class="code hl_function" href="namespacearion.html#a518d557b759718374f1916af01edc156">md5_init</a>(&amp;ctx);</div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span> </div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    <span class="keywordflow">while</span> ((input_size = fread(input_buffer, 1, 1024, file)) &gt; 0)</div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>    {</div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>        <a class="code hl_function" href="namespacearion.html#a9c841e776923f443e297370a7ba1ae0e">md5_update</a>(&amp;ctx, (uint8_t *)input_buffer, input_size);</div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    }</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>    <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> j = 0; j &lt; 14; ++j)</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>    {</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>        input[j] = (uint32_t)(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a>[(j * 4) + 3]) &lt;&lt; 24 | (uint32_t)(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a>[(j * 4) + 2]) &lt;&lt; 16 |</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>                   (uint32_t)(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a>[(j * 4) + 1]) &lt;&lt; 8 | (uint32_t)(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a>[(j * 4)]);</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>    }</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    input[14] = (uint32_t)(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">size</a> * 8);</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    input[15] = (uint32_t)((ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">size</a> * 8) &gt;&gt; 32);</div>
 <div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span> </div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>    <a class="code hl_function" href="namespacearion.html#ad0fd274e7fe853acd27f97cfc6258cce">md5_finalize</a>(&amp;ctx);</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>    <a class="code hl_function" href="namespacearion.html#a3ef4f65b6d74b4c6b146a123ed770308">md5_step</a>(ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>, input);</div>
 <div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span> </div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    free(input_buffer);</div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    memcpy(result, ctx.<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#ac91fae6253dc20311a82262c69d72265">digest</a>, 16);</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>}</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i = 0; i &lt; 4; ++i)</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    {</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#ac91fae6253dc20311a82262c69d72265">digest</a>[(i * 4) + 0] = (uint8_t)((ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>[i] &amp; 0x000000FF));</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>        ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#ac91fae6253dc20311a82262c69d72265">digest</a>[(i * 4) + 1] = (uint8_t)((ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>[i] &amp; 0x0000FF00) &gt;&gt; 8);</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>        ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#ac91fae6253dc20311a82262c69d72265">digest</a>[(i * 4) + 2] = (uint8_t)((ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>[i] &amp; 0x00FF0000) &gt;&gt; 16);</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>        ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#ac91fae6253dc20311a82262c69d72265">digest</a>[(i * 4) + 3] = (uint8_t)((ctx-&gt;<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a>[i] &amp; 0xFF000000) &gt;&gt; 24);</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>    }</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>}</div>
 </div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span> </div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>}; <span class="comment">// namespace arion</span></div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span> </div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span><span class="preprocessor">#endif </span><span class="comment">// ARION_MD5_HPP</span></div>
-<div class="ttc" id="amd5_8hpp_html_a111da81ae5883147168bbb8366377b10"><div class="ttname"><a href="md5_8hpp.html#a111da81ae5883147168bbb8366377b10">B</a></div><div class="ttdeci">#define B</div><div class="ttdef"><b>Definition</b> md5.hpp:14</div></div>
-<div class="ttc" id="amd5_8hpp_html_a3ab4053d9e8013cba3faa1abf9ef1c9c"><div class="ttname"><a href="md5_8hpp.html#a3ab4053d9e8013cba3faa1abf9ef1c9c">H</a></div><div class="ttdeci">#define H(X, Y, Z)</div><div class="ttdef"><b>Definition</b> md5.hpp:50</div></div>
-<div class="ttc" id="amd5_8hpp_html_a955f504eccf76b4eb2489c0adab03121"><div class="ttname"><a href="md5_8hpp.html#a955f504eccf76b4eb2489c0adab03121">A</a></div><div class="ttdeci">#define A</div><div class="ttdef"><b>Definition</b> md5.hpp:13</div></div>
-<div class="ttc" id="amd5_8hpp_html_aa33f2e8f2d68506493eccef4bc022cb5"><div class="ttname"><a href="md5_8hpp.html#aa33f2e8f2d68506493eccef4bc022cb5">I</a></div><div class="ttdeci">#define I(X, Y, Z)</div><div class="ttdef"><b>Definition</b> md5.hpp:51</div></div>
-<div class="ttc" id="amd5_8hpp_html_ac4cf4b2ab929bd23951a8676eeac086b"><div class="ttname"><a href="md5_8hpp.html#ac4cf4b2ab929bd23951a8676eeac086b">C</a></div><div class="ttdeci">#define C</div><div class="ttdef"><b>Definition</b> md5.hpp:15</div></div>
-<div class="ttc" id="amd5_8hpp_html_ad6d7c306af62dbc87d1fcde6cb1bfb0e"><div class="ttname"><a href="md5_8hpp.html#ad6d7c306af62dbc87d1fcde6cb1bfb0e">F</a></div><div class="ttdeci">#define F(X, Y, Z)</div><div class="ttdef"><b>Definition</b> md5.hpp:48</div></div>
-<div class="ttc" id="amd5_8hpp_html_adbf7bdfe79e039c09c4a945ca9ac0664"><div class="ttname"><a href="md5_8hpp.html#adbf7bdfe79e039c09c4a945ca9ac0664">G</a></div><div class="ttdeci">#define G(X, Y, Z)</div><div class="ttdef"><b>Definition</b> md5.hpp:49</div></div>
-<div class="ttc" id="amd5_8hpp_html_af316c33cc298530f245e8b55330e86b5"><div class="ttname"><a href="md5_8hpp.html#af316c33cc298530f245e8b55330e86b5">D</a></div><div class="ttdeci">#define D</div><div class="ttdef"><b>Definition</b> md5.hpp:16</div></div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span> </div>
+<div class="foldopen" id="foldopen00204" data-start="{" data-end="}">
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno"><a class="line" href="namespacearion.html#a270cc6c0ee6f51afdcfc8c43c967c11a">  204</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="namespacearion.html#a270cc6c0ee6f51afdcfc8c43c967c11a">md5_string</a>(<span class="keywordtype">char</span> *input, uint8_t *result)</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>{</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    <a class="code hl_struct" href="structarion_1_1MD5__CTXT.html">MD5_CTXT</a> ctx;</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    <a class="code hl_function" href="namespacearion.html#a518d557b759718374f1916af01edc156">md5_init</a>(&amp;ctx);</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>    <a class="code hl_function" href="namespacearion.html#a9c841e776923f443e297370a7ba1ae0e">md5_update</a>(&amp;ctx, (uint8_t *)input, strlen(input));</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    <a class="code hl_function" href="namespacearion.html#ad0fd274e7fe853acd27f97cfc6258cce">md5_finalize</a>(&amp;ctx);</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span> </div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>    memcpy(result, ctx.<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#ac91fae6253dc20311a82262c69d72265">digest</a>, 16);</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>}</div>
+</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span> </div>
+<div class="foldopen" id="foldopen00220" data-start="{" data-end="}">
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno"><a class="line" href="namespacearion.html#ad1a09e583285248fe49d9122983723f5">  220</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="namespacearion.html#ad1a09e583285248fe49d9122983723f5">md5_file</a>(FILE *file, uint8_t *result)</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>{</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>    <span class="keywordtype">char</span> *input_buffer = (<span class="keywordtype">char</span> *)malloc(1024);</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>    <span class="keywordtype">size_t</span> input_size = 0;</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span> </div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>    <a class="code hl_struct" href="structarion_1_1MD5__CTXT.html">MD5_CTXT</a> ctx;</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>    <a class="code hl_function" href="namespacearion.html#a518d557b759718374f1916af01edc156">md5_init</a>(&amp;ctx);</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span> </div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>    <span class="keywordflow">while</span> ((input_size = fread(input_buffer, 1, 1024, file)) &gt; 0)</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>    {</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>        <a class="code hl_function" href="namespacearion.html#a9c841e776923f443e297370a7ba1ae0e">md5_update</a>(&amp;ctx, (uint8_t *)input_buffer, input_size);</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>    }</div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span> </div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    <a class="code hl_function" href="namespacearion.html#ad0fd274e7fe853acd27f97cfc6258cce">md5_finalize</a>(&amp;ctx);</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span> </div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    free(input_buffer);</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span> </div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    memcpy(result, ctx.<a class="code hl_variable" href="structarion_1_1MD5__CTXT.html#ac91fae6253dc20311a82262c69d72265">digest</a>, 16);</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>}</div>
+</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span> </div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>}; <span class="comment">// namespace arion</span></div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span> </div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span><span class="preprocessor">#endif </span><span class="comment">// ARION_MD5_HPP</span></div>
+<div class="ttc" id="amd5_8hpp_html_a1cacf16d0881bfbb88482dae5294c164"><div class="ttname"><a href="md5_8hpp.html#a1cacf16d0881bfbb88482dae5294c164">ARION_MD5_C</a></div><div class="ttdeci">#define ARION_MD5_C</div><div class="ttdef"><b>Definition</b> md5.hpp:15</div></div>
+<div class="ttc" id="amd5_8hpp_html_a2ef2d4d53b0953f95cb73cc3fa39f7e1"><div class="ttname"><a href="md5_8hpp.html#a2ef2d4d53b0953f95cb73cc3fa39f7e1">ARION_MD5_B</a></div><div class="ttdeci">#define ARION_MD5_B</div><div class="ttdef"><b>Definition</b> md5.hpp:14</div></div>
+<div class="ttc" id="amd5_8hpp_html_a5a1d81303815fb90e57e4c9515058085"><div class="ttname"><a href="md5_8hpp.html#a5a1d81303815fb90e57e4c9515058085">ARION_MD5_G</a></div><div class="ttdeci">#define ARION_MD5_G(X, Y, Z)</div><div class="ttdef"><b>Definition</b> md5.hpp:19</div></div>
+<div class="ttc" id="amd5_8hpp_html_a64ea135099ca36ba82d6f8589b656811"><div class="ttname"><a href="md5_8hpp.html#a64ea135099ca36ba82d6f8589b656811">ARION_MD5_I</a></div><div class="ttdeci">#define ARION_MD5_I(X, Y, Z)</div><div class="ttdef"><b>Definition</b> md5.hpp:21</div></div>
+<div class="ttc" id="amd5_8hpp_html_a910620f8046e2c27bf3fc696d7a1e63f"><div class="ttname"><a href="md5_8hpp.html#a910620f8046e2c27bf3fc696d7a1e63f">ARION_MD5_D</a></div><div class="ttdeci">#define ARION_MD5_D</div><div class="ttdef"><b>Definition</b> md5.hpp:16</div></div>
+<div class="ttc" id="amd5_8hpp_html_a96fac5b985aca86eb6d4a21ed677fb15"><div class="ttname"><a href="md5_8hpp.html#a96fac5b985aca86eb6d4a21ed677fb15">ARION_MD5_H</a></div><div class="ttdeci">#define ARION_MD5_H(X, Y, Z)</div><div class="ttdef"><b>Definition</b> md5.hpp:20</div></div>
+<div class="ttc" id="amd5_8hpp_html_ab556fdf30c5e8bb49eb363de2137b1d5"><div class="ttname"><a href="md5_8hpp.html#ab556fdf30c5e8bb49eb363de2137b1d5">ARION_MD5_A</a></div><div class="ttdeci">#define ARION_MD5_A</div><div class="ttdef"><b>Definition</b> md5.hpp:13</div></div>
+<div class="ttc" id="amd5_8hpp_html_ad8229ecf0359dbf6030708cc14575562"><div class="ttname"><a href="md5_8hpp.html#ad8229ecf0359dbf6030708cc14575562">ARION_MD5_F</a></div><div class="ttdeci">#define ARION_MD5_F(X, Y, Z)</div><div class="ttdef"><b>Definition</b> md5.hpp:18</div></div>
 <div class="ttc" id="anamespacearion_html"><div class="ttname"><a href="namespacearion.html">arion</a></div><div class="ttdef"><b>Definition</b> arch_x86-64.hpp:11</div></div>
-<div class="ttc" id="anamespacearion_html_a270cc6c0ee6f51afdcfc8c43c967c11a"><div class="ttname"><a href="namespacearion.html#a270cc6c0ee6f51afdcfc8c43c967c11a">arion::md5_string</a></div><div class="ttdeci">void md5_string(char *input, uint8_t *result)</div><div class="ttdef"><b>Definition</b> md5.hpp:165</div></div>
-<div class="ttc" id="anamespacearion_html_a3ef4f65b6d74b4c6b146a123ed770308"><div class="ttname"><a href="namespacearion.html#a3ef4f65b6d74b4c6b146a123ed770308">arion::md5_step</a></div><div class="ttdeci">void md5_step(uint32_t *buffer, uint32_t *input)</div><div class="ttdef"><b>Definition</b> md5.hpp:68</div></div>
-<div class="ttc" id="anamespacearion_html_a518d557b759718374f1916af01edc156"><div class="ttname"><a href="namespacearion.html#a518d557b759718374f1916af01edc156">arion::md5_init</a></div><div class="ttdeci">void md5_init(MD5_CTXT *ctx)</div><div class="ttdef"><b>Definition</b> md5.hpp:58</div></div>
-<div class="ttc" id="anamespacearion_html_a5318fc00e6bdb0214ddefc03f90b24fb"><div class="ttname"><a href="namespacearion.html#a5318fc00e6bdb0214ddefc03f90b24fb">arion::rotate_left</a></div><div class="ttdeci">uint32_t rotate_left(uint32_t x, uint32_t n)</div><div class="ttdef"><b>Definition</b> md5.hpp:53</div></div>
-<div class="ttc" id="anamespacearion_html_a545bfc6266b55b0d59949025fa76d047"><div class="ttname"><a href="namespacearion.html#a545bfc6266b55b0d59949025fa76d047">arion::S</a></div><div class="ttdeci">static uint32_t S[]</div><div class="ttdef"><b>Definition</b> md5.hpp:29</div></div>
-<div class="ttc" id="anamespacearion_html_a8932209106f31f91453f65d50912822e"><div class="ttname"><a href="namespacearion.html#a8932209106f31f91453f65d50912822e">arion::K</a></div><div class="ttdeci">static uint32_t K[]</div><div class="ttdef"><b>Definition</b> md5.hpp:33</div></div>
-<div class="ttc" id="anamespacearion_html_a9c841e776923f443e297370a7ba1ae0e"><div class="ttname"><a href="namespacearion.html#a9c841e776923f443e297370a7ba1ae0e">arion::md5_update</a></div><div class="ttdeci">void md5_update(MD5_CTXT *ctx, uint8_t *input_buffer, size_t input_len)</div><div class="ttdef"><b>Definition</b> md5.hpp:114</div></div>
-<div class="ttc" id="anamespacearion_html_aa9afca3821a229d83906015c45b89c3f"><div class="ttname"><a href="namespacearion.html#aa9afca3821a229d83906015c45b89c3f">arion::PADDING</a></div><div class="ttdeci">static uint8_t PADDING[]</div><div class="ttdef"><b>Definition</b> md5.hpp:42</div></div>
-<div class="ttc" id="anamespacearion_html_ad0fd274e7fe853acd27f97cfc6258cce"><div class="ttname"><a href="namespacearion.html#ad0fd274e7fe853acd27f97cfc6258cce">arion::md5_finalize</a></div><div class="ttdeci">void md5_finalize(MD5_CTXT *ctx)</div><div class="ttdef"><b>Definition</b> md5.hpp:137</div></div>
-<div class="ttc" id="anamespacearion_html_ad1a09e583285248fe49d9122983723f5"><div class="ttname"><a href="namespacearion.html#ad1a09e583285248fe49d9122983723f5">arion::md5_file</a></div><div class="ttdeci">void md5_file(FILE *file, uint8_t *result)</div><div class="ttdef"><b>Definition</b> md5.hpp:175</div></div>
-<div class="ttc" id="astructarion_1_1MD5__CTXT_html"><div class="ttname"><a href="structarion_1_1MD5__CTXT.html">arion::MD5_CTXT</a></div><div class="ttdef"><b>Definition</b> md5.hpp:22</div></div>
-<div class="ttc" id="astructarion_1_1MD5__CTXT_html_a43789dc54608a0f0d6b5ed3ddd53dfd8"><div class="ttname"><a href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">arion::MD5_CTXT::input</a></div><div class="ttdeci">uint8_t input[64]</div><div class="ttdef"><b>Definition</b> md5.hpp:25</div></div>
-<div class="ttc" id="astructarion_1_1MD5__CTXT_html_a7af8f36a7cbfb60865e69df52f1ed90e"><div class="ttname"><a href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">arion::MD5_CTXT::buffer</a></div><div class="ttdeci">uint32_t buffer[4]</div><div class="ttdef"><b>Definition</b> md5.hpp:24</div></div>
-<div class="ttc" id="astructarion_1_1MD5__CTXT_html_aa77372c36c04adca738d13befebe43f2"><div class="ttname"><a href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">arion::MD5_CTXT::size</a></div><div class="ttdeci">uint64_t size</div><div class="ttdef"><b>Definition</b> md5.hpp:23</div></div>
-<div class="ttc" id="astructarion_1_1MD5__CTXT_html_ac91fae6253dc20311a82262c69d72265"><div class="ttname"><a href="structarion_1_1MD5__CTXT.html#ac91fae6253dc20311a82262c69d72265">arion::MD5_CTXT::digest</a></div><div class="ttdeci">uint8_t digest[16]</div><div class="ttdef"><b>Definition</b> md5.hpp:26</div></div>
+<div class="ttc" id="anamespacearion_html_a270cc6c0ee6f51afdcfc8c43c967c11a"><div class="ttname"><a href="namespacearion.html#a270cc6c0ee6f51afdcfc8c43c967c11a">arion::md5_string</a></div><div class="ttdeci">void md5_string(char *input, uint8_t *result)</div><div class="ttdef"><b>Definition</b> md5.hpp:204</div></div>
+<div class="ttc" id="anamespacearion_html_a3ef4f65b6d74b4c6b146a123ed770308"><div class="ttname"><a href="namespacearion.html#a3ef4f65b6d74b4c6b146a123ed770308">arion::md5_step</a></div><div class="ttdeci">void md5_step(uint32_t *buffer, uint32_t *input)</div><div class="ttdef"><b>Definition</b> md5.hpp:91</div></div>
+<div class="ttc" id="anamespacearion_html_a518d557b759718374f1916af01edc156"><div class="ttname"><a href="namespacearion.html#a518d557b759718374f1916af01edc156">arion::md5_init</a></div><div class="ttdeci">void md5_init(MD5_CTXT *ctx)</div><div class="ttdef"><b>Definition</b> md5.hpp:76</div></div>
+<div class="ttc" id="anamespacearion_html_a5318fc00e6bdb0214ddefc03f90b24fb"><div class="ttname"><a href="namespacearion.html#a5318fc00e6bdb0214ddefc03f90b24fb">arion::rotate_left</a></div><div class="ttdeci">uint32_t rotate_left(uint32_t x, uint32_t n)</div><div class="ttdef"><b>Definition</b> md5.hpp:67</div></div>
+<div class="ttc" id="anamespacearion_html_a545bfc6266b55b0d59949025fa76d047"><div class="ttname"><a href="namespacearion.html#a545bfc6266b55b0d59949025fa76d047">arion::S</a></div><div class="ttdeci">static uint32_t S[]</div><div class="ttdoc">Array of shift amounts S[i] used in the MD5 algorithm.</div><div class="ttdef"><b>Definition</b> md5.hpp:40</div></div>
+<div class="ttc" id="anamespacearion_html_a8932209106f31f91453f65d50912822e"><div class="ttname"><a href="namespacearion.html#a8932209106f31f91453f65d50912822e">arion::K</a></div><div class="ttdeci">static uint32_t K[]</div><div class="ttdoc">Array of 64 pre-calculated sine constants K[i] used in the MD5 algorithm.</div><div class="ttdef"><b>Definition</b> md5.hpp:45</div></div>
+<div class="ttc" id="anamespacearion_html_a9c841e776923f443e297370a7ba1ae0e"><div class="ttname"><a href="namespacearion.html#a9c841e776923f443e297370a7ba1ae0e">arion::md5_update</a></div><div class="ttdeci">void md5_update(MD5_CTXT *ctx, uint8_t *input_buffer, size_t input_len)</div><div class="ttdef"><b>Definition</b> md5.hpp:144</div></div>
+<div class="ttc" id="anamespacearion_html_aa9afca3821a229d83906015c45b89c3f"><div class="ttname"><a href="namespacearion.html#aa9afca3821a229d83906015c45b89c3f">arion::PADDING</a></div><div class="ttdeci">static uint8_t PADDING[]</div><div class="ttdoc">The MD5 padding constant array.</div><div class="ttdef"><b>Definition</b> md5.hpp:55</div></div>
+<div class="ttc" id="anamespacearion_html_ad0fd274e7fe853acd27f97cfc6258cce"><div class="ttname"><a href="namespacearion.html#ad0fd274e7fe853acd27f97cfc6258cce">arion::md5_finalize</a></div><div class="ttdeci">void md5_finalize(MD5_CTXT *ctx)</div><div class="ttdef"><b>Definition</b> md5.hpp:171</div></div>
+<div class="ttc" id="anamespacearion_html_ad1a09e583285248fe49d9122983723f5"><div class="ttname"><a href="namespacearion.html#ad1a09e583285248fe49d9122983723f5">arion::md5_file</a></div><div class="ttdeci">void md5_file(FILE *file, uint8_t *result)</div><div class="ttdef"><b>Definition</b> md5.hpp:220</div></div>
+<div class="ttc" id="astructarion_1_1MD5__CTXT_html"><div class="ttname"><a href="structarion_1_1MD5__CTXT.html">arion::MD5_CTXT</a></div><div class="ttdoc">This structure holds the context for MD5 calculation.</div><div class="ttdef"><b>Definition</b> md5.hpp:28</div></div>
+<div class="ttc" id="astructarion_1_1MD5__CTXT_html_a43789dc54608a0f0d6b5ed3ddd53dfd8"><div class="ttname"><a href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">arion::MD5_CTXT::input</a></div><div class="ttdeci">uint8_t input[64]</div><div class="ttdoc">Temporary input buffer (64 bytes or 512 bits).</div><div class="ttdef"><b>Definition</b> md5.hpp:34</div></div>
+<div class="ttc" id="astructarion_1_1MD5__CTXT_html_a7af8f36a7cbfb60865e69df52f1ed90e"><div class="ttname"><a href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">arion::MD5_CTXT::buffer</a></div><div class="ttdeci">uint32_t buffer[4]</div><div class="ttdoc">The four 32-bit buffers/registers (A, B, C, D) used in the hash calculation.</div><div class="ttdef"><b>Definition</b> md5.hpp:32</div></div>
+<div class="ttc" id="astructarion_1_1MD5__CTXT_html_aa77372c36c04adca738d13befebe43f2"><div class="ttname"><a href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">arion::MD5_CTXT::size</a></div><div class="ttdeci">uint64_t size</div><div class="ttdoc">Total size of the input data in bits.</div><div class="ttdef"><b>Definition</b> md5.hpp:30</div></div>
+<div class="ttc" id="astructarion_1_1MD5__CTXT_html_ac91fae6253dc20311a82262c69d72265"><div class="ttname"><a href="structarion_1_1MD5__CTXT.html#ac91fae6253dc20311a82262c69d72265">arion::MD5_CTXT::digest</a></div><div class="ttdeci">uint8_t digest[16]</div><div class="ttdoc">The resulting 16-byte (128-bit) MD5 digest.</div><div class="ttdef"><b>Definition</b> md5.hpp:36</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

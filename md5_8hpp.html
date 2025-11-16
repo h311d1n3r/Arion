@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Arion: include/arion/crypto/md5.hpp File Reference</title>
+<title>Arion: /home/runner/work/Arion/Arion/include/arion/crypto/md5.hpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -116,6 +116,7 @@ $(document).ready(function(){initNavTree('md5_8hpp.html',''); initResizable(); }
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1MD5__CTXT.html">arion::MD5_CTXT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This structure holds the context for MD5 calculation.  <a href="structarion_1_1MD5__CTXT.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
@@ -127,22 +128,22 @@ Namespaces</h2></td></tr>
 Macros</h2></td></tr>
 <tr class="memitem:ae1ccf1a4af3f69b0f73113109de28a90" id="r_ae1ccf1a4af3f69b0f73113109de28a90"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="md5_8hpp.html#ae1ccf1a4af3f69b0f73113109de28a90">MD5_DIGEST_LEN</a>&#160;&#160;&#160;16</td></tr>
 <tr class="separator:ae1ccf1a4af3f69b0f73113109de28a90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a955f504eccf76b4eb2489c0adab03121" id="r_a955f504eccf76b4eb2489c0adab03121"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="md5_8hpp.html#a955f504eccf76b4eb2489c0adab03121">A</a>&#160;&#160;&#160;0x67452301</td></tr>
-<tr class="separator:a955f504eccf76b4eb2489c0adab03121"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a111da81ae5883147168bbb8366377b10" id="r_a111da81ae5883147168bbb8366377b10"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="md5_8hpp.html#a111da81ae5883147168bbb8366377b10">B</a>&#160;&#160;&#160;0xefcdab89</td></tr>
-<tr class="separator:a111da81ae5883147168bbb8366377b10"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4cf4b2ab929bd23951a8676eeac086b" id="r_ac4cf4b2ab929bd23951a8676eeac086b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="md5_8hpp.html#ac4cf4b2ab929bd23951a8676eeac086b">C</a>&#160;&#160;&#160;0x98badcfe</td></tr>
-<tr class="separator:ac4cf4b2ab929bd23951a8676eeac086b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af316c33cc298530f245e8b55330e86b5" id="r_af316c33cc298530f245e8b55330e86b5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="md5_8hpp.html#af316c33cc298530f245e8b55330e86b5">D</a>&#160;&#160;&#160;0x10325476</td></tr>
-<tr class="separator:af316c33cc298530f245e8b55330e86b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6d7c306af62dbc87d1fcde6cb1bfb0e" id="r_ad6d7c306af62dbc87d1fcde6cb1bfb0e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="md5_8hpp.html#ad6d7c306af62dbc87d1fcde6cb1bfb0e">F</a>(X,  Y,  Z)&#160;&#160;&#160;((X &amp; Y) | (~X &amp; Z))</td></tr>
-<tr class="separator:ad6d7c306af62dbc87d1fcde6cb1bfb0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adbf7bdfe79e039c09c4a945ca9ac0664" id="r_adbf7bdfe79e039c09c4a945ca9ac0664"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="md5_8hpp.html#adbf7bdfe79e039c09c4a945ca9ac0664">G</a>(X,  Y,  Z)&#160;&#160;&#160;((X &amp; Z) | (Y &amp; ~Z))</td></tr>
-<tr class="separator:adbf7bdfe79e039c09c4a945ca9ac0664"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ab4053d9e8013cba3faa1abf9ef1c9c" id="r_a3ab4053d9e8013cba3faa1abf9ef1c9c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="md5_8hpp.html#a3ab4053d9e8013cba3faa1abf9ef1c9c">H</a>(X,  Y,  Z)&#160;&#160;&#160;(X ^ Y ^ Z)</td></tr>
-<tr class="separator:a3ab4053d9e8013cba3faa1abf9ef1c9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa33f2e8f2d68506493eccef4bc022cb5" id="r_aa33f2e8f2d68506493eccef4bc022cb5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="md5_8hpp.html#aa33f2e8f2d68506493eccef4bc022cb5">I</a>(X,  Y,  Z)&#160;&#160;&#160;(Y ^ (X | ~Z))</td></tr>
-<tr class="separator:aa33f2e8f2d68506493eccef4bc022cb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab556fdf30c5e8bb49eb363de2137b1d5" id="r_ab556fdf30c5e8bb49eb363de2137b1d5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="md5_8hpp.html#ab556fdf30c5e8bb49eb363de2137b1d5">ARION_MD5_A</a>&#160;&#160;&#160;0x67452301</td></tr>
+<tr class="separator:ab556fdf30c5e8bb49eb363de2137b1d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ef2d4d53b0953f95cb73cc3fa39f7e1" id="r_a2ef2d4d53b0953f95cb73cc3fa39f7e1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="md5_8hpp.html#a2ef2d4d53b0953f95cb73cc3fa39f7e1">ARION_MD5_B</a>&#160;&#160;&#160;0xefcdab89</td></tr>
+<tr class="separator:a2ef2d4d53b0953f95cb73cc3fa39f7e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cacf16d0881bfbb88482dae5294c164" id="r_a1cacf16d0881bfbb88482dae5294c164"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="md5_8hpp.html#a1cacf16d0881bfbb88482dae5294c164">ARION_MD5_C</a>&#160;&#160;&#160;0x98badcfe</td></tr>
+<tr class="separator:a1cacf16d0881bfbb88482dae5294c164"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a910620f8046e2c27bf3fc696d7a1e63f" id="r_a910620f8046e2c27bf3fc696d7a1e63f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="md5_8hpp.html#a910620f8046e2c27bf3fc696d7a1e63f">ARION_MD5_D</a>&#160;&#160;&#160;0x10325476</td></tr>
+<tr class="separator:a910620f8046e2c27bf3fc696d7a1e63f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8229ecf0359dbf6030708cc14575562" id="r_ad8229ecf0359dbf6030708cc14575562"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="md5_8hpp.html#ad8229ecf0359dbf6030708cc14575562">ARION_MD5_F</a>(X,  Y,  Z)&#160;&#160;&#160;((X &amp; Y) | (~X &amp; Z))</td></tr>
+<tr class="separator:ad8229ecf0359dbf6030708cc14575562"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a1d81303815fb90e57e4c9515058085" id="r_a5a1d81303815fb90e57e4c9515058085"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="md5_8hpp.html#a5a1d81303815fb90e57e4c9515058085">ARION_MD5_G</a>(X,  Y,  Z)&#160;&#160;&#160;((X &amp; Z) | (Y &amp; ~Z))</td></tr>
+<tr class="separator:a5a1d81303815fb90e57e4c9515058085"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96fac5b985aca86eb6d4a21ed677fb15" id="r_a96fac5b985aca86eb6d4a21ed677fb15"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="md5_8hpp.html#a96fac5b985aca86eb6d4a21ed677fb15">ARION_MD5_H</a>(X,  Y,  Z)&#160;&#160;&#160;(X ^ Y ^ Z)</td></tr>
+<tr class="separator:a96fac5b985aca86eb6d4a21ed677fb15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64ea135099ca36ba82d6f8589b656811" id="r_a64ea135099ca36ba82d6f8589b656811"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="md5_8hpp.html#a64ea135099ca36ba82d6f8589b656811">ARION_MD5_I</a>(X,  Y,  Z)&#160;&#160;&#160;(Y ^ (X | ~Z))</td></tr>
+<tr class="separator:a64ea135099ca36ba82d6f8589b656811"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -164,77 +165,80 @@ Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a545bfc6266b55b0d59949025fa76d047" id="r_a545bfc6266b55b0d59949025fa76d047"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a545bfc6266b55b0d59949025fa76d047">arion::S</a> []</td></tr>
+<tr class="memdesc:a545bfc6266b55b0d59949025fa76d047"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of shift amounts S[i] used in the MD5 algorithm.  <br /></td></tr>
 <tr class="separator:a545bfc6266b55b0d59949025fa76d047"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8932209106f31f91453f65d50912822e" id="r_a8932209106f31f91453f65d50912822e"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a8932209106f31f91453f65d50912822e">arion::K</a> []</td></tr>
+<tr class="memdesc:a8932209106f31f91453f65d50912822e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of 64 pre-calculated sine constants K[i] used in the MD5 algorithm.  <br /></td></tr>
 <tr class="separator:a8932209106f31f91453f65d50912822e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9afca3821a229d83906015c45b89c3f" id="r_aa9afca3821a229d83906015c45b89c3f"><td class="memItemLeft" align="right" valign="top">static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#aa9afca3821a229d83906015c45b89c3f">arion::PADDING</a> []</td></tr>
+<tr class="memdesc:aa9afca3821a229d83906015c45b89c3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The MD5 padding constant array.  <br /></td></tr>
 <tr class="separator:aa9afca3821a229d83906015c45b89c3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a955f504eccf76b4eb2489c0adab03121" name="a955f504eccf76b4eb2489c0adab03121"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a955f504eccf76b4eb2489c0adab03121">&#9670;&#160;</a></span>A</h2>
+<a id="ab556fdf30c5e8bb49eb363de2137b1d5" name="ab556fdf30c5e8bb49eb363de2137b1d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab556fdf30c5e8bb49eb363de2137b1d5">&#9670;&#160;</a></span>ARION_MD5_A</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define A&#160;&#160;&#160;0x67452301</td>
+          <td class="memname">#define ARION_MD5_A&#160;&#160;&#160;0x67452301</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a111da81ae5883147168bbb8366377b10" name="a111da81ae5883147168bbb8366377b10"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a111da81ae5883147168bbb8366377b10">&#9670;&#160;</a></span>B</h2>
+<a id="a2ef2d4d53b0953f95cb73cc3fa39f7e1" name="a2ef2d4d53b0953f95cb73cc3fa39f7e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ef2d4d53b0953f95cb73cc3fa39f7e1">&#9670;&#160;</a></span>ARION_MD5_B</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define B&#160;&#160;&#160;0xefcdab89</td>
+          <td class="memname">#define ARION_MD5_B&#160;&#160;&#160;0xefcdab89</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="ac4cf4b2ab929bd23951a8676eeac086b" name="ac4cf4b2ab929bd23951a8676eeac086b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac4cf4b2ab929bd23951a8676eeac086b">&#9670;&#160;</a></span>C</h2>
+<a id="a1cacf16d0881bfbb88482dae5294c164" name="a1cacf16d0881bfbb88482dae5294c164"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1cacf16d0881bfbb88482dae5294c164">&#9670;&#160;</a></span>ARION_MD5_C</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define C&#160;&#160;&#160;0x98badcfe</td>
+          <td class="memname">#define ARION_MD5_C&#160;&#160;&#160;0x98badcfe</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="af316c33cc298530f245e8b55330e86b5" name="af316c33cc298530f245e8b55330e86b5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af316c33cc298530f245e8b55330e86b5">&#9670;&#160;</a></span>D</h2>
+<a id="a910620f8046e2c27bf3fc696d7a1e63f" name="a910620f8046e2c27bf3fc696d7a1e63f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a910620f8046e2c27bf3fc696d7a1e63f">&#9670;&#160;</a></span>ARION_MD5_D</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define D&#160;&#160;&#160;0x10325476</td>
+          <td class="memname">#define ARION_MD5_D&#160;&#160;&#160;0x10325476</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="ad6d7c306af62dbc87d1fcde6cb1bfb0e" name="ad6d7c306af62dbc87d1fcde6cb1bfb0e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad6d7c306af62dbc87d1fcde6cb1bfb0e">&#9670;&#160;</a></span>F</h2>
+<a id="ad8229ecf0359dbf6030708cc14575562" name="ad8229ecf0359dbf6030708cc14575562"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8229ecf0359dbf6030708cc14575562">&#9670;&#160;</a></span>ARION_MD5_F</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define F</td>
+          <td class="memname">#define ARION_MD5_F</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">X, </td>
@@ -261,14 +265,14 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="adbf7bdfe79e039c09c4a945ca9ac0664" name="adbf7bdfe79e039c09c4a945ca9ac0664"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adbf7bdfe79e039c09c4a945ca9ac0664">&#9670;&#160;</a></span>G</h2>
+<a id="a5a1d81303815fb90e57e4c9515058085" name="a5a1d81303815fb90e57e4c9515058085"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a1d81303815fb90e57e4c9515058085">&#9670;&#160;</a></span>ARION_MD5_G</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define G</td>
+          <td class="memname">#define ARION_MD5_G</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">X, </td>
@@ -295,14 +299,14 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a3ab4053d9e8013cba3faa1abf9ef1c9c" name="a3ab4053d9e8013cba3faa1abf9ef1c9c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3ab4053d9e8013cba3faa1abf9ef1c9c">&#9670;&#160;</a></span>H</h2>
+<a id="a96fac5b985aca86eb6d4a21ed677fb15" name="a96fac5b985aca86eb6d4a21ed677fb15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96fac5b985aca86eb6d4a21ed677fb15">&#9670;&#160;</a></span>ARION_MD5_H</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define H</td>
+          <td class="memname">#define ARION_MD5_H</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">X, </td>
@@ -329,14 +333,14 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="aa33f2e8f2d68506493eccef4bc022cb5" name="aa33f2e8f2d68506493eccef4bc022cb5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa33f2e8f2d68506493eccef4bc022cb5">&#9670;&#160;</a></span>I</h2>
+<a id="a64ea135099ca36ba82d6f8589b656811" name="a64ea135099ca36ba82d6f8589b656811"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64ea135099ca36ba82d6f8589b656811">&#9670;&#160;</a></span>ARION_MD5_I</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define I</td>
+          <td class="memname">#define ARION_MD5_I</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">X, </td>

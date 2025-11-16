@@ -105,6 +105,9 @@ $(document).ready(function(){initNavTree('structarion__poly__struct_1_1POLYMORPH
 </div><!--header-->
 <div class="contents">
 
+<p>Structure defining an architecture constraint for a field in a polymorphic struct.  
+ <a href="structarion__poly__struct_1_1POLYMORPHIC__STRUCT__CONSTRAINT.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="struct__utils_8hpp_source.html">struct_utils.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -119,11 +122,15 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a486493cb38476e4be8e90244004e0981" id="r_a486493cb38476e4be8e90244004e0981"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5">arion::CPU_ARCH</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__poly__struct_1_1POLYMORPHIC__STRUCT__CONSTRAINT.html#a486493cb38476e4be8e90244004e0981">arch</a></td></tr>
+<tr class="memdesc:a486493cb38476e4be8e90244004e0981"><td class="mdescLeft">&#160;</td><td class="mdescRight">The specific architecture required for the field to be present/used.  <br /></td></tr>
 <tr class="separator:a486493cb38476e4be8e90244004e0981"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0dfb1df6051b77be309d38fc3cc76fe4" id="r_a0dfb1df6051b77be309d38fc3cc76fe4"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__poly__struct_1_1POLYMORPHIC__STRUCT__CONSTRAINT.html#a0dfb1df6051b77be309d38fc3cc76fe4">arch_sz</a></td></tr>
+<tr class="memdesc:a0dfb1df6051b77be309d38fc3cc76fe4"><td class="mdescLeft">&#160;</td><td class="mdescRight">The specific architecture bit size required (e.g., 32 or 64 bit).  <br /></td></tr>
 <tr class="separator:a0dfb1df6051b77be309d38fc3cc76fe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Structure defining an architecture constraint for a field in a polymorphic struct. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a16b578fa20f5c84b92c91f09171990a3" name="a16b578fa20f5c84b92c91f09171990a3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a16b578fa20f5c84b92c91f09171990a3">&#9670;&#160;</a></span>POLYMORPHIC_STRUCT_CONSTRAINT() <span class="overload">[1/3]</span></h2>
 
@@ -146,6 +153,7 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for an unconstrained <a class="el" href="structarion__poly__struct_1_1POLYMORPHIC__STRUCT__CONSTRAINT.html" title="Structure defining an architecture constraint for a field in a polymorphic struct.">POLYMORPHIC_STRUCT_CONSTRAINT</a> instance. </p>
 
 </div>
 </div>
@@ -172,6 +180,12 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for a constraint based on architecture. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arch</td><td>The specific CPU architecture. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -198,6 +212,12 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for a constraint based on architecture size. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arch_sz</td><td>The specific architecture size (32 or 64). </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -214,6 +234,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The specific architecture required for the field to be present/used. </p>
+
 </div>
 </div>
 <a id="a0dfb1df6051b77be309d38fc3cc76fe4" name="a0dfb1df6051b77be309d38fc3cc76fe4"></a>
@@ -228,10 +250,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The specific architecture bit size required (e.g., 32 or 64 bit). </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/utils/<a class="el" href="struct__utils_8hpp_source.html">struct_utils.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/utils/<a class="el" href="struct__utils_8hpp_source.html">struct_utils.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

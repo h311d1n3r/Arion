@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Arion: include/arion/platforms/linux/elf_loader.hpp File Reference</title>
+<title>Arion: /home/runner/work/Arion/Arion/include/arion/platforms/linux/elf_loader.hpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -118,8 +118,10 @@ $(document).ready(function(){initNavTree('elf__loader_8hpp.html',''); initResiza
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARM__TRAP.html">arion::ARM_TRAP</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure representing a kernel trap entry for the 32-bit ARM architecture.  <a href="structarion_1_1ARM__TRAP.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1ElfLoader.html">arion::ElfLoader</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A Linux loader implementation responsible for parsing and mapping ELF binaries (executables and dynamic loaders).  <a href="classarion_1_1ElfLoader.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
@@ -177,8 +179,10 @@ Macros</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:aa11addaed9eb8c26808abe4f4d228bbf" id="r_aa11addaed9eb8c26808abe4f4d228bbf"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="elf__loader_8hpp.html#aa11addaed9eb8c26808abe4f4d228bbf">_binary_vdso_bin_start</a> []</td></tr>
+<tr class="memdesc:aa11addaed9eb8c26808abe4f4d228bbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">External symbol indicating the start of the embedded VDSO binary data.  <br /></td></tr>
 <tr class="separator:aa11addaed9eb8c26808abe4f4d228bbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7108157413c77cbb0d219b6d15f826a" id="r_ab7108157413c77cbb0d219b6d15f826a"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="elf__loader_8hpp.html#ab7108157413c77cbb0d219b6d15f826a">_binary_vdso_bin_end</a> []</td></tr>
+<tr class="memdesc:ab7108157413c77cbb0d219b6d15f826a"><td class="mdescLeft">&#160;</td><td class="mdescRight">External symbol indicating the end of the embedded VDSO binary data.  <br /></td></tr>
 <tr class="separator:ab7108157413c77cbb0d219b6d15f826a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
@@ -511,6 +515,8 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>External symbol indicating the end of the embedded VDSO binary data. </p>
+
 </div>
 </div>
 <a id="aa11addaed9eb8c26808abe4f4d228bbf" name="aa11addaed9eb8c26808abe4f4d228bbf"></a>
@@ -532,6 +538,8 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>External symbol indicating the start of the embedded VDSO binary data. </p>
 
 </div>
 </div>

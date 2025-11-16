@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Arion: include/arion/platforms/linux/archs/lnx_arch_arm.hpp File Reference</title>
+<title>Arion: /home/runner/work/Arion/Arion/include/arion/platforms/linux/archs/lnx_arch_arm.hpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -114,14 +114,19 @@ $(document).ready(function(){initNavTree('lnx__arch__arm_8hpp.html',''); initRes
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm_1_1pt__regs.html">arion_lnx_arm::pt_regs</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure represents the ARM processor's register state as saved on the stack by the Linux kernel.  <a href="structarion__lnx__arm_1_1pt__regs.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm_1_1elf__prstatus.html">arion_lnx_arm::elf_prstatus</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure for a process status ELF note (NT_PRSTATUS) for ARM, containing general registers.  <a href="structarion__lnx__arm_1_1elf__prstatus.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm_1_1fp__reg.html">arion_lnx_arm::fp_reg</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure representing a single ARM floating-point register (double-precision format).  <a href="structarion__lnx__arm_1_1fp__reg.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm_1_1user__fp.html">arion_lnx_arm::user_fp</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure representing the ARM floating-point unit (FPU) context as saved in the user area.  <a href="structarion__lnx__arm_1_1user__fp.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__lnx__arm_1_1ArchManagerLinuxARM.html">arion_lnx_arm::ArchManagerLinuxARM</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Linux ARM architecture manager class for Arion.  <a href="classarion__lnx__arm_1_1ArchManagerLinuxARM.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
@@ -132,17 +137,22 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:aa81c585fd8d5d63cd203581f98f97534" id="r_aa81c585fd8d5d63cd203581f98f97534"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="namespacearion__lnx__type.html#abc9712287958c302788e0ec31d2fba0b">arion_lnx_type::elf_greg_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion__lnx__arm.html#aa81c585fd8d5d63cd203581f98f97534">arion_lnx_arm::elf_gregset_t</a>[<a class="el" href="namespacearion__lnx__arm.html#ae814a8bdd77a35c192e3c6c7e338199f">ELF_NGREG</a>]</td></tr>
+<tr class="memdesc:aa81c585fd8d5d63cd203581f98f97534"><td class="mdescLeft">&#160;</td><td class="mdescRight">Definition of the general-purpose register set type for ELF notes.  <br /></td></tr>
 <tr class="separator:aa81c585fd8d5d63cd203581f98f97534"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2baa2425f7a3812e909fd589fab5efd6" id="r_a2baa2425f7a3812e909fd589fab5efd6"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structarion__lnx__arm_1_1user__fp.html">user_fp</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion__lnx__arm.html#a2baa2425f7a3812e909fd589fab5efd6">arion_lnx_arm::elf_fpregset_t</a></td></tr>
+<tr class="memdesc:a2baa2425f7a3812e909fd589fab5efd6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Definition of the floating-point register set type for ELF notes (NT_FPREGSET).  <br /></td></tr>
 <tr class="separator:a2baa2425f7a3812e909fd589fab5efd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a4f79135d623fc66e69e6a97ab91a0733" id="r_a4f79135d623fc66e69e6a97ab91a0733"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacearion.html#a1bc7997a0cf279f7e07ce89b9e72e899">arion::REG</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion__lnx__arm.html#a4f79135d623fc66e69e6a97ab91a0733">arion_lnx_arm::uc_pt_regs</a></td></tr>
+<tr class="memdesc:a4f79135d623fc66e69e6a97ab91a0733"><td class="mdescLeft">&#160;</td><td class="mdescRight">A vector mapping the Linux <code><a class="el" href="structarion__lnx__arm_1_1pt__regs.html" title="Structure represents the ARM processor&#39;s register state as saved on the stack by the Linux kernel.">pt_regs</a></code> structure indices to ARION's universal register enumeration (<code><a class="el" href="namespacearion.html#a1bc7997a0cf279f7e07ce89b9e72e899" title="Identifies a Unicorn register.">arion::REG</a></code>).  <br /></td></tr>
 <tr class="separator:a4f79135d623fc66e69e6a97ab91a0733"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae814a8bdd77a35c192e3c6c7e338199f" id="r_ae814a8bdd77a35c192e3c6c7e338199f"><td class="memItemLeft" align="right" valign="top">const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion__lnx__arm.html#ae814a8bdd77a35c192e3c6c7e338199f">arion_lnx_arm::ELF_NGREG</a> = (sizeof(struct <a class="el" href="structarion__lnx__arm_1_1pt__regs.html">pt_regs</a>) / sizeof(<a class="el" href="namespacearion__lnx__type.html#abc9712287958c302788e0ec31d2fba0b">arion_lnx_type::elf_greg_t</a>))</td></tr>
+<tr class="memdesc:ae814a8bdd77a35c192e3c6c7e338199f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of 32-bit words (general registers) in the <code><a class="el" href="structarion__lnx__arm_1_1pt__regs.html" title="Structure represents the ARM processor&#39;s register state as saved on the stack by the Linux kernel.">pt_regs</a></code> structure, used for ELF notes.  <br /></td></tr>
 <tr class="separator:ae814a8bdd77a35c192e3c6c7e338199f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8ac484511d126997ec94ebc6f8d8a3b" id="r_ac8ac484511d126997ec94ebc6f8d8a3b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacearion.html#a1bc7997a0cf279f7e07ce89b9e72e899">arion::REG</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion__lnx__arm.html#ac8ac484511d126997ec94ebc6f8d8a3b">arion_lnx_arm::uc_fp_regs</a></td></tr>
+<tr class="memdesc:ac8ac484511d126997ec94ebc6f8d8a3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">A vector mapping the FPU registers to ARION's universal register enumeration (<code><a class="el" href="namespacearion.html#a1bc7997a0cf279f7e07ce89b9e72e899" title="Identifies a Unicorn register.">arion::REG</a></code>).  <br /></td></tr>
 <tr class="separator:ac8ac484511d126997ec94ebc6f8d8a3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->

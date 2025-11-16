@@ -105,6 +105,9 @@ $(document).ready(function(){initNavTree('structarion_1_1ARION__AFL__PARAM.html'
 </div><!--header-->
 <div class="contents">
 
+<p>This structure is placed in the UnicornAFL user_data parameter.  
+ <a href="structarion_1_1ARION__AFL__PARAM.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="arion__afl_8hpp_source.html">arion_afl.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -115,19 +118,26 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a071fb272bbb168b4143dc2538dbce79d" id="r_a071fb272bbb168b4143dc2538dbce79d"><td class="memItemLeft" align="right" valign="top">std::weak_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__AFL__PARAM.html#a071fb272bbb168b4143dc2538dbce79d">arion</a></td></tr>
+<tr class="memdesc:a071fb272bbb168b4143dc2538dbce79d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance being fuzzed.  <br /></td></tr>
 <tr class="separator:a071fb272bbb168b4143dc2538dbce79d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9112a458808853cb42d0d1225fabc3b" id="r_ad9112a458808853cb42d0d1225fabc3b"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="structarion_1_1ARION__CONTEXT.html">ARION_CONTEXT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__AFL__PARAM.html#ad9112a458808853cb42d0d1225fabc3b">ctxt</a></td></tr>
+<tr class="memdesc:ad9112a458808853cb42d0d1225fabc3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The original context of the <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance, before fuzzing started.  <br /></td></tr>
 <tr class="separator:ad9112a458808853cb42d0d1225fabc3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a610a7c9a37baa1fac44be429846dcfed" id="r_a610a7c9a37baa1fac44be429846dcfed"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#a7f8621e7352870b33f86f3397dffaa43">ARION_MEM_STRATEGY</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__AFL__PARAM.html#a610a7c9a37baa1fac44be429846dcfed">mem_strategy</a></td></tr>
+<tr class="memdesc:a610a7c9a37baa1fac44be429846dcfed"><td class="mdescLeft">&#160;</td><td class="mdescRight">The memory restoring strategy.  <br /></td></tr>
 <tr class="separator:a610a7c9a37baa1fac44be429846dcfed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a418bd4a4e73c9b0c2d32853ab46e82" id="r_a4a418bd4a4e73c9b0c2d32853ab46e82"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#aff16d1d3d06a73f4f8a60ce223844c81">ARION_AFL_INPUT_CALLBACK</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__AFL__PARAM.html#a4a418bd4a4e73c9b0c2d32853ab46e82">input_callback</a></td></tr>
 <tr class="separator:a4a418bd4a4e73c9b0c2d32853ab46e82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4018a171bb8caa3ced26ac9c15af8fd8" id="r_a4018a171bb8caa3ced26ac9c15af8fd8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#ac6990bc1b15b483d4c6804f3b7abcf34">ARION_AFL_CRASH_CALLBACK</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__AFL__PARAM.html#a4018a171bb8caa3ced26ac9c15af8fd8">crash_callback</a></td></tr>
+<tr class="memdesc:a4018a171bb8caa3ced26ac9c15af8fd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">This callback gets triggered at each target crash detected by AFL.  <br /></td></tr>
 <tr class="separator:a4018a171bb8caa3ced26ac9c15af8fd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75f55e17e4b7a92e6d0fae6505d23436" id="r_a75f55e17e4b7a92e6d0fae6505d23436"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__AFL__PARAM.html#a75f55e17e4b7a92e6d0fae6505d23436">user_data</a></td></tr>
+<tr class="memdesc:a75f55e17e4b7a92e6d0fae6505d23436"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional user-defined data passed to the hook.  <br /></td></tr>
 <tr class="separator:a75f55e17e4b7a92e6d0fae6505d23436"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This structure is placed in the UnicornAFL user_data parameter. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a449f7ef423ea9628a38c586e686dd973" name="a449f7ef423ea9628a38c586e686dd973"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a449f7ef423ea9628a38c586e686dd973">&#9670;&#160;</a></span>ARION_AFL_PARAM()</h2>
 
@@ -185,6 +195,17 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="structarion_1_1ARION__AFL__PARAM.html" title="This structure is placed in the UnicornAFL user_data parameter.">ARION_AFL_PARAM</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance being fuzzed. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ctxt</td><td>The original context of the <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance, before fuzzing started. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mem_strategy</td><td>The memory restoring strategy. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input_callback</td><td>This callback gets triggered at each input generation by AFL, allowing the user to inject the input in the <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">crash_callback</td><td>This callback gets triggered at each target crash detected by AFL. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -201,6 +222,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance being fuzzed. </p>
+
 </div>
 </div>
 <a id="a4018a171bb8caa3ced26ac9c15af8fd8" name="a4018a171bb8caa3ced26ac9c15af8fd8"></a>
@@ -214,6 +237,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>This callback gets triggered at each target crash detected by AFL. </p>
 
 </div>
 </div>
@@ -229,6 +254,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The original context of the <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance, before fuzzing started. </p>
+
 </div>
 </div>
 <a id="a4a418bd4a4e73c9b0c2d32853ab46e82" name="a4a418bd4a4e73c9b0c2d32853ab46e82"></a>
@@ -242,6 +269,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>This callback gets triggered at each input generation by AFL, allowing the user to inject the input in the <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance. </p>
 
 </div>
 </div>
@@ -257,6 +285,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The memory restoring strategy. </p>
+
 </div>
 </div>
 <a id="a75f55e17e4b7a92e6d0fae6505d23436" name="a75f55e17e4b7a92e6d0fae6505d23436"></a>
@@ -271,10 +301,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Optional user-defined data passed to the hook. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/components/<a class="el" href="arion__afl_8hpp_source.html">arion_afl.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/components/<a class="el" href="arion__afl_8hpp_source.html">arion_afl.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

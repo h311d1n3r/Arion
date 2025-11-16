@@ -215,6 +215,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:afc3dbff834b2bf1885eceb4725a07747" id="r_afc3dbff834b2bf1885eceb4725a07747"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classarion_1_1MemoryRecorder.html">MemoryRecorder</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1MemoryManager.html#afc3dbff834b2bf1885eceb4725a07747">recorder</a></td></tr>
+<tr class="memdesc:afc3dbff834b2bf1885eceb4725a07747"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to record memory accesses to the associated <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance.  <br /></td></tr>
 <tr class="separator:afc3dbff834b2bf1885eceb4725a07747"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
@@ -233,15 +234,21 @@ Private Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ad415592f3580b79efb064239a3d4f771" id="r_ad415592f3580b79efb064239a3d4f771"><td class="memItemLeft" align="right" valign="top">std::weak_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1MemoryManager.html#ad415592f3580b79efb064239a3d4f771">arion</a></td></tr>
+<tr class="memdesc:ad415592f3580b79efb064239a3d4f771"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this instance.  <br /></td></tr>
 <tr class="separator:ad415592f3580b79efb064239a3d4f771"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8a17cb696a3c89260b672dffcac3077" id="r_aa8a17cb696a3c89260b672dffcac3077"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classarion_1_1MemoryManager.html#a2daaaec7e42c1c92c83959e0197e3fbc">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1MemoryManager.html#aa8a17cb696a3c89260b672dffcac3077">page_sz</a></td></tr>
+<tr class="memdesc:aa8a17cb696a3c89260b672dffcac3077"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of a memory page in bytes. Used when allocating new pages.  <br /></td></tr>
 <tr class="separator:aa8a17cb696a3c89260b672dffcac3077"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2e61b6a2969ea3c8d75cafa2c09253c" id="r_ac2e61b6a2969ea3c8d75cafa2c09253c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#a58583bcb70d373fc0444d39a9fd06b59">ADDR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1MemoryManager.html#ac2e61b6a2969ea3c8d75cafa2c09253c">brk</a> = 0</td></tr>
+<tr class="memdesc:ac2e61b6a2969ea3c8d75cafa2c09253c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current break address (brk). This is used to determine where new memory should be allocated.  <br /></td></tr>
 <tr class="separator:ac2e61b6a2969ea3c8d75cafa2c09253c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8b6e1828b860fe2f685f325f6eb4f76" id="r_aa8b6e1828b860fe2f685f325f6eb4f76"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="structarion_1_1ARION__MAPPING.html">ARION_MAPPING</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1MemoryManager.html#aa8b6e1828b860fe2f685f325f6eb4f76">mappings</a></td></tr>
+<tr class="memdesc:aa8b6e1828b860fe2f685f325f6eb4f76"><td class="mdescLeft">&#160;</td><td class="mdescRight">A vector of all mappings currently present within the <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance.  <br /></td></tr>
 <tr class="separator:aa8b6e1828b860fe2f685f325f6eb4f76"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This class is responsible for managing memory mappings within an <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> emulation session. It allows the user to map and unmap memory regions, change their protection flags, and read/write from/to arbitrary addresses. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af6fd6bedaedf53a8e1522d3546275531" name="af6fd6bedaedf53a8e1522d3546275531"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af6fd6bedaedf53a8e1522d3546275531">&#9670;&#160;</a></span>MemoryManager()</h2>
 
@@ -275,6 +282,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="classarion_1_1MemoryManager.html">MemoryManager</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">page_sz</td><td>The size of a memory page in bytes. Used when allocating new pages. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -294,6 +308,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Aligns a given address to the next page boundary. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Address to align. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Address aligned to the page size. </dd></dl>
 
 </div>
 </div>
@@ -322,6 +343,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Checks whether a memory region can be mapped at a given address and size. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Desired starting address. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">sz</td><td>Size of the region to map. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the mapping can be created, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -339,6 +368,7 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Retrieves the current program break (brk). </p><dl class="section return"><dt>Returns</dt><dd>The current break address. </dd></dl>
 
 </div>
 </div>
@@ -357,6 +387,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Retrieves the mapping that contains a given address. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>The address to look up. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The corresponding <a class="el" href="structarion_1_1ARION__MAPPING.html" title="This structure holds data associated with a memory mapping.">ARION_MAPPING</a> if found, otherwise nullptr. </dd></dl>
 
 </div>
 </div>
@@ -375,6 +412,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Retrieves a mapping by its info string. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">info</td><td>The info string identifying the mapping. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The corresponding <a class="el" href="structarion_1_1ARION__MAPPING.html" title="This structure holds data associated with a memory mapping.">ARION_MAPPING</a> if found, otherwise nullptr. </dd></dl>
 
 </div>
 </div>
@@ -392,6 +436,7 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Returns a vector containing all currently active memory mappings. </p><dl class="section return"><dt>Returns</dt><dd>A vector of shared pointers to <a class="el" href="structarion_1_1ARION__MAPPING.html" title="This structure holds data associated with a memory mapping.">ARION_MAPPING</a> structures. </dd></dl>
 
 </div>
 </div>
@@ -410,6 +455,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Checks whether a mapping exists in the current <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> memory layout. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">mapping</td><td>The <a class="el" href="structarion_1_1ARION__MAPPING.html" title="This structure holds data associated with a memory mapping.">ARION_MAPPING</a> to check. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the mapping exists, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -428,6 +480,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Checks if a mapping with a specific info string exists. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">info</td><td>The info string associated with a mapping. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if such a mapping exists, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -454,6 +513,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Instanciates and initializes new <a class="el" href="classarion_1_1MemoryManager.html">MemoryManager</a> objects with some parameters. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this instance. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A new <a class="el" href="classarion_1_1MemoryManager.html">MemoryManager</a> instance. </dd></dl>
 
 </div>
 </div>
@@ -480,6 +546,12 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Inserts a new mapping in <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> memory. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">mapping</td><td>The <a class="el" href="structarion_1_1ARION__MAPPING.html" title="This structure holds data associated with a memory mapping.">ARION_MAPPING</a> to insert. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -498,6 +570,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Checks whether a given address is mapped in <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> memory. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Address to check. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the address is mapped, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -538,6 +617,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Maps a memory region at a specific address. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">start_addr</td><td>The starting address for the mapping. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">sz</td><td>Size of the region to map. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">perms</td><td>Memory protection flags. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">info</td><td>Optional string identifying the mapping. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The starting address of the mapped region. </dd></dl>
 
 </div>
 </div>
@@ -584,6 +673,17 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Maps a memory region near a specific address, automatically finding a suitable place. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Preferred starting address. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">sz</td><td>Size of the region to map. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">perms</td><td>Memory protection flags. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">asc</td><td>If true, search upwards in memory; otherwise downwards. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">info</td><td>Optional info string for the mapping. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The address where the region was mapped. </dd></dl>
 
 </div>
 </div>
@@ -624,6 +724,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Maps a memory region at any available location. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">sz</td><td>Size of the region to map. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">perms</td><td>Memory protection flags. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">asc</td><td>If true, search upwards in memory; otherwise downwards. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">info</td><td>Optional info string for the mapping. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The address where the region was mapped. </dd></dl>
 
 </div>
 </div>
@@ -641,6 +751,7 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Returns a string representation of all mappings. </p><dl class="section return"><dt>Returns</dt><dd>A formatted string describing each memory mapping. </dd></dl>
 
 </div>
 </div>
@@ -666,6 +777,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Merges all contiguous memory mappings (expensive operation). </p>
 
 </div>
 </div>
@@ -702,6 +814,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Merges contiguous memory mappings in a given range. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Start memory address of the mappings that should be merged. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>End memory address of the mappings that should be merged. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -730,6 +849,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Changes protection flags for the mapping containing a specific address. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">seg_addr</td><td>Address within the mapping to modify. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">perms</td><td>New protection flags. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -764,6 +890,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Changes protection flags for a memory range. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">start_addr</td><td>Start of the range. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end_addr</td><td>End of the range. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">perms</td><td>New protection flags. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -804,6 +938,15 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Changes protection flags for a specific region within a mapping. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">mapping</td><td>The mapping to modify. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start_addr</td><td>Start of the region. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end_addr</td><td>End of the region. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">perms</td><td>New protection flags. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -832,6 +975,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Changes protection flags for an entire mapping. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">mapping</td><td>The mapping to modify. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">perms</td><td>New protection flags. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -860,6 +1010,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Reads raw bytes from memory. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Starting address. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">data_sz</td><td>Number of bytes to read. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector containing the read bytes. </dd></dl>
 
 </div>
 </div>
@@ -888,6 +1046,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Reads a memory region and returns its ASCII representation. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Starting address. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">data_sz</td><td>Number of bytes to read. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ASCII string. </dd></dl>
 
 </div>
 </div>
@@ -906,6 +1072,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Reads a null-terminated C string from memory. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Address of the string. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The read C string. </dd></dl>
 
 </div>
 </div>
@@ -924,6 +1097,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Reads a file descriptor (int) from memory. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Address to read from. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>File descriptor value. </dd></dl>
 
 </div>
 </div>
@@ -958,6 +1138,15 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Reads memory as a hexadecimal string. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Starting address. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">data_sz</td><td>Number of bytes to read. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">sep</td><td>Optional separator character between bytes. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>String representation of the data in hexadecimal. </dd></dl>
 
 </div>
 </div>
@@ -986,6 +1175,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Disassembles a number of instructions from a given address. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Starting address. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">count</td><td>Number of instructions to read. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector of Capstone instruction objects. </dd></dl>
 
 </div>
 </div>
@@ -1004,6 +1201,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Reads a pointer-sized value from memory. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Address to read from. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer value read from memory. </dd></dl>
 
 </div>
 </div>
@@ -1022,6 +1226,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Reads an array of pointers from memory. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Starting address of the array. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector of pointer values. </dd></dl>
 
 </div>
 </div>
@@ -1040,6 +1251,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Reads a size_t value from memory. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Address to read from. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Size value read from memory. </dd></dl>
 
 </div>
 </div>
@@ -1068,6 +1286,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Reads an integer value of a given size from memory. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Address to read from. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>Number of bytes to read. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The read value as a 64-bit integer. </dd></dl>
 
 </div>
 </div>
@@ -1094,6 +1320,12 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Removes a mapping from <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> memory. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">mapping</td><td>The <a class="el" href="structarion_1_1ARION__MAPPING.html" title="This structure holds data associated with a memory mapping.">ARION_MAPPING</a> to remove. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1128,6 +1360,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Resizes the mapping containing a specific address. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">seg_addr</td><td>Address within the mapping. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start_addr</td><td>New start address. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end_addr</td><td>New end address. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1162,6 +1402,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Resizes an existing mapping to a new range. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">mapping</td><td>The mapping to resize. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start_addr</td><td>New start address. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end_addr</td><td>New end address. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1180,6 +1428,12 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Sets the current program break (brk). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">brk</td><td>New break address. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1197,6 +1451,7 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Aligns the emulated stack pointer to the current word or ABI boundary. </p>
 
 </div>
 </div>
@@ -1214,6 +1469,7 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Pops a 64-bit value from the emulated stack. </p><dl class="section return"><dt>Returns</dt><dd>The popped value. </dd></dl>
 
 </div>
 </div>
@@ -1232,6 +1488,12 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Pushes a 64-bit value onto the emulated stack. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">val</td><td>Value to push. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1260,6 +1522,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Pushes raw bytes onto the emulated stack. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>Pointer to the data to push. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">data_sz</td><td>Size of the data in bytes. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1278,6 +1547,12 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Pushes a string onto the emulated stack. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>String to push. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1304,6 +1579,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Converts <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> memory protection rights to Unicorn ones. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">perms</td><td><a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> memory protection rights. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Unicorn memory protection rights. </dd></dl>
 
 </div>
 </div>
@@ -1322,6 +1604,12 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Unmaps the mapping containing a specific address. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">seg_addr</td><td>Any address within the mapping to remove. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1350,6 +1638,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Unmaps a range of memory. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">start_addr</td><td>Start address of the region to unmap. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end_addr</td><td>End address of the region to unmap. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1368,6 +1663,12 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Unmaps an entire mapping. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">mapping</td><td>The mapping to unmap. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1402,6 +1703,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Unmaps a memory range from an existing mapping. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">mapping</td><td>The mapping to unmap from. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start_addr</td><td>Start of the range to unmap. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end_addr</td><td>End of the range to unmap. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1419,6 +1728,7 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Unmaps all memory regions. </p>
 
 </div>
 </div>
@@ -1453,6 +1763,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Writes raw bytes to memory. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Destination address. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>Pointer to the data. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">data_sz</td><td>Size of the data. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1481,6 +1799,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Writes a file descriptor (int) to memory. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Destination address. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">fd</td><td>File descriptor to write. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1509,6 +1834,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Writes a pointer to memory. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Destination address. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ptr</td><td>Pointer value to write. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1537,6 +1869,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Writes a string to memory (without null-termination unless included). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Destination address. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>The string to write. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1565,6 +1904,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Writes a size_t value to memory. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Destination address. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">sz</td><td>Size value to write. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1599,6 +1945,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Writes a fixed-size integer value to memory. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Destination address. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">val</td><td>The value to write. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>Number of bytes to write. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1623,6 +1977,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this instance. </p>
+
 </div>
 </div>
 <a id="ac2e61b6a2969ea3c8d75cafa2c09253c" name="ac2e61b6a2969ea3c8d75cafa2c09253c"></a>
@@ -1644,6 +2000,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>The current break address (brk). This is used to determine where new memory should be allocated. </p>
 
 </div>
 </div>
@@ -1667,6 +2025,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>A vector of all mappings currently present within the <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance. </p>
+
 </div>
 </div>
 <a id="aa8a17cb696a3c89260b672dffcac3077" name="aa8a17cb696a3c89260b672dffcac3077"></a>
@@ -1689,6 +2049,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>The size of a memory page in bytes. Used when allocating new pages. </p>
+
 </div>
 </div>
 <a id="afc3dbff834b2bf1885eceb4725a07747" name="afc3dbff834b2bf1885eceb4725a07747"></a>
@@ -1703,10 +2065,12 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Used to record memory accesses to the associated <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance. </p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/common/<a class="el" href="memory__manager_8hpp_source.html">memory_manager.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/common/<a class="el" href="memory__manager_8hpp_source.html">memory_manager.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

@@ -115,13 +115,18 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:abf427a86ee0212d98d23dc3dd8724efb" id="r_abf427a86ee0212d98d23dc3dd8724efb"><td class="memItemLeft" align="right" valign="top">pid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__TGROUP__ENTRY.html#abf427a86ee0212d98d23dc3dd8724efb">tid</a></td></tr>
+<tr class="memdesc:abf427a86ee0212d98d23dc3dd8724efb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Thread ID (TID) of the thread.  <br /></td></tr>
 <tr class="separator:abf427a86ee0212d98d23dc3dd8724efb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e7f16e3ac8622e898c1a6119c4282b3" id="r_a6e7f16e3ac8622e898c1a6119c4282b3"><td class="memItemLeft" align="right" valign="top">pid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__TGROUP__ENTRY.html#a6e7f16e3ac8622e898c1a6119c4282b3">tgid</a></td></tr>
+<tr class="memdesc:a6e7f16e3ac8622e898c1a6119c4282b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Thread Group ID (TGID) associated with the thread.  <br /></td></tr>
 <tr class="separator:a6e7f16e3ac8622e898c1a6119c4282b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71786d85611c617537c2b46cdcf98ec3" id="r_a71786d85611c617537c2b46cdcf98ec3"><td class="memItemLeft" align="right" valign="top">pid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__TGROUP__ENTRY.html#a71786d85611c617537c2b46cdcf98ec3">pid</a></td></tr>
+<tr class="memdesc:a71786d85611c617537c2b46cdcf98ec3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Process ID (PID) associated with the thread.  <br /></td></tr>
 <tr class="separator:a71786d85611c617537c2b46cdcf98ec3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This structure stores the identifiers associated with a thread and its parent process within a thread group, allowing <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> to track relationships between threads and processes. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a1604906c44a366cd26c5d6d83cbb3723" name="a1604906c44a366cd26c5d6d83cbb3723"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1604906c44a366cd26c5d6d83cbb3723">&#9670;&#160;</a></span>ARION_TGROUP_ENTRY()</h2>
 
@@ -161,6 +166,14 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="structarion_1_1ARION__TGROUP__ENTRY.html">ARION_TGROUP_ENTRY</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">tid</td><td>The Thread ID (TID) of the thread. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">tgid</td><td>The Thread Group ID (TGID) associated with the thread. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pid</td><td>The Process ID (PID) associated with the thread. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -177,6 +190,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The Process ID (PID) associated with the thread. </p>
+
 </div>
 </div>
 <a id="a6e7f16e3ac8622e898c1a6119c4282b3" name="a6e7f16e3ac8622e898c1a6119c4282b3"></a>
@@ -190,6 +205,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>The Thread Group ID (TGID) associated with the thread. </p>
 
 </div>
 </div>
@@ -205,10 +222,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The Thread ID (TID) of the thread. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/common/<a class="el" href="threading__manager_8hpp_source.html">threading_manager.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/common/<a class="el" href="threading__manager_8hpp_source.html">threading_manager.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

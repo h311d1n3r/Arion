@@ -104,20 +104,29 @@ $(document).ready(function(){initNavTree('structarion_1_1MD5__CTXT.html',''); in
 </div><!--header-->
 <div class="contents">
 
+<p>This structure holds the context for MD5 calculation.  
+ <a href="structarion_1_1MD5__CTXT.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="md5_8hpp_source.html">md5.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:aa77372c36c04adca738d13befebe43f2" id="r_aa77372c36c04adca738d13befebe43f2"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1MD5__CTXT.html#aa77372c36c04adca738d13befebe43f2">size</a></td></tr>
+<tr class="memdesc:aa77372c36c04adca738d13befebe43f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Total size of the input data in bits.  <br /></td></tr>
 <tr class="separator:aa77372c36c04adca738d13befebe43f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7af8f36a7cbfb60865e69df52f1ed90e" id="r_a7af8f36a7cbfb60865e69df52f1ed90e"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1MD5__CTXT.html#a7af8f36a7cbfb60865e69df52f1ed90e">buffer</a> [4]</td></tr>
+<tr class="memdesc:a7af8f36a7cbfb60865e69df52f1ed90e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The four 32-bit buffers/registers (A, B, C, D) used in the hash calculation.  <br /></td></tr>
 <tr class="separator:a7af8f36a7cbfb60865e69df52f1ed90e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43789dc54608a0f0d6b5ed3ddd53dfd8" id="r_a43789dc54608a0f0d6b5ed3ddd53dfd8"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1MD5__CTXT.html#a43789dc54608a0f0d6b5ed3ddd53dfd8">input</a> [64]</td></tr>
+<tr class="memdesc:a43789dc54608a0f0d6b5ed3ddd53dfd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Temporary input buffer (64 bytes or 512 bits).  <br /></td></tr>
 <tr class="separator:a43789dc54608a0f0d6b5ed3ddd53dfd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac91fae6253dc20311a82262c69d72265" id="r_ac91fae6253dc20311a82262c69d72265"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1MD5__CTXT.html#ac91fae6253dc20311a82262c69d72265">digest</a> [16]</td></tr>
+<tr class="memdesc:ac91fae6253dc20311a82262c69d72265"><td class="mdescLeft">&#160;</td><td class="mdescRight">The resulting 16-byte (128-bit) MD5 digest.  <br /></td></tr>
 <tr class="separator:ac91fae6253dc20311a82262c69d72265"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This structure holds the context for MD5 calculation. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a7af8f36a7cbfb60865e69df52f1ed90e" name="a7af8f36a7cbfb60865e69df52f1ed90e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7af8f36a7cbfb60865e69df52f1ed90e">&#9670;&#160;</a></span>buffer</h2>
 
@@ -129,6 +138,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>The four 32-bit buffers/registers (A, B, C, D) used in the hash calculation. </p>
 
 </div>
 </div>
@@ -144,6 +155,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The resulting 16-byte (128-bit) MD5 digest. </p>
+
 </div>
 </div>
 <a id="a43789dc54608a0f0d6b5ed3ddd53dfd8" name="a43789dc54608a0f0d6b5ed3ddd53dfd8"></a>
@@ -157,6 +170,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Temporary input buffer (64 bytes or 512 bits). </p>
 
 </div>
 </div>
@@ -172,10 +187,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Total size of the input data in bits. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/crypto/<a class="el" href="md5_8hpp_source.html">md5.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/crypto/<a class="el" href="md5_8hpp_source.html">md5.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

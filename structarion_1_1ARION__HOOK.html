@@ -105,6 +105,9 @@ $(document).ready(function(){initNavTree('structarion_1_1ARION__HOOK.html',''); 
 </div><!--header-->
 <div class="contents">
 
+<p>This structure holds information about an <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> hook.  
+ <a href="structarion_1_1ARION__HOOK.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="hooks__manager_8hpp_source.html">hooks_manager.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -115,13 +118,18 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a750b13c0064cd7b080ce1f39eb913a29" id="r_a750b13c0064cd7b080ce1f39eb913a29"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#ad3929d28dd075448348df2bbad5c1739">ARION_HOOK_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__HOOK.html#a750b13c0064cd7b080ce1f39eb913a29">type</a></td></tr>
+<tr class="memdesc:a750b13c0064cd7b080ce1f39eb913a29"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> type for the hook.  <br /></td></tr>
 <tr class="separator:a750b13c0064cd7b080ce1f39eb913a29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab81457ca9099f8a8f47ffb4e5bd2655e" id="r_ab81457ca9099f8a8f47ffb4e5bd2655e"><td class="memItemLeft" align="right" valign="top">uc_hook&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__HOOK.html#ab81457ca9099f8a8f47ffb4e5bd2655e">uc_id</a></td></tr>
+<tr class="memdesc:ab81457ca9099f8a8f47ffb4e5bd2655e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unicorn hook id associated with this <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> hook.  <br /></td></tr>
 <tr class="separator:ab81457ca9099f8a8f47ffb4e5bd2655e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfa517904543591f66970135c63da692" id="r_abfa517904543591f66970135c63da692"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structarion_1_1ARION__HOOK__PARAM.html">ARION_HOOK_PARAM</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__HOOK.html#abfa517904543591f66970135c63da692">param</a></td></tr>
+<tr class="memdesc:abfa517904543591f66970135c63da692"><td class="mdescLeft">&#160;</td><td class="mdescRight">A structure holding data to be passed to the <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> hook when its associated Unicorn hook gets triggered.  <br /></td></tr>
 <tr class="separator:abfa517904543591f66970135c63da692"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This structure holds information about an <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> hook. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a284b94199c0ffed3fd82c9145b8a4223" name="a284b94199c0ffed3fd82c9145b8a4223"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a284b94199c0ffed3fd82c9145b8a4223">&#9670;&#160;</a></span>ARION_HOOK()</h2>
 
@@ -161,6 +169,14 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="structarion_1_1ARION__HOOK.html" title="This structure holds information about an Arion hook.">ARION_HOOK</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">type</td><td><a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> type for the hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">uc_id</td><td>Unicorn hook id associated with this <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">param</td><td>A structure holding data to be passed to the <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> hook when its associated Unicorn hook gets triggered. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -177,6 +193,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>A structure holding data to be passed to the <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> hook when its associated Unicorn hook gets triggered. </p>
+
 </div>
 </div>
 <a id="a750b13c0064cd7b080ce1f39eb913a29" name="a750b13c0064cd7b080ce1f39eb913a29"></a>
@@ -190,6 +208,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p><a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> type for the hook. </p>
 
 </div>
 </div>
@@ -205,10 +225,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Unicorn hook id associated with this <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> hook. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/common/<a class="el" href="hooks__manager_8hpp_source.html">hooks_manager.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/common/<a class="el" href="hooks__manager_8hpp_source.html">hooks_manager.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

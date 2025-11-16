@@ -105,6 +105,9 @@ $(document).ready(function(){initNavTree('structarion_1_1ARION__HOOK__PARAM.html
 </div><!--header-->
 <div class="contents">
 
+<p>This structure is placed in the Unicorn user_data parameter of hooks.  
+ <a href="structarion_1_1ARION__HOOK__PARAM.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="hooks__manager_8hpp_source.html">hooks_manager.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -115,13 +118,18 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:afde14b0f7c4cc3c1714782c4792bd029" id="r_afde14b0f7c4cc3c1714782c4792bd029"><td class="memItemLeft" align="right" valign="top">std::weak_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__HOOK__PARAM.html#afde14b0f7c4cc3c1714782c4792bd029">arion</a></td></tr>
+<tr class="memdesc:afde14b0f7c4cc3c1714782c4792bd029"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance that triggered the hook.  <br /></td></tr>
 <tr class="separator:afde14b0f7c4cc3c1714782c4792bd029"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae52b6b27c4ec3114745678b50262460d" id="r_ae52b6b27c4ec3114745678b50262460d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#afb300c662124ba9ad67f420d1cb10e8e">HOOK_CALLBACK</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__HOOK__PARAM.html#ae52b6b27c4ec3114745678b50262460d">callback</a></td></tr>
+<tr class="memdesc:ae52b6b27c4ec3114745678b50262460d"><td class="mdescLeft">&#160;</td><td class="mdescRight">A user-defined callback for the hook.  <br /></td></tr>
 <tr class="separator:ae52b6b27c4ec3114745678b50262460d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a4aad2fb6ee8a27b2ba21ceebb326d9" id="r_a9a4aad2fb6ee8a27b2ba21ceebb326d9"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__HOOK__PARAM.html#a9a4aad2fb6ee8a27b2ba21ceebb326d9">user_data</a></td></tr>
+<tr class="memdesc:a9a4aad2fb6ee8a27b2ba21ceebb326d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional user-defined data passed to the hook.  <br /></td></tr>
 <tr class="separator:a9a4aad2fb6ee8a27b2ba21ceebb326d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This structure is placed in the Unicorn user_data parameter of hooks. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a4e2cd26d493efe0ee067bfec4a8b1a45" name="a4e2cd26d493efe0ee067bfec4a8b1a45"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4e2cd26d493efe0ee067bfec4a8b1a45">&#9670;&#160;</a></span>ARION_HOOK_PARAM()</h2>
 
@@ -161,6 +169,14 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="structarion_1_1ARION__HOOK__PARAM.html" title="This structure is placed in the Unicorn user_data parameter of hooks.">ARION_HOOK_PARAM</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td><a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance that triggered the hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>A user-defined callback for the hook. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -177,6 +193,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p><a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance that triggered the hook. </p>
+
 </div>
 </div>
 <a id="ae52b6b27c4ec3114745678b50262460d" name="ae52b6b27c4ec3114745678b50262460d"></a>
@@ -190,6 +208,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>A user-defined callback for the hook. </p>
 
 </div>
 </div>
@@ -205,10 +225,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Optional user-defined data passed to the hook. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/common/<a class="el" href="hooks__manager_8hpp_source.html">hooks_manager.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/common/<a class="el" href="hooks__manager_8hpp_source.html">hooks_manager.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

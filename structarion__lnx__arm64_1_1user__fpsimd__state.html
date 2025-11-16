@@ -104,20 +104,29 @@ $(document).ready(function(){initNavTree('structarion__lnx__arm64_1_1user__fpsim
 </div><!--header-->
 <div class="contents">
 
+<p>Structure representing the AArch64 Floating-Point and SIMD (FPSIMD) state.  
+ <a href="structarion__lnx__arm64_1_1user__fpsimd__state.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="lnx__arch__arm64_8hpp_source.html">lnx_arch_arm64.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a65523cebf53c52056918bb8ced964f5c" id="r_a65523cebf53c52056918bb8ced964f5c"><td class="memItemLeft" align="right" valign="top">__uint128_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm64_1_1user__fpsimd__state.html#a65523cebf53c52056918bb8ced964f5c">vregs</a> [32]</td></tr>
+<tr class="memdesc:a65523cebf53c52056918bb8ced964f5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector registers V0 to V31 (128-bit each).  <br /></td></tr>
 <tr class="separator:a65523cebf53c52056918bb8ced964f5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3da08b209b0cd61346e01bf8f865865c" id="r_a3da08b209b0cd61346e01bf8f865865c"><td class="memItemLeft" align="right" valign="top">__u32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm64_1_1user__fpsimd__state.html#a3da08b209b0cd61346e01bf8f865865c">fpsr</a></td></tr>
+<tr class="memdesc:a3da08b209b0cd61346e01bf8f865865c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Floating-Point Status Register.  <br /></td></tr>
 <tr class="separator:a3da08b209b0cd61346e01bf8f865865c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad95e22b469afaaf88f6b622513c89a18" id="r_ad95e22b469afaaf88f6b622513c89a18"><td class="memItemLeft" align="right" valign="top">__u32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm64_1_1user__fpsimd__state.html#ad95e22b469afaaf88f6b622513c89a18">fpcr</a></td></tr>
+<tr class="memdesc:ad95e22b469afaaf88f6b622513c89a18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Floating-Point Control Register.  <br /></td></tr>
 <tr class="separator:ad95e22b469afaaf88f6b622513c89a18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99f3aadf370a3be141970a6c7a8401b7" id="r_a99f3aadf370a3be141970a6c7a8401b7"><td class="memItemLeft" align="right" valign="top">__u32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm64_1_1user__fpsimd__state.html#a99f3aadf370a3be141970a6c7a8401b7">__reserved</a> [2]</td></tr>
+<tr class="memdesc:a99f3aadf370a3be141970a6c7a8401b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reserved padding.  <br /></td></tr>
 <tr class="separator:a99f3aadf370a3be141970a6c7a8401b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Structure representing the AArch64 Floating-Point and SIMD (FPSIMD) state. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a99f3aadf370a3be141970a6c7a8401b7" name="a99f3aadf370a3be141970a6c7a8401b7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a99f3aadf370a3be141970a6c7a8401b7">&#9670;&#160;</a></span>__reserved</h2>
 
@@ -129,6 +138,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Reserved padding. </p>
 
 </div>
 </div>
@@ -144,6 +155,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Floating-Point Control Register. </p>
+
 </div>
 </div>
 <a id="a3da08b209b0cd61346e01bf8f865865c" name="a3da08b209b0cd61346e01bf8f865865c"></a>
@@ -157,6 +170,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Floating-Point Status Register. </p>
 
 </div>
 </div>
@@ -172,10 +187,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Vector registers V0 to V31 (128-bit each). </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/platforms/linux/archs/<a class="el" href="lnx__arch__arm64_8hpp_source.html">lnx_arch_arm64.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/platforms/linux/archs/<a class="el" href="lnx__arch__arm64_8hpp_source.html">lnx_arch_arm64.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

@@ -104,6 +104,9 @@ $(document).ready(function(){initNavTree('classarion_1_1colorstream.html',''); i
 </div><!--header-->
 <div class="contents">
 
+<p>A stringstream extended class, which allows the use of LOG_COLOR colors for logging.  
+ <a href="classarion_1_1colorstream.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="logger_8hpp_source.html">logger.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for arion::colorstream:</div>
@@ -120,7 +123,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0dfae5461da9d02bfbe722b1a63d8ecf"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classarion_1_1colorstream.html">colorstream</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classarion_1_1colorstream.html#a0dfae5461da9d02bfbe722b1a63d8ecf">operator&lt;&lt;</a> (const T &amp;value)</td></tr>
 <tr class="separator:a0dfae5461da9d02bfbe722b1a63d8ecf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A stringstream extended class, which allows the use of LOG_COLOR colors for logging. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="af0fa4536cc2c9c04daf406c40be4d368" name="af0fa4536cc2c9c04daf406c40be4d368"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af0fa4536cc2c9c04daf406c40be4d368">&#9670;&#160;</a></span>operator&lt;&lt;() <span class="overload">[1/2]</span></h2>
 
@@ -144,6 +149,13 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>The redefined stream insertion operator for coloring purpose. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">color</td><td>Color of the next text to be inserted in the current colorstream. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The current colorstream instance. </dd></dl>
 
 </div>
 </div>
@@ -172,11 +184,24 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Stream insertion operator for generic types. Allows inserting any type that supports the standard stream insertion operator. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Type of the value being inserted into the stream. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>The value to insert into the stream. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The current colorstream instance. </dd></dl>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/common/<a class="el" href="logger_8hpp_source.html">logger.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/common/<a class="el" href="logger_8hpp_source.html">logger.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

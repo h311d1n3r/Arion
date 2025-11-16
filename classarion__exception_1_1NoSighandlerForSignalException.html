@@ -104,6 +104,9 @@ $(document).ready(function(){initNavTree('classarion__exception_1_1NoSighandlerF
 </div><!--header-->
 <div class="contents">
 
+<p>Thrown when a thread has no signal handler set for a given signal.  
+ <a href="classarion__exception_1_1NoSighandlerForSignalException.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="global__excepts_8hpp_source.html">global_excepts.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for arion_exception::NoSighandlerForSignalException:</div>
@@ -111,7 +114,7 @@ Inheritance diagram for arion_exception::NoSighandlerForSignalException:</div>
  <div class="center">
   <img src="classarion__exception_1_1NoSighandlerForSignalException.png" usemap="#arion_5Fexception::NoSighandlerForSignalException_map" alt=""/>
   <map id="arion_5Fexception::NoSighandlerForSignalException_map" name="arion_5Fexception::NoSighandlerForSignalException_map">
-<area href="classarion__exception_1_1ArionException.html" alt="arion_exception::ArionException" shape="rect" coords="0,56,295,80"/>
+<area href="classarion__exception_1_1ArionException.html" title="This class represents a custom exception defined in Arion environment." alt="arion_exception::ArionException" shape="rect" coords="0,56,295,80"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -125,7 +128,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aae7263ce3b646b7eb57a1272598d1475 inherit pub_methods_classarion__exception_1_1ArionException" id="r_aae7263ce3b646b7eb57a1272598d1475"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__exception_1_1ArionException.html#aae7263ce3b646b7eb57a1272598d1475">what</a> () const noexcept override</td></tr>
 <tr class="separator:aae7263ce3b646b7eb57a1272598d1475 inherit pub_methods_classarion__exception_1_1ArionException"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Thrown when a thread has no signal handler set for a given signal. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a112189d0061ff7820c3bfb3382cf1bfd" name="a112189d0061ff7820c3bfb3382cf1bfd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a112189d0061ff7820c3bfb3382cf1bfd">&#9670;&#160;</a></span>NoSighandlerForSignalException()</h2>
 
@@ -165,11 +170,19 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="classarion__exception_1_1NoSighandlerForSignalException.html" title="Thrown when a thread has no signal handler set for a given signal.">NoSighandlerForSignalException</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pid</td><td>The process id. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">tid</td><td>The thread id. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">signo</td><td>The signal number. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/common/<a class="el" href="global__excepts_8hpp_source.html">global_excepts.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/common/<a class="el" href="global__excepts_8hpp_source.html">global_excepts.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

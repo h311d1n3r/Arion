@@ -113,7 +113,7 @@ Inheritance diagram for arion_poly_struct::ArionVariableStructType:</div>
  <div class="center">
   <img src="classarion__poly__struct_1_1ArionVariableStructType.png" usemap="#arion_5Fpoly_5Fstruct::ArionVariableStructType_map" alt=""/>
   <map id="arion_5Fpoly_5Fstruct::ArionVariableStructType_map" name="arion_5Fpoly_5Fstruct::ArionVariableStructType_map">
-<area href="classarion__type_1_1KernelType.html" alt="arion_type::KernelType" shape="rect" coords="0,0,256,24"/>
+<area href="classarion__type_1_1KernelType.html" title="Abstract base class for all kernel-related data types used for visualization/logging." alt="arion_type::KernelType" shape="rect" coords="0,0,256,24"/>
 <area href="classarion__lnx__type_1_1StructSockaddrType.html" alt="arion_lnx_type::StructSockaddrType" shape="rect" coords="0,112,256,136"/>
   </map>
 </div></div>
@@ -124,6 +124,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1a66e1c80d4ba0dc45d9f958fe28aa73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classarion__type_1_1KernelType"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classarion__type_1_1KernelType')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classarion__type_1_1KernelType.html">arion_type::KernelType</a></td></tr>
 <tr class="memitem:aefebe31453ef42b38144e7d997193258 inherit pub_methods_classarion__type_1_1KernelType" id="r_aefebe31453ef42b38144e7d997193258"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__type_1_1KernelType.html#aefebe31453ef42b38144e7d997193258">~KernelType</a> ()=default</td></tr>
+<tr class="memdesc:aefebe31453ef42b38144e7d997193258 inherit pub_methods_classarion__type_1_1KernelType"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual destructor to allow polymorphic deletion.  <br /></td></tr>
 <tr class="separator:aefebe31453ef42b38144e7d997193258 inherit pub_methods_classarion__type_1_1KernelType"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3bde54f1596ace75b753bf521f3a5b9 inherit pub_methods_classarion__type_1_1KernelType" id="r_ad3bde54f1596ace75b753bf521f3a5b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#a83cb12d3bd9a71f0fe5be4663e199f7f">arion::LOG_COLOR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__type_1_1KernelType.html#ad3bde54f1596ace75b753bf521f3a5b9">get_color</a> ()</td></tr>
 <tr class="separator:ad3bde54f1596ace75b753bf521f3a5b9 inherit pub_methods_classarion__type_1_1KernelType"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,7 +142,9 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:aec5eed8646302e7f5a596427cd7ce914" id="r_aec5eed8646302e7f5a596427cd7ce914"><td class="memItemLeft" align="right" valign="top">virtual std::shared_ptr&lt; <a class="el" href="classarion__poly__struct_1_1AbsArionStructType.html">arion_poly_struct::AbsArionStructType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__poly__struct_1_1ArionVariableStructType.html#aec5eed8646302e7f5a596427cd7ce914">process</a> (std::shared_ptr&lt; <a class="el" href="classarion_1_1Arion.html">arion::Arion</a> &gt; arion, uint64_t val)=0</td></tr>
 <tr class="separator:aec5eed8646302e7f5a596427cd7ce914"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Represents a variable polymorphic structure type (e.g., <code>sockaddr</code>), where the final structure type depends on runtime data (like a family field). </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a46f6b2e95212e609d668e0469c2c5904" name="a46f6b2e95212e609d668e0469c2c5904"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a46f6b2e95212e609d668e0469c2c5904">&#9670;&#160;</a></span>ArionVariableStructType()</h2>
 
@@ -165,6 +168,12 @@ Private Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="classarion__poly__struct_1_1ArionVariableStructType.html">ArionVariableStructType</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>The display name of the structure type. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -202,6 +211,14 @@ Private Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>**(Pure Virtual)** Logic to dynamically determine the concrete structure type based on the content of the emulated memory. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>Shared pointer to the Arion instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">val</td><td>The memory address pointing to the generic structure. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A shared pointer to the concrete <code><a class="el" href="classarion__poly__struct_1_1AbsArionStructType.html" title="Abstract base class providing common utilities for structure types that interact with emulated memory...">AbsArionStructType</a></code> instance (e.g., <code>StructSockaddrInType</code>). </dd></dl>
 
 <p>Implemented in <a class="el" href="classarion__lnx__type_1_1StructSockaddrType.html#acd12ea18b6490c4c2864b266575dd6a4">arion_lnx_type::StructSockaddrType</a>.</p>
 
@@ -240,13 +257,21 @@ Private Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Overrides the string conversion to first call <code>process</code> to determine the concrete type, and then uses that concrete type's <code>str</code> method. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>Shared pointer to the Arion instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">val</td><td>The memory address pointing to the generic structure. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The formatted string representation of the underlying concrete structure. </dd></dl>
 
 <p>Reimplemented from <a class="el" href="classarion__type_1_1KernelType.html#a91128c30e195e719628b2cb4d9259bf9">arion_type::KernelType</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/utils/<a class="el" href="struct__utils_8hpp_source.html">struct_utils.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/utils/<a class="el" href="struct__utils_8hpp_source.html">struct_utils.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

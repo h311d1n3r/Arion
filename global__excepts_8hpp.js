@@ -86,5 +86,5 @@ var global__excepts_8hpp =
     [ "arion_exception::MemoryRecorderAlreadyStoppedException", "classarion__exception_1_1MemoryRecorderAlreadyStoppedException.html", "classarion__exception_1_1MemoryRecorderAlreadyStoppedException" ],
     [ "arion_exception::WrongLogLevelException", "classarion__exception_1_1WrongLogLevelException.html", "classarion__exception_1_1WrongLogLevelException" ],
     [ "arion_exception::TooManyLoggersException", "classarion__exception_1_1TooManyLoggersException.html", "classarion__exception_1_1TooManyLoggersException" ],
-    [ "EXCEPTION_MAX_FRAMES", "global__excepts_8hpp.html#ab8346609951e30db6e73e9843a324491", null ]
+    [ "ARION_EXCEPTION_MAX_FRAMES", "global__excepts_8hpp.html#a2683c9648482f6e655dd6f481b77f45c", null ]
 ];

@@ -106,6 +106,9 @@ $(document).ready(function(){initNavTree('classarion_1_1ElfCoredumpParser.html',
 </div><!--header-->
 <div class="contents">
 
+<p>Helper class responsible for parsing the specific NOTE sections of an ELF core dump file.  
+ <a href="classarion_1_1ElfCoredumpParser.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="elf__parser_8hpp_source.html">elf_parser.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -129,13 +132,18 @@ Private Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a1cd4f94b32e69b8433f6b65c5f6dd396" id="r_a1cd4f94b32e69b8433f6b65c5f6dd396"><td class="memItemLeft" align="right" valign="top">std::weak_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1ElfCoredumpParser.html#a1cd4f94b32e69b8433f6b65c5f6dd396">arion</a></td></tr>
+<tr class="memdesc:a1cd4f94b32e69b8433f6b65c5f6dd396"><td class="mdescLeft">&#160;</td><td class="mdescRight">Weak pointer back to the main <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance.  <br /></td></tr>
 <tr class="separator:a1cd4f94b32e69b8433f6b65c5f6dd396"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae18cc6bfcef1ce8391a8c75acf72baff" id="r_ae18cc6bfcef1ce8391a8c75acf72baff"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="structarion_1_1ELF__PARSER__ATTRIBUTES.html">ELF_PARSER_ATTRIBUTES</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1ElfCoredumpParser.html#ae18cc6bfcef1ce8391a8c75acf72baff">attrs</a></td></tr>
+<tr class="memdesc:ae18cc6bfcef1ce8391a8c75acf72baff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared pointer to the parser attributes, including core dump attributes.  <br /></td></tr>
 <tr class="separator:ae18cc6bfcef1ce8391a8c75acf72baff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc614f337b6668533a8af73dbf794514" id="r_acc614f337b6668533a8af73dbf794514"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1ElfCoredumpParser.html#acc614f337b6668533a8af73dbf794514">found_prpsinfo</a> = false</td></tr>
+<tr class="memdesc:acc614f337b6668533a8af73dbf794514"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating if the NT_PRPSINFO note has been found and parsed.  <br /></td></tr>
 <tr class="separator:acc614f337b6668533a8af73dbf794514"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Helper class responsible for parsing the specific NOTE sections of an ELF core dump file. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a8deeb7be547b20d542d515587a719879" name="a8deeb7be547b20d542d515587a719879"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8deeb7be547b20d542d515587a719879">&#9670;&#160;</a></span>ElfCoredumpParser()</h2>
 
@@ -159,6 +167,12 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="classarion_1_1ElfCoredumpParser.html" title="Helper class responsible for parsing the specific NOTE sections of an ELF core dump file.">ElfCoredumpParser</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>Weak pointer to the main <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -194,6 +208,15 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Iterates over all notes in the core dump binary and extracts thread context and memory map information. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">elf</td><td>The unique pointer to the LIEF ELF Binary representation. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">attrs</td><td>The shared pointer to the attributes where parsed data will be stored. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">segments</td><td>List of memory segments parsed from the loadable program headers. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The unique pointer to the LIEF ELF Binary. </dd></dl>
 
 </div>
 </div>
@@ -230,6 +253,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Parses the NT_FILE note, which contains information about the mapped files (segments). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">note</td><td>The LIEF Note structure containing the NT_FILE data. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">segments</td><td>List of segments already loaded/known. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -266,6 +296,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Parses the NT_FPREGSET note, containing floating-point register state for a thread. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">note</td><td>The LIEF Note structure containing the NT_FPREGSET data. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">attrs</td><td>Shared pointer to the parser attributes. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -302,6 +339,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Parses the NT_PRPSINFO note, containing process status info (e.g., command line, PID, UID). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">note</td><td>The LIEF Note structure containing the NT_PRPSINFO data. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">attrs</td><td>Shared pointer to the parser attributes. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -338,6 +382,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Parses the NT_PRSTATUS note, containing general-purpose register state for a thread. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">note</td><td>The LIEF Note structure containing the NT_PRSTATUS data. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">attrs</td><td>Shared pointer to the parser attributes. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -362,6 +413,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Weak pointer back to the main <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance. </p>
+
 </div>
 </div>
 <a id="ae18cc6bfcef1ce8391a8c75acf72baff" name="ae18cc6bfcef1ce8391a8c75acf72baff"></a>
@@ -383,6 +436,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Shared pointer to the parser attributes, including core dump attributes. </p>
 
 </div>
 </div>
@@ -406,10 +461,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Flag indicating if the NT_PRPSINFO note has been found and parsed. </p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/platforms/linux/<a class="el" href="elf__parser_8hpp_source.html">elf_parser.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/platforms/linux/<a class="el" href="elf__parser_8hpp_source.html">elf_parser.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

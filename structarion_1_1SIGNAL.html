@@ -105,6 +105,9 @@ $(document).ready(function(){initNavTree('structarion_1_1SIGNAL.html',''); initR
 </div><!--header-->
 <div class="contents">
 
+<p>Identifies an OS signal.  
+ <a href="structarion_1_1SIGNAL.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="global__defs_8hpp_source.html">global_defs.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -115,11 +118,15 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a9f091f970d30cc91da30d867549a5e1e" id="r_a9f091f970d30cc91da30d867549a5e1e"><td class="memItemLeft" align="right" valign="top">pid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1SIGNAL.html#a9f091f970d30cc91da30d867549a5e1e">source_pid</a></td></tr>
+<tr class="memdesc:a9f091f970d30cc91da30d867549a5e1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">PID of the process responsible for triggering this signal.  <br /></td></tr>
 <tr class="separator:a9f091f970d30cc91da30d867549a5e1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab44e5e28ee75d227335aa739fa9b9f7b" id="r_ab44e5e28ee75d227335aa739fa9b9f7b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1SIGNAL.html#ab44e5e28ee75d227335aa739fa9b9f7b">signo</a></td></tr>
+<tr class="memdesc:ab44e5e28ee75d227335aa739fa9b9f7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The signal number.  <br /></td></tr>
 <tr class="separator:ab44e5e28ee75d227335aa739fa9b9f7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Identifies an OS signal. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a28f351597b3307d0ba45db54ea9e2ddc" name="a28f351597b3307d0ba45db54ea9e2ddc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a28f351597b3307d0ba45db54ea9e2ddc">&#9670;&#160;</a></span>SIGNAL()</h2>
 
@@ -153,6 +160,13 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="structarion_1_1SIGNAL.html" title="Identifies an OS signal.">SIGNAL</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">source_pid</td><td>PID of the process responsible for triggering this signal. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">signo</td><td>The signal number. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -169,6 +183,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The signal number. </p>
+
 </div>
 </div>
 <a id="a9f091f970d30cc91da30d867549a5e1e" name="a9f091f970d30cc91da30d867549a5e1e"></a>
@@ -183,10 +199,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>PID of the process responsible for triggering this signal. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/common/<a class="el" href="global__defs_8hpp_source.html">global_defs.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/common/<a class="el" href="global__defs_8hpp_source.html">global_defs.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

@@ -105,6 +105,9 @@ $(document).ready(function(){initNavTree('structarion_1_1ANALYSIS__HIT.html','')
 </div><!--header-->
 <div class="contents">
 
+<p>This structure holds data relative to a trace hit (e.g : instruction, basic block...).  
+ <a href="structarion_1_1ANALYSIS__HIT.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="code__trace__analysis_8hpp_source.html">code_trace_analysis.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -117,17 +120,23 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a0bfc1921c5cd39e3782049857cfd5dc5" id="r_a0bfc1921c5cd39e3782049857cfd5dc5"><td class="memItemLeft" align="right" valign="top">off_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ANALYSIS__HIT.html#a0bfc1921c5cd39e3782049857cfd5dc5">hit_i</a></td></tr>
+<tr class="memdesc:a0bfc1921c5cd39e3782049857cfd5dc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index of the hit in the trace file.  <br /></td></tr>
 <tr class="separator:a0bfc1921c5cd39e3782049857cfd5dc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3e7a3d02386893f574a654d87e78cf2" id="r_ad3e7a3d02386893f574a654d87e78cf2"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ANALYSIS__HIT.html#ad3e7a3d02386893f574a654d87e78cf2">mod_name</a></td></tr>
+<tr class="memdesc:ad3e7a3d02386893f574a654d87e78cf2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of the module where the hit occurred.  <br /></td></tr>
 <tr class="separator:ad3e7a3d02386893f574a654d87e78cf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f97042331e88e2b99f1aea6ec03c75e" id="r_a4f97042331e88e2b99f1aea6ec03c75e"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ANALYSIS__HIT.html#a4f97042331e88e2b99f1aea6ec03c75e">off</a></td></tr>
+<tr class="memdesc:a4f97042331e88e2b99f1aea6ec03c75e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset to the module start in bytes.  <br /></td></tr>
 <tr class="separator:a4f97042331e88e2b99f1aea6ec03c75e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a345a4816da04d85224ad06274a8c45f6" id="r_a345a4816da04d85224ad06274a8c45f6"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ANALYSIS__HIT.html#a345a4816da04d85224ad06274a8c45f6">sz</a></td></tr>
+<tr class="memdesc:a345a4816da04d85224ad06274a8c45f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of the hit in bytes.  <br /></td></tr>
 <tr class="separator:a345a4816da04d85224ad06274a8c45f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d68ca3ac1348febd834f9a2df3c13b0" id="r_a3d68ca3ac1348febd834f9a2df3c13b0"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; std::map&lt; <a class="el" href="namespacearion.html#a1bc7997a0cf279f7e07ce89b9e72e899">REG</a>, <a class="el" href="unionarion_1_1RVAL.html">RVAL</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ANALYSIS__HIT.html#a3d68ca3ac1348febd834f9a2df3c13b0">regs</a></td></tr>
 <tr class="separator:a3d68ca3ac1348febd834f9a2df3c13b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This structure holds data relative to a trace hit (e.g : instruction, basic block...). </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="abbb1ed61be346c06f3762965a3342547" name="abbb1ed61be346c06f3762965a3342547"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abbb1ed61be346c06f3762965a3342547">&#9670;&#160;</a></span>ANALYSIS_HIT() <span class="overload">[1/2]</span></h2>
 
@@ -142,6 +151,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="structarion_1_1ANALYSIS__HIT.html" title="This structure holds data relative to a trace hit (e.g : instruction, basic block....">ANALYSIS_HIT</a> instances. </p>
 
 </div>
 </div>
@@ -196,6 +206,16 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="structarion_1_1ANALYSIS__HIT.html" title="This structure holds data relative to a trace hit (e.g : instruction, basic block....">ANALYSIS_HIT</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">hit_i</td><td>Index of the hit in the trace file. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mod_name</td><td>Name of the module where the hit occurred. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">off</td><td>Offset to the module start in bytes. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">sz</td><td>Size of the hit in bytes. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">regs</td><td>Map of context register values given their associated register. Only makes sense for files generated with <a class="el" href="namespacearion.html#aaa987bdad6252658d02e9540565b0376ac3433d1dd0617cf02b1840ca2cd7d386" title="Arion tracer file which stores the CPU context of every executed instruction.">TRACE_MODE::CTXT</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -212,6 +232,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Index of the hit in the trace file. </p>
+
 </div>
 </div>
 <a id="ad3e7a3d02386893f574a654d87e78cf2" name="ad3e7a3d02386893f574a654d87e78cf2"></a>
@@ -225,6 +247,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Name of the module where the hit occurred. </p>
 
 </div>
 </div>
@@ -240,6 +264,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Offset to the module start in bytes. </p>
+
 </div>
 </div>
 <a id="a3d68ca3ac1348febd834f9a2df3c13b0" name="a3d68ca3ac1348febd834f9a2df3c13b0"></a>
@@ -253,6 +279,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Map of context register values given their associated register. Only makes sense for files generated with <a class="el" href="namespacearion.html#aaa987bdad6252658d02e9540565b0376ac3433d1dd0617cf02b1840ca2cd7d386" title="Arion tracer file which stores the CPU context of every executed instruction.">TRACE_MODE::CTXT</a>. </p>
 
 </div>
 </div>
@@ -268,10 +295,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Size of the hit in bytes. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/components/<a class="el" href="code__trace__analysis_8hpp_source.html">code_trace_analysis.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/components/<a class="el" href="code__trace__analysis_8hpp_source.html">code_trace_analysis.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

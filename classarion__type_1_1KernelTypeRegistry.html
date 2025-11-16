@@ -106,6 +106,9 @@ $(document).ready(function(){initNavTree('classarion__type_1_1KernelTypeRegistry
 </div><!--header-->
 <div class="contents">
 
+<p>Singleton class responsible for managing the initialization order of all kernel type objects.  
+ <a href="classarion__type_1_1KernelTypeRegistry.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="type__utils_8hpp_source.html">type_utils.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -125,11 +128,15 @@ Static Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:abdc34d0be4f4ff7fe7091bfd0f3057ae" id="r_abdc34d0be4f4ff7fe7091bfd0f3057ae"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::tuple&lt; int, <a class="el" href="namespacearion__type.html#aec495340911b90ef3aec2d84f92aad82">InitFn</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__type_1_1KernelTypeRegistry.html#abdc34d0be4f4ff7fe7091bfd0f3057ae">initializers</a></td></tr>
+<tr class="memdesc:abdc34d0be4f4ff7fe7091bfd0f3057ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of initialization functions paired with their priority.  <br /></td></tr>
 <tr class="separator:abdc34d0be4f4ff7fe7091bfd0f3057ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea7a08b8994a6764976286951ec87bd3" id="r_aea7a08b8994a6764976286951ec87bd3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__type_1_1KernelTypeRegistry.html#aea7a08b8994a6764976286951ec87bd3">initialized</a> = false</td></tr>
+<tr class="memdesc:aea7a08b8994a6764976286951ec87bd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating if initialization has been completed.  <br /></td></tr>
 <tr class="separator:aea7a08b8994a6764976286951ec87bd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Singleton class responsible for managing the initialization order of all kernel type objects. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ae8bb7f6f70d86b2af9069077ddf15a03" name="ae8bb7f6f70d86b2af9069077ddf15a03"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae8bb7f6f70d86b2af9069077ddf15a03">&#9670;&#160;</a></span>init_types()</h2>
 
@@ -152,6 +159,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Executes all registered initialization functions in priority order. </p>
 
 </div>
 </div>
@@ -177,6 +185,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Provides access to the singleton instance of the registry. </p><dl class="section return"><dt>Returns</dt><dd>Reference to the singleton instance. </dd></dl>
 
 </div>
 </div>
@@ -202,6 +211,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Checks if the registry has finished initialization. </p><dl class="section return"><dt>Returns</dt><dd><code>true</code> if initialized, <code>false</code> otherwise. </dd></dl>
 
 </div>
 </div>
@@ -238,6 +248,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Registers a type initialization function with a priority. Initialization runs in ascending priority order. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">priority</td><td>The priority level for initialization. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">fn</td><td>The function to call to initialize the type object. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -262,6 +279,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Flag indicating if initialization has been completed. </p>
+
 </div>
 </div>
 <a id="abdc34d0be4f4ff7fe7091bfd0f3057ae" name="abdc34d0be4f4ff7fe7091bfd0f3057ae"></a>
@@ -284,10 +303,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>List of initialization functions paired with their priority. </p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/utils/<a class="el" href="type__utils_8hpp_source.html">type_utils.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/utils/<a class="el" href="type__utils_8hpp_source.html">type_utils.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

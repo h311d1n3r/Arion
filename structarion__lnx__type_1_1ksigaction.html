@@ -104,20 +104,29 @@ $(document).ready(function(){initNavTree('structarion__lnx__type_1_1ksigaction.h
 </div><!--header-->
 <div class="contents">
 
+<p>Linux kernel structure representing the signal action data for <code>rt_sigaction</code>.  
+ <a href="structarion__lnx__type_1_1ksigaction.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="lnx__kernel__utils_8hpp_source.html">lnx_kernel_utils.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a2e8ebcd402a5850c0ba1b87de2ccfb97" id="r_a2e8ebcd402a5850c0ba1b87de2ccfb97"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__type_1_1ksigaction.html#a2e8ebcd402a5850c0ba1b87de2ccfb97">handler</a></td></tr>
+<tr class="memdesc:a2e8ebcd402a5850c0ba1b87de2ccfb97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signal handler function pointer.  <br /></td></tr>
 <tr class="separator:a2e8ebcd402a5850c0ba1b87de2ccfb97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c840ec841e039731f23ca659a10d983" id="r_a1c840ec841e039731f23ca659a10d983"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__type_1_1ksigaction.html#a1c840ec841e039731f23ca659a10d983">flags</a></td></tr>
+<tr class="memdesc:a1c840ec841e039731f23ca659a10d983"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signal flags (e.g., SA_SIGINFO).  <br /></td></tr>
 <tr class="separator:a1c840ec841e039731f23ca659a10d983"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6a54a1e6d1c06d69961928457d553c4" id="r_ad6a54a1e6d1c06d69961928457d553c4"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__type_1_1ksigaction.html#ad6a54a1e6d1c06d69961928457d553c4">restorer</a></td></tr>
+<tr class="memdesc:ad6a54a1e6d1c06d69961928457d553c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signal trampoline/restorer function pointer.  <br /></td></tr>
 <tr class="separator:ad6a54a1e6d1c06d69961928457d553c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acbdc23dc9fd60f1a6991e46a31dd69d9" id="r_acbdc23dc9fd60f1a6991e46a31dd69d9"><td class="memItemLeft" align="right" valign="top">sigset_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__type_1_1ksigaction.html#acbdc23dc9fd60f1a6991e46a31dd69d9">mask</a></td></tr>
+<tr class="memdesc:acbdc23dc9fd60f1a6991e46a31dd69d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signals blocked during handler execution.  <br /></td></tr>
 <tr class="separator:acbdc23dc9fd60f1a6991e46a31dd69d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Linux kernel structure representing the signal action data for <code>rt_sigaction</code>. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a1c840ec841e039731f23ca659a10d983" name="a1c840ec841e039731f23ca659a10d983"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1c840ec841e039731f23ca659a10d983">&#9670;&#160;</a></span>flags</h2>
 
@@ -129,6 +138,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Signal flags (e.g., SA_SIGINFO). </p>
 
 </div>
 </div>
@@ -144,6 +155,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Signal handler function pointer. </p>
+
 </div>
 </div>
 <a id="acbdc23dc9fd60f1a6991e46a31dd69d9" name="acbdc23dc9fd60f1a6991e46a31dd69d9"></a>
@@ -157,6 +170,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Signals blocked during handler execution. </p>
 
 </div>
 </div>
@@ -172,10 +187,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Signal trampoline/restorer function pointer. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/platforms/linux/<a class="el" href="lnx__kernel__utils_8hpp_source.html">lnx_kernel_utils.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/platforms/linux/<a class="el" href="lnx__kernel__utils_8hpp_source.html">lnx_kernel_utils.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

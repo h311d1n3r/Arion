@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Arion: include/arion/utils/host_utils.hpp Source File</title>
+<title>Arion: /home/runner/work/Arion/Arion/include/arion/utils/host_utils.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -109,37 +109,39 @@ $(document).ready(function(){initNavTree('host__utils_8hpp_source.html',''); ini
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacearion.html">arion</a></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>{</div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="foldopen" id="foldopen00010" data-start="{" data-end="}">
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="namespacearion.html#a60513332dcc615f523f6e395b10e3707">   10</a></span><span class="keyword">inline</span> <a class="code hl_enumeration" href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5">CPU_ARCH</a> <a class="code hl_function" href="namespacearion.html#a60513332dcc615f523f6e395b10e3707">get_host_cpu_arch</a>()</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>{</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#if defined(__x86_64__) || defined(_M_X64)</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keywordflow">return</span> <a class="code hl_enumvalue" href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5a74df39fd5c7ee455517dd2815c39451f">CPU_ARCH::X8664_ARCH</a>;</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#elif defined(__i386__) || defined(_M_IX86)</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="keywordflow">return</span> <a class="code hl_enumvalue" href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5a9fe308eaed3248fc91e2098541b5e200">CPU_ARCH::X86_ARCH</a>;</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#elif defined(__aarch64__) || defined(_M_ARM64)</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordflow">return</span> <a class="code hl_enumvalue" href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5ab5c4d5b0eec211fabcb59a849081d2bf">CPU_ARCH::ARM64_ARCH</a>;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#elif defined(__arm__) || defined(_M_ARM)</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keywordflow">return</span> <a class="code hl_enumvalue" href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5ad92842f00cedd60ddda41ed5ea1b78a6">CPU_ARCH::ARM_ARCH</a>;</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#else</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#error &quot;Unsupported host CPU architecture&quot;</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keywordflow">throw</span> <a class="code hl_class" href="classarion__exception_1_1UnsupportedHostCpuArchException.html">arion_exception::UnsupportedHostCpuArchException</a>();</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>}</div>
+<div class="foldopen" id="foldopen00017" data-start="{" data-end="}">
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="namespacearion.html#a60513332dcc615f523f6e395b10e3707">   17</a></span><span class="keyword">inline</span> <a class="code hl_enumeration" href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5">CPU_ARCH</a> <a class="code hl_function" href="namespacearion.html#a60513332dcc615f523f6e395b10e3707">get_host_cpu_arch</a>()</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>{</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#if defined(__x86_64__) || defined(_M_X64)</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keywordflow">return</span> <a class="code hl_enumvalue" href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5a74df39fd5c7ee455517dd2815c39451f">CPU_ARCH::X8664_ARCH</a>;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#elif defined(__i386__) || defined(_M_IX86)</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keywordflow">return</span> <a class="code hl_enumvalue" href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5a9fe308eaed3248fc91e2098541b5e200">CPU_ARCH::X86_ARCH</a>;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#elif defined(__aarch64__) || defined(_M_ARM64)</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="keywordflow">return</span> <a class="code hl_enumvalue" href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5ab5c4d5b0eec211fabcb59a849081d2bf">CPU_ARCH::ARM64_ARCH</a>;</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#elif defined(__arm__) || defined(_M_ARM)</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keywordflow">return</span> <a class="code hl_enumvalue" href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5ad92842f00cedd60ddda41ed5ea1b78a6">CPU_ARCH::ARM_ARCH</a>;</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#else</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#error &quot;Unsupported host CPU architecture&quot;</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="comment">// The throw statement is technically unreachable due to the #error above,</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="comment">// but kept for completeness if compilation proceeded without a known macro.</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keywordflow">throw</span> <a class="code hl_class" href="classarion__exception_1_1UnsupportedHostCpuArchException.html">arion_exception::UnsupportedHostCpuArchException</a>();</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>}</div>
 </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>}; <span class="comment">// namespace arion</span></div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#endif </span><span class="comment">// ARION_HOST_UTILS_HPP</span></div>
-<div class="ttc" id="aclassarion__exception_1_1UnsupportedHostCpuArchException_html"><div class="ttname"><a href="classarion__exception_1_1UnsupportedHostCpuArchException.html">arion_exception::UnsupportedHostCpuArchException</a></div><div class="ttdef"><b>Definition</b> global_excepts.hpp:233</div></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>}; <span class="comment">// namespace arion</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="preprocessor">#endif </span><span class="comment">// ARION_HOST_UTILS_HPP</span></div>
+<div class="ttc" id="aclassarion__exception_1_1UnsupportedHostCpuArchException_html"><div class="ttname"><a href="classarion__exception_1_1UnsupportedHostCpuArchException.html">arion_exception::UnsupportedHostCpuArchException</a></div><div class="ttdoc">Thrown when the host CPU architecture is not supported.</div><div class="ttdef"><b>Definition</b> global_excepts.hpp:359</div></div>
 <div class="ttc" id="aglobal__defs_8hpp_html"><div class="ttname"><a href="global__defs_8hpp.html">global_defs.hpp</a></div></div>
 <div class="ttc" id="aglobal__excepts_8hpp_html"><div class="ttname"><a href="global__excepts_8hpp.html">global_excepts.hpp</a></div></div>
 <div class="ttc" id="anamespacearion_html"><div class="ttname"><a href="namespacearion.html">arion</a></div><div class="ttdef"><b>Definition</b> arch_x86-64.hpp:11</div></div>
-<div class="ttc" id="anamespacearion_html_a60513332dcc615f523f6e395b10e3707"><div class="ttname"><a href="namespacearion.html#a60513332dcc615f523f6e395b10e3707">arion::get_host_cpu_arch</a></div><div class="ttdeci">CPU_ARCH get_host_cpu_arch()</div><div class="ttdef"><b>Definition</b> host_utils.hpp:10</div></div>
-<div class="ttc" id="anamespacearion_html_a641ab515f8829f44a3e54918529d57c5"><div class="ttname"><a href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5">arion::CPU_ARCH</a></div><div class="ttdeci">CPU_ARCH</div><div class="ttdef"><b>Definition</b> global_defs.hpp:76</div></div>
-<div class="ttc" id="anamespacearion_html_a641ab515f8829f44a3e54918529d57c5a74df39fd5c7ee455517dd2815c39451f"><div class="ttname"><a href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5a74df39fd5c7ee455517dd2815c39451f">arion::X8664_ARCH</a></div><div class="ttdeci">@ X8664_ARCH</div><div class="ttdef"><b>Definition</b> global_defs.hpp:79</div></div>
-<div class="ttc" id="anamespacearion_html_a641ab515f8829f44a3e54918529d57c5a9fe308eaed3248fc91e2098541b5e200"><div class="ttname"><a href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5a9fe308eaed3248fc91e2098541b5e200">arion::X86_ARCH</a></div><div class="ttdeci">@ X86_ARCH</div><div class="ttdef"><b>Definition</b> global_defs.hpp:78</div></div>
-<div class="ttc" id="anamespacearion_html_a641ab515f8829f44a3e54918529d57c5ab5c4d5b0eec211fabcb59a849081d2bf"><div class="ttname"><a href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5ab5c4d5b0eec211fabcb59a849081d2bf">arion::ARM64_ARCH</a></div><div class="ttdeci">@ ARM64_ARCH</div><div class="ttdef"><b>Definition</b> global_defs.hpp:81</div></div>
-<div class="ttc" id="anamespacearion_html_a641ab515f8829f44a3e54918529d57c5ad92842f00cedd60ddda41ed5ea1b78a6"><div class="ttname"><a href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5ad92842f00cedd60ddda41ed5ea1b78a6">arion::ARM_ARCH</a></div><div class="ttdeci">@ ARM_ARCH</div><div class="ttdef"><b>Definition</b> global_defs.hpp:80</div></div>
+<div class="ttc" id="anamespacearion_html_a60513332dcc615f523f6e395b10e3707"><div class="ttname"><a href="namespacearion.html#a60513332dcc615f523f6e395b10e3707">arion::get_host_cpu_arch</a></div><div class="ttdeci">CPU_ARCH get_host_cpu_arch()</div><div class="ttdef"><b>Definition</b> host_utils.hpp:17</div></div>
+<div class="ttc" id="anamespacearion_html_a641ab515f8829f44a3e54918529d57c5"><div class="ttname"><a href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5">arion::CPU_ARCH</a></div><div class="ttdeci">CPU_ARCH</div><div class="ttdoc">Identifies a CPU architecture.</div><div class="ttdef"><b>Definition</b> global_defs.hpp:128</div></div>
+<div class="ttc" id="anamespacearion_html_a641ab515f8829f44a3e54918529d57c5a74df39fd5c7ee455517dd2815c39451f"><div class="ttname"><a href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5a74df39fd5c7ee455517dd2815c39451f">arion::X8664_ARCH</a></div><div class="ttdeci">@ X8664_ARCH</div><div class="ttdoc">The x86-64 CPU architecture.</div><div class="ttdef"><b>Definition</b> global_defs.hpp:134</div></div>
+<div class="ttc" id="anamespacearion_html_a641ab515f8829f44a3e54918529d57c5a9fe308eaed3248fc91e2098541b5e200"><div class="ttname"><a href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5a9fe308eaed3248fc91e2098541b5e200">arion::X86_ARCH</a></div><div class="ttdeci">@ X86_ARCH</div><div class="ttdoc">The x86 CPU architecture.</div><div class="ttdef"><b>Definition</b> global_defs.hpp:132</div></div>
+<div class="ttc" id="anamespacearion_html_a641ab515f8829f44a3e54918529d57c5ab5c4d5b0eec211fabcb59a849081d2bf"><div class="ttname"><a href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5ab5c4d5b0eec211fabcb59a849081d2bf">arion::ARM64_ARCH</a></div><div class="ttdeci">@ ARM64_ARCH</div><div class="ttdoc">The ARM64 CPU architecture.</div><div class="ttdef"><b>Definition</b> global_defs.hpp:138</div></div>
+<div class="ttc" id="anamespacearion_html_a641ab515f8829f44a3e54918529d57c5ad92842f00cedd60ddda41ed5ea1b78a6"><div class="ttname"><a href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5ad92842f00cedd60ddda41ed5ea1b78a6">arion::ARM_ARCH</a></div><div class="ttdeci">@ ARM_ARCH</div><div class="ttdoc">The ARM CPU architecture.</div><div class="ttdef"><b>Definition</b> global_defs.hpp:136</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

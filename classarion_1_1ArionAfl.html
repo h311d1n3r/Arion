@@ -106,6 +106,9 @@ $(document).ready(function(){initNavTree('classarion_1_1ArionAfl.html',''); init
 </div><!--header-->
 <div class="contents">
 
+<p>This class is used to managed a UnicornAFL fuzzing session from an <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance.  
+ <a href="classarion_1_1ArionAfl.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="arion__afl_8hpp_source.html">arion_afl.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -125,9 +128,12 @@ Static Private Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ae67160cdc4678a7e8eb90799ea6b7210" id="r_ae67160cdc4678a7e8eb90799ea6b7210"><td class="memItemLeft" align="right" valign="top">std::weak_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1ArionAfl.html#ae67160cdc4678a7e8eb90799ea6b7210">arion</a></td></tr>
+<tr class="memdesc:ae67160cdc4678a7e8eb90799ea6b7210"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this fuzzing session.  <br /></td></tr>
 <tr class="separator:ae67160cdc4678a7e8eb90799ea6b7210"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This class is used to managed a UnicornAFL fuzzing session from an <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a5d0c869ab017b9fd7842a5cf1381ab99" name="a5d0c869ab017b9fd7842a5cf1381ab99"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5d0c869ab017b9fd7842a5cf1381ab99">&#9670;&#160;</a></span>ArionAfl()</h2>
 
@@ -151,6 +157,12 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="classarion_1_1ArionAfl.html" title="This class is used to managed a UnicornAFL fuzzing session from an Arion instance.">ArionAfl</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname"><a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a></td><td>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this fuzzing session. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -216,6 +228,19 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Starts a fuzzing session. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">input_callback</td><td>The callback that gets triggered at each input generation by AFL. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">crash_callback</td><td>The callback that gets triggered at each target crash detected by AFL. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">exits</td><td>A list of code addresses, which, when reached, stop the current execution. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mem_strategy</td><td>The memory restoring strategy. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">signals</td><td>The list of signals which <a class="el" href="classarion_1_1ArionAfl.html" title="This class is used to managed a UnicornAFL fuzzing session from an Arion instance.">ArionAfl</a> must consider crashes. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">always_validate</td><td>If true, the crash_callback will be called after every execution. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">persistent_iters</td><td>The number of executions before forking, and then restoring the context perfectly (but an expensive operation). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>Optional user-defined data passed to the hook. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -276,6 +301,18 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>A callback that gets triggered at each target crash detected by AFL. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">uc</td><td>The Unicorn engine associated with the <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">res</td><td>Error code returned from Unicorn engine. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>The buffer containing the input generated by AFL. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input_sz</td><td>The size of the buffer containing the input generated by AFL. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">persistent_round</td><td>The number of remaining rounds before a fork occurs to restore a perfect state. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>The <a class="el" href="structarion_1_1ARION__AFL__PARAM.html" title="This structure is placed in the UnicornAFL user_data parameter.">ARION_AFL_PARAM</a> structure for the fuzzing session. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the crash is handled. </dd></dl>
 
 </div>
 </div>
@@ -330,6 +367,17 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>A callback that gets triggered at each input generation by AFL. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">uc</td><td>The Unicorn engine associated with the <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>The buffer containing the input generated by AFL. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input_sz</td><td>The size of the buffer containing the input generated by AFL. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">persistent_round</td><td>The number of remaining rounds before a fork occurs to restore a perfect state. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>The <a class="el" href="structarion_1_1ARION__AFL__PARAM.html" title="This structure is placed in the UnicornAFL user_data parameter.">ARION_AFL_PARAM</a> structure for the fuzzing session. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the input is accepted. </dd></dl>
 
 </div>
 </div>
@@ -354,10 +402,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>The <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance associated with this fuzzing session. </p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/components/<a class="el" href="arion__afl_8hpp_source.html">arion_afl.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/components/<a class="el" href="arion__afl_8hpp_source.html">arion_afl.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

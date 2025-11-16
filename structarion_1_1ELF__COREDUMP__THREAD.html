@@ -105,6 +105,9 @@ $(document).ready(function(){initNavTree('structarion_1_1ELF__COREDUMP__THREAD.h
 </div><!--header-->
 <div class="contents">
 
+<p>Structure holding register data for a single thread extracted from an ELF core dump.  
+ <a href="structarion_1_1ELF__COREDUMP__THREAD.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="elf__parser_8hpp_source.html">elf_parser.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -115,11 +118,15 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:afa3f0a10cd44fc1fba9a3c360ce23d7b" id="r_afa3f0a10cd44fc1fba9a3c360ce23d7b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacearion.html#a7903048e93fdb36816a483e988c7408e">BYTE</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ELF__COREDUMP__THREAD.html#afa3f0a10cd44fc1fba9a3c360ce23d7b">raw_prstatus</a></td></tr>
+<tr class="memdesc:afa3f0a10cd44fc1fba9a3c360ce23d7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raw byte data of the general-purpose register set (<code>prstatus</code>) note.  <br /></td></tr>
 <tr class="separator:afa3f0a10cd44fc1fba9a3c360ce23d7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0165b44236df677d56dc34ccdfce71f9" id="r_a0165b44236df677d56dc34ccdfce71f9"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacearion.html#a7903048e93fdb36816a483e988c7408e">BYTE</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ELF__COREDUMP__THREAD.html#a0165b44236df677d56dc34ccdfce71f9">raw_fpregset</a></td></tr>
+<tr class="memdesc:a0165b44236df677d56dc34ccdfce71f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raw byte data of the floating-point register set (<code>fpregset</code>) note.  <br /></td></tr>
 <tr class="separator:a0165b44236df677d56dc34ccdfce71f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Structure holding register data for a single thread extracted from an ELF core dump. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af403b009e86b265b71eb9a556432abe9" name="af403b009e86b265b71eb9a556432abe9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af403b009e86b265b71eb9a556432abe9">&#9670;&#160;</a></span>ELF_COREDUMP_THREAD()</h2>
 
@@ -143,6 +150,12 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for an <a class="el" href="structarion_1_1ELF__COREDUMP__THREAD.html" title="Structure holding register data for a single thread extracted from an ELF core dump.">ELF_COREDUMP_THREAD</a> instance, initializing with <code>prstatus</code> data. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">raw_prstatus</td><td>Raw byte data of the <code>prstatus</code> note. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -159,6 +172,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Raw byte data of the floating-point register set (<code>fpregset</code>) note. </p>
+
 </div>
 </div>
 <a id="afa3f0a10cd44fc1fba9a3c360ce23d7b" name="afa3f0a10cd44fc1fba9a3c360ce23d7b"></a>
@@ -173,10 +188,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Raw byte data of the general-purpose register set (<code>prstatus</code>) note. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/platforms/linux/<a class="el" href="elf__parser_8hpp_source.html">elf_parser.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/platforms/linux/<a class="el" href="elf__parser_8hpp_source.html">elf_parser.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

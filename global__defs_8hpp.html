@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Arion: include/arion/common/global_defs.hpp File Reference</title>
+<title>Arion: /home/runner/work/Arion/Arion/include/arion/common/global_defs.hpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -120,10 +120,13 @@ $(document).ready(function(){initNavTree('global__defs_8hpp.html',''); initResiz
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">union &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unionarion_1_1RVAL.html">arion::RVAL</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies a size-agnostic register value.  <a href="unionarion_1_1RVAL.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1SEGMENT.html">arion::SEGMENT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies an OS memory segment.  <a href="structarion_1_1SEGMENT.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1SIGNAL.html">arion::SIGNAL</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies an OS signal.  <a href="structarion_1_1SIGNAL.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
@@ -134,52 +137,74 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a09d4725b12a09179956d8328c3732293" id="r_a09d4725b12a09179956d8328c3732293"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global__defs_8hpp.html#a09d4725b12a09179956d8328c3732293">ARION_EXPORT</a>&#160;&#160;&#160;__attribute__((visibility(&quot;default&quot;)))</td></tr>
+<tr class="memdesc:a09d4725b12a09179956d8328c3732293"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines which symbols should be exported from the library.  <br /></td></tr>
 <tr class="separator:a09d4725b12a09179956d8328c3732293"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e51cf099f50fc7c0d37ddfa4320281e" id="r_a6e51cf099f50fc7c0d37ddfa4320281e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global__defs_8hpp.html#a6e51cf099f50fc7c0d37ddfa4320281e">ARION_BUF_SZ</a>&#160;&#160;&#160;0x1000</td></tr>
+<tr class="memdesc:a6e51cf099f50fc7c0d37ddfa4320281e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines a generic value that many buffers use to initialize their size.  <br /></td></tr>
 <tr class="separator:a6e51cf099f50fc7c0d37ddfa4320281e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad001d24e086d46bdc65f1df9223a7a7b" id="r_ad001d24e086d46bdc65f1df9223a7a7b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global__defs_8hpp.html#ad001d24e086d46bdc65f1df9223a7a7b">ARION_UUID_SZ</a>&#160;&#160;&#160;0x24</td></tr>
+<tr class="memdesc:ad001d24e086d46bdc65f1df9223a7a7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of a UUID buffer.  <br /></td></tr>
 <tr class="separator:ad001d24e086d46bdc65f1df9223a7a7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a310c7f5730ca669a761511d0eff4ac58" id="r_a310c7f5730ca669a761511d0eff4ac58"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global__defs_8hpp.html#a310c7f5730ca669a761511d0eff4ac58">ARION_SYSTEM_PAGE_SZ</a>&#160;&#160;&#160;0x1000</td></tr>
+<tr class="memdesc:a310c7f5730ca669a761511d0eff4ac58"><td class="mdescLeft">&#160;</td><td class="mdescRight">The 4 KB memory page size that most systems use.  <br /></td></tr>
 <tr class="separator:a310c7f5730ca669a761511d0eff4ac58"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a974fdea625ba040829243b5a9208f372" id="r_a974fdea625ba040829243b5a9208f372"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global__defs_8hpp.html#a974fdea625ba040829243b5a9208f372">ARION_FD_SZ</a>&#160;&#160;&#160;0x4</td></tr>
+<tr class="memdesc:a974fdea625ba040829243b5a9208f372"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of a file descriptor (int).  <br /></td></tr>
 <tr class="separator:a974fdea625ba040829243b5a9208f372"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca59c90db71175638da8366ece13da7b" id="r_aca59c90db71175638da8366ece13da7b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global__defs_8hpp.html#aca59c90db71175638da8366ece13da7b">ARION_UNIX_PATH_MAX</a>&#160;&#160;&#160;0x6C</td></tr>
+<tr class="memdesc:aca59c90db71175638da8366ece13da7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum size for a UNIX path.  <br /></td></tr>
 <tr class="separator:aca59c90db71175638da8366ece13da7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5904b1e34be5b7cc75b34e966b56e8d5" id="r_a5904b1e34be5b7cc75b34e966b56e8d5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global__defs_8hpp.html#a5904b1e34be5b7cc75b34e966b56e8d5">ARION_MAX_U32</a>&#160;&#160;&#160;0xFFFFFFFF</td></tr>
+<tr class="memdesc:a5904b1e34be5b7cc75b34e966b56e8d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum number for an unsigned 32-bit integer.  <br /></td></tr>
 <tr class="separator:a5904b1e34be5b7cc75b34e966b56e8d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9fda7ed5bdba0a2b90cc8f7288f1c9a" id="r_aa9fda7ed5bdba0a2b90cc8f7288f1c9a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global__defs_8hpp.html#aa9fda7ed5bdba0a2b90cc8f7288f1c9a">ARION_MAX_U64</a>&#160;&#160;&#160;0xFFFFFFFFFFFFFFFF</td></tr>
+<tr class="memdesc:aa9fda7ed5bdba0a2b90cc8f7288f1c9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum number for an unsigned 64-bit integer.  <br /></td></tr>
 <tr class="separator:aa9fda7ed5bdba0a2b90cc8f7288f1c9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4c584830b3e150e9c5e97200d6c9eb2" id="r_ae4c584830b3e150e9c5e97200d6c9eb2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global__defs_8hpp.html#ae4c584830b3e150e9c5e97200d6c9eb2">ARION_PROCESS_PID</a>&#160;&#160;&#160;0x1</td></tr>
+<tr class="memdesc:ae4c584830b3e150e9c5e97200d6c9eb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">First PID value to be associated with an emulated process.  <br /></td></tr>
 <tr class="separator:ae4c584830b3e150e9c5e97200d6c9eb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafc24385c745765dcf15360708ecdf8c" id="r_aafc24385c745765dcf15360708ecdf8c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global__defs_8hpp.html#aafc24385c745765dcf15360708ecdf8c">ARION_CYCLES_PER_THREAD</a>&#160;&#160;&#160;0x1000</td></tr>
+<tr class="memdesc:aafc24385c745765dcf15360708ecdf8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of CPU cycles for a thread before switching to another one.  <br /></td></tr>
 <tr class="separator:aafc24385c745765dcf15360708ecdf8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:a58583bcb70d373fc0444d39a9fd06b59" id="r_a58583bcb70d373fc0444d39a9fd06b59"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a58583bcb70d373fc0444d39a9fd06b59">arion::ADDR</a> = uint64_t</td></tr>
+<tr class="memdesc:a58583bcb70d373fc0444d39a9fd06b59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies a memory address.  <br /></td></tr>
 <tr class="separator:a58583bcb70d373fc0444d39a9fd06b59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a45e4538187604eaf992774e4760470" id="r_a9a45e4538187604eaf992774e4760470"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a9a45e4538187604eaf992774e4760470">arion::PROT_FLAGS</a> = uint8_t</td></tr>
+<tr class="memdesc:a9a45e4538187604eaf992774e4760470"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies memory protection rights.  <br /></td></tr>
 <tr class="separator:a9a45e4538187604eaf992774e4760470"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7903048e93fdb36816a483e988c7408e" id="r_a7903048e93fdb36816a483e988c7408e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a7903048e93fdb36816a483e988c7408e">arion::BYTE</a> = uint8_t</td></tr>
+<tr class="memdesc:a7903048e93fdb36816a483e988c7408e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies an 8-bit integer.  <br /></td></tr>
 <tr class="separator:a7903048e93fdb36816a483e988c7408e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bc7997a0cf279f7e07ce89b9e72e899" id="r_a1bc7997a0cf279f7e07ce89b9e72e899"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a1bc7997a0cf279f7e07ce89b9e72e899">arion::REG</a> = uint64_t</td></tr>
+<tr class="memdesc:a1bc7997a0cf279f7e07ce89b9e72e899"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies a Unicorn register.  <br /></td></tr>
 <tr class="separator:a1bc7997a0cf279f7e07ce89b9e72e899"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38c4470ec785e62381b8f1c7a0d9cc37" id="r_a38c4470ec785e62381b8f1c7a0d9cc37"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a38c4470ec785e62381b8f1c7a0d9cc37">arion::RVAL8</a> = uint8_t</td></tr>
+<tr class="memdesc:a38c4470ec785e62381b8f1c7a0d9cc37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies a 8-bit register value.  <br /></td></tr>
 <tr class="separator:a38c4470ec785e62381b8f1c7a0d9cc37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63266b8904798b82be1b54c404dfef89" id="r_a63266b8904798b82be1b54c404dfef89"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a63266b8904798b82be1b54c404dfef89">arion::RVAL16</a> = uint16_t</td></tr>
+<tr class="memdesc:a63266b8904798b82be1b54c404dfef89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies a 16-bit register value.  <br /></td></tr>
 <tr class="separator:a63266b8904798b82be1b54c404dfef89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41d9aa33d685f2c8d4cc5dbb2cbf9496" id="r_a41d9aa33d685f2c8d4cc5dbb2cbf9496"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a41d9aa33d685f2c8d4cc5dbb2cbf9496">arion::RVAL32</a> = uint32_t</td></tr>
+<tr class="memdesc:a41d9aa33d685f2c8d4cc5dbb2cbf9496"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies a 32-bit register value.  <br /></td></tr>
 <tr class="separator:a41d9aa33d685f2c8d4cc5dbb2cbf9496"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3cdee3154ac838e207bea439dc04aa6" id="r_ac3cdee3154ac838e207bea439dc04aa6"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#ac3cdee3154ac838e207bea439dc04aa6">arion::RVAL64</a> = uint64_t</td></tr>
+<tr class="memdesc:ac3cdee3154ac838e207bea439dc04aa6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies a 64-bit register value.  <br /></td></tr>
 <tr class="separator:ac3cdee3154ac838e207bea439dc04aa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af34bbf9917cd0fc0d49db0c49be06332" id="r_af34bbf9917cd0fc0d49db0c49be06332"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#af34bbf9917cd0fc0d49db0c49be06332">arion::RVAL128</a> = std::array&lt; <a class="el" href="namespacearion.html#a7903048e93fdb36816a483e988c7408e">BYTE</a>, 16 &gt;</td></tr>
+<tr class="memdesc:af34bbf9917cd0fc0d49db0c49be06332"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies a 128-bit register value.  <br /></td></tr>
 <tr class="separator:af34bbf9917cd0fc0d49db0c49be06332"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4566735f99a3404ccfa246f373ac6c03" id="r_a4566735f99a3404ccfa246f373ac6c03"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a4566735f99a3404ccfa246f373ac6c03">arion::RVAL256</a> = std::array&lt; <a class="el" href="namespacearion.html#a7903048e93fdb36816a483e988c7408e">BYTE</a>, 32 &gt;</td></tr>
+<tr class="memdesc:a4566735f99a3404ccfa246f373ac6c03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies a 256-bit register value.  <br /></td></tr>
 <tr class="separator:a4566735f99a3404ccfa246f373ac6c03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a755efc15ae64c35633a2d3881eff4b9e" id="r_a755efc15ae64c35633a2d3881eff4b9e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a755efc15ae64c35633a2d3881eff4b9e">arion::RVAL512</a> = std::array&lt; <a class="el" href="namespacearion.html#a7903048e93fdb36816a483e988c7408e">BYTE</a>, 64 &gt;</td></tr>
+<tr class="memdesc:a755efc15ae64c35633a2d3881eff4b9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies a 512-bit register value.  <br /></td></tr>
 <tr class="separator:a755efc15ae64c35633a2d3881eff4b9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b29ca82a25f4b6c7f7efe85abb1d926" id="r_a9b29ca82a25f4b6c7f7efe85abb1d926"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a9b29ca82a25f4b6c7f7efe85abb1d926">arion::SYS_PARAM</a> = uint64_t</td></tr>
-<tr class="separator:a9b29ca82a25f4b6c7f7efe85abb1d926"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b0b9beda4f339ebd4d0597834af40cb" id="r_a1b0b9beda4f339ebd4d0597834af40cb"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a1b0b9beda4f339ebd4d0597834af40cb">arion::SYS_PARAM</a> = uint64_t</td></tr>
+<tr class="memdesc:a1b0b9beda4f339ebd4d0597834af40cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies a syscall parameter.  <br /></td></tr>
+<tr class="separator:a1b0b9beda4f339ebd4d0597834af40cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -187,6 +212,7 @@ Enumerations</h2></td></tr>
 , <a class="el" href="namespacearion.html#a3843fd554ce69dfb860a0e724608e6b6a37b0a20cca7fdd3061acd96dcb50ea0e">arion::DYNAMIC_LINKAGE</a>
 , <a class="el" href="namespacearion.html#a3843fd554ce69dfb860a0e724608e6b6a08a7833d8683e40e22aae331e6f5142c">arion::STATIC_LINKAGE</a>
  }</td></tr>
+<tr class="memdesc:a3843fd554ce69dfb860a0e724608e6b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies the method used to link an executable.  <a href="namespacearion.html#a3843fd554ce69dfb860a0e724608e6b6">More...</a><br /></td></tr>
 <tr class="separator:a3843fd554ce69dfb860a0e724608e6b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a641ab515f8829f44a3e54918529d57c5" id="r_a641ab515f8829f44a3e54918529d57c5"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5">arion::CPU_ARCH</a> { <br />
 &#160;&#160;<a class="el" href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5a8e85b847795f49eed250d17f94d2b1b0">arion::UNKNOWN_ARCH</a>
@@ -197,12 +223,14 @@ Enumerations</h2></td></tr>
 &#160;&#160;<a class="el" href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5ab5c4d5b0eec211fabcb59a849081d2bf">arion::ARM64_ARCH</a>
 <br />
  }</td></tr>
+<tr class="memdesc:a641ab515f8829f44a3e54918529d57c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies a CPU architecture.  <a href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5">More...</a><br /></td></tr>
 <tr class="separator:a641ab515f8829f44a3e54918529d57c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af69d1435a1ec93308fdb0d3f6837a73a" id="r_af69d1435a1ec93308fdb0d3f6837a73a"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#af69d1435a1ec93308fdb0d3f6837a73a">arion::PLATFORM</a> { <a class="el" href="namespacearion.html#af69d1435a1ec93308fdb0d3f6837a73aa3b0d5f34a58ea5ffaaaf051bc21758a0">arion::UNKNOWN_PLATFORM</a>
 , <a class="el" href="namespacearion.html#af69d1435a1ec93308fdb0d3f6837a73aa78059a15aafb66e1b69372395b62c3f3">arion::LINUX</a>
 , <a class="el" href="namespacearion.html#af69d1435a1ec93308fdb0d3f6837a73aa855326fad251530e3d357b52959e90f3">arion::WINDOWS</a>
 , <a class="el" href="namespacearion.html#af69d1435a1ec93308fdb0d3f6837a73aa721cda23f077b114ce55628b07cf2e6e">arion::MACOS</a>
  }</td></tr>
+<tr class="memdesc:af69d1435a1ec93308fdb0d3f6837a73a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies an Operating System (OS).  <a href="namespacearion.html#af69d1435a1ec93308fdb0d3f6837a73a">More...</a><br /></td></tr>
 <tr class="separator:af69d1435a1ec93308fdb0d3f6837a73a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82c0b542baf93dc9b2fcc00f19aa4572" id="r_a82c0b542baf93dc9b2fcc00f19aa4572"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a82c0b542baf93dc9b2fcc00f19aa4572">arion::LOG_LEVEL</a> { <br />
 &#160;&#160;<a class="el" href="namespacearion.html#a82c0b542baf93dc9b2fcc00f19aa4572a84d800bc17fbb43d033fe3a443f67618">arion::TRACE</a>
@@ -215,15 +243,19 @@ Enumerations</h2></td></tr>
 , <a class="el" href="namespacearion.html#a82c0b542baf93dc9b2fcc00f19aa4572a250a589f14105efeefff66a110f974cc">arion::OFF</a>
 <br />
  }</td></tr>
+<tr class="memdesc:a82c0b542baf93dc9b2fcc00f19aa4572"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies a logging level.  <a href="namespacearion.html#a82c0b542baf93dc9b2fcc00f19aa4572">More...</a><br /></td></tr>
 <tr class="separator:a82c0b542baf93dc9b2fcc00f19aa4572"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a94b8f4f00fe9ee277b32b55edc9f2db6" id="r_a94b8f4f00fe9ee277b32b55edc9f2db6"><td class="memItemLeft" align="right" valign="top">const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a94b8f4f00fe9ee277b32b55edc9f2db6">arion::EMPTY</a> = 0</td></tr>
+<tr class="memdesc:a94b8f4f00fe9ee277b32b55edc9f2db6"><td class="mdescLeft">&#160;</td><td class="mdescRight">A 64-bit zero-initialized value for various purposes.  <br /></td></tr>
 <tr class="separator:a94b8f4f00fe9ee277b32b55edc9f2db6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25b40f071a20d329d448ddd81a28d8b9" id="r_a25b40f071a20d329d448ddd81a28d8b9"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, <a class="el" href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5">CPU_ARCH</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a25b40f071a20d329d448ddd81a28d8b9">arion::ARCH_FROM_NAME</a></td></tr>
+<tr class="memdesc:a25b40f071a20d329d448ddd81a28d8b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">A map identifying a CPU architecture given its name.  <br /></td></tr>
 <tr class="separator:a25b40f071a20d329d448ddd81a28d8b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25705023b2b8f6a94f529376d923dc09" id="r_a25705023b2b8f6a94f529376d923dc09"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacearion.html#a641ab515f8829f44a3e54918529d57c5">CPU_ARCH</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a25705023b2b8f6a94f529376d923dc09">arion::NAME_FROM_ARCH</a></td></tr>
+<tr class="memdesc:a25705023b2b8f6a94f529376d923dc09"><td class="mdescLeft">&#160;</td><td class="mdescRight">A map identifying a name corresponding a given CPU architecture.  <br /></td></tr>
 <tr class="separator:a25705023b2b8f6a94f529376d923dc09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
@@ -239,6 +271,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Defines a generic value that many buffers use to initialize their size. </p>
+
 </div>
 </div>
 <a id="aafc24385c745765dcf15360708ecdf8c" name="aafc24385c745765dcf15360708ecdf8c"></a>
@@ -252,6 +286,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Number of CPU cycles for a thread before switching to another one. </p>
 
 </div>
 </div>
@@ -267,6 +303,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Defines which symbols should be exported from the library. </p>
+
 </div>
 </div>
 <a id="a974fdea625ba040829243b5a9208f372" name="a974fdea625ba040829243b5a9208f372"></a>
@@ -280,6 +318,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Size of a file descriptor (int). </p>
 
 </div>
 </div>
@@ -295,6 +335,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Maximum number for an unsigned 32-bit integer. </p>
+
 </div>
 </div>
 <a id="aa9fda7ed5bdba0a2b90cc8f7288f1c9a" name="aa9fda7ed5bdba0a2b90cc8f7288f1c9a"></a>
@@ -308,6 +350,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Maximum number for an unsigned 64-bit integer. </p>
 
 </div>
 </div>
@@ -323,6 +367,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>First PID value to be associated with an emulated process. </p>
+
 </div>
 </div>
 <a id="a310c7f5730ca669a761511d0eff4ac58" name="a310c7f5730ca669a761511d0eff4ac58"></a>
@@ -336,6 +382,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>The 4 KB memory page size that most systems use. </p>
 
 </div>
 </div>
@@ -351,6 +399,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Maximum size for a UNIX path. </p>
+
 </div>
 </div>
 <a id="ad001d24e086d46bdc65f1df9223a7a7b" name="ad001d24e086d46bdc65f1df9223a7a7b"></a>
@@ -364,6 +414,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Size of a UUID buffer. </p>
 
 </div>
 </div>

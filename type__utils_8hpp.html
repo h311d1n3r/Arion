@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Arion: include/arion/utils/type_utils.hpp File Reference</title>
+<title>Arion: /home/runner/work/Arion/Arion/include/arion/utils/type_utils.hpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -116,14 +116,19 @@ $(document).ready(function(){initNavTree('type__utils_8hpp.html',''); initResiza
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__type_1_1KernelType.html">arion_type::KernelType</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract base class for all kernel-related data types used for visualization/logging.  <a href="classarion__type_1_1KernelType.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__type_1_1KernelTypeRegistry.html">arion_type::KernelTypeRegistry</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Singleton class responsible for managing the initialization order of all kernel type objects.  <a href="classarion__type_1_1KernelTypeRegistry.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__type_1_1FlagType.html">arion_type::FlagType</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class for data types represented as a set of bit flags or discrete symbolic constants.  <a href="classarion__type_1_1FlagType.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__type_1_1IntType.html">arion_type::IntType</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concrete type representing a generic integer value.  <a href="classarion__type_1_1IntType.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion__type_1_1RawStringType.html">arion_type::RawStringType</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concrete type representing a memory address pointing to a null-terminated string.  <a href="classarion__type_1_1RawStringType.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
@@ -151,13 +156,16 @@ Macros</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:aec495340911b90ef3aec2d84f92aad82" id="r_aec495340911b90ef3aec2d84f92aad82"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion__type.html#aec495340911b90ef3aec2d84f92aad82">arion_type::InitFn</a> = std::function&lt; void()&gt;</td></tr>
+<tr class="memdesc:aec495340911b90ef3aec2d84f92aad82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function type used for initializing a kernel type.  <br /></td></tr>
 <tr class="separator:aec495340911b90ef3aec2d84f92aad82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:aa843ebc10610ed17ec3796c1d650f09f" id="r_aa843ebc10610ed17ec3796c1d650f09f"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classarion__type_1_1IntType.html">IntType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion__type.html#aa843ebc10610ed17ec3796c1d650f09f">arion_type::INT_TYPE</a></td></tr>
+<tr class="memdesc:aa843ebc10610ed17ec3796c1d650f09f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared pointer to the singleton instance of <code><a class="el" href="classarion__type_1_1IntType.html" title="Concrete type representing a generic integer value.">IntType</a></code>.  <br /></td></tr>
 <tr class="separator:aa843ebc10610ed17ec3796c1d650f09f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a139d1e662b0962b9589af9fabadaec1b" id="r_a139d1e662b0962b9589af9fabadaec1b"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classarion__type_1_1RawStringType.html">RawStringType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion__type.html#a139d1e662b0962b9589af9fabadaec1b">arion_type::RAW_STRING_TYPE</a></td></tr>
+<tr class="memdesc:a139d1e662b0962b9589af9fabadaec1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared pointer to the singleton instance of <code><a class="el" href="classarion__type_1_1RawStringType.html" title="Concrete type representing a memory address pointing to a null-terminated string.">RawStringType</a></code>.  <br /></td></tr>
 <tr class="separator:a139d1e662b0962b9589af9fabadaec1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
@@ -201,7 +209,15 @@ Variables</h2></td></tr>
 <div class="line">            KernelTypeRegistry::instance().register_type(PRIORITY, [] { VAR = std::make_shared&lt;TYPE&gt;(); });            \</div>
 <div class="line">        }                                                                                                              \</div>
 <div class="line">    } KernelTypeRegistrarInstance_##VAR;</div>
-</div><!-- fragment -->
+</div><!-- fragment --><p>Macro to automatically register a shared pointer to a <code>KernelType</code> derived class. This ensures that type objects are correctly instantiated in the required order via the <code>KernelTypeRegistry</code>. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">VAR</td><td>The <code>std::shared_ptr&lt;TYPE&gt;</code> variable to initialize. </td></tr>
+    <tr><td class="paramname">TYPE</td><td>The concrete class of the kernel type. </td></tr>
+    <tr><td class="paramname">PRIORITY</td><td>The initialization priority (lower numbers initialize first). </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a1c5f6554f615cefd1dcf4b4465394beb" name="a1c5f6554f615cefd1dcf4b4465394beb"></a>

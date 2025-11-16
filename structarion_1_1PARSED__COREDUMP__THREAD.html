@@ -105,6 +105,9 @@ $(document).ready(function(){initNavTree('structarion_1_1PARSED__COREDUMP__THREA
 </div><!--header-->
 <div class="contents">
 
+<p>Structure holding the fully parsed register state for a thread retrieved from a core dump.  
+ <a href="structarion_1_1PARSED__COREDUMP__THREAD.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="lnx__arch__manager_8hpp_source.html">lnx_arch_manager.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -115,11 +118,15 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a673a1f5008c9c57c7cda6f04c073dba8" id="r_a673a1f5008c9c57c7cda6f04c073dba8"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="structarion_1_1ELF__COREDUMP__THREAD.html">ELF_COREDUMP_THREAD</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1PARSED__COREDUMP__THREAD.html#a673a1f5008c9c57c7cda6f04c073dba8">thread</a></td></tr>
+<tr class="memdesc:a673a1f5008c9c57c7cda6f04c073dba8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unique pointer to the raw ELF thread data.  <br /></td></tr>
 <tr class="separator:a673a1f5008c9c57c7cda6f04c073dba8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fa3a6190c108378c97b7924457599e3" id="r_a3fa3a6190c108378c97b7924457599e3"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacearion.html#a1bc7997a0cf279f7e07ce89b9e72e899">REG</a>, <a class="el" href="unionarion_1_1RVAL.html">RVAL</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1PARSED__COREDUMP__THREAD.html#a3fa3a6190c108378c97b7924457599e3">regs</a></td></tr>
+<tr class="memdesc:a3fa3a6190c108378c97b7924457599e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map of <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> universal register IDs to their decoded register values.  <br /></td></tr>
 <tr class="separator:a3fa3a6190c108378c97b7924457599e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Structure holding the fully parsed register state for a thread retrieved from a core dump. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a2c8d415701aa1f1b0fa51a0c4e434c7c" name="a2c8d415701aa1f1b0fa51a0c4e434c7c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2c8d415701aa1f1b0fa51a0c4e434c7c">&#9670;&#160;</a></span>PARSED_COREDUMP_THREAD()</h2>
 
@@ -142,6 +149,7 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="structarion_1_1PARSED__COREDUMP__THREAD.html" title="Structure holding the fully parsed register state for a thread retrieved from a core dump.">PARSED_COREDUMP_THREAD</a> instances. </p>
 
 </div>
 </div>
@@ -158,6 +166,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Map of <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> universal register IDs to their decoded register values. </p>
+
 </div>
 </div>
 <a id="a673a1f5008c9c57c7cda6f04c073dba8" name="a673a1f5008c9c57c7cda6f04c073dba8"></a>
@@ -172,10 +182,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Unique pointer to the raw ELF thread data. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/platforms/linux/<a class="el" href="lnx__arch__manager_8hpp_source.html">lnx_arch_manager.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/platforms/linux/<a class="el" href="lnx__arch__manager_8hpp_source.html">lnx_arch_manager.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

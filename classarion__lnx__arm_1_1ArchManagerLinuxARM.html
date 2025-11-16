@@ -104,6 +104,9 @@ $(document).ready(function(){initNavTree('classarion__lnx__arm_1_1ArchManagerLin
 </div><!--header-->
 <div class="contents">
 
+<p>Linux ARM architecture manager class for Arion.  
+ <a href="classarion__lnx__arm_1_1ArchManagerLinuxARM.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="lnx__arch__arm_8hpp_source.html">lnx_arch_arm.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for arion_lnx_arm::ArchManagerLinuxARM:</div>
@@ -112,7 +115,7 @@ Inheritance diagram for arion_lnx_arm::ArchManagerLinuxARM:</div>
   <img src="classarion__lnx__arm_1_1ArchManagerLinuxARM.png" usemap="#arion_5Flnx_5Farm::ArchManagerLinuxARM_map" alt=""/>
   <map id="arion_5Flnx_5Farm::ArchManagerLinuxARM_map" name="arion_5Flnx_5Farm::ArchManagerLinuxARM_map">
 <area href="classarion__arm_1_1ArchManagerARM.html" title="A class responsible for performing architecture specific operations in case of an ARM chip emulation." alt="arion_arm::ArchManagerARM" shape="rect" coords="0,56,235,80"/>
-<area href="classarion_1_1LinuxArchManager.html" alt="arion::LinuxArchManager" shape="rect" coords="245,56,480,80"/>
+<area href="classarion_1_1LinuxArchManager.html" title="Abstract base class for managing Linux architecture-specific details, particularly for core dump pars..." alt="arion::LinuxArchManager" shape="rect" coords="245,56,480,80"/>
 <area href="classarion_1_1ArchManager.html" alt="arion::ArchManager" shape="rect" coords="0,0,235,24"/>
   </map>
 </div></div>
@@ -225,7 +228,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memdesc:afcf57a1696c4c5494dfcd6cf155a23d7 inherit pro_attribs_classarion_1_1ArchManager"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if the <a class="el" href="classarion_1_1ArchManager.html">ArchManager</a> subclass uses hook_intr to intercept syscalls.  <br /></td></tr>
 <tr class="separator:afcf57a1696c4c5494dfcd6cf155a23d7 inherit pro_attribs_classarion_1_1ArchManager"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Linux ARM architecture manager class for Arion. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a556bd6414abe335b8c4e63045ec3b5cd" name="a556bd6414abe335b8c4e63045ec3b5cd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a556bd6414abe335b8c4e63045ec3b5cd">&#9670;&#160;</a></span>fpregset_to_regs()</h2>
 
@@ -249,6 +254,13 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Converts the raw ELF <code>elf_fpregset_t</code> data (floating-point registers) into an Arion register map. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">fpregset</td><td>Raw byte vector containing the <code>elf_fpregset_t</code> structure. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A map of Arion's universal register IDs to their 64-bit values (<code><a class="el" href="unionarion_1_1RVAL.html" title="Identifies a size-agnostic register value.">arion::RVAL</a></code>). </dd></dl>
 
 </div>
 </div>
@@ -275,6 +287,13 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Packs the custom <code><a class="el" href="structarion__lnx__arm_1_1fp__reg.html" title="Structure representing a single ARM floating-point register (double-precision format).">fp_reg</a></code> structure into a standard 64-bit value (<code>uint64_t</code>). This is typically used to normalize the FPU state for use in the emulator. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">r</td><td>Pointer to the ARM floating-point register structure. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The 64-bit packed value of the floating-point register. </dd></dl>
 
 </div>
 </div>
@@ -301,11 +320,18 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Converts the raw ELF <code><a class="el" href="structarion__lnx__arm_1_1elf__prstatus.html" title="Structure for a process status ELF note (NT_PRSTATUS) for ARM, containing general registers.">elf_prstatus</a></code> data (general registers) into an Arion register map. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">prstatus</td><td>Raw byte vector containing the <code><a class="el" href="structarion__lnx__arm_1_1elf__prstatus.html" title="Structure for a process status ELF note (NT_PRSTATUS) for ARM, containing general registers.">elf_prstatus</a></code> structure. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A map of Arion's universal register IDs to their 64-bit values (<code><a class="el" href="unionarion_1_1RVAL.html" title="Identifies a size-agnostic register value.">arion::RVAL</a></code>). </dd></dl>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/platforms/linux/archs/<a class="el" href="lnx__arch__arm_8hpp_source.html">lnx_arch_arm.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/platforms/linux/archs/<a class="el" href="lnx__arch__arm_8hpp_source.html">lnx_arch_arm.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

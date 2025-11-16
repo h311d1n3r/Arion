@@ -104,6 +104,9 @@ $(document).ready(function(){initNavTree('structarion_1_1ELF__PARSER__ATTRIBUTES
 </div><!--header-->
 <div class="contents">
 
+<p>Extended attributes structure for the ELF file parser.  
+ <a href="structarion_1_1ELF__PARSER__ATTRIBUTES.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="elf__parser_8hpp_source.html">elf_parser.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for arion::ELF_PARSER_ATTRIBUTES:</div>
@@ -118,14 +121,19 @@ Inheritance diagram for arion::ELF_PARSER_ATTRIBUTES:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ab1bd70a92d6dbdfde40fa6e58c5e1b42" id="r_ab1bd70a92d6dbdfde40fa6e58c5e1b42"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#aefad64e5619975900515a4731ec98f2e">ELF_FILE_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ELF__PARSER__ATTRIBUTES.html#ab1bd70a92d6dbdfde40fa6e58c5e1b42">type</a> = <a class="el" href="namespacearion.html#aefad64e5619975900515a4731ec98f2eacc8f7997ba2d61f078f985e22bb65474">ELF_FILE_TYPE::UNKNOWN_FILE</a></td></tr>
+<tr class="memdesc:ab1bd70a92d6dbdfde40fa6e58c5e1b42"><td class="mdescLeft">&#160;</td><td class="mdescRight">The specific type of the ELF file.  <br /></td></tr>
 <tr class="separator:ab1bd70a92d6dbdfde40fa6e58c5e1b42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66e203a6cbb87e414347c45dd086cc12" id="r_a66e203a6cbb87e414347c45dd086cc12"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#a58583bcb70d373fc0444d39a9fd06b59">ADDR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ELF__PARSER__ATTRIBUTES.html#a66e203a6cbb87e414347c45dd086cc12">prog_headers_off</a> = 0</td></tr>
+<tr class="memdesc:a66e203a6cbb87e414347c45dd086cc12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset of the program headers table.  <br /></td></tr>
 <tr class="separator:a66e203a6cbb87e414347c45dd086cc12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a728ad25d51d2b4ab96e0396f5844b474" id="r_a728ad25d51d2b4ab96e0396f5844b474"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ELF__PARSER__ATTRIBUTES.html#a728ad25d51d2b4ab96e0396f5844b474">prog_headers_entry_sz</a> = 0</td></tr>
+<tr class="memdesc:a728ad25d51d2b4ab96e0396f5844b474"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of a single program header entry.  <br /></td></tr>
 <tr class="separator:a728ad25d51d2b4ab96e0396f5844b474"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a118fea0cc3f68f8beec12333363d9b46" id="r_a118fea0cc3f68f8beec12333363d9b46"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ELF__PARSER__ATTRIBUTES.html#a118fea0cc3f68f8beec12333363d9b46">prog_headers_n</a> = 0</td></tr>
+<tr class="memdesc:a118fea0cc3f68f8beec12333363d9b46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of program header entries.  <br /></td></tr>
 <tr class="separator:a118fea0cc3f68f8beec12333363d9b46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ad208640c1347c1fa3fb92aecdd1f10" id="r_a4ad208640c1347c1fa3fb92aecdd1f10"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="structarion_1_1ELF__COREDUMP__ATTRS.html">ELF_COREDUMP_ATTRS</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ELF__PARSER__ATTRIBUTES.html#a4ad208640c1347c1fa3fb92aecdd1f10">coredump</a> = 0</td></tr>
+<tr class="memdesc:a4ad208640c1347c1fa3fb92aecdd1f10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attributes specific to CORE dump files, or null otherwise.  <br /></td></tr>
 <tr class="separator:a4ad208640c1347c1fa3fb92aecdd1f10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_attribs_structarion_1_1EXECUTABLE__PARSER__ATTRIBUTES"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_structarion_1_1EXECUTABLE__PARSER__ATTRIBUTES')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="structarion_1_1EXECUTABLE__PARSER__ATTRIBUTES.html">arion::EXECUTABLE_PARSER_ATTRIBUTES</a></td></tr>
 <tr class="memitem:adb29dbb0828caa2ffd9f84dff6e02e2b inherit pub_attribs_structarion_1_1EXECUTABLE__PARSER__ATTRIBUTES" id="r_adb29dbb0828caa2ffd9f84dff6e02e2b"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1EXECUTABLE__PARSER__ATTRIBUTES.html#adb29dbb0828caa2ffd9f84dff6e02e2b">usr_path</a></td></tr>
@@ -156,7 +164,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:ad0b3dbaa32e682f698a82bbac4d4b080 inherit pub_methods_structarion_1_1EXECUTABLE__PARSER__ATTRIBUTES" id="r_ad0b3dbaa32e682f698a82bbac4d4b080"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1EXECUTABLE__PARSER__ATTRIBUTES.html#ad0b3dbaa32e682f698a82bbac4d4b080">~EXECUTABLE_PARSER_ATTRIBUTES</a> ()=default</td></tr>
 <tr class="separator:ad0b3dbaa32e682f698a82bbac4d4b080 inherit pub_methods_structarion_1_1EXECUTABLE__PARSER__ATTRIBUTES"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Extended attributes structure for the ELF file parser. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a4ad208640c1347c1fa3fb92aecdd1f10" name="a4ad208640c1347c1fa3fb92aecdd1f10"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4ad208640c1347c1fa3fb92aecdd1f10">&#9670;&#160;</a></span>coredump</h2>
 
@@ -168,6 +178,8 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Attributes specific to CORE dump files, or null otherwise. </p>
 
 </div>
 </div>
@@ -183,6 +195,8 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Size of a single program header entry. </p>
+
 </div>
 </div>
 <a id="a118fea0cc3f68f8beec12333363d9b46" name="a118fea0cc3f68f8beec12333363d9b46"></a>
@@ -196,6 +210,8 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Number of program header entries. </p>
 
 </div>
 </div>
@@ -211,6 +227,8 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Offset of the program headers table. </p>
+
 </div>
 </div>
 <a id="ab1bd70a92d6dbdfde40fa6e58c5e1b42" name="ab1bd70a92d6dbdfde40fa6e58c5e1b42"></a>
@@ -225,10 +243,12 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The specific type of the ELF file. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/platforms/linux/<a class="el" href="elf__parser_8hpp_source.html">elf_parser.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/platforms/linux/<a class="el" href="elf__parser_8hpp_source.html">elf_parser.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

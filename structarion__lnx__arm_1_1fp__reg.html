@@ -104,26 +104,38 @@ $(document).ready(function(){initNavTree('structarion__lnx__arm_1_1fp__reg.html'
 </div><!--header-->
 <div class="contents">
 
+<p>Structure representing a single ARM floating-point register (double-precision format).  
+ <a href="structarion__lnx__arm_1_1fp__reg.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="lnx__arch__arm_8hpp_source.html">lnx_arch_arm.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:aed22d51932e514f93eb7fbfb1fe6f7b7" id="r_aed22d51932e514f93eb7fbfb1fe6f7b7"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm_1_1fp__reg.html#aed22d51932e514f93eb7fbfb1fe6f7b7">sign1</a>: 1</td></tr>
+<tr class="memdesc:aed22d51932e514f93eb7fbfb1fe6f7b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sign bit of the mantissa.  <br /></td></tr>
 <tr class="separator:aed22d51932e514f93eb7fbfb1fe6f7b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05ed2a9759e72d4255b3e85d139ef8ec" id="r_a05ed2a9759e72d4255b3e85d139ef8ec"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm_1_1fp__reg.html#a05ed2a9759e72d4255b3e85d139ef8ec">unused</a>: 15</td></tr>
+<tr class="memdesc:a05ed2a9759e72d4255b3e85d139ef8ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unused bits.  <br /></td></tr>
 <tr class="separator:a05ed2a9759e72d4255b3e85d139ef8ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9507a0f7a880415e3f4c8130da7b6b1b" id="r_a9507a0f7a880415e3f4c8130da7b6b1b"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm_1_1fp__reg.html#a9507a0f7a880415e3f4c8130da7b6b1b">sign2</a>: 1</td></tr>
+<tr class="memdesc:a9507a0f7a880415e3f4c8130da7b6b1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sign bit of the exponent.  <br /></td></tr>
 <tr class="separator:a9507a0f7a880415e3f4c8130da7b6b1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abbf9ecec465d169e75b5fc594efc1380" id="r_abbf9ecec465d169e75b5fc594efc1380"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm_1_1fp__reg.html#abbf9ecec465d169e75b5fc594efc1380">exponent</a>: 14</td></tr>
+<tr class="memdesc:abbf9ecec465d169e75b5fc594efc1380"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exponent part.  <br /></td></tr>
 <tr class="separator:abbf9ecec465d169e75b5fc594efc1380"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9837c2f5e5d7dc40f0fa6d4b0cc8687" id="r_ab9837c2f5e5d7dc40f0fa6d4b0cc8687"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm_1_1fp__reg.html#ab9837c2f5e5d7dc40f0fa6d4b0cc8687">j</a>: 1</td></tr>
+<tr class="memdesc:ab9837c2f5e5d7dc40f0fa6d4b0cc8687"><td class="mdescLeft">&#160;</td><td class="mdescRight">Integer bit in normalized representation.  <br /></td></tr>
 <tr class="separator:ab9837c2f5e5d7dc40f0fa6d4b0cc8687"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab63c051aebe72f7e069e9b9f49d5e0fa" id="r_ab63c051aebe72f7e069e9b9f49d5e0fa"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm_1_1fp__reg.html#ab63c051aebe72f7e069e9b9f49d5e0fa">mantissa1</a>: 31</td></tr>
+<tr class="memdesc:ab63c051aebe72f7e069e9b9f49d5e0fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">High 31 bits of the mantissa.  <br /></td></tr>
 <tr class="separator:ab63c051aebe72f7e069e9b9f49d5e0fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1128f084e0e9954831dd73425f2fc61a" id="r_a1128f084e0e9954831dd73425f2fc61a"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm_1_1fp__reg.html#a1128f084e0e9954831dd73425f2fc61a">mantissa0</a>: 32</td></tr>
+<tr class="memdesc:a1128f084e0e9954831dd73425f2fc61a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Low 32 bits of the mantissa.  <br /></td></tr>
 <tr class="separator:a1128f084e0e9954831dd73425f2fc61a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Structure representing a single ARM floating-point register (double-precision format). </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="abbf9ecec465d169e75b5fc594efc1380" name="abbf9ecec465d169e75b5fc594efc1380"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abbf9ecec465d169e75b5fc594efc1380">&#9670;&#160;</a></span>exponent</h2>
 
@@ -135,6 +147,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Exponent part. </p>
 
 </div>
 </div>
@@ -150,6 +164,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Integer bit in normalized representation. </p>
+
 </div>
 </div>
 <a id="a1128f084e0e9954831dd73425f2fc61a" name="a1128f084e0e9954831dd73425f2fc61a"></a>
@@ -163,6 +179,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Low 32 bits of the mantissa. </p>
 
 </div>
 </div>
@@ -178,6 +196,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>High 31 bits of the mantissa. </p>
+
 </div>
 </div>
 <a id="aed22d51932e514f93eb7fbfb1fe6f7b7" name="aed22d51932e514f93eb7fbfb1fe6f7b7"></a>
@@ -191,6 +211,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Sign bit of the mantissa. </p>
 
 </div>
 </div>
@@ -206,6 +228,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Sign bit of the exponent. </p>
+
 </div>
 </div>
 <a id="a05ed2a9759e72d4255b3e85d139ef8ec" name="a05ed2a9759e72d4255b3e85d139ef8ec"></a>
@@ -220,10 +244,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Unused bits. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/platforms/linux/archs/<a class="el" href="lnx__arch__arm_8hpp_source.html">lnx_arch_arm.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/platforms/linux/archs/<a class="el" href="lnx__arch__arm_8hpp_source.html">lnx_arch_arm.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

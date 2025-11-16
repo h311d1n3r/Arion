@@ -24,7 +24,7 @@ var global__defs_8hpp =
     [ "RVAL512", "global__defs_8hpp.html#a755efc15ae64c35633a2d3881eff4b9e", null ],
     [ "RVAL64", "global__defs_8hpp.html#ac3cdee3154ac838e207bea439dc04aa6", null ],
     [ "RVAL8", "global__defs_8hpp.html#a38c4470ec785e62381b8f1c7a0d9cc37", null ],
-    [ "SYS_PARAM", "global__defs_8hpp.html#a9b29ca82a25f4b6c7f7efe85abb1d926", null ],
+    [ "SYS_PARAM", "global__defs_8hpp.html#a1b0b9beda4f339ebd4d0597834af40cb", null ],
     [ "CPU_ARCH", "global__defs_8hpp.html#a641ab515f8829f44a3e54918529d57c5", [
       [ "UNKNOWN_ARCH", "global__defs_8hpp.html#a641ab515f8829f44a3e54918529d57c5a8e85b847795f49eed250d17f94d2b1b0", null ],
       [ "X86_ARCH", "global__defs_8hpp.html#a641ab515f8829f44a3e54918529d57c5a9fe308eaed3248fc91e2098541b5e200", null ],

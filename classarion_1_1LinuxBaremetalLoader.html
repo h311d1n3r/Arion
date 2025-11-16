@@ -106,6 +106,9 @@ $(document).ready(function(){initNavTree('classarion_1_1LinuxBaremetalLoader.htm
 </div><!--header-->
 <div class="contents">
 
+<p>A Linux loader implementation for baremetal (shellcode) injection/execution without a full ELF file structure.  
+ <a href="classarion_1_1LinuxBaremetalLoader.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="lnx__baremetal__loader_8hpp_source.html">lnx_baremetal_loader.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for arion::LinuxBaremetalLoader:</div>
@@ -113,7 +116,7 @@ Inheritance diagram for arion::LinuxBaremetalLoader:</div>
  <div class="center">
   <img src="classarion_1_1LinuxBaremetalLoader.png" usemap="#arion::LinuxBaremetalLoader_map" alt=""/>
   <map id="arion::LinuxBaremetalLoader_map" name="arion::LinuxBaremetalLoader_map">
-<area href="classarion_1_1LinuxLoader.html" alt="arion::LinuxLoader" shape="rect" coords="0,0,173,24"/>
+<area href="classarion_1_1LinuxLoader.html" title="Abstract base class for Linux-specific executable loading and setup routines." alt="arion::LinuxLoader" shape="rect" coords="0,0,173,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -146,13 +149,18 @@ Private Member Functions</h2></td></tr>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_attribs_classarion_1_1LinuxLoader"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classarion_1_1LinuxLoader')"><img src="closed.png" alt="-"/>&#160;Private Attributes inherited from <a class="el" href="classarion_1_1LinuxLoader.html">arion::LinuxLoader</a></td></tr>
 <tr class="memitem:a82fefe752286fc1560f19f82fe6df97e inherit pub_attribs_classarion_1_1LinuxLoader" id="r_a82fefe752286fc1560f19f82fe6df97e"><td class="memItemLeft" align="right" valign="top">std::weak_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1LinuxLoader.html#a82fefe752286fc1560f19f82fe6df97e">arion</a></td></tr>
+<tr class="memdesc:a82fefe752286fc1560f19f82fe6df97e inherit pub_attribs_classarion_1_1LinuxLoader"><td class="mdescLeft">&#160;</td><td class="mdescRight">Weak pointer back to the main <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> instance.  <br /></td></tr>
 <tr class="separator:a82fefe752286fc1560f19f82fe6df97e inherit pub_attribs_classarion_1_1LinuxLoader"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c6813354c8bf34df376d6f278110bd3 inherit pub_attribs_classarion_1_1LinuxLoader" id="r_a5c6813354c8bf34df376d6f278110bd3"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1LinuxLoader.html#a5c6813354c8bf34df376d6f278110bd3">program_args</a></td></tr>
+<tr class="memdesc:a5c6813354c8bf34df376d6f278110bd3 inherit pub_attribs_classarion_1_1LinuxLoader"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of command-line arguments.  <br /></td></tr>
 <tr class="separator:a5c6813354c8bf34df376d6f278110bd3 inherit pub_attribs_classarion_1_1LinuxLoader"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f99c77c90bdfe135cd0b387a824020d inherit pub_attribs_classarion_1_1LinuxLoader" id="r_a1f99c77c90bdfe135cd0b387a824020d"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1LinuxLoader.html#a1f99c77c90bdfe135cd0b387a824020d">program_env</a></td></tr>
+<tr class="memdesc:a1f99c77c90bdfe135cd0b387a824020d inherit pub_attribs_classarion_1_1LinuxLoader"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of environment variables.  <br /></td></tr>
 <tr class="separator:a1f99c77c90bdfe135cd0b387a824020d inherit pub_attribs_classarion_1_1LinuxLoader"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A Linux loader implementation for baremetal (shellcode) injection/execution without a full ELF file structure. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="abebf04a43a861492337c2df58c04a367" name="abebf04a43a861492337c2df58c04a367"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abebf04a43a861492337c2df58c04a367">&#9670;&#160;</a></span>LinuxBaremetalLoader()</h2>
 
@@ -192,6 +200,14 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="classarion_1_1LinuxBaremetalLoader.html" title="A Linux loader implementation for baremetal (shellcode) injection/execution without a full ELF file s...">LinuxBaremetalLoader</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion</td><td>Weak pointer to the <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> emulator instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">program_args</td><td>Vector of command-line arguments. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">program_env</td><td>Vector of environment variables. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -219,6 +235,13 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Maps the raw machine code (shellcode) into the emulator's memory space. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">code</td><td>Vector of bytes representing the machine code. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The base virtual address where the code was mapped. </dd></dl>
 
 </div>
 </div>
@@ -244,6 +267,7 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Processes the baremetal loading, mapping the code, setting up the stack, and finalizing the loader parameters. </p><dl class="section return"><dt>Returns</dt><dd>A unique pointer to the finalized loader parameters (<code><a class="el" href="structarion_1_1LNX__LOADER__PARAMS.html" title="Structure holding the key load addresses of the emulated process.">LNX_LOADER_PARAMS</a></code>). </dd></dl>
 
 <p>Implements <a class="el" href="classarion_1_1LinuxLoader.html#a2207aab4b02a2e1a631455757a073a05">arion::LinuxLoader</a>.</p>
 
@@ -282,13 +306,20 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Sets up architecture-specific Auxiliary Vector (AUXV) entries before execution starts. This implementation is typically minimal for baremetal loading. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">params</td><td>Shared pointer to the loader parameters structure. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">arch_sz</td><td>The size of the architecture (32 or 64 bit). </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p>Implements <a class="el" href="classarion_1_1LinuxLoader.html#a18a7769f6e4016ea78dd82a0b9d2abc4">arion::LinuxLoader</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>include/arion/platforms/linux/<a class="el" href="lnx__baremetal__loader_8hpp_source.html">lnx_baremetal_loader.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/platforms/linux/<a class="el" href="lnx__baremetal__loader_8hpp_source.html">lnx_baremetal_loader.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

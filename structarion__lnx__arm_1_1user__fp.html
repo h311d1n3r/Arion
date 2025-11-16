@@ -104,22 +104,32 @@ $(document).ready(function(){initNavTree('structarion__lnx__arm_1_1user__fp.html
 </div><!--header-->
 <div class="contents">
 
+<p>Structure representing the ARM floating-point unit (FPU) context as saved in the user area.  
+ <a href="structarion__lnx__arm_1_1user__fp.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="lnx__arch__arm_8hpp_source.html">lnx_arch_arm.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a7da775e4b16685b57095db2a288e3a73" id="r_a7da775e4b16685b57095db2a288e3a73"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structarion__lnx__arm_1_1fp__reg.html">fp_reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm_1_1user__fp.html#a7da775e4b16685b57095db2a288e3a73">fpregs</a> [8]</td></tr>
+<tr class="memdesc:a7da775e4b16685b57095db2a288e3a73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of 8 double-precision floating-point registers (D0-D7).  <br /></td></tr>
 <tr class="separator:a7da775e4b16685b57095db2a288e3a73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aedea3153f8ca3d6849b8a08902946392" id="r_aedea3153f8ca3d6849b8a08902946392"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm_1_1user__fp.html#aedea3153f8ca3d6849b8a08902946392">fpsr</a>: 32</td></tr>
+<tr class="memdesc:aedea3153f8ca3d6849b8a08902946392"><td class="mdescLeft">&#160;</td><td class="mdescRight">Floating-Point Status Register.  <br /></td></tr>
 <tr class="separator:aedea3153f8ca3d6849b8a08902946392"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0fd6844287f0652f6e911b1c5848ba8" id="r_ae0fd6844287f0652f6e911b1c5848ba8"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm_1_1user__fp.html#ae0fd6844287f0652f6e911b1c5848ba8">fpcr</a>: 32</td></tr>
+<tr class="memdesc:ae0fd6844287f0652f6e911b1c5848ba8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Floating-Point Control Register.  <br /></td></tr>
 <tr class="separator:ae0fd6844287f0652f6e911b1c5848ba8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af36f26088684f265712d5c75488af25b" id="r_af36f26088684f265712d5c75488af25b"><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm_1_1user__fp.html#af36f26088684f265712d5c75488af25b">ftype</a> [8]</td></tr>
+<tr class="memdesc:af36f26088684f265712d5c75488af25b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of floating-point type markers.  <br /></td></tr>
 <tr class="separator:af36f26088684f265712d5c75488af25b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac11dd3fcde4320908e9349f9c07d7985" id="r_ac11dd3fcde4320908e9349f9c07d7985"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion__lnx__arm_1_1user__fp.html#ac11dd3fcde4320908e9349f9c07d7985">init_flag</a></td></tr>
+<tr class="memdesc:ac11dd3fcde4320908e9349f9c07d7985"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialization flag for the FPU context.  <br /></td></tr>
 <tr class="separator:ac11dd3fcde4320908e9349f9c07d7985"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Structure representing the ARM floating-point unit (FPU) context as saved in the user area. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="ae0fd6844287f0652f6e911b1c5848ba8" name="ae0fd6844287f0652f6e911b1c5848ba8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae0fd6844287f0652f6e911b1c5848ba8">&#9670;&#160;</a></span>fpcr</h2>
 
@@ -131,6 +141,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Floating-Point Control Register. </p>
 
 </div>
 </div>
@@ -146,6 +158,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Array of 8 double-precision floating-point registers (D0-D7). </p>
+
 </div>
 </div>
 <a id="aedea3153f8ca3d6849b8a08902946392" name="aedea3153f8ca3d6849b8a08902946392"></a>
@@ -159,6 +173,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Floating-Point Status Register. </p>
 
 </div>
 </div>
@@ -174,6 +190,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Array of floating-point type markers. </p>
+
 </div>
 </div>
 <a id="ac11dd3fcde4320908e9349f9c07d7985" name="ac11dd3fcde4320908e9349f9c07d7985"></a>
@@ -188,10 +206,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Initialization flag for the FPU context. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/platforms/linux/archs/<a class="el" href="lnx__arch__arm_8hpp_source.html">lnx_arch_arm.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/platforms/linux/archs/<a class="el" href="lnx__arch__arm_8hpp_source.html">lnx_arch_arm.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

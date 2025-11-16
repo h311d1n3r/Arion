@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Arion: include/arion/common/hooks_manager.hpp File Reference</title>
+<title>Arion: /home/runner/work/Arion/Arion/include/arion/common/hooks_manager.hpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -121,10 +121,13 @@ $(document).ready(function(){initNavTree('hooks__manager_8hpp.html',''); initRes
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__HOOK__PARAM.html">arion::ARION_HOOK_PARAM</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This structure is placed in the Unicorn user_data parameter of hooks.  <a href="structarion_1_1ARION__HOOK__PARAM.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__HOOK.html">arion::ARION_HOOK</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This structure holds information about an <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> hook.  <a href="structarion_1_1ARION__HOOK.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarion_1_1HooksManager.html">arion::HooksManager</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class purpose is to manage user-defined <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> hooks including hook creation, deletion, trigger handling...  <a href="classarion_1_1HooksManager.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
@@ -135,6 +138,7 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:a88f442989871be938f7a07b0ae96f8d3" id="r_a88f442989871be938f7a07b0ae96f8d3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a88f442989871be938f7a07b0ae96f8d3">arion::HOOK_ID</a> = uint64_t</td></tr>
+<tr class="memdesc:a88f442989871be938f7a07b0ae96f8d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">ID associated with a hook when created.  <br /></td></tr>
 <tr class="separator:a88f442989871be938f7a07b0ae96f8d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a347f486b27911bd410124bc38b6d492d" id="r_a347f486b27911bd410124bc38b6d492d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a347f486b27911bd410124bc38b6d492d">arion::NO_PARAM_HOOK_CALLBACK</a> = std::function&lt; void(std::shared_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt; arion, void *user_data)&gt;</td></tr>
 <tr class="separator:a347f486b27911bd410124bc38b6d492d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -154,9 +158,10 @@ Typedefs</h2></td></tr>
 <tr class="separator:a4376059cb695803e70d10a942a653f74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b3c9228588f85a88eb99aa29daaa0b7" id="r_a6b3c9228588f85a88eb99aa29daaa0b7"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a6b3c9228588f85a88eb99aa29daaa0b7">arion::PROCESS_HOOK_CALLBACK</a> = std::function&lt; void(std::shared_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt; arion, std::shared_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt; child, void *user_data)&gt;</td></tr>
 <tr class="separator:a6b3c9228588f85a88eb99aa29daaa0b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99f6b1a397f1e086b9603899bf78fd7d" id="r_a99f6b1a397f1e086b9603899bf78fd7d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a99f6b1a397f1e086b9603899bf78fd7d">arion::SYSCALL_HOOK_CALLBACK</a> = std::function&lt; void(std::shared_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt; arion, uint64_t sysno, std::vector&lt; <a class="el" href="namespacearion.html#a9b29ca82a25f4b6c7f7efe85abb1d926">SYS_PARAM</a> &gt; params, bool *handled, void *user_data)&gt;</td></tr>
+<tr class="memitem:a99f6b1a397f1e086b9603899bf78fd7d" id="r_a99f6b1a397f1e086b9603899bf78fd7d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a99f6b1a397f1e086b9603899bf78fd7d">arion::SYSCALL_HOOK_CALLBACK</a> = std::function&lt; void(std::shared_ptr&lt; <a class="el" href="classarion_1_1Arion.html">Arion</a> &gt; arion, uint64_t sysno, std::vector&lt; <a class="el" href="namespacearion.html#a1b0b9beda4f339ebd4d0597834af40cb">SYS_PARAM</a> &gt; params, bool *handled, void *user_data)&gt;</td></tr>
 <tr class="separator:a99f6b1a397f1e086b9603899bf78fd7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb300c662124ba9ad67f420d1cb10e8e" id="r_afb300c662124ba9ad67f420d1cb10e8e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#afb300c662124ba9ad67f420d1cb10e8e">arion::HOOK_CALLBACK</a> = std::variant&lt; <a class="el" href="namespacearion.html#a347f486b27911bd410124bc38b6d492d">NO_PARAM_HOOK_CALLBACK</a>, <a class="el" href="namespacearion.html#a6123873cf2d13d0b232bb075f1bd59e3">NO_PARAM_BOOL_HOOK_CALLBACK</a>, <a class="el" href="namespacearion.html#aebdd8d1d5843331a0084f0b39a7c0531">U32_HOOK_CALLBACK</a>, <a class="el" href="namespacearion.html#a9a619e43f88cedf564d873000546927a">ADDR_SZ_HOOK_CALLBACK</a>, <a class="el" href="namespacearion.html#afd4d92100f6acae1da296e632e6c890b">MEM_HOOK_CALLBACK</a>, <a class="el" href="namespacearion.html#a1ba05356d362c8968b9f1b0fb8ecf4d9">EDGE_HOOK_CALLBACK</a>, <a class="el" href="namespacearion.html#a0289c03aad26439e64fc1c7dea5e4f71">TCG_HOOK_CALLBACK</a>, <a class="el" href="namespacearion.html#a4376059cb695803e70d10a942a653f74">TLB_HOOK_CALLBACK</a>, <a class="el" href="namespacearion.html#a6b3c9228588f85a88eb99aa29daaa0b7">PROCESS_HOOK_CALLBACK</a>, <a class="el" href="namespacearion.html#a99f6b1a397f1e086b9603899bf78fd7d">SYSCALL_HOOK_CALLBACK</a> &gt;</td></tr>
+<tr class="memdesc:afb300c662124ba9ad67f420d1cb10e8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Variant type that represents any possible hook callback type supported by <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a>.  <br /></td></tr>
 <tr class="separator:afb300c662124ba9ad67f420d1cb10e8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
@@ -190,6 +195,7 @@ Enumerations</h2></td></tr>
 &#160;&#160;<a class="el" href="namespacearion.html#ad3929d28dd075448348df2bbad5c1739a04ceb00b601ab8c84139d1f7ab1bf343">arion::SYSCALL_HOOK</a>
 <br />
  }</td></tr>
+<tr class="memdesc:ad3929d28dd075448348df2bbad5c1739"><td class="mdescLeft">&#160;</td><td class="mdescRight">Types for Arion hooks.  <a href="namespacearion.html#ad3929d28dd075448348df2bbad5c1739">More...</a><br /></td></tr>
 <tr class="separator:ad3929d28dd075448348df2bbad5c1739"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
@@ -234,8 +240,10 @@ Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a0aaabd2446d488f25f7bb7f93af6de28" id="r_a0aaabd2446d488f25f7bb7f93af6de28"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacearion.html#ad3929d28dd075448348df2bbad5c1739">ARION_HOOK_TYPE</a>, uc_hook_type &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#a0aaabd2446d488f25f7bb7f93af6de28">arion::ARION_UC_HOOK_TYPES</a></td></tr>
+<tr class="memdesc:a0aaabd2446d488f25f7bb7f93af6de28"><td class="mdescLeft">&#160;</td><td class="mdescRight">A map identifying a Unicorn hook type given its associated <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> hook type.  <br /></td></tr>
 <tr class="separator:a0aaabd2446d488f25f7bb7f93af6de28"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac269d10f9fb9a9b13a1caf2161b23f51" id="r_ac269d10f9fb9a9b13a1caf2161b23f51"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacearion.html#ad3929d28dd075448348df2bbad5c1739">ARION_HOOK_TYPE</a>, void * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearion.html#ac269d10f9fb9a9b13a1caf2161b23f51">arion::ARION_UC_HOOK_FUNCS</a></td></tr>
+<tr class="memdesc:ac269d10f9fb9a9b13a1caf2161b23f51"><td class="mdescLeft">&#160;</td><td class="mdescRight">A map identifying a hook function given its associated <a class="el" href="classarion_1_1Arion.html" title="An emulation unit associated with a process.">Arion</a> hook type.  <br /></td></tr>
 <tr class="separator:ac269d10f9fb9a9b13a1caf2161b23f51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->

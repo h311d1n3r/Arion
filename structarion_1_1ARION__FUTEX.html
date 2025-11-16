@@ -105,6 +105,9 @@ $(document).ready(function(){initNavTree('structarion_1_1ARION__FUTEX.html','');
 </div><!--header-->
 <div class="contents">
 
+<p>This structure holds data about a Fast Userspace muTEX.  
+ <a href="structarion_1_1ARION__FUTEX.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="threading__manager_8hpp_source.html">threading_manager.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -119,13 +122,18 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:adfd3acdf783833fd7b94748d3ff77d83" id="r_adfd3acdf783833fd7b94748d3ff77d83"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacearion.html#a58583bcb70d373fc0444d39a9fd06b59">ADDR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__FUTEX.html#adfd3acdf783833fd7b94748d3ff77d83">futex_addr</a> = 0</td></tr>
+<tr class="memdesc:adfd3acdf783833fd7b94748d3ff77d83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Memory address of the futex.  <br /></td></tr>
 <tr class="separator:adfd3acdf783833fd7b94748d3ff77d83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a169f83664140d3247be9537601fed753" id="r_a169f83664140d3247be9537601fed753"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__FUTEX.html#a169f83664140d3247be9537601fed753">futex_bitmask</a> = 0</td></tr>
+<tr class="memdesc:a169f83664140d3247be9537601fed753"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bitmask of the futex, used to encode various states or conditions.  <br /></td></tr>
 <tr class="separator:a169f83664140d3247be9537601fed753"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:affc52ca2363ea8ee8d376c5e04e51d11" id="r_affc52ca2363ea8ee8d376c5e04e51d11"><td class="memItemLeft" align="right" valign="top">pid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarion_1_1ARION__FUTEX.html#affc52ca2363ea8ee8d376c5e04e51d11">tid</a></td></tr>
+<tr class="memdesc:affc52ca2363ea8ee8d376c5e04e51d11"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Thread ID associated with the futex.  <br /></td></tr>
 <tr class="separator:affc52ca2363ea8ee8d376c5e04e51d11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This structure holds data about a Fast Userspace muTEX. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac9f4aea9b12d4876d07f34b14d08ea85" name="ac9f4aea9b12d4876d07f34b14d08ea85"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac9f4aea9b12d4876d07f34b14d08ea85">&#9670;&#160;</a></span>ARION_FUTEX() <span class="overload">[1/3]</span></h2>
 
@@ -148,6 +156,7 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="structarion_1_1ARION__FUTEX.html" title="This structure holds data about a Fast Userspace muTEX.">ARION_FUTEX</a> instances. </p>
 
 </div>
 </div>
@@ -190,6 +199,14 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="structarion_1_1ARION__FUTEX.html" title="This structure holds data about a Fast Userspace muTEX.">ARION_FUTEX</a> instances. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">futex_addr</td><td>Memory address of the futex. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">futex_bitmask</td><td>Bitmask of the futex, used to encode various states or conditions. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">tid</td><td>The Thread ID associated with the futex. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -216,6 +233,12 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Builder for <a class="el" href="structarion_1_1ARION__FUTEX.html" title="This structure holds data about a Fast Userspace muTEX.">ARION_FUTEX</a> instances used to clone an <a class="el" href="structarion_1_1ARION__FUTEX.html" title="This structure holds data about a Fast Userspace muTEX.">ARION_FUTEX</a> instance. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">arion_f</td><td>The <a class="el" href="structarion_1_1ARION__FUTEX.html" title="This structure holds data about a Fast Userspace muTEX.">ARION_FUTEX</a> instance to be cloned. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -232,6 +255,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Memory address of the futex. </p>
+
 </div>
 </div>
 <a id="a169f83664140d3247be9537601fed753" name="a169f83664140d3247be9537601fed753"></a>
@@ -245,6 +270,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Bitmask of the futex, used to encode various states or conditions. </p>
 
 </div>
 </div>
@@ -260,10 +287,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The Thread ID associated with the futex. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/arion/common/<a class="el" href="threading__manager_8hpp_source.html">threading_manager.hpp</a></li>
+<li>/home/runner/work/Arion/Arion/include/arion/common/<a class="el" href="threading__manager_8hpp_source.html">threading_manager.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
