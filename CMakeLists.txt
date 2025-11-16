@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
 project(Arion)
-set(ARION_VERSION 1.0.1-alpha)
+set(ARION_VERSION 1.0.2-alpha)
 
 include(CMakePackageConfigHelpers)
 

@@ -15,8 +15,8 @@ using namespace arion_lnx_type;
 ADDR do_mmap(std::shared_ptr<Arion> arion, ADDR addr, size_t len, int prot, int flags, int fd, off_t off)
 {
     addr = arion->mem->align_up(addr);
-    if (addr < MMAP_MIN_ADDR)
-        addr = MMAP_MIN_ADDR;
+    if (addr < ARION_MMAP_MIN_ADDR)
+        addr = ARION_MMAP_MIN_ADDR;
     len = arion->mem->align_up(len);
     PROT_FLAGS arion_prot = kernel_prot_to_arion_prot(prot);
     ADDR map_addr;

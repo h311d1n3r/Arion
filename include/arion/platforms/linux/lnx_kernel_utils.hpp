@@ -16,102 +16,193 @@ namespace arion_lnx_type
 {
 
 // Defined in https://elixir.bootlin.com/linux/v6.12.6/source/arch/x86/include/uapi/asm/signal.h#L93
+/// Linux kernel structure representing the signal action data for `rt_sigaction`.
 struct ksigaction
 {
+    /// Signal handler function pointer.
     void *handler;
+    /// Signal flags (e.g., SA_SIGINFO).
     unsigned long flags;
+    /// Signal trampoline/restorer function pointer.
     void *restorer;
+    /// Signals blocked during handler execution.
     sigset_t mask;
 };
 
+/// Structure for resource limits in 32-bit systems (two 32-bit values).
 struct rlimit32
 {
+    /// Current (soft) limit.
     uint32_t rlim_cur;
+    /// Maximum (hard) limit.
     uint32_t rlim_max;
 };
 
+/// Structure for a scatter/gather vector entry in 32-bit systems.
 struct iovec32
 {
+    /// Base address of the buffer.
     uint32_t iov_base;
+    /// Length of the buffer.
     uint32_t iov_len;
 };
 
+/// Kernel structure for time value used in older syscalls (`gettimeofday`, ELF notes).
 struct __kernel_old_timeval
 {
+    /// Seconds component of the time value.
     __kernel_long_t tv_sec;
+    /// Microseconds component of the time value.
     __kernel_long_t tv_usec;
 };
 
+/// Kernel structure for signal information used in ELF core dump notes.
 struct elf_siginfo
 {
+    /// Signal number.
     int si_signo;
+    /// Signal code.
     int si_code;
+    /// Error number.
     int si_errno;
 };
 
+/// Common fields shared across architecture-specific `elf_prstatus` structures in core dumps.
 struct elf_prstatus_common
 {
+    /// Signal information structure.
     struct elf_siginfo pr_info;
+    /// Current signal.
     short pr_cursig;
+    /// Pending signals.
     unsigned long pr_sigpend;
+    /// Held signals.
     unsigned long pr_sighold;
+    /// Process ID.
     pid_t pr_pid;
+    /// Parent Process ID.
     pid_t pr_ppid;
+    /// Process Group ID.
     pid_t pr_pgrp;
+    /// Session ID.
     pid_t pr_sid;
+    /// User CPU time consumed (obsolete field).
     struct __kernel_old_timeval pr_utime;
+    /// System CPU time consumed (obsolete field).
     struct __kernel_old_timeval pr_stime;
+    /// User CPU time consumed by waited-for children (obsolete field).
     struct __kernel_old_timeval pr_cutime;
+    /// System CPU time consumed by waited-for children (obsolete field).
     struct __kernel_old_timeval pr_cstime;
 };
 
+/// Type definition for a single general-purpose register value in an ELF core dump.
 typedef unsigned long elf_greg_t;
+/// Type definition for an FPU register value in an ELF core dump (typically for legacy 32-bit x86).
 typedef unsigned long elf_freg_t[3];
 
+/**
+ * Converts kernel memory protection flags (e.g., PROT_READ | PROT_EXEC) to Arion's internal `PROT_FLAGS` enum.
+ * @param[in] kflags The integer containing the kernel protection flags.
+ * @return The corresponding `arion::PROT_FLAGS` value.
+ */
 arion::PROT_FLAGS kernel_prot_to_arion_prot(int kflags);
 
+/// Type used for syscall return error codes (negative values).
 class ErrCodeType : public arion_type::KernelType
 {
   public:
+    /**
+     * Builder for ErrCodeType instances.
+     */
     ErrCodeType() : arion_type::KernelType("Error code", arion::LOG_COLOR::MAGENTA) {};
+    /**
+     * Converts an error code value to its string representation (e.g., "-2" to "-ENOENT").
+     * @param[in] arion Shared pointer to the Arion instance.
+     * @param[in] val The error code value (usually negative).
+     * @return String representation of the error code.
+     */
     std::string str(std::shared_ptr<arion::Arion> arion, uint64_t val) override;
 };
+/// Shared pointer to the singleton instance of `ErrCodeType`.
 extern std::shared_ptr<ErrCodeType> ERR_CODE_TYPE;
 
+/// Type used for file descriptor values.
 class FileDescriptorType : public arion_type::KernelType
 {
   public:
+    /**
+     * Builder for FileDescriptorType instances.
+     */
     FileDescriptorType() : arion_type::KernelType("File descriptor", arion::LOG_COLOR::MAGENTA) {};
+    /**
+     * Converts a file descriptor value to its string representation (e.g., 1 to "1 (stdout)").
+     * @param[in] arion Shared pointer to the Arion instance.
+     * @param[in] val The file descriptor value.
+     * @return String representation of the file descriptor.
+     */
     std::string str(std::shared_ptr<arion::Arion> arion, uint64_t val) override;
 };
+/// Shared pointer to the singleton instance of `FileDescriptorType`.
 extern std::shared_ptr<FileDescriptorType> FILE_DESCRIPTOR_TYPE;
 
+/// Type used for 32-bit IPv4 address values (`in_addr_t`).
 class InAddrTType : public arion_type::KernelType
 {
   public:
+    /**
+     * Builder for InAddrTType instances.
+     */
     InAddrTType() : arion_type::KernelType("Type in_addr_t", arion::LOG_COLOR::CYAN) {};
+    /**
+     * Converts an IPv4 address value to its dotted-decimal string representation.
+     * @param[in] arion Shared pointer to the Arion instance.
+     * @param[in] val The IPv4 address value.
+     * @return Dotted-decimal string representation of the address.
+     */
     std::string str(std::shared_ptr<arion::Arion> arion, uint64_t val) override;
 };
+/// Shared pointer to the singleton instance of `InAddrTType`.
 extern std::shared_ptr<InAddrTType> IN_ADDR_T_TYPE;
 
+/// Type used for 128-bit IPv6 address values (`in6_addr_t`).
 class In6AddrTType : public arion_type::KernelType
 {
   public:
+    /**
+     * Builder for In6AddrTType instances.
+     */
     In6AddrTType() : arion_type::KernelType("Type in6_addr_t", arion::LOG_COLOR::CYAN) {};
+    /**
+     * Converts an IPv6 address value to its string representation.
+     * @param[in] arion Shared pointer to the Arion instance.
+     * @param[in] val The memory address pointing to the 128-bit IPv6 value.
+     * @return String representation of the IPv6 address.
+     */
     std::string str(std::shared_ptr<arion::Arion> arion, uint64_t val) override;
 };
+/// Shared pointer to the singleton instance of `In6AddrTType`.
 extern std::shared_ptr<In6AddrTType> IN6_ADDR_T_TYPE;
 
+/// Type representing the access modes for the `access()` syscall (R_OK, W_OK, X_OK, F_OK).
 class AccessModeType : public arion_type::FlagType
 {
   public:
+    /**
+     * Builder for AccessModeType instances.
+     */
     AccessModeType() : arion_type::FlagType("Access mode", {{0, "F_OK"}, {1, "X_OK"}, {2, "W_OK"}, {4, "R_OK"}}) {};
 };
+/// Shared pointer to the singleton instance of `AccessModeType`.
 extern std::shared_ptr<AccessModeType> ACCESS_MODE_TYPE;
 
+/// Type representing the open modes for the `open()` syscall (O_RDONLY, O_CREAT, etc.).
 class OpenModeType : public arion_type::FlagType
 {
   public:
+    /**
+     * Builder for OpenModeType instances.
+     */
     OpenModeType()
         : arion_type::FlagType("Open mode", {{0, "O_RDONLY"},
                                              {1, "O_WRONLY"},
@@ -134,11 +225,16 @@ class OpenModeType : public arion_type::FlagType
                                              {010000, "O_DSYNC"},
                                              {020000000 | 0200000, "__O_TMPFILE"}}) {};
 };
+/// Shared pointer to the singleton instance of `OpenModeType`.
 extern std::shared_ptr<OpenModeType> OPEN_MODE_TYPE;
 
+/// Type representing the flags used by the `*at` file syscalls (`openat`, `faccessat`, etc.).
 class FileATFlagType : public arion_type::FlagType
 {
   public:
+    /**
+     * Builder for FileATFlagType instances.
+     */
     FileATFlagType()
         : arion_type::FlagType("File AT flag", {{-100, "AT_FDCWD"},
                                                 {0x100, "AT_SYMLINK_NOFOLLOW"},
@@ -152,11 +248,16 @@ class FileATFlagType : public arion_type::FlagType
                                                 {0x4000, "AT_STATX_DONT_SYNC"},
                                                 {0x8000, "AT_RECURSIVE"}}) {};
 };
+/// Shared pointer to the singleton instance of `FileATFlagType`.
 extern std::shared_ptr<FileATFlagType> FILE_AT_FLAG_TYPE;
 
+/// Type representing the mask of requested fields for the `statx()` syscall.
 class StatxMaskType : public arion_type::FlagType
 {
   public:
+    /**
+     * Builder for StatxMaskType instances.
+     */
     StatxMaskType()
         : arion_type::FlagType("Statx mask", {{0x00000001U, "STATX_TYPE"},
                                               {0x00000002U, "STATX_MODE"},
@@ -177,11 +278,16 @@ class StatxMaskType : public arion_type::FlagType
                                               {0x00008000U, "STATX_SUBVOL"},
                                               {0x10000, "STATX_WRITE_ATOMIC"}}) {};
 };
+/// Shared pointer to the singleton instance of `StatxMaskType`.
 extern std::shared_ptr<StatxMaskType> STATX_MASK_TYPE;
 
+/// Type representing the file attributes flags returned by the `statx()` syscall.
 class StatxAttrsType : public arion_type::FlagType
 {
   public:
+    /**
+     * Builder for StatxAttrsType instances.
+     */
     StatxAttrsType()
         : arion_type::FlagType("Statx attributes", {{0x4, "STATX_ATTR_COMPRESSED"},
                                                     {0x10, "STATX_ATTR_IMMUTABLE"},
@@ -193,19 +299,35 @@ class StatxAttrsType : public arion_type::FlagType
                                                     {0x200000, "STATX_ATTR_DAX"},
                                                     {0x400000, "STATX_ATTR_WRITE_ATOMIC"}}) {};
 };
+/// Shared pointer to the singleton instance of `StatxAttrsType`.
 extern std::shared_ptr<StatxAttrsType> STATX_ATTRS_TYPE;
 
+/// Type representing the memory protection flags for `mmap`/`mprotect` (PROT_READ, PROT_WRITE, PROT_EXEC).
 class ProtFlagType : public arion_type::KernelType
 {
   public:
+    /**
+     * Builder for ProtFlagType instances.
+     */
     ProtFlagType() : arion_type::KernelType("Protection flag", arion::LOG_COLOR::ORANGE) {};
+    /**
+     * Converts a protection flag value to its string representation (e.g., 3 to "PROT_READ|PROT_WRITE").
+     * @param[in] arion Shared pointer to the Arion instance.
+     * @param[in] val The protection flag value.
+     * @return String representation of the protection flag.
+     */
     std::string str(std::shared_ptr<arion::Arion> arion, uint64_t val) override;
 };
+/// Shared pointer to the singleton instance of `ProtFlagType`.
 extern std::shared_ptr<ProtFlagType> PROT_FLAG_TYPE;
 
+/// Type representing the flags for the `mmap()` syscall (MAP_SHARED, MAP_ANONYMOUS, etc.).
 class MmapFlagType : public arion_type::FlagType
 {
   public:
+    /**
+     * Builder for MmapFlagType instances.
+     */
     MmapFlagType()
         : arion_type::FlagType("Mmap flag", {{0x0, "MAP_FILE"},
                                              {0x1, "MAP_SHARED"},
@@ -226,21 +348,31 @@ class MmapFlagType : public arion_type::FlagType
                                              {0x80000, "MAP_SYNC"},
                                              {0x100000, "MAP_FIXED_NOREPLACE"}}) {};
 };
+/// Shared pointer to the singleton instance of `MmapFlagType`.
 extern std::shared_ptr<MmapFlagType> MMAP_FLAG_TYPE;
 
+/// Type representing the seek origin flags for `lseek` (SEEK_SET, SEEK_CUR, SEEK_END).
 class SeekWhenceType : public arion_type::FlagType
 {
   public:
+    /**
+     * Builder for SeekWhenceType instances.
+     */
     SeekWhenceType()
         : arion_type::FlagType(
               "Seek whence", {{0, "SEEK_SET"}, {1, "SEEK_CUR"}, {2, "SEEK_END"}, {3, "SEEK_DATA"}, {4, "SEEK_HOLE"}}) {
           };
 };
+/// Shared pointer to the singleton instance of `SeekWhenceType`.
 extern std::shared_ptr<SeekWhenceType> SEEK_WHENCE_TYPE;
 
+/// Type representing the operation codes for the `futex()` syscall.
 class FutexOpType : public arion_type::FlagType
 {
   public:
+    /**
+     * Builder for FutexOpType instances.
+     */
     FutexOpType()
         : arion_type::FlagType("Futex operation", {{0, "FUTEX_WAIT"},
                                                    {1, "FUTEX_WAKE"},
@@ -273,11 +405,16 @@ class FutexOpType : public arion_type::FlagType
                                                    {11 + 128, "FUTEX_WAIT_REQUEUE_PI_PRIVATE"},
                                                    {12 + 128, "FUTEX_CMP_REQUEUE_PI_PRIVATE"}}) {};
 };
+/// Shared pointer to the singleton instance of `FutexOpType`.
 extern std::shared_ptr<FutexOpType> FUTEX_OP_TYPE;
 
+/// Type representing the flags for the `clone()` syscall (CLONE_VM, CLONE_THREAD, etc.).
 class CloneFlagType : public arion_type::FlagType
 {
   public:
+    /**
+     * Builder for CloneFlagType instances.
+     */
     CloneFlagType()
         : arion_type::FlagType("Clone flag", {{0x000000ff, "CSIGNAL"},
                                               {0x00000100, "CLONE_VM"},
@@ -308,11 +445,16 @@ class CloneFlagType : public arion_type::FlagType
                                               {0x200000000ULL, "CLONE_INTO_CGROUP"},
                                               {0x00000080, "CLONE_NEWTIME"}}) {};
 };
+/// Shared pointer to the singleton instance of `CloneFlagType`.
 extern std::shared_ptr<CloneFlagType> CLONE_FLAG_TYPE;
 
+/// Type representing Linux signals (SIGHUP, SIGINT, SIGSEGV, etc.).
 class SignalType : public arion_type::FlagType
 {
   public:
+    /**
+     * Builder for SignalType instances.
+     */
     SignalType()
         : arion_type::FlagType("Signal",
                                {{1, "SIGHUP"},   {2, "SIGINT"},     {3, "SIGQUIT"},  {4, "SIGILL"},    {5, "SIGTRAP"},
@@ -323,11 +465,16 @@ class SignalType : public arion_type::FlagType
                                 {25, "SIGXFSZ"}, {26, "SIGVTALRM"}, {27, "SIGPROF"}, {28, "SIGWINCH"}, {29, "SIGIO"},
                                 {30, "SIGPWR"},  {31, "SIGSYS"}}) {};
 };
+/// Shared pointer to the singleton instance of `SignalType`.
 extern std::shared_ptr<SignalType> SIGNAL_TYPE;
 
+/// Type representing Unix file modes (permissions and file type).
 class FileModeType : public arion_type::FlagType
 {
   public:
+    /**
+     * Builder for FileModeType instances.
+     */
     FileModeType()
         : arion_type::FlagType("File mode",
                                {{00170000, "S_IFMT"}, {0140000, "S_IFSOCK"}, {0120000, "S_IFLNK"}, {0100000, "S_IFREG"},
@@ -337,11 +484,16 @@ class FileModeType : public arion_type::FlagType
                                 {00040, "S_IRGRP"},   {00020, "S_IWGRP"},    {00010, "S_IXGRP"},   {00007, "S_IRWXO"},
                                 {00004, "S_IROTH"},   {00002, "S_IWOTH"},    {00001, "S_IXOTH"}}) {};
 };
+/// Shared pointer to the singleton instance of `FileModeType`.
 extern std::shared_ptr<FileModeType> FILE_MODE_TYPE;
 
+/// Type representing the socket address families (domains) (AF_INET, AF_LOCAL, etc.).
 class SocketDomainType : public arion_type::FlagType
 {
   public:
+    /**
+     * Builder for SocketDomainType instances.
+     */
     SocketDomainType()
         : arion_type::FlagType(
               "Socket domain",
@@ -356,11 +508,16 @@ class SocketDomainType : public arion_type::FlagType
                {40, "AF_VSOCK"},    {41, "AF_KCM"},        {42, "AF_QIPCRTR"}, {43, "AF_SMC"},     {44, "AF_XDP"},
                {45, "AF_MCTP"}}) {};
 };
+/// Shared pointer to the singleton instance of `SocketDomainType`.
 extern std::shared_ptr<SocketDomainType> SOCKET_DOMAIN_TYPE;
 
+/// Type representing the socket types (SOCK_STREAM, SOCK_DGRAM, etc.).
 class SocketTypeType : public arion_type::FlagType
 {
   public:
+    /**
+     * Builder for SocketTypeType instances.
+     */
     SocketTypeType()
         : arion_type::FlagType("Socket domain", {{1, "SOCK_STREAM"},
                                                  {2, "SOCK_DGRAM"},
@@ -372,11 +529,16 @@ class SocketTypeType : public arion_type::FlagType
                                                  {00004000, "SOCK_NONBLOCK"},
                                                  {02000000, "SOCK_CLOEXEC"}}) {};
 };
+/// Shared pointer to the singleton instance of `SocketTypeType`.
 extern std::shared_ptr<SocketTypeType> SOCKET_TYPE_TYPE;
 
+/// Polymorphic structure factory for the Unix `struct stat` (file status) structure.
 class StatStructFactory : public arion_poly_struct::PolymorphicStructFactory<struct stat>
 {
   public:
+    /**
+     * Builder for StatStructFactory instances.
+     */
     StatStructFactory()
         : PolymorphicStructFactory(
               {{ftype::PTR_SZ, arion_type::INT_TYPE, "st_dev"},
@@ -413,18 +575,28 @@ class StatStructFactory : public arion_poly_struct::PolymorphicStructFactory<str
                {{arion::CPU_ARCH::ARM64_ARCH}, ftype::V32, arion_type::INT_TYPE, "__unused2"},
                {{arion::CPU_ARCH::X8664_ARCH}, ftype::PTR_SZ, arion_type::INT_TYPE, "__unused3"}}) {};
 };
+/// Shared pointer to the singleton instance of `StatStructFactory`.
 extern std::shared_ptr<StatStructFactory> STAT_STRUCT_FACTORY;
 
+/// Arion structure type wrapper for `struct stat`.
 class StructStatType : public arion_poly_struct::ArionStructType<struct stat>
 {
   public:
+    /**
+     * Builder for StructStatType instances.
+     */
     StructStatType() : ArionStructType("Struct stat", STAT_STRUCT_FACTORY) {};
 };
+/// Shared pointer to the singleton instance of `StructStatType`.
 extern std::shared_ptr<StructStatType> STRUCT_STAT_TYPE;
 
+/// Polymorphic structure factory for the Linux `struct statx` (extended file status) structure.
 class StatxStructFactory : public arion_poly_struct::PolymorphicStructFactory<struct statx>
 {
   public:
+    /**
+     * Builder for StatxStructFactory instances.
+     */
     StatxStructFactory()
         : PolymorphicStructFactory({
               {ftype::V32, arion_lnx_type::STATX_MASK_TYPE, "stx_mask"},
@@ -458,34 +630,54 @@ class StatxStructFactory : public arion_poly_struct::PolymorphicStructFactory<st
               {ftype::A64, arion_type::INT_TYPE, "unused2", 14},
           }) {};
 };
+/// Shared pointer to the singleton instance of `StatxStructFactory`.
 extern std::shared_ptr<StatxStructFactory> STATX_STRUCT_FACTORY;
 
+/// Arion structure type wrapper for `struct statx`.
 class StructStatxType : public arion_poly_struct::ArionStructType<struct statx>
 {
   public:
+    /**
+     * Builder for StructStatxType instances.
+     */
     StructStatxType() : ArionStructType("Struct statx", STATX_STRUCT_FACTORY) {};
 };
+/// Shared pointer to the singleton instance of `StructStatxType`.
 extern std::shared_ptr<StructStatxType> STRUCT_STATX_TYPE;
 
+/// Polymorphic structure factory for the POSIX `struct timespec` structure.
 class TimespecStructFactory : public arion_poly_struct::PolymorphicStructFactory<struct timespec>
 {
   public:
+    /**
+     * Builder for TimespecStructFactory instances.
+     */
     TimespecStructFactory()
-        : PolymorphicStructFactory({{ftype::V64, arion_type::INT_TYPE, "tv_sec"},
-                                    {ftype::V64, arion_type::INT_TYPE, "tv_nsec"}}) {};
+        : PolymorphicStructFactory(
+              {{ftype::V64, arion_type::INT_TYPE, "tv_sec"}, {ftype::V64, arion_type::INT_TYPE, "tv_nsec"}}) {};
 };
+/// Shared pointer to the singleton instance of `TimespecStructFactory`.
 extern std::shared_ptr<TimespecStructFactory> TIMESPEC_STRUCT_FACTORY;
 
+/// Arion structure type wrapper for `struct timespec`.
 class StructTimespecType : public arion_poly_struct::ArionStructType<struct timespec>
 {
   public:
+    /**
+     * Builder for StructTimespecType instances.
+     */
     StructTimespecType() : ArionStructType("Struct timespec", TIMESPEC_STRUCT_FACTORY) {};
 };
+/// Shared pointer to the singleton instance of `StructTimespecType`.
 extern std::shared_ptr<StructTimespecType> STRUCT_TIMESPEC_TYPE;
 
+/// Polymorphic structure factory for the Linux `struct clone_args` structure.
 class CloneArgsStructFactory : public arion_poly_struct::PolymorphicStructFactory<struct clone_args>
 {
   public:
+    /**
+     * Builder for CloneArgsStructFactory instances.
+     */
     CloneArgsStructFactory()
         : PolymorphicStructFactory({{ftype::V64, arion_lnx_type::CLONE_FLAG_TYPE, "flags"},
                                     {ftype::V64, arion_type::INT_TYPE, "pidfd"},
@@ -499,35 +691,55 @@ class CloneArgsStructFactory : public arion_poly_struct::PolymorphicStructFactor
                                     {ftype::V64, arion_type::INT_TYPE, "set_tid_size"},
                                     {ftype::V64, arion_lnx_type::FILE_DESCRIPTOR_TYPE, "cgroup"}}) {};
 };
+/// Shared pointer to the singleton instance of `CloneArgsStructFactory`.
 extern std::shared_ptr<CloneArgsStructFactory> CLONE_ARGS_STRUCT_FACTORY;
 
+/// Arion structure type wrapper for `struct clone_args`.
 class StructCloneArgsType : public arion_poly_struct::ArionStructType<struct clone_args>
 {
   public:
+    /**
+     * Builder for StructCloneArgsType instances.
+     */
     StructCloneArgsType() : ArionStructType("Struct clone_args", CLONE_ARGS_STRUCT_FACTORY) {};
 };
+/// Shared pointer to the singleton instance of `StructCloneArgsType`.
 extern std::shared_ptr<StructCloneArgsType> STRUCT_CLONE_ARGS_TYPE;
 
+/// Polymorphic structure factory for the IPv4 socket address `struct sockaddr_in`.
 class SockaddrInStructFactory : public arion_poly_struct::PolymorphicStructFactory<struct sockaddr_in>
 {
   public:
+    /**
+     * Builder for SockaddrInStructFactory instances.
+     */
     SockaddrInStructFactory()
         : PolymorphicStructFactory({{ftype::V16, arion_lnx_type::SOCKET_DOMAIN_TYPE, "sin_family"},
                                     {ftype::V16, arion_type::INT_TYPE, "sin_port"},
                                     {ftype::V32, arion_lnx_type::IN_ADDR_T_TYPE, "sin_addr"}}) {};
 };
+/// Shared pointer to the singleton instance of `SockaddrInStructFactory`.
 extern std::shared_ptr<SockaddrInStructFactory> SOCKADDR_IN_STRUCT_FACTORY;
 
+/// Arion structure type wrapper for `struct sockaddr_in`.
 class StructSockaddrInType : public arion_poly_struct::ArionStructType<struct sockaddr_in>
 {
   public:
+    /**
+     * Builder for StructSockaddrInType instances.
+     */
     StructSockaddrInType() : ArionStructType("Struct sockaddr_in", SOCKADDR_IN_STRUCT_FACTORY) {};
 };
+/// Shared pointer to the singleton instance of `StructSockaddrInType`.
 extern std::shared_ptr<StructSockaddrInType> STRUCT_SOCKADDR_IN_TYPE;
 
+/// Polymorphic structure factory for the IPv6 socket address `struct sockaddr_in6`.
 class SockaddrIn6StructFactory : public arion_poly_struct::PolymorphicStructFactory<struct sockaddr_in6>
 {
   public:
+    /**
+     * Builder for SockaddrIn6StructFactory instances.
+     */
     SockaddrIn6StructFactory()
         : PolymorphicStructFactory({
               {ftype::V16, arion_lnx_type::SOCKET_DOMAIN_TYPE, "sin6_family"},
@@ -537,40 +749,76 @@ class SockaddrIn6StructFactory : public arion_poly_struct::PolymorphicStructFact
               {ftype::V32, arion_type::INT_TYPE, "sin6_scope_id"},
           }) {};
 };
+/// Shared pointer to the singleton instance of `SockaddrIn6StructFactory`.
 extern std::shared_ptr<SockaddrIn6StructFactory> SOCKADDR_IN6_STRUCT_FACTORY;
 
+/// Arion structure type wrapper for `struct sockaddr_in6`.
 class StructSockaddrIn6Type : public arion_poly_struct::ArionStructType<struct sockaddr_in6>
 {
   public:
+    /**
+     * Builder for StructSockaddrIn6Type instances.
+     */
     StructSockaddrIn6Type() : ArionStructType("Struct sockaddr_in6", SOCKADDR_IN6_STRUCT_FACTORY) {};
 };
+/// Shared pointer to the singleton instance of `StructSockaddrIn6Type`.
 extern std::shared_ptr<StructSockaddrIn6Type> STRUCT_SOCKADDR_IN6_TYPE;
 
+/// Polymorphic structure factory for the Unix domain socket address `struct sockaddr_un`.
 class SockaddrUnStructFactory : public arion_poly_struct::PolymorphicStructFactory<struct sockaddr_un>
 {
   public:
+    /**
+     * Builder for SockaddrUnStructFactory instances.
+     */
     SockaddrUnStructFactory()
         : PolymorphicStructFactory({{ftype::V16, arion_lnx_type::SOCKET_DOMAIN_TYPE, "sun_family"}}) {};
 };
+/// Shared pointer to the singleton instance of `SockaddrUnStructFactory`.
 extern std::shared_ptr<SockaddrUnStructFactory> SOCKADDR_UN_STRUCT_FACTORY;
 
+/// Arion structure type wrapper for `struct sockaddr_un`.
 class StructSockaddrUnType : public arion_poly_struct::ArionStructType<struct sockaddr_un>
 {
   public:
+    /**
+     * Builder for StructSockaddrUnType instances.
+     */
     StructSockaddrUnType() : ArionStructType("Struct sockaddr_un", SOCKADDR_UN_STRUCT_FACTORY) {};
+    /**
+     * Converts a pointer to a `struct sockaddr_un` instance in memory to its string representation (including the
+     * path).
+     * @param[in] arion Shared pointer to the Arion instance.
+     * @param[in] val The memory address pointing to the `struct sockaddr_un` value.
+     * @return String representation of the structure.
+     */
     std::string str(std::shared_ptr<arion::Arion> arion, uint64_t val) override;
 };
+/// Shared pointer to the singleton instance of `StructSockaddrUnType`.
 extern std::shared_ptr<StructSockaddrUnType> STRUCT_SOCKADDR_UN_TYPE;
 
+/// Variable structure type for the generic socket address `struct sockaddr`. It dynamically determines the underlying
+/// type.
 class StructSockaddrType : public arion_poly_struct::ArionVariableStructType
 {
   private:
+    /**
+     * Dynamically determines the specific socket address type (e.g., IPv4, IPv6, Unix) based on the `sa_family` field
+     * in memory.
+     * @param[in] arion Shared pointer to the Arion instance.
+     * @param[in] val The memory address pointing to the generic `struct sockaddr` value.
+     * @return A shared pointer to the concrete `ArionStructType` derived class.
+     */
     std::shared_ptr<arion_poly_struct::AbsArionStructType> process(std::shared_ptr<arion::Arion> arion,
                                                                    uint64_t val) override;
 
   public:
+    /**
+     * Builder for StructSockaddrType instances.
+     */
     StructSockaddrType() : ArionVariableStructType("Struct sockaddr") {};
 };
+/// Shared pointer to the singleton instance of `StructSockaddrType`.
 extern std::shared_ptr<StructSockaddrType> STRUCT_SOCKADDR_TYPE;
 
 } // namespace arion_lnx_type
