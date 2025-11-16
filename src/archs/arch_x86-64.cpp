@@ -1,19 +1,21 @@
-#include <arion/archs/abi_x86-64.hpp>
+#include <arion/archs/arch_x86-64.hpp>
 #include <arion/arion.hpp>
 
 using namespace arion;
+using namespace arion_x86_64;
+using namespace arion_exception;
 
-ks_engine *AbiManagerX8664::curr_ks()
+ks_engine *ArchManagerX8664::curr_ks()
 {
     return this->ks.at(0);
 }
 
-csh *AbiManagerX8664::curr_cs()
+csh *ArchManagerX8664::curr_cs()
 {
     return this->cs.at(0);
 }
 
-std::array<BYTE, VSYSCALL_ENTRY_SZ> AbiManagerX8664::gen_vsyscall_entry(uint64_t syscall_no)
+std::array<BYTE, ARION_VSYSCALL_ENTRY_SZ> ArchManagerX8664::gen_vsyscall_entry(uint64_t syscall_no)
 {
     char vsyscall_asm[64];
     snprintf(vsyscall_asm, sizeof(vsyscall_asm), "mov rax, 0x%" PRIx64 "; syscall; ret", syscall_no);
@@ -22,41 +24,41 @@ std::array<BYTE, VSYSCALL_ENTRY_SZ> AbiManagerX8664::gen_vsyscall_entry(uint64_t
     ks_err ks_asm_err = (ks_err)ks_asm(this->ks.at(0), vsyscall_asm, 0, &asm_buf, &asm_sz, &asm_cnt);
     if (ks_asm_err != KS_ERR_OK)
         throw KeystoneAsmException(ks_asm_err);
-    std::array<BYTE, VSYSCALL_ENTRY_SZ> vsyscall_entry;
+    std::array<BYTE, ARION_VSYSCALL_ENTRY_SZ> vsyscall_entry;
     std::copy(asm_buf, asm_buf + asm_sz, vsyscall_entry.begin());
     std::fill(vsyscall_entry.begin() + asm_sz, vsyscall_entry.end(), 0xCC); // INT3
     ks_free(asm_buf);
     return vsyscall_entry;
 }
 
-void AbiManagerX8664::syscall_hook(std::shared_ptr<Arion> arion, void *user_data)
+void ArchManagerX8664::syscall_hook(std::shared_ptr<Arion> arion, void *user_data)
 {
     arion->syscalls->process_syscall(arion);
 }
 
-void AbiManagerX8664::setup()
+void ArchManagerX8664::setup()
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    arion->hooks->hook_insn(AbiManagerX8664::syscall_hook, UC_X86_INS_SYSCALL);
+    arion->hooks->hook_insn(ArchManagerX8664::syscall_hook, UC_X86_INS_SYSCALL);
 }
 
-ADDR AbiManagerX8664::dump_tls()
+ADDR ArchManagerX8664::dump_tls()
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    return arion->abi->read_reg<RVAL64>(UC_X86_REG_FS_BASE);
+    return arion->arch->read_reg<RVAL64>(UC_X86_REG_FS_BASE);
 }
 
-void AbiManagerX8664::load_tls(ADDR new_tls)
+void ArchManagerX8664::load_tls(ADDR new_tls)
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    arion->abi->write_reg<RVAL64>(UC_X86_REG_FS_BASE, new_tls);
+    arion->arch->write_reg<RVAL64>(UC_X86_REG_FS_BASE, new_tls);
 }

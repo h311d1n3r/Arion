@@ -8,6 +8,7 @@
 #include <memory>
 
 using namespace arion;
+using namespace arion_exception;
 
 std::unique_ptr<GdtManager> GdtManager::initialize(std::weak_ptr<Arion> arion)
 {
@@ -63,12 +64,12 @@ void GdtManager::setup()
     uc_x86_mmr gdtr_val = {0, this->gdt_addr, ARION_GDT_ENTRY_SZ * ARION_GDT_ENTRIES_N - 1, 0};
     std::array<BYTE, 32> gdtr_arr{};
     memcpy(gdtr_arr.data(), &gdtr_val, sizeof(uc_x86_mmr));
-    arion->abi->write_reg<RVAL256>(UC_X86_REG_GDTR, gdtr_arr);
+    arion->arch->write_reg<RVAL256>(UC_X86_REG_GDTR, gdtr_arr);
 
-    arion->abi->write_reg<RVAL16>(UC_X86_REG_GS, this->setup_selector(15, ARION_S_GDT | ARION_S_PRIV_3));
-    arion->abi->write_reg<RVAL16>(UC_X86_REG_DS, this->setup_selector(16, ARION_S_GDT | ARION_S_PRIV_3));
-    arion->abi->write_reg<RVAL16>(UC_X86_REG_CS, this->setup_selector(17, ARION_S_GDT | ARION_S_PRIV_3));
-    arion->abi->write_reg<RVAL16>(UC_X86_REG_SS, this->setup_selector(18, ARION_S_GDT | ARION_S_PRIV_0));
+    arion->arch->write_reg<RVAL16>(UC_X86_REG_GS, this->setup_selector(15, ARION_S_GDT | ARION_S_PRIV_3));
+    arion->arch->write_reg<RVAL16>(UC_X86_REG_DS, this->setup_selector(16, ARION_S_GDT | ARION_S_PRIV_3));
+    arion->arch->write_reg<RVAL16>(UC_X86_REG_CS, this->setup_selector(17, ARION_S_GDT | ARION_S_PRIV_3));
+    arion->arch->write_reg<RVAL16>(UC_X86_REG_SS, this->setup_selector(18, ARION_S_GDT | ARION_S_PRIV_0));
 }
 
 uint8_t GdtManager::find_free_idx(uint8_t start_idx)

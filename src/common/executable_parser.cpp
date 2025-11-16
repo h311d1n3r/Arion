@@ -1,0 +1,13 @@
+#include <arion/common/executable_parser.hpp>
+
+using namespace arion;
+
+std::shared_ptr<EXECUTABLE_PARSER_ATTRIBUTES> ExecutableParser::get_attrs()
+{
+    return this->attrs;
+}
+
+std::vector<std::shared_ptr<struct arion::SEGMENT>> ExecutableParser::get_segments()
+{
+    return this->segments;
+}

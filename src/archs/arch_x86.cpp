@@ -1,49 +1,51 @@
-#include <arion/archs/abi_x86.hpp>
+#include <arion/archs/arch_x86.hpp>
 #include <arion/arion.hpp>
 #include <asm/ldt.h>
 
 using namespace arion;
+using namespace arion_x86;
+using namespace arion_exception;
 
-ks_engine *AbiManagerX86::curr_ks()
+ks_engine *ArchManagerX86::curr_ks()
 {
     return this->ks.at(0);
 }
 
-csh *AbiManagerX86::curr_cs()
+csh *ArchManagerX86::curr_cs()
 {
     return this->cs.at(0);
 }
 
-void AbiManagerX86::int_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data)
+void ArchManagerX86::int_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data)
 {
     if (intno == 0x80)
         arion->syscalls->process_syscall(arion);
 }
 
-void AbiManagerX86::setup()
+void ArchManagerX86::setup()
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    arion->hooks->hook_intr(AbiManagerX86::int_hook);
+    arion->hooks->hook_intr(ArchManagerX86::int_hook);
     // May implement sysenter hook by the future instead of patching vdso.bin to remove that instruction
 }
 
-ADDR AbiManagerX86::dump_tls()
+ADDR ArchManagerX86::dump_tls()
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    RVAL16 tls_selector = arion->abi->read_reg<RVAL16>(UC_X86_REG_GS);
+    RVAL16 tls_selector = arion->arch->read_reg<RVAL16>(UC_X86_REG_GS);
     if (!tls_selector)
         return 0;
 
     return tls_selector;
 }
 
-uint16_t AbiManagerX86::new_tls(ADDR udesc_addr)
+uint16_t ArchManagerX86::new_tls(ADDR udesc_addr)
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
@@ -70,11 +72,11 @@ uint16_t AbiManagerX86::new_tls(ADDR udesc_addr)
     return selector;
 }
 
-void AbiManagerX86::load_tls(ADDR new_tls)
+void ArchManagerX86::load_tls(ADDR new_tls)
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    arion->abi->write_reg<RVAL16>(UC_X86_REG_GS, new_tls);
+    arion->arch->write_reg<RVAL16>(UC_X86_REG_GS, new_tls);
 }

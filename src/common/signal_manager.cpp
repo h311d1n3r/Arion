@@ -5,6 +5,8 @@
 #include <sys/wait.h>
 
 using namespace arion;
+using namespace arion_exception;
+using namespace arion_lnx_type;
 
 std::map<int, std::string> SignalManager::signals = {
     // Synchronous signals
@@ -49,10 +51,10 @@ std::unique_ptr<SignalManager> SignalManager::initialize(std::weak_ptr<Arion> ar
 
 void SignalManager::intr_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data)
 {
-    if (arion->abi->has_idt_entry(intno))
+    if (arion->arch->has_idt_entry(intno))
     {
-        CPU_INTR intr = arion->abi->get_idt_entry(intno);
-        int signo = AbiManager::get_signal_from_intr(intr);
+        CPU_INTR intr = arion->arch->get_idt_entry(intno);
+        int signo = ArchManager::get_signal_from_intr(intr);
         arion->send_signal(arion->get_pid(), signo);
     }
 }
@@ -101,7 +103,7 @@ void SignalManager::handle_sigchld(pid_t source_pid)
         return;
     pid_t target_pid = wait_it->second;
     pid_t running_tid = arion->threads->get_running_tid();
-    REG ret_reg = arion->abi->get_attrs()->syscalling_conv.ret_reg;
+    REG ret_reg = arion->arch->get_attrs()->syscalling_conv.ret_reg;
     std::weak_ptr<Arion> source_instance_weak = arion->get_group()->get_arion_instance(source_pid);
     std::shared_ptr<Arion> source_instance = source_instance_weak.lock();
     if (!arion)
@@ -118,7 +120,7 @@ void SignalManager::handle_sigchld(pid_t source_pid)
             arion->mem->write_val(arion_t->wait_status_addr, 0, sizeof(int));
             arion_t->wait_status_addr = 0;
         }
-        arion->abi->write_arch_reg(ret_reg, source_pid);
+        arion->arch->write_arch_reg(ret_reg, source_pid);
         arion->threads->threads_map[running_tid] = std::move(arion_t);
         arion->remove_child(source_pid);
         this->sigwait_list.erase(running_tid);
@@ -134,30 +136,30 @@ bool SignalManager::handle_sighandler(pid_t source_pid, int signo)
     auto sighandler_it = this->sighandlers.find(signo);
     if (sighandler_it == this->sighandlers.end())
         return false;
-    REG pc_reg = arion->abi->get_attrs()->regs.pc;
-    REG sp_reg = arion->abi->get_attrs()->regs.sp;
-    std::shared_ptr<struct ksigaction> handler = sighandler_it->second;
+    REG pc_reg = arion->arch->get_attrs()->regs.pc;
+    REG sp_reg = arion->arch->get_attrs()->regs.sp;
+    std::shared_ptr<struct arion_lnx_type::ksigaction> handler = sighandler_it->second;
     std::shared_ptr<ARION_CONTEXT> ctxt = arion->context->save();
-    ADDR curr_pc = arion->abi->read_arch_reg(pc_reg);
-    arion->abi->write_arch_reg(pc_reg, (ADDR)handler->handler);
+    ADDR curr_pc = arion->arch->read_arch_reg(pc_reg);
+    arion->arch->write_arch_reg(pc_reg, (ADDR)handler->handler);
     // In both cases (with and without SA_SIGINFO), first parameter is signal number
-    std::vector<REG> param_regs = arion->abi->get_attrs()->calling_conv.param_regs;
-    arion->abi->write_arch_reg(param_regs.at(0), (uint64_t)signo);
+    std::vector<REG> param_regs = arion->arch->get_attrs()->calling_conv.param_regs;
+    arion->arch->write_arch_reg(param_regs.at(0), (uint64_t)signo);
     if (handler->flags & SA_SIGINFO)
     {
         this->ucontext_regs = std::move(
-            arion->abi->dump_regs()); // For now, clone context registers instead of using ucontext from siginfo_t
+            arion->arch->dump_regs()); // For now, clone context registers instead of using ucontext from siginfo_t
         std::unique_ptr<siginfo_t> info = std::make_unique<siginfo_t>();
         memset(info.get(), 0, sizeof(siginfo_t));
         // TODO : Fill siginfo_t struct with missing fields
         info->si_signo = signo;
         info->si_pid = source_pid;
-        uint64_t sp = arion->abi->read_arch_reg(sp_reg);
+        uint64_t sp = arion->arch->read_arch_reg(sp_reg);
         sp -= sizeof(siginfo_t);
-        arion->abi->write_arch_reg(sp_reg, sp);
+        arion->arch->write_arch_reg(sp_reg, sp);
         arion->mem->write(sp, (BYTE *)info.get(), sizeof(siginfo_t));
-        arion->abi->write_arch_reg(param_regs.at(1), sp);
-        arion->abi->write_arch_reg(param_regs.at(2), 0); // TODO : Provide ucontext here
+        arion->arch->write_arch_reg(param_regs.at(1), sp);
+        arion->arch->write_arch_reg(param_regs.at(2), 0); // TODO : Provide ucontext here
     }
     arion->mem->stack_push(curr_pc);
 
@@ -176,12 +178,14 @@ bool SignalManager::handle_sighandler(pid_t source_pid, int signo)
     return true;
 }
 
-void SignalManager::print_signal(std::shared_ptr<Arion> arion, std::string sig_name) {
-    if(arion->logger->get_log_level() > ARION_LOG_LEVEL::DEBUG)
+void SignalManager::print_signal(std::shared_ptr<Arion> arion, std::string sig_name)
+{
+    if (arion->logger->get_log_level() > LOG_LEVEL::DEBUG)
         return;
 
     colorstream msg;
-    msg << ARION_LOG_COLOR::BLUE << "SIGNAL" << ARION_LOG_COLOR::WHITE << " -> " << ARION_LOG_COLOR::MAGENTA << sig_name;
+    msg << LOG_COLOR::BLUE << "SIGNAL" << LOG_COLOR::WHITE << " -> " << LOG_COLOR::MAGENTA
+        << sig_name;
     arion->logger->debug(msg.str());
 }
 
@@ -306,7 +310,7 @@ bool SignalManager::has_sighandler(int signo)
     return this->sighandlers.find(signo) != this->sighandlers.end();
 }
 
-std::shared_ptr<struct ksigaction> SignalManager::get_sighandler(int signo)
+std::shared_ptr<struct arion_lnx_type::ksigaction> SignalManager::get_sighandler(int signo)
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
@@ -318,7 +322,7 @@ std::shared_ptr<struct ksigaction> SignalManager::get_sighandler(int signo)
     return sighandler_it->second;
 }
 
-void SignalManager::set_sighandler(int signo, std::shared_ptr<struct ksigaction> sighandler)
+void SignalManager::set_sighandler(int signo, std::shared_ptr<struct arion_lnx_type::ksigaction> sighandler)
 {
     this->sighandlers[signo] = sighandler;
 }
@@ -331,6 +335,6 @@ bool SignalManager::sigreturn()
 
     if (!this->ucontext_regs)
         return false;
-    arion->abi->load_regs(std::move(this->ucontext_regs));
+    arion->arch->load_regs(std::move(this->ucontext_regs));
     return true;
 }

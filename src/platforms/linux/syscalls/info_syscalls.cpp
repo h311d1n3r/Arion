@@ -1,5 +1,5 @@
 #include <arion/arion.hpp>
-#include <arion/common/abi_manager.hpp>
+#include <arion/common/arch_manager.hpp>
 #include <arion/common/global_defs.hpp>
 #include <arion/platforms/linux/lnx_kernel_utils.hpp>
 #include <arion/platforms/linux/syscalls/info_syscalls.hpp>
@@ -11,8 +11,9 @@
 #include <sys/utsname.h>
 
 using namespace arion;
+using namespace arion_lnx_type;
 
-uint64_t sys_newuname(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_newuname(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR buf_addr = params.at(0);
 
@@ -25,7 +26,7 @@ uint64_t sys_newuname(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
     return uname_ret;
 }
 
-uint64_t sys_gettimeofday(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_gettimeofday(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR tv_addr = params.at(0);
     ADDR tz_addr = params.at(1);
@@ -44,7 +45,7 @@ uint64_t sys_gettimeofday(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> p
     return gettimeofday_ret;
 }
 
-uint64_t sys_getrlimit(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_getrlimit(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     unsigned int resource = params.at(0);
     ADDR rlim_addr = params.at(1);
@@ -68,7 +69,7 @@ uint64_t sys_getrlimit(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> para
             getrlimit_ret = -errno;
     }
     }
-    if (arion->abi->get_attrs()->arch_sz == 32)
+    if (arion->arch->get_attrs()->arch_sz == 32)
     {
         struct rlimit32 *rlim32 = (struct rlimit32 *)malloc(sizeof(struct rlimit32));
         rlim32->rlim_cur = rlim->rlim_cur;
@@ -82,7 +83,7 @@ uint64_t sys_getrlimit(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> para
     return getrlimit_ret;
 }
 
-uint64_t sys_sysinfo(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_sysinfo(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR info_addr = params.at(0);
 
@@ -100,7 +101,7 @@ uint64_t sys_sysinfo(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params
     return sysinfo_ret;
 }
 
-uint64_t sys_capget(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_capget(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR hdrp = params.at(0);
     ADDR data = params.at(1);
@@ -133,13 +134,13 @@ uint64_t sys_capget(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     return capget_ret;
 }
 
-uint64_t sys_capset(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_capset(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     // PREVENT MODIFICATION OF SYSTEM SETTINGS
     return 0;
 }
 
-uint64_t sys_arch_prctl(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_arch_prctl(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     int op = params.at(0);
     ADDR addr = params.at(1);
@@ -153,22 +154,22 @@ uint64_t sys_arch_prctl(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> par
         arion->mem->write_ptr(addr, 1);
         break;
     case ARCH_SET_FS:
-        arion->abi->write_reg(UC_X86_REG_FS_BASE, addr);
+        arion->arch->write_reg(UC_X86_REG_FS_BASE, addr);
         break;
     case ARCH_GET_FS:
-        arion->mem->write_ptr(addr, arion->abi->read_arch_reg(UC_X86_REG_FS_BASE));
+        arion->mem->write_ptr(addr, arion->arch->read_arch_reg(UC_X86_REG_FS_BASE));
         break;
     case ARCH_SET_GS:
-        arion->abi->write_reg(UC_X86_REG_GS_BASE, addr);
+        arion->arch->write_reg(UC_X86_REG_GS_BASE, addr);
         break;
     case ARCH_GET_GS:
-        arion->mem->write_ptr(addr, arion->abi->read_arch_reg(UC_X86_REG_GS_BASE));
+        arion->mem->write_ptr(addr, arion->arch->read_arch_reg(UC_X86_REG_GS_BASE));
         break;
     }
     return 0;
 }
 
-uint64_t sys_prlimit64(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_prlimit64(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     pid_t pid = params.at(0);
     unsigned int resource = params.at(1);
@@ -193,7 +194,7 @@ uint64_t sys_prlimit64(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> para
     return 0;
 }
 
-uint64_t sys_getcpu(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_getcpu(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR cpu_addr = params.at(0);
     ADDR node_addr = params.at(1);

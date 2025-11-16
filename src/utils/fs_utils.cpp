@@ -4,13 +4,15 @@
 #include <arion/utils/fs_utils.hpp>
 #include <filesystem>
 #include <fstream>
+#include <poll.h>
 #include <sstream>
 #include <stdio.h>
 #include <uuid/uuid.h>
 
 using namespace arion;
+using namespace arion_exception;
 
-void read_bin_file(std::string file_path, ADDR off, size_t sz, RD_BIN_CALLBACK callback)
+void arion::read_bin_file(std::string file_path, ADDR off, size_t sz, RD_BIN_CALLBACK callback)
 {
     if (!std::filesystem::exists(file_path))
         throw FileNotFoundException(file_path);
@@ -31,7 +33,7 @@ void read_bin_file(std::string file_path, ADDR off, size_t sz, RD_BIN_CALLBACK c
     rd_file.close();
 }
 
-std::string gen_tmp_path()
+std::string arion::gen_tmp_path()
 {
     const std::string tmp_dir = "/tmp/";
     if (!std::filesystem::exists(tmp_dir))
@@ -53,7 +55,7 @@ std::string gen_tmp_path()
     return file_path;
 }
 
-std::string md5_hash_file(std::string file_path)
+std::string arion::md5_hash_file(std::string file_path)
 {
     FILE *in_f = fopen(file_path.c_str(), "rb");
     if (!in_f)
@@ -72,4 +74,22 @@ std::string md5_hash_file(std::string file_path)
     fclose(in_f);
 
     return hash_ss.str();
+}
+
+bool arion::check_fd_status(int fd, short int &revents)
+{
+    struct pollfd pfd;
+    pfd.fd = fd;
+    pfd.events = POLLIN | POLLPRI | POLLOUT;
+
+    int ret = poll(&pfd, 1, 0);
+
+    if (ret <= 0)
+    {
+        revents = 0;
+        return false;
+    }
+
+    revents = pfd.revents;
+    return true;
 }

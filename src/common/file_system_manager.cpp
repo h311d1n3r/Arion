@@ -1,14 +1,17 @@
 #include <arion/arion.hpp>
 #include <arion/common/file_system_manager.hpp>
 #include <arion/common/global_excepts.hpp>
+#include <arion/platforms/linux/lnx_excepts.hpp>
 #include <fcntl.h>
 #include <filesystem>
 #include <linux/limits.h>
 #include <memory>
+#include <regex>
 
 using namespace arion;
+using namespace arion_exception;
 
-std::vector<BYTE> serialize_arion_file(ARION_FILE *arion_f)
+std::vector<BYTE> arion::serialize_arion_file(ARION_FILE *arion_f)
 {
     std::vector<BYTE> srz_file;
 
@@ -18,12 +21,13 @@ std::vector<BYTE> serialize_arion_file(ARION_FILE *arion_f)
     srz_file.insert(srz_file.end(), (BYTE *)arion_f->path.c_str(), (BYTE *)arion_f->path.c_str() + path_sz);
     srz_file.insert(srz_file.end(), (BYTE *)&arion_f->flags, (BYTE *)&arion_f->flags + sizeof(int));
     srz_file.insert(srz_file.end(), (BYTE *)&arion_f->mode, (BYTE *)&arion_f->mode + sizeof(mode_t));
+    srz_file.insert(srz_file.end(), (BYTE *)&arion_f->blocking, (BYTE *)&arion_f->blocking + sizeof(bool));
     srz_file.insert(srz_file.end(), (BYTE *)&arion_f->saved_off, (BYTE *)&arion_f->saved_off + sizeof(off_t));
 
     return srz_file;
 }
 
-ARION_FILE *deserialize_arion_file(std::vector<BYTE> srz_file)
+ARION_FILE *arion::deserialize_arion_file(std::vector<BYTE> srz_file)
 {
     ARION_FILE *arion_f = new ARION_FILE;
 
@@ -42,15 +46,57 @@ ARION_FILE *deserialize_arion_file(std::vector<BYTE> srz_file)
     off += sizeof(int);
     memcpy(&arion_f->mode, srz_file.data() + off, sizeof(mode_t));
     off += sizeof(mode_t);
+    memcpy(&arion_f->blocking, srz_file.data() + off, sizeof(bool));
+    off += sizeof(bool);
     memcpy(&arion_f->saved_off, srz_file.data() + off, sizeof(off_t));
 
     return arion_f;
+}
+
+std::unique_ptr<ProcFSManager> ProcFSManager::initialize(std::weak_ptr<Arion> arion)
+{
+    std::unique_ptr<ProcFSManager> procfs = std::make_unique<ProcFSManager>(arion);
+    return std::move(procfs);
+}
+
+bool ProcFSManager::is_procfs_path(std::string path)
+{
+    return std::regex_match(path, ProcFSManager::PROCFS_REGEX);
+}
+
+std::string ProcFSManager::convert(std::string path)
+{
+    std::shared_ptr<Arion> arion = this->arion.lock();
+    if (!arion)
+        throw ExpiredWeakPtrException("Arion");
+
+    std::smatch match;
+    if (!std::regex_match(path, match, ProcFSManager::PROCFS_REGEX))
+        return "";
+    pid_t pid = 0;
+    if (match[1] == "self")
+        pid = arion->get_pid();
+    else
+        pid = stoi(match[1]);
+    std::shared_ptr group = arion->get_group();
+    if (!group->has_arion_instance(pid))
+        return "";
+    std::shared_ptr<Arion> proc_inst = group->get_arion_instance(pid);
+    if (match[2] == "exe")
+    {
+        std::vector<std::string> args = proc_inst->get_program_args();
+        if (!args.size())
+            return "";
+        return args.at(0);
+    }
+    return "";
 }
 
 std::unique_ptr<FileSystemManager> FileSystemManager::initialize(std::weak_ptr<Arion> arion, std::string fs_path,
                                                                  std::string cwd_path)
 {
     std::unique_ptr<FileSystemManager> fs = std::make_unique<FileSystemManager>(arion, fs_path, cwd_path);
+    fs->procfs = std::move(ProcFSManager::initialize(arion));
     std::vector<std::string> stdio_paths =
         std::vector<std::string>({std::string("/dev/stdin"), std::string("/dev/stdout"), std::string("/dev/stderr")});
     for (uint8_t stdio_i = 0; stdio_i < stdio_paths.size(); stdio_i++)
@@ -152,8 +198,29 @@ std::shared_ptr<ARION_FILE> FileSystemManager::get_arion_file(int target_fd)
     return this->files.at(target_fd);
 }
 
+bool FileSystemManager::can_access_file(std::string path)
+{
+    std::filesystem::path current = path;
+    std::error_code ec;
+    while (std::filesystem::is_symlink(current, ec))
+    {
+        if (access(current.c_str(), R_OK))
+            return false;
+        std::filesystem::path target = std::filesystem::read_symlink(current, ec);
+        if (ec)
+            return false;
+        if (target.is_relative())
+            current = current.parent_path() / target;
+        else
+            current = target;
+    }
+    return true;
+}
+
 bool FileSystemManager::is_in_fs(std::string path)
 {
+    if (!this->can_access_file(path))
+        return false;
     std::filesystem::path fs_canonical = std::filesystem::weakly_canonical(this->fs_path);
     std::filesystem::path path_canonical = std::filesystem::weakly_canonical(path);
     auto fs_it = fs_canonical.begin();
@@ -172,10 +239,13 @@ std::string FileSystemManager::to_fs_path(std::string path)
 {
     std::string fmt_path;
     path = strip_str(path);
+    if (this->procfs->is_procfs_path(path))
+        path = this->procfs->convert(path);
     if (!path.size())
         fmt_path = this->fs_path;
     else if (path.at(0) == '/')
     {
+
         if (this->is_in_fs(path))
             fmt_path = path;
         else
@@ -184,6 +254,6 @@ std::string FileSystemManager::to_fs_path(std::string path)
     else
         fmt_path = this->cwd_path + path;
     if (!this->is_in_fs(fmt_path))
-        fmt_path = this->fs_path;
+        fmt_path = "";
     return fmt_path;
 }

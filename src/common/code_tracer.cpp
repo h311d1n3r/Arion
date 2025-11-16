@@ -11,6 +11,7 @@
 #include <memory>
 
 using namespace arion;
+using namespace arion_exception;
 
 std::unique_ptr<CodeTracer> CodeTracer::initialize(std::weak_ptr<Arion> arion)
 {
@@ -65,7 +66,7 @@ void CodeTracer::prepare_file()
         if (this->mode == TRACE_MODE::CTXT)
             regs_sec_off = (off_t)this->out_f.tellp() + sizeof(off_t) * 2;
         this->out_f.write((char *)&regs_sec_off, sizeof(off_t));
-        std::vector<REG> ctxt_regs = arion->abi->get_context_regs();
+        std::vector<REG> ctxt_regs = arion->arch->get_context_regs();
         size_t ctxt_regs_sz = ctxt_regs.size();
         off_t data_sec_off = (off_t)this->out_f.tellp() + sizeof(off_t) + sizeof(size_t) + ctxt_regs_sz * sizeof(REG);
         this->out_f.write((char *)&data_sec_off, sizeof(off_t));
@@ -116,6 +117,7 @@ void CodeTracer::release_file()
         break;
     }
     case TRACE_MODE::DRCOV: {
+        this->out_f.close();
         std::string tmp_f_path = gen_tmp_path();
         std::ofstream tmp_f(tmp_f_path, std::ios::binary);
         tmp_f << "DRCOV VERSION: 2" << std::endl;
@@ -144,7 +146,8 @@ void CodeTracer::release_file()
         break;
     }
 
-    this->out_f.close();
+    if (this->out_f.is_open())
+        this->out_f.close();
 }
 
 void CodeTracer::process_hit(ADDR addr, size_t sz)
@@ -172,11 +175,11 @@ void CodeTracer::process_hit(ADDR addr, size_t sz)
     this->total_hits++;
     std::unique_ptr<CODE_HIT> hit = std::make_unique<CODE_HIT>(addr - mapping_start, sz, mod_id);
     if (this->mode == TRACE_MODE::CTXT)
-        hit->regs = std::move(arion->abi->dump_regs());
+        hit->regs = std::move(arion->arch->dump_regs());
     this->hits.push_back(std::move(hit));
 
     size_t hits_sz = this->hits.size();
-    size_t max_hits = this->mode == TRACE_MODE::CTXT ? MAX_HEAVY_HITS : MAX_LIGHT_HITS;
+    size_t max_hits = this->mode == TRACE_MODE::CTXT ? ARION_MAX_HEAVY_HITS : ARION_MAX_LIGHT_HITS;
     if (hits_sz >= max_hits)
         this->flush_hits();
 }

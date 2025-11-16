@@ -1,8 +1,8 @@
-#include <arion/platforms/linux/elf_loader.hpp>
 #include <arion/arion.hpp>
 #include <arion/common/file_system_manager.hpp>
 #include <arion/common/global_defs.hpp>
 #include <arion/common/memory_manager.hpp>
+#include <arion/platforms/linux/elf_loader.hpp>
 #include <arion/platforms/linux/lnx_kernel_utils.hpp>
 #include <arion/platforms/linux/syscalls/mem_syscalls.hpp>
 #include <cerrno>
@@ -10,12 +10,13 @@
 #include <sys/mman.h>
 
 using namespace arion;
+using namespace arion_lnx_type;
 
 ADDR do_mmap(std::shared_ptr<Arion> arion, ADDR addr, size_t len, int prot, int flags, int fd, off_t off)
 {
     addr = arion->mem->align_up(addr);
-    if (addr < MMAP_MIN_ADDR)
-        addr = MMAP_MIN_ADDR;
+    if (addr < ARION_MMAP_MIN_ADDR)
+        addr = ARION_MMAP_MIN_ADDR;
     len = arion->mem->align_up(len);
     PROT_FLAGS arion_prot = kernel_prot_to_arion_prot(prot);
     ADDR map_addr;
@@ -60,7 +61,7 @@ ADDR do_mmap(std::shared_ptr<Arion> arion, ADDR addr, size_t len, int prot, int 
             addr = arion->mem->get_mapping_by_info("[vvar]")->start_addr;
         else
         {
-            switch (arion->abi->get_attrs()->arch_sz)
+            switch (arion->arch->get_attrs()->arch_sz)
             {
             case 32: {
                 addr = LINUX_32_INTERP_ADDR;
@@ -81,7 +82,7 @@ ADDR do_mmap(std::shared_ptr<Arion> arion, ADDR addr, size_t len, int prot, int 
     return map_addr;
 }
 
-uint64_t sys_mmap(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_mmap(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR addr = params.at(0);
     size_t len = params.at(1);
@@ -95,7 +96,7 @@ uint64_t sys_mmap(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     return map_addr;
 }
 
-uint64_t sys_mmap2(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_mmap2(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR addr = params.at(0);
     size_t len = params.at(1);
@@ -109,7 +110,7 @@ uint64_t sys_mmap2(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     return map_addr;
 }
 
-uint64_t sys_mprotect(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_mprotect(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR addr = params.at(0);
     size_t len = params.at(1);
@@ -120,7 +121,7 @@ uint64_t sys_mprotect(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> param
     return 0;
 }
 
-uint64_t sys_munmap(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_munmap(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR addr = params.at(0);
     size_t len = params.at(1);
@@ -129,7 +130,7 @@ uint64_t sys_munmap(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
     return 0;
 }
 
-uint64_t sys_brk(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params)
+uint64_t arion::sys_brk(std::shared_ptr<Arion> arion, std::vector<SYS_PARAM> params, bool &cancel)
 {
     ADDR addr = params.at(0);
 

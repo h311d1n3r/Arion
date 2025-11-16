@@ -1,5 +1,8 @@
 #include <arion/components/arion_afl.hpp>
 
+using namespace arion;
+using namespace arion_exception;
+
 bool ArionAfl::uc_input_callback(uc_engine *uc, char *input, size_t input_sz, uint32_t persistent_round,
                                  void *user_data)
 {
@@ -8,7 +11,27 @@ bool ArionAfl::uc_input_callback(uc_engine *uc, char *input, size_t input_sz, ui
     std::shared_ptr<Arion> arion = hook_param->arion.lock();
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
-    arion->context->restore(hook_param->ctxt);
+    if (persistent_round) // When persistent_round is NULL, it means we forked and then that state is perfect
+    {
+        switch (hook_param->mem_strategy)
+        {
+        case ARION_MEM_STRATEGY::RECORD_EDITS:
+            arion->mem->recorder->stop();
+            arion->context->restore(hook_param->ctxt, arion->mem->recorder->get_edits());
+            arion->mem->recorder->clear();
+            arion->mem->recorder->start();
+            break;
+        case ARION_MEM_STRATEGY::RESTORE_MAPPINGS:
+            arion->context->restore(hook_param->ctxt, true, false);
+            break;
+        case ARION_MEM_STRATEGY::RAW_RESTORE:
+            arion->context->restore(hook_param->ctxt, true, true);
+            break;
+        case ARION_MEM_STRATEGY::MANUAL_MANAGEMENT:
+        default:
+            break;
+        }
+    }
     try
     {
         return arion_callback(arion, input, input_sz, persistent_round, hook_param->user_data);
@@ -40,8 +63,8 @@ bool ArionAfl::uc_crash_callback(uc_engine *uc, uc_err res, char *input, int inp
 }
 
 void ArionAfl::fuzz(ARION_AFL_INPUT_CALLBACK input_callback, ARION_AFL_CRASH_CALLBACK crash_callback,
-                    std::vector<arion::ADDR> exits, std::vector<int> signals, bool always_validate,
-                    uint32_t persistent_iters, void *user_data)
+                    std::vector<arion::ADDR> exits, ARION_MEM_STRATEGY mem_strategy, std::vector<int> signals,
+                    bool always_validate, uint32_t persistent_iters, void *user_data)
 {
     std::shared_ptr<Arion> arion = this->arion.lock();
     if (!arion)
@@ -51,7 +74,10 @@ void ArionAfl::fuzz(ARION_AFL_INPUT_CALLBACK input_callback, ARION_AFL_CRASH_CAL
         throw UnicornAflNoExitsException();
     arion->init_afl_mode(signals);
     std::shared_ptr<ARION_CONTEXT> ctxt = arion->context->save();
-    struct ARION_AFL_PARAM *param = new ARION_AFL_PARAM(this->arion, ctxt, input_callback, crash_callback, user_data);
+    if (mem_strategy == ARION_MEM_STRATEGY::RECORD_EDITS)
+        arion->mem->recorder->start();
+    struct ARION_AFL_PARAM *param =
+        new ARION_AFL_PARAM(this->arion, ctxt, mem_strategy, input_callback, crash_callback, user_data);
     uc_afl_ret fuzz_ret =
         uc_afl_fuzz(arion->uc, (char *)arion->get_program_args().at(0).c_str(), uc_input_callback, exits.data(),
                     exits.size(), uc_crash_callback, always_validate, persistent_iters, param);

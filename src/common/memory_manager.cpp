@@ -2,18 +2,21 @@
 #include <arion/arion.hpp>
 #include <arion/common/global_defs.hpp>
 #include <arion/common/global_excepts.hpp>
+#include <arion/common/hooks_manager.hpp>
 #include <arion/common/memory_manager.hpp>
+#include <arion/unicorn/unicorn.h>
 #include <arion/utils/convert_utils.hpp>
 #include <cstdint>
 #include <iomanip>
+#include <iostream>
 #include <iterator>
 #include <memory>
-#include <arion/unicorn/unicorn.h>
 #include <unistd.h>
 
 using namespace arion;
+using namespace arion_exception;
 
-std::vector<BYTE> serialize_arion_mapping(ARION_MAPPING *arion_m)
+std::vector<BYTE> arion::serialize_arion_mapping(ARION_MAPPING *arion_m)
 {
     std::vector<BYTE> srz_mapping;
 
@@ -29,7 +32,7 @@ std::vector<BYTE> serialize_arion_mapping(ARION_MAPPING *arion_m)
     return srz_mapping;
 }
 
-ARION_MAPPING *deserialize_arion_mapping(std::vector<BYTE> srz_mapping)
+ARION_MAPPING *arion::deserialize_arion_mapping(std::vector<BYTE> srz_mapping)
 {
     ARION_MAPPING *arion_m = new ARION_MAPPING;
 
@@ -55,9 +58,78 @@ ARION_MAPPING *deserialize_arion_mapping(std::vector<BYTE> srz_mapping)
     return arion_m;
 }
 
+std::unique_ptr<MemoryRecorder> MemoryRecorder::initialize(std::weak_ptr<Arion> arion)
+{
+    return std::move(std::make_unique<MemoryRecorder>(arion));
+}
+
+bool MemoryRecorder::write_mem_hook(std::shared_ptr<Arion> arion, uc_mem_type type, uint64_t addr, int size,
+                                    int64_t val, void *user_data)
+{
+    arion->mem->recorder->add_edit(std::make_shared<ARION_MEM_EDIT>(addr, size));
+    return true;
+}
+
+void MemoryRecorder::add_edit(std::shared_ptr<ARION_MEM_EDIT> edit)
+{
+    if (!this->started)
+        return;
+    for (std::shared_ptr<ARION_MEM_EDIT> edit2 : this->edits)
+    {
+        if ((edit->addr < edit2->addr + edit2->sz) && (edit2->addr < edit->addr + edit->sz))
+        {
+            ADDR start_addr = std::min(edit->addr, edit2->addr);
+            ADDR end_addr = std::max(edit->addr + edit->sz, edit2->addr + edit2->sz);
+            edit2->addr = start_addr;
+            edit2->sz = end_addr - start_addr;
+            return;
+        }
+    }
+    this->edits.insert(this->edits.begin(),
+                       edit); // Next changes have more chances to occur in this region and it will be iterated first
+}
+
+void MemoryRecorder::clear()
+{
+    this->edits.clear();
+}
+
+void MemoryRecorder::start()
+{
+    std::shared_ptr<Arion> arion = this->arion.lock();
+    if (!arion)
+        throw ExpiredWeakPtrException("Arion");
+
+    if (this->started)
+        throw MemoryRecorderAlreadyStartedException();
+    this->started = true;
+    this->clear();
+
+    this->write_mem_hook_id = arion->hooks->hook_mem_write(this->write_mem_hook);
+}
+
+void MemoryRecorder::stop()
+{
+    std::shared_ptr<Arion> arion = this->arion.lock();
+    if (!arion)
+        throw ExpiredWeakPtrException("Arion");
+
+    if (!this->started)
+        throw MemoryRecorderAlreadyStoppedException();
+    this->started = false;
+    arion->hooks->unhook(this->write_mem_hook_id);
+}
+
+std::vector<std::shared_ptr<ARION_MEM_EDIT>> MemoryRecorder::get_edits()
+{
+    return this->edits;
+}
+
 std::unique_ptr<MemoryManager> MemoryManager::initialize(std::weak_ptr<Arion> arion)
 {
-    return std::move(std::make_unique<MemoryManager>(arion, ARION_SYSTEM_PAGE_SZ));
+    std::unique_ptr<MemoryManager> manager = std::make_unique<MemoryManager>(arion, ARION_SYSTEM_PAGE_SZ);
+    manager->recorder = MemoryRecorder::initialize(arion);
+    return std::move(manager);
 }
 
 bool MemoryManager::is_mapped(ADDR addr)
@@ -68,6 +140,15 @@ bool MemoryManager::is_mapped(ADDR addr)
             return true;
     }
     return false;
+}
+
+bool MemoryManager::has_mapping(std::shared_ptr<ARION_MAPPING> mapping)
+{
+    if (!this->is_mapped(mapping->start_addr))
+        return false;
+    std::shared_ptr<ARION_MAPPING> mapping2 = this->get_mapping_at(mapping->start_addr);
+    return mapping->start_addr == mapping2->start_addr && mapping->end_addr == mapping2->end_addr &&
+           mapping->perms == mapping2->perms && mapping->info == mapping2->info;
 }
 
 bool MemoryManager::can_map(ADDR start_addr, size_t sz)
@@ -542,7 +623,7 @@ ADDR MemoryManager::read_ptr(ADDR addr)
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    return this->read_val(addr, arion->abi->get_attrs()->ptr_sz);
+    return this->read_val(addr, arion->arch->get_attrs()->ptr_sz);
 }
 
 size_t MemoryManager::read_sz(ADDR addr)
@@ -639,8 +720,7 @@ std::vector<cs_insn> MemoryManager::read_instrs(ADDR addr, size_t count)
         std::vector<BYTE> buf_vec = this->read(addr + off, buf_sz);
         memcpy(buf, buf_vec.data(), buf_vec.size());
         cs_insn *insn;
-        size_t dis_count =
-            cs_disasm(*arion->abi->curr_cs(), buf, buf_sz, addr + off, count - instrs.size(), &insn);
+        size_t dis_count = cs_disasm(*arion->arch->curr_cs(), buf, buf_sz, addr + off, count - instrs.size(), &insn);
         for (uint64_t instr_i = 0; instr_i < dis_count && instr_i < count; instr_i++)
             instrs.push_back(insn[instr_i]);
         cs_free(insn, dis_count);
@@ -677,7 +757,7 @@ void MemoryManager::write_ptr(ADDR addr, ADDR ptr)
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    return this->write_val(addr, ptr, arion->abi->get_attrs()->ptr_sz);
+    return this->write_val(addr, ptr, arion->arch->get_attrs()->ptr_sz);
 }
 
 void MemoryManager::write_sz(ADDR addr, size_t sz)
@@ -696,10 +776,10 @@ void MemoryManager::stack_push(uint64_t val)
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    size_t ptr_sz = arion->abi->get_attrs()->ptr_sz;
-    ADDR sp = arion->abi->read_arch_reg(arion->abi->get_attrs()->regs.sp);
+    size_t ptr_sz = arion->arch->get_attrs()->ptr_sz;
+    ADDR sp = arion->arch->read_arch_reg(arion->arch->get_attrs()->regs.sp);
     sp -= ptr_sz;
-    arion->abi->write_arch_reg(arion->abi->get_attrs()->regs.sp, sp);
+    arion->arch->write_arch_reg(arion->arch->get_attrs()->regs.sp, sp);
     this->write(sp, (BYTE *)&val, ptr_sz);
 }
 
@@ -709,9 +789,9 @@ void MemoryManager::stack_push_bytes(BYTE *data, size_t data_sz)
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    ADDR sp = arion->abi->read_arch_reg(arion->abi->get_attrs()->regs.sp);
+    ADDR sp = arion->arch->read_arch_reg(arion->arch->get_attrs()->regs.sp);
     sp -= data_sz;
-    arion->abi->write_arch_reg(arion->abi->get_attrs()->regs.sp, sp);
+    arion->arch->write_arch_reg(arion->arch->get_attrs()->regs.sp, sp);
     this->write(sp, data, data_sz);
 }
 
@@ -721,9 +801,9 @@ void MemoryManager::stack_push_string(std::string data)
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    ADDR sp = arion->abi->read_arch_reg(arion->abi->get_attrs()->regs.sp);
+    ADDR sp = arion->arch->read_arch_reg(arion->arch->get_attrs()->regs.sp);
     sp -= data.size() + 1;
-    arion->abi->write_arch_reg(arion->abi->get_attrs()->regs.sp, sp);
+    arion->arch->write_arch_reg(arion->arch->get_attrs()->regs.sp, sp);
     this->write_string(sp, data);
 }
 
@@ -733,10 +813,10 @@ uint64_t MemoryManager::stack_pop()
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    ADDR sp = arion->abi->read_arch_reg(arion->abi->get_attrs()->regs.sp);
+    ADDR sp = arion->arch->read_arch_reg(arion->arch->get_attrs()->regs.sp);
     ADDR val = this->read_ptr(sp);
-    sp += arion->abi->get_attrs()->ptr_sz;
-    arion->abi->write_arch_reg(arion->abi->get_attrs()->regs.sp, sp);
+    sp += arion->arch->get_attrs()->ptr_sz;
+    arion->arch->write_arch_reg(arion->arch->get_attrs()->regs.sp, sp);
     return val;
 }
 
@@ -746,9 +826,9 @@ void MemoryManager::stack_align()
     if (!arion)
         throw ExpiredWeakPtrException("Arion");
 
-    ADDR sp = arion->abi->read_arch_reg(arion->abi->get_attrs()->regs.sp);
-    sp -= (sp % arion->abi->get_attrs()->ptr_sz);
-    arion->abi->write_arch_reg(arion->abi->get_attrs()->regs.sp, sp);
+    ADDR sp = arion->arch->read_arch_reg(arion->arch->get_attrs()->regs.sp);
+    sp -= (sp % arion->arch->get_attrs()->ptr_sz);
+    arion->arch->write_arch_reg(arion->arch->get_attrs()->regs.sp, sp);
 }
 
 void MemoryManager::set_brk(ADDR brk)

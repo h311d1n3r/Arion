@@ -1,19 +1,24 @@
-#ifndef ARION_ABI_ARM_HPP
-#define ARION_ABI_ARM_HPP
+#ifndef ARION_ARCH_ARM_HPP
+#define ARION_ARCH_ARM_HPP
 
-#include <arion/common/abi_manager.hpp>
+#include <arion/common/arch_manager.hpp>
 #include <arion/common/global_defs.hpp>
+#include <arion/platforms/linux/lnx_kernel_utils.hpp>
 #include <cstdint>
 #include <map>
 #include <string>
 
+/// Value of the CPSR thumb bit for ARM mode
 #define ARION_ARM_MODE 0
+/// Value of the CPSR thumb bit for THUMB mode
 #define ARION_THUMB_MODE 1
-
+/// Mask for the ARM CPSR thumb bit
 #define ARION_ARM_CPSR_THUMB_BIT (1 << 5)
 
 namespace arion_arm
 {
+
+/// A map identifying an ARM syscall name given its number.
 inline std::map<uint64_t, std::string> NAME_BY_SYSCALL_NO = {{0, "restart_syscall"},
                                                              {1, "exit"},
                                                              {2, "fork"},
@@ -422,6 +427,7 @@ inline std::map<uint64_t, std::string> NAME_BY_SYSCALL_NO = {{0, "restart_syscal
                                                              {983045, "set_tls"},
                                                              {983046, "get_tls"}};
 
+/// A map identifying a Unicorn ARM register given its name.
 inline std::map<std::string, arion::REG> ARCH_REGS = {{"APSR", UC_ARM_REG_APSR},
                                                       {"APSR_NZCV", UC_ARM_REG_APSR_NZCV},
                                                       {"CPSR", UC_ARM_REG_CPSR},
@@ -547,6 +553,7 @@ inline std::map<std::string, arion::REG> ARCH_REGS = {{"APSR", UC_ARM_REG_APSR},
                                                       {"FP", UC_ARM_REG_FP},
                                                       {"IP", UC_ARM_REG_IP}};
 
+/// A map identifying a Unicorn ARM register size given the register.
 inline std::map<arion::REG, uint8_t> ARCH_REGS_SZ = {
     {UC_ARM_REG_R0, 4},      {UC_ARM_REG_R1, 4},          {UC_ARM_REG_R2, 4},        {UC_ARM_REG_R3, 4},
     {UC_ARM_REG_R4, 4},      {UC_ARM_REG_R5, 4},          {UC_ARM_REG_R6, 4},        {UC_ARM_REG_R7, 4},
@@ -579,6 +586,7 @@ inline std::map<arion::REG, uint8_t> ARCH_REGS_SZ = {
     {UC_ARM_REG_Q9, 16},     {UC_ARM_REG_Q10, 16},        {UC_ARM_REG_Q11, 16},      {UC_ARM_REG_Q12, 16},
     {UC_ARM_REG_Q13, 16},    {UC_ARM_REG_Q14, 16},        {UC_ARM_REG_Q15, 16},      {UC_ARM_REG_CP_REG, 36}};
 
+/// The list of high-level ARM registers that make up the context to be saved and restored.
 inline std::vector<arion::REG> CTXT_REGS = {
     UC_ARM_REG_R0,      UC_ARM_REG_R1,      UC_ARM_REG_R2,       UC_ARM_REG_R3,    UC_ARM_REG_R4,   UC_ARM_REG_R5,
     UC_ARM_REG_R6,      UC_ARM_REG_R7,      UC_ARM_REG_R8,       UC_ARM_REG_R9,    UC_ARM_REG_R10,  UC_ARM_REG_R11,
@@ -589,7 +597,8 @@ inline std::vector<arion::REG> CTXT_REGS = {
     UC_ARM_REG_CPSR,    UC_ARM_REG_APSR,    UC_ARM_REG_SPSR,     UC_ARM_REG_FPSCR, UC_ARM_REG_IPSR, UC_ARM_REG_CONTROL,
     UC_ARM_REG_PRIMASK, UC_ARM_REG_BASEPRI, UC_ARM_REG_FAULTMASK};
 
-inline std::map<uint64_t, CPU_INTR> IDT = {/*{1, UDEF},
+/// The ARM Interrupt Descriptor Table
+inline std::map<uint64_t, arion::CPU_INTR> IDT = {/*{1, UDEF},
                                            {2, SWI},
                                            {3, PREFETCH_ABORT},
                                            {4, DATA_ABORT},
@@ -611,49 +620,101 @@ inline std::map<uint64_t, CPU_INTR> IDT = {/*{1, UDEF},
                                            {21, LSERR},
                                            {22, UNALIGNED}*/};
 
-inline ABI_REGISTERS ABI_REGS = ABI_REGISTERS(UC_ARM_REG_PC, UC_ARM_REG_SP);
+/// Unicorn ARM PC and SP registers for genericity.
+inline arion::ABI_REGISTERS ABI_REGS = arion::ABI_REGISTERS(UC_ARM_REG_PC, UC_ARM_REG_SP);
 
-inline ABI_CALLING_CONVENTION ABI_CALLING_CONV =
-    ABI_CALLING_CONVENTION(UC_ARM_REG_R0, {UC_ARM_REG_R0, UC_ARM_REG_R1, UC_ARM_REG_R2, UC_ARM_REG_R3});
+/// Unicorn ARM registers involved in calling convention.
+inline arion::ABI_CALLING_CONVENTION ABI_CALLING_CONV =
+    arion::ABI_CALLING_CONVENTION(UC_ARM_REG_R0, {UC_ARM_REG_R0, UC_ARM_REG_R1, UC_ARM_REG_R2, UC_ARM_REG_R3});
 
-inline ABI_SYSCALLING_CONVENTION ABI_SYSCALLING_CONV = ABI_SYSCALLING_CONVENTION(
+/// Unicorn ARM registers involved in syscalling convention.
+inline arion::ABI_SYSCALLING_CONVENTION ABI_SYSCALLING_CONV = arion::ABI_SYSCALLING_CONVENTION(
     UC_ARM_REG_R7, UC_ARM_REG_R0,
     {UC_ARM_REG_R0, UC_ARM_REG_R1, UC_ARM_REG_R2, UC_ARM_REG_R3, UC_ARM_REG_R4, UC_ARM_REG_R5, UC_ARM_REG_R6});
 
+/// ARM flags telling the loader which kernel segments should be mapped in memory.
 inline arion::KERNEL_SEG_FLAGS SEG_FLAGS = ARION_ARM_TRAPS_PRESENT;
 
+/// Some well working ARM chip HWCAP2 value.
 inline uint32_t HWCAP2 = 0;
 
+/// Some well working ARM chip HWCAP value.
 inline uint32_t HWCAP = 0x001fb8d7;
 
+/// Size in bytes of a pointer in an ARM chip.
 inline const size_t PTR_SZ = 4;
 
+/// Size in bits of the ARM general-purpose registers.
 inline const uint16_t ARCH_SZ = 32;
 
+/// Arion CPU_ARCH for ARM.
 inline arion::CPU_ARCH ARCH = arion::CPU_ARCH::ARM_ARCH;
 
-inline ABI_ATTRIBUTES ABI_ATTRS = ABI_ATTRIBUTES(ARCH, ARCH_SZ, PTR_SZ, HWCAP, HWCAP2, SEG_FLAGS, ABI_REGS,
-                                                 ABI_CALLING_CONV, ABI_SYSCALLING_CONV, NAME_BY_SYSCALL_NO);
-} // namespace arion_arm
+/// Multiple architecture specific attributes for ARM, grouped in a structure for genericity purpose.
+inline arion::ARCH_ATTRIBUTES ARCH_ATTRS =
+    arion::ARCH_ATTRIBUTES(ARCH, ARCH_SZ, PTR_SZ, HWCAP, HWCAP2, SEG_FLAGS, ABI_REGS, ABI_CALLING_CONV,
+                           ABI_SYSCALLING_CONV, NAME_BY_SYSCALL_NO);
 
-class AbiManagerARM : public AbiManager
+/// A class responsible for performing architecture specific operations in case of an ARM chip emulation.
+class ArchManagerARM : public arion::ArchManager
 {
   private:
-    static void int_hook(std::shared_ptr<Arion> arion, uint32_t intno, void *user_data);
+    /**
+     * Interrupt hook used to detect syscalls.
+     * @param[in] arion The Arion instance responsible for the interrupt.
+     * @param[in] intno The interrupt number.
+     * @param[in] user_data Additional user data.
+     */
+    static void int_hook(std::shared_ptr<arion::Arion> arion, uint32_t intno, void *user_data);
+    /**
+     * Checks whether the ARM CPU is in ARM or THUMB mode.
+     * @return True if the ARM CPU is in THUMB mode.
+     */
     bool is_thumb();
+    /**
+     * Enables the Vector Floating Point (VFP) unit of the ARM emulated chip.
+     */
     void enable_vfp();
-    void setup();
+    /**
+     * Prepares the ArchManagerARM for emulation.
+     */
+    void setup() override;
 
   public:
-    AbiManagerARM()
-        : AbiManager(std::make_shared<ABI_ATTRIBUTES>(arion_arm::ABI_ATTRS), arion_arm::ARCH_REGS,
-                     arion_arm::ARCH_REGS_SZ, arion_arm::CTXT_REGS, arion_arm::IDT, true) {};
+    /**
+     * Builder for ArchManagerARM instances.
+     */
+    ArchManagerARM()
+        : ArchManager(std::make_shared<arion::ARCH_ATTRIBUTES>(arion_arm::ARCH_ATTRS), arion_arm::ARCH_REGS,
+                      arion_arm::ARCH_REGS_SZ, arion_arm::CTXT_REGS, arion_arm::IDT, true) {};
 
-    ks_engine *curr_ks();
-    csh *curr_cs();
-    arion::ADDR dump_tls();
-    void load_tls(arion::ADDR new_tls);
-    void prerun_hook(arion::ADDR& start) override;
+    /** Retrieves a Keystone engine associated with this instance, based on the current mode of the ARM CPU (ARM or
+     * THUMB).
+     * @return The Keystone engine.
+     */
+    ks_engine *curr_ks() override;
+    /** Retrieves a Capstone engine associated with this instance, based on the current mode of the ARM CPU (ARM or
+     * THUMB).
+     * @return The Capstone engine.
+     */
+    csh *curr_cs() override;
+    /**
+     * Retrieves the current Thread Local Storage (TLS) address from the emulation context.
+     * @return The TLS address.
+     */
+    arion::ADDR dump_tls() override;
+    /**
+     * Defines a Thread Local Storage (TLS) address to apply to the emulation.
+     * @param[in] new_tls The new TLS address.
+     */
+    void load_tls(arion::ADDR new_tls) override;
+    /**
+     * Performs ARM specific operations each time emulation starts.
+     * @param[in, out] start The emulation start address.
+     */
+    void prerun_hook(arion::ADDR &start) override;
 };
 
-#endif // ARION_ABI_ARM_HPP
+}; // namespace arion_arm
+
+#endif // ARION_ARCH_ARM_HPP

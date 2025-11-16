@@ -1,5 +1,5 @@
 #include <algorithm>
-#include <arion/archs/abi_x86-64.hpp>
+#include <arion/archs/arch_x86-64.hpp>
 #include <arion/common/code_tracer.hpp>
 #include <arion/crypto/md5.hpp>
 #include <arion/utils/convert_utils.hpp>
@@ -523,7 +523,7 @@ VOID PrepareFile(std::shared_ptr<TRACE_VALUES> values)
         if (values->mode == TRACE_MODE::CTXT)
             regs_sec_off = (off_t)values->out_f.tellp() + sizeof(off_t) * 2;
         values->out_f.write((char *)&regs_sec_off, sizeof(off_t));
-        /*std::vector<REG> ctxt_regs = arion->abi->get_context_regs();*/
+        /*std::vector<REG> ctxt_regs = arion->arch->get_context_regs();*/
         std::vector<arion::REG> ctxt_regs = arion_x86_64::CTXT_REGS;
         size_t ctxt_regs_sz = ctxt_regs.size();
         off_t data_sec_off =
@@ -542,7 +542,7 @@ VOID PrepareFile(std::shared_ptr<TRACE_VALUES> values)
     }
 }
 
-int main(int argc, char *argv[])
+int ARION_EXPORT main(int argc, char *argv[])
 {
     PrintBanner();
     const char *params_str = std::getenv("PIN_TRACER_PARAMS");
