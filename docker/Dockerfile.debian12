@@ -10,6 +10,8 @@ RUN apt-get update -y && apt-get upgrade -y && apt-get install -y \
     uuid-dev \
     python3 \
     pkg-config \
+    clang \
+    libclang-dev \
     make \
     curl \
     dpkg-dev \

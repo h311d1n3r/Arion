@@ -9,6 +9,8 @@ RUN dnf update -y && dnf upgrade -y && dnf install -y \
     libuuid-devel \
     python3 \
     pkg-config \
+    clang \
+    clang-devel \
     make \
     rpm-build \
     curl \
