@@ -50,18 +50,18 @@ RUN mkdir -p /app/docker_build/deb_package/DEBIAN
 RUN mkdir -p /app/docker_build/deb_package/usr/include
 RUN mkdir -p /app/docker_build/deb_package/usr/lib
 
-RUN cp -r /app/include/arion /app/docker_build/deb_package/usr/include/
-RUN cp -r /app/lib/capstone/include/capstone /app/docker_build/deb_package/usr/include/arion/
-RUN cp -r /app/lib/keystone/include/keystone /app/docker_build/deb_package/usr/include/arion/
-RUN cp -r /app/lib/lief/include/LIEF /app/docker_build/deb_package/usr/include/arion/
-RUN cp -r /app/docker_build/lib/lief/include/LIEF /app/docker_build/deb_package/usr/include/arion/
-RUN cp -r /app/lib/spdlog/include/spdlog /app/docker_build/deb_package/usr/include/arion/
-RUN cp -r /app/lib/unicorn/include/unicorn /app/docker_build/deb_package/usr/include/arion/
-RUN cp -r /app/lib/unicornafl/include/unicornafl /app/docker_build/deb_package/usr/include/arion/
-RUN cp -r /app/docker_build/libarion.so /app/docker_build/deb_package/usr/lib/
+RUN cp -r /app/include/arion /app/docker_build/deb_package/usr/include/ && rm -rf /app/include/arion
+RUN cp -r /app/lib/capstone/include/capstone /app/docker_build/deb_package/usr/include/arion/ && rm -rf /app/lib/capstone/include/capstone
+RUN cp -r /app/lib/keystone/include/keystone /app/docker_build/deb_package/usr/include/arion/ && rm -rf /app/lib/keystone/include/keystone
+RUN cp -r /app/lib/lief/include/LIEF /app/docker_build/deb_package/usr/include/arion/ && rm -rf /app/lib/lief/include/LIEF
+RUN cp -r /app/docker_build/lib/lief/include/LIEF /app/docker_build/deb_package/usr/include/arion/ && rm -rf /app/docker_build/lib/lief/include/LIEF
+RUN cp -r /app/lib/spdlog/include/spdlog /app/docker_build/deb_package/usr/include/arion/ && rm -rf /app/lib/spdlog/include/spdlog
+RUN cp -r /app/lib/unicorn/include/unicorn /app/docker_build/deb_package/usr/include/arion/ && rm -rf /app/lib/unicorn/include/unicorn
+RUN cp -r /app/lib/unicornafl/include/unicornafl /app/docker_build/deb_package/usr/include/arion/ && rm -rf /app/lib/unicornafl/include/unicornafl
+RUN cp -r /app/docker_build/libarion.so /app/docker_build/deb_package/usr/lib/ && rm -rf /app/docker_build/libarion.so
 RUN find /app/docker_build/deb_package/usr/include/ -type f -exec chmod 666 {} +
 
-RUN cp -r /app/docker_build/install/lib/cmake /app/docker_build/deb_package/usr/lib/
+RUN cp -r /app/docker_build/install/lib/cmake /app/docker_build/deb_package/usr/lib/ && rm -rf /app/docker_build/install/lib/cmake
 
 RUN echo "Package: arion" > /app/docker_build/deb_package/DEBIAN/control && \
     echo "Version: $VERSION" >> /app/docker_build/deb_package/DEBIAN/control && \
