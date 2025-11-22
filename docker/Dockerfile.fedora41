@@ -1,4 +1,4 @@
-FROM fedora:41
+FROM fedora:41 AS builder
 
 ARG VERSION=1.0.0
 
@@ -14,12 +14,14 @@ RUN dnf update -y && dnf upgrade -y && dnf install -y \
     make \
     rpm-build \
     curl \
-    openssl-devel
+    openssl-devel \
+    && dnf clean all
 
-RUN curl -LO https://github.com/Kitware/CMake/releases/download/v3.28.2/cmake-3.28.2-linux-x86_64.tar.gz
-RUN tar -zxvf cmake-3.28.2-linux-x86_64.tar.gz
-RUN rm cmake-3.28.2-linux-x86_64.tar.gz
-RUN mv cmake-3.28.2-linux-x86_64 /opt/cmake
+RUN curl -LO https://github.com/Kitware/CMake/releases/download/v3.28.2/cmake-3.28.2-linux-x86_64.tar.gz \
+    && tar -zxvf cmake-3.28.2-linux-x86_64.tar.gz \
+    && mv cmake-3.28.2-linux-x86_64 /opt/cmake \
+    && rm cmake-3.28.2-linux-x86_64.tar.gz
+
 RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
 ENV PATH="/opt/cmake/bin:/root/.cargo/bin:$PATH"
 
@@ -31,36 +33,30 @@ COPY tools ./tools
 COPY lib ./lib
 COPY res ./res
 COPY cmake ./cmake
-COPY .git ./.git
 COPY CMakeLists.txt .
 COPY .gitmodules .
-COPY .gitattributes .
-COPY .gitignore .
 
-RUN git submodule update --init --recursive
+RUN cmake -DCMAKE_BUILD_TYPE=Release -B docker_build \
+    && cmake --build docker_build --parallel 4 \
+    && cmake --install docker_build --prefix /app/docker_build/install
 
-RUN cmake -DCMAKE_BUILD_TYPE=Release -B docker_build
-RUN cmake --build docker_build --parallel 4
+RUN mkdir -p /app/docker_build/rpm_package/{BUILD,RPMS,SOURCES,SPECS,SRPMS} \
+    && mkdir -p /app/docker_build/rpm_package/usr/include/arion \
+    && mkdir -p /app/docker_build/rpm_package/usr/lib \
+    && cp -r /app/include/arion/* /app/docker_build/rpm_package/usr/include/arion/ \
+    && cp -r /app/lib/capstone/include/capstone /app/docker_build/rpm_package/usr/include/arion/ \
+    && cp -r /app/lib/keystone/include/keystone /app/docker_build/rpm_package/usr/include/arion/ \
+    && cp -r /app/lib/lief/include/LIEF /app/docker_build/rpm_package/usr/include/arion/ \
+    && cp -r /app/docker_build/lib/lief/include/LIEF/* /app/docker_build/rpm_package/usr/include/arion/LIEF/ || true \
+    && cp -r /app/lib/spdlog/include/spdlog /app/docker_build/rpm_package/usr/include/arion/ \
+    && cp -r /app/lib/unicorn/include/unicorn /app/docker_build/rpm_package/usr/include/arion/ \
+    && cp -r /app/lib/unicornafl/include/unicornafl /app/docker_build/rpm_package/usr/include/arion/ \
+    && cp -r /app/docker_build/libarion.so /app/docker_build/rpm_package/usr/lib/ \
+    && cp -r /app/docker_build/install/lib/cmake /app/docker_build/rpm_package/usr/lib/ \
+    && find /app/docker_build/rpm_package/usr/include/ -type f -exec chmod 666 {} +
 
-RUN cmake --install docker_build --prefix /app/docker_build/install
-
-RUN mkdir -p /app/docker_build/rpm_package/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
-RUN mkdir -p /app/docker_build/rpm_package/usr/include
-RUN mkdir -p /app/docker_build/rpm_package/usr/lib
-
-RUN cp -r /app/include/arion /app/docker_build/rpm_package/usr/include/ && rm -rf /app/include/arion
-RUN cp -r /app/lib/capstone/include/capstone /app/docker_build/rpm_package/usr/include/arion/ && rm -rf /app/lib/capstone/include/capstone
-RUN cp -r /app/lib/keystone/include/keystone /app/docker_build/rpm_package/usr/include/arion/ && rm -rf /app/lib/keystone/include/keystone
-RUN cp -r /app/lib/lief/include/LIEF /app/docker_build/rpm_package/usr/include/arion/ && rm -rf /app/lib/lief/include/LIEF
-RUN cp -r /app/docker_build/lib/lief/include/LIEF /app/docker_build/rpm_package/usr/include/arion/ && rm -rf /app/docker_build/lib/lief/include/LIEF
-RUN cp -r /app/lib/spdlog/include/spdlog /app/docker_build/rpm_package/usr/include/arion/ && rm -rf /app/lib/spdlog/include/spdlog
-RUN cp -r /app/lib/unicorn/include/unicorn /app/docker_build/rpm_package/usr/include/arion/ && rm -rf /app/lib/unicorn/include/unicorn
-RUN cp -r /app/lib/unicornafl/include/unicornafl /app/docker_build/rpm_package/usr/include/arion/ && rm -rf /app/lib/unicornafl/include/unicornafl
-RUN cp -r /app/docker_build/libarion.so /app/docker_build/rpm_package/usr/lib/ && rm -rf /app/docker_build/libarion.so
-RUN cp -r /app/docker_build/install/lib/cmake /app/docker_build/rpm_package/usr/lib/ && rm -rf /app/docker_build/install/lib/cmake
-RUN find /app/docker_build/rpm_package/usr/include/ -type f -exec chmod 666 {} +
-
-RUN echo "Name: arion" > /app/docker_build/rpm_package/SPECS/arion.spec && \
+RUN echo "%define debug_package %{nil}" > /app/docker_build/rpm_package/SPECS/arion.spec && \
+    echo "Name: arion" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
     echo "Version: $(echo $VERSION | sed 's/-/~/g')" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
     echo "Release: 1%{?dist}" >> /app/docker_build/rpm_package/SPECS/arion.spec && \
     echo "Summary: A high-performance C++ framework for emulating executable binaries." >> /app/docker_build/rpm_package/SPECS/arion.spec && \
@@ -84,3 +80,7 @@ RUN echo "Name: arion" > /app/docker_build/rpm_package/SPECS/arion.spec && \
 RUN rpmbuild --define "_topdir /app/docker_build/rpm_package" -bb /app/docker_build/rpm_package/SPECS/arion.spec
 
 RUN mv /app/docker_build/rpm_package/RPMS/x86_64/*.rpm /app/docker_build/arion-$VERSION.rpm
+
+FROM scratch AS export
+ARG VERSION=1.0.0
+COPY --from=builder /app/docker_build/arion-$VERSION.rpm /app/docker_build/
