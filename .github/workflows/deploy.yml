@@ -23,6 +23,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         lfs: 'true'
+        submodules: recursive
 
     - name: Init submodules
       run: git submodule update --init --recursive
