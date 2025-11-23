@@ -81,6 +81,8 @@ RUN rpmbuild --define "_topdir /app/docker_build/rpm_package" -bb /app/docker_bu
 
 RUN mv /app/docker_build/rpm_package/RPMS/x86_64/*.rpm /app/docker_build/arion-$VERSION.rpm
 
-FROM scratch AS export
+FROM alpine:3
 ARG VERSION=1.0.0
-COPY --from=builder /app/docker_build/arion-$VERSION.rpm /app/docker_build/
+WORKDIR /app/docker_build
+COPY --from=builder /app/docker_build/arion-$VERSION.rpm .
+CMD ["true"]

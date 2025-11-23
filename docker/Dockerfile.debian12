@@ -70,5 +70,8 @@ RUN echo "Package: arion" > /app/docker_build/deb_package/DEBIAN/control && \
 
 RUN dpkg-deb --build /app/docker_build/deb_package /app/docker_build/arion-$VERSION.deb
 
-FROM scratch AS export
-COPY --from=builder /app/docker_build/*.deb /app/docker_build/
+FROM alpine:3
+ARG VERSION=1.0.0
+WORKDIR /app/docker_build
+COPY --from=builder /app/docker_build/arion-$VERSION.deb .
+CMD ["true"]
